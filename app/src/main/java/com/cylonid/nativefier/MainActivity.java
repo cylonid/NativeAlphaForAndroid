@@ -1,47 +1,48 @@
 package com.cylonid.nativefier;
 
+import android.graphics.Color;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
+import static android.widget.LinearLayout.HORIZONTAL;
 
 public class MainActivity extends AppCompatActivity {
-    private WebView wv1;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        //Toolbar toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                wv1.goBack();
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
 
-        wv1 = (WebView)findViewById(R.id.webview);
-        wv1.getSettings().setBlockNetworkLoads (false);
-        wv1.setWebViewClient(new MyBrowser());
-        wv1.loadUrl("https://orf.at");
-        }
+        LinearLayout mainScreen = (LinearLayout) findViewById(R.id.mainScreen);
+
+        for (int i = 0; i < 15; i++)
+            addRow(mainScreen);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -66,18 +67,60 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        if (wv1.canGoBack())
-            wv1.goBack();
-        else
             moveTaskToBack(true);
     }
-    private class MyBrowser extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
+
+    private void addRow(LinearLayout mainScreen)
+    {
+        int row_height = (int)getResources().getDimension(R.dimen.line_height);
+
+        LinearLayout ll_row = new LinearLayout(this);
+        ll_row.setOrientation(HORIZONTAL);
+        LinearLayout.LayoutParams layout_row = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, row_height);
+        layout_row.width = LinearLayout.LayoutParams.MATCH_PARENT;
+        layout_row.height = row_height;
+        ll_row.setLayoutParams(layout_row);
+
+        Button btn_title = new Button(this);
+//        btn_title.setId("btn_title");
+        btn_title.setBackgroundColor(Color.parseColor("#07000000"));
+        btn_title.setText("ORF.at");
+//        btn_title.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_black_24dp);
+//        btn_title.setGravity(Gravity.START | Gravity.CENTER);
+        LinearLayout.LayoutParams layout_title = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, row_height);
+        layout_title.width = 0;
+        layout_title.height = (int)getResources().getDimension(R.dimen.line_height);
+        layout_title.weight = 4;
+        btn_title.setLayoutParams(layout_title);
+        ll_row.addView(btn_title);
+
+        btn_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Titel angeklickt", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+        ImageButton btn_settings = new ImageButton(this);
+        btn_settings.setBackgroundColor(Color.parseColor("#07000000"));
+        btn_settings.setImageResource(R.drawable.ic_settings_black_24dp);
+        LinearLayout.LayoutParams layout_action_buttons = new LinearLayout.LayoutParams(0, row_height);
+        layout_action_buttons.width = 0;
+        layout_action_buttons.height = row_height;
+        layout_action_buttons.weight = 1;
+        btn_settings.setLayoutParams(layout_action_buttons);
+        ll_row.addView(btn_settings);
+
+        ImageButton btn_delete = new ImageButton(this);
+        btn_delete.setBackgroundColor(Color.parseColor("#07000000"));
+        btn_delete.setImageResource(R.drawable.ic_delete_black_24dp);
+        btn_delete.setLayoutParams(layout_action_buttons);
+        ll_row.addView(btn_delete);
+
+        mainScreen.addView(ll_row);
     }
+
 }
 
 
