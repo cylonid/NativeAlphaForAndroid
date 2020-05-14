@@ -2,24 +2,19 @@ package com.cylonid.nativefier;
 
 import android.graphics.Color;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import static android.widget.LinearLayout.HORIZONTAL;
 
@@ -98,6 +93,14 @@ public class MainActivity extends AppCompatActivity {
         layout_title.weight = 4;
         btn_title.setLayoutParams(layout_title);
         ll_row.addView(btn_title);
+
+        btn_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Titel angeklickt", Toast.LENGTH_LONG).show();
+
+            }
+        });
 
         ImageButton btn_settings = new ImageButton(this);
         btn_settings.setBackgroundColor(Color.parseColor("#07000000"));
