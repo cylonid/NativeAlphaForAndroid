@@ -7,11 +7,19 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fillViewport="true"
-        android:id="@+id/mainScreen"
+
         tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:id="@+id/mainScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+        >
+        </LinearLayout>
 
 <!--        <LinearLayout-->
 

@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -42,13 +42,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ScrollView mainScreen = (ScrollView) findViewById(R.id.mainScreen);
-        addRow(mainScreen);
+        LinearLayout mainScreen = (LinearLayout) findViewById(R.id.mainScreen);
 
-
-
-
-
+        for (int i = 0; i < 15; i++)
+            addRow(mainScreen);
 
     }
 
@@ -78,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             moveTaskToBack(true);
     }
 
-    private void addRow(ScrollView mainScreen)
+    private void addRow(LinearLayout mainScreen)
     {
         int row_height = (int)getResources().getDimension(R.dimen.line_height);
 
