@@ -21,11 +21,6 @@ import static android.widget.LinearLayout.HORIZONTAL;
 
 public class MainActivity extends AppCompatActivity {
 
-//    Add dummy data
-    WebsiteData d1 = new WebsiteData("ORF.at", "orf.at");
-    WebsiteData d2 = new WebsiteData("Die Presse", "diepresse.com");
-    WebsiteData d3 = new WebsiteData("ÖBB", "oebb.at");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +39,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         LinearLayout mainScreen = (LinearLayout) findViewById(R.id.mainScreen);
-
-        WebsiteDataManager.getInstance().addWebsite(d1);
-        WebsiteDataManager.getInstance().addWebsite(d2);
-        WebsiteDataManager.getInstance().addWebsite(d3);
+        WebsiteDataManager.getInstance().initContext(this);
+        WebsiteDataManager.getInstance().initDummyData();
         for (WebsiteData d : WebsiteDataManager.getInstance().getWebsites())
             addRow(mainScreen, d);
 
@@ -84,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         int row_height = (int)getResources().getDimension(R.dimen.line_height);
         int transparent_color = ResourcesCompat.getColor(getResources(), R.color.transparent, null);
 
-//        Color transparent = Color.parseColor(((getResources().getColor(R.color.transparent))));
+
         LinearLayout ll_row = new LinearLayout(this);
         ll_row.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams layout_row = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, row_height);
