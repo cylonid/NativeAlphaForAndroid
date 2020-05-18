@@ -1,7 +1,7 @@
 package com.cylonid.nativefier;
 
-import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -19,6 +20,11 @@ import com.google.android.material.snackbar.Snackbar;
 import static android.widget.LinearLayout.HORIZONTAL;
 
 public class MainActivity extends AppCompatActivity {
+
+//    Add dummy data
+    WebsiteData d1 = new WebsiteData("ORF.at", "orf.at");
+    WebsiteData d2 = new WebsiteData("Die Presse", "diepresse.com");
+    WebsiteData d3 = new WebsiteData("ÖBB", "oebb.at");
 
 
     @Override
@@ -39,8 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout mainScreen = (LinearLayout) findViewById(R.id.mainScreen);
 
-        for (int i = 0; i < 15; i++)
-            addRow(mainScreen);
+        WebsiteDataManager.getInstance().addWebsite(d1);
+        WebsiteDataManager.getInstance().addWebsite(d2);
+        WebsiteDataManager.getInstance().addWebsite(d3);
+        for (WebsiteData d : WebsiteDataManager.getInstance().getWebsites())
+            addRow(mainScreen, d);
 
     }
 
@@ -70,10 +79,12 @@ public class MainActivity extends AppCompatActivity {
             moveTaskToBack(true);
     }
 
-    private void addRow(LinearLayout mainScreen)
+    private void addRow(LinearLayout mainScreen, final WebsiteData data)
     {
         int row_height = (int)getResources().getDimension(R.dimen.line_height);
+        int transparent_color = ResourcesCompat.getColor(getResources(), R.color.transparent, null);
 
+//        Color transparent = Color.parseColor(((getResources().getColor(R.color.transparent))));
         LinearLayout ll_row = new LinearLayout(this);
         ll_row.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams layout_row = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, row_height);
@@ -83,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button btn_title = new Button(this);
 //        btn_title.setId("btn_title");
-        btn_title.setBackgroundColor(Color.parseColor("#07000000"));
-        btn_title.setText("ORF.at");
+        btn_title.setBackgroundColor(transparent_color);
+        btn_title.setText(data.getName());
 //        btn_title.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_black_24dp);
 //        btn_title.setGravity(Gravity.START | Gravity.CENTER);
         LinearLayout.LayoutParams layout_title = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, row_height);
@@ -97,13 +108,13 @@ public class MainActivity extends AppCompatActivity {
         btn_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Titel angeklickt", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Titel angeklickt: "+ data.getName(), Toast.LENGTH_LONG).show();
 
             }
         });
 
         ImageButton btn_settings = new ImageButton(this);
-        btn_settings.setBackgroundColor(Color.parseColor("#07000000"));
+        btn_settings.setBackgroundColor(transparent_color);
         btn_settings.setImageResource(R.drawable.ic_settings_black_24dp);
         LinearLayout.LayoutParams layout_action_buttons = new LinearLayout.LayoutParams(0, row_height);
         layout_action_buttons.width = 0;
@@ -113,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         ll_row.addView(btn_settings);
 
         ImageButton btn_delete = new ImageButton(this);
-        btn_delete.setBackgroundColor(Color.parseColor("#07000000"));
+        btn_delete.setBackgroundColor(transparent_color);
         btn_delete.setImageResource(R.drawable.ic_delete_black_24dp);
         btn_delete.setLayoutParams(layout_action_buttons);
         ll_row.addView(btn_delete);

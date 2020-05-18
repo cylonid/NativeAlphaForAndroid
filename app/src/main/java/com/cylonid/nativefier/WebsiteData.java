@@ -1,24 +1,22 @@
 package com.cylonid.nativefier;
 
 public class WebsiteData {
-    private
-      String name;
-      String url;
-      int ID;
-      boolean open_url_internal;
+    private String name;
+    private String url;
+    private int ID;
+    private boolean open_url_internal;
 
-
-    public WebsiteData(String name, String url, int ID, boolean open_url_internal) {
+    public WebsiteData(String name, String url, boolean open_url_internal) {
         this.name = name;
         this.url = url;
-        this.ID = ID;
+        this.ID = WebsiteDataManager.getInstance().getIncrementedID();
         this.open_url_internal = open_url_internal;
     }
 
-    public WebsiteData(String name, String url, int ID) {
+    public WebsiteData(String name, String url) {
         this.name = name;
         this.url = url;
-        this.ID = ID;
+        this.ID = WebsiteDataManager.getInstance().getIncrementedID();
         this.open_url_internal = true;
     }
 
