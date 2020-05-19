@@ -1,5 +1,7 @@
 package com.cylonid.nativefier;
 
+import android.widget.Toast;
+
 public class WebsiteData {
     private String name;
     private String url;
@@ -18,6 +20,7 @@ public class WebsiteData {
         this.url = url;
         this.ID = WebsiteDataManager.getInstance().getIncrementedID();
         this.open_url_external = false;
+
     }
 
     public String getName() {

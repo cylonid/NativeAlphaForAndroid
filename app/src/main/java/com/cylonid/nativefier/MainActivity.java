@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -135,42 +135,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void buildAddWebsiteDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
         final View inflated_view = getLayoutInflater().inflate(R.layout.add_website_dialogue, null);
-        builder.setView(inflated_view);
         final EditText title = (EditText) inflated_view.findViewById(R.id.websiteTitle);
         final EditText url = (EditText) inflated_view.findViewById(R.id.websiteUrl);
         final Switch open_url_external = (Switch) inflated_view.findViewById(R.id.switchOpenUrlExternal);
-        builder.setTitle("Add new website");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-                String str_title = title.getText().toString();
-                String str_url = url.getText().toString();
 
-                if (str_title.trim().equals(""))
-                    title.setError("Please input the title.");
-                else if (str_url.trim().equals(""))
-                    url.setError("Please input the web address.");
-                else {
-                    WebsiteData new_site = new WebsiteData(str_title, str_url, open_url_external.isChecked());
-                    WebsiteDataManager.getInstance().addWebsite(new_site);
-                    addRow(new_site);
-                }
+        final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                .setView(inflated_view)
+                .setTitle("Add website")
+                .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+
+                Button positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                positive.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        String str_title = title.getText().toString();
+                        String str_url = url.getText().toString();
+
+                        if (str_title.trim().equals(""))
+                            str_title = str_url.replace("http://", "").replace("https://", "").replace("http://www.", "").replace("https://www.", "");
+
+                        if (!(str_url.startsWith("https://")) && !(str_url.startsWith("http://")))
+                            str_url = "https://" + str_url;
+
+                        if (Patterns.WEB_URL.matcher(str_url.toLowerCase()).matches()) {
+                            WebsiteData new_site = new WebsiteData(str_title, str_url, open_url_external.isChecked());
+                            WebsiteDataManager.getInstance().addWebsite(new_site);
+                            addRow(new_site);
+                            dialog.dismiss();
+                        }
+                        else
+                            url.setError("Please input a valid web address.");
+                    }
+                });
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
-                dialog.cancel();
-
-            }
-        });
-        AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 
     private void buildDeleteItemDialog(final int ID) {
 
@@ -202,6 +212,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+
 
 }
 

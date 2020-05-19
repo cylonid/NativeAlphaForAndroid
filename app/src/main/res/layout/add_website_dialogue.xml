@@ -25,7 +25,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif"
-        android:hint="Title"/>
+        android:hint="Title (optional)"/>
 
     <Switch
         android:id="@+id/switchOpenUrlExternal"

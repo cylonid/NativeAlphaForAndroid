@@ -1,6 +1,8 @@
 package com.cylonid.nativefier;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -19,6 +21,7 @@ public class WebViewActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         String url = "";
+
         boolean open_external = false;
         if(b != null)
             url = b.getString("URL");
@@ -26,7 +29,11 @@ public class WebViewActivity extends AppCompatActivity {
 
         wv = (WebView)findViewById(R.id.webview);
         wv.getSettings().setBlockNetworkLoads(false);
-        wv.setWebViewClient(new InternalBrowser());
+        if (open_external)
+            wv.setWebViewClient(new WebViewClient());
+        else
+            wv.setWebViewClient(new InternalBrowser());
+
         wv.loadUrl(url);
 
         }
