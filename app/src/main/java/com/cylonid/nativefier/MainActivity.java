@@ -3,7 +3,6 @@ package com.cylonid.nativefier;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,25 +18,24 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import static android.widget.LinearLayout.HORIZONTAL;
 
 public class MainActivity extends AppCompatActivity {
 
-
+     LinearLayout mainScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        LinearLayout mainScreen = (LinearLayout) findViewById(R.id.mainScreen);
+        mainScreen = (LinearLayout) findViewById(R.id.mainScreen);
         WebsiteDataManager.getInstance().initContext(this);
-        WebsiteDataManager.getInstance().initDummyData();
+//        WebsiteDataManager.getInstance().initDummyData();
+
         for (WebsiteData d : WebsiteDataManager.getInstance().getWebsites())
-            addRow(mainScreen, d);
+            addRow(d);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -45,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder dialog_add_website = new AlertDialog.Builder(MainActivity.this);
-                configAddWebsiteDialogue(dialog_add_website);
+                buildAddWebsiteDialog();
             }
         });
     }
@@ -77,11 +75,10 @@ public class MainActivity extends AppCompatActivity {
             moveTaskToBack(true);
     }
 
-    private void addRow(LinearLayout mainScreen, final WebsiteData data)
+    private void addRow(final WebsiteData data)
     {
         int row_height = (int)getResources().getDimension(R.dimen.line_height);
         int transparent_color = ResourcesCompat.getColor(getResources(), R.color.transparent, null);
-
 
         LinearLayout ll_row = new LinearLayout(this);
         ll_row.setOrientation(HORIZONTAL);
@@ -126,32 +123,75 @@ public class MainActivity extends AppCompatActivity {
         btn_delete.setImageResource(R.drawable.ic_delete_black_24dp);
         btn_delete.setLayoutParams(layout_action_buttons);
         ll_row.addView(btn_delete);
+        btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    buildDeleteItemDialog(data.getID());
+
+            }
+        });
 
         mainScreen.addView(ll_row);
     }
 
-    private void configAddWebsiteDialogue(AlertDialog.Builder builder) {
-
+    private void buildAddWebsiteDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(getLayoutInflater().inflate(R.layout.add_website_dialogue, null));
+        final View inflated_view = getLayoutInflater().inflate(R.layout.add_website_dialogue, null);
+        builder.setView(inflated_view);
+        final EditText title = (EditText) inflated_view.findViewById(R.id.websiteTitle);
+        final EditText url = (EditText) inflated_view.findViewById(R.id.websiteUrl);
+        final Switch open_url_external = (Switch) inflated_view.findViewById(R.id.switchOpenUrlExternal);
         builder.setTitle("Add new website");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
+                String str_title = title.getText().toString();
+                String str_url = url.getText().toString();
+
+                if (str_title.trim().equals(""))
+                    title.setError("Please input the title.");
+                else if (str_url.trim().equals(""))
+                    url.setError("Please input the web address.");
+                else {
+                    WebsiteData new_site = new WebsiteData(str_title, str_url, open_url_external.isChecked());
+                    WebsiteDataManager.getInstance().addWebsite(new_site);
+                    addRow(new_site);
+                }
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
                 dialog.cancel();
+
             }
         });
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
+    private void buildDeleteItemDialog(final int ID) {
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Are you sure you want to remove this website?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                WebsiteDataManager.getInstance().removeWebsite(ID);
+                mainScreen.removeAllViews();
+                for (WebsiteData d : WebsiteDataManager.getInstance().getWebsites())
+                    addRow(d);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
 }
 
