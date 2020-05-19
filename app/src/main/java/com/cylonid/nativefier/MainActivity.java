@@ -23,29 +23,13 @@ import com.google.android.material.snackbar.Snackbar;
 import static android.widget.LinearLayout.HORIZONTAL;
 
 public class MainActivity extends AppCompatActivity {
-    AlertDialog.Builder dialogue_add_website;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
-
-
-
 
 
         LinearLayout mainScreen = (LinearLayout) findViewById(R.id.mainScreen);
@@ -53,9 +37,18 @@ public class MainActivity extends AppCompatActivity {
         WebsiteDataManager.getInstance().initDummyData();
         for (WebsiteData d : WebsiteDataManager.getInstance().getWebsites())
             addRow(mainScreen, d);
-        dialogue_add_website = new AlertDialog.Builder(this);
-        configAddWebsiteDialogue();
-        dialogue_add_website.show();
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder dialog_add_website = new AlertDialog.Builder(MainActivity.this);
+                configAddWebsiteDialogue(dialog_add_website);
+            }
+        });
     }
 
     @Override
@@ -137,26 +130,25 @@ public class MainActivity extends AppCompatActivity {
         mainScreen.addView(ll_row);
     }
 
-    private void configAddWebsiteDialogue() {
-        // Get the layout inflater
-        LayoutInflater inflater = getLayoutInflater();
+    private void configAddWebsiteDialogue(AlertDialog.Builder builder) {
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        dialogue_add_website.setView(inflater.inflate(R.layout.add_website_dialogue, null));
-        dialogue_add_website.setTitle("Add new website");
-        // Add the buttons
-        dialogue_add_website.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setView(getLayoutInflater().inflate(R.layout.add_website_dialogue, null));
+        builder.setTitle("Add new website");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
             }
         });
-        dialogue_add_website.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
+                dialog.cancel();
             }
         });
-        AlertDialog dialog = dialogue_add_website.create();
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 
