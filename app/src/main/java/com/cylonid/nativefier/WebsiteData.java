@@ -32,7 +32,7 @@ public class WebsiteData {
         return ID;
     }
 
-    public boolean openUrlInternal() {
+    public boolean openUrlExternal() {
         return open_url_external;
     }
 }

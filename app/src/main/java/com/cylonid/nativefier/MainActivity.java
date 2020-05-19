@@ -2,6 +2,7 @@ package com.cylonid.nativefier;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -103,8 +104,7 @@ public class MainActivity extends AppCompatActivity {
         btn_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Titel angeklickt: "+ data.getName(), Toast.LENGTH_LONG).show();
-
+                openWebView(data);
             }
         });
 
@@ -191,6 +191,16 @@ public class MainActivity extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void openWebView(WebsiteData d) {
+        Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+        Bundle b = new Bundle();
+        b.putString("URL", d.getUrl());
+        b.putBoolean("open_external", d.openUrlExternal());
+        intent.putExtras(b);
+        startActivity(intent);
+        finish();
     }
 
 }
