@@ -1,15 +1,12 @@
 package com.cylonid.nativefier;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,22 +19,16 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.drawable.IconCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
 import static android.widget.LinearLayout.HORIZONTAL;
 
-public class MainActivity extends AppCompatActivity {
 
-     LinearLayout mainScreen;
+public class MainActivity extends AppCompatActivity {
+    LinearLayout mainScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        addShortcutToHomeScreen();
     }
 
     @Override
@@ -156,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText title = (EditText) inflated_view.findViewById(R.id.websiteTitle);
         final EditText url = (EditText) inflated_view.findViewById(R.id.websiteUrl);
         final Switch open_url_external = (Switch) inflated_view.findViewById(R.id.switchOpenUrlExternal);
+        final Switch create_shortcut = (Switch) inflated_view.findViewById(R.id.switchCreateShortcut);
 
         final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
                 .setView(inflated_view)
@@ -187,7 +178,9 @@ public class MainActivity extends AppCompatActivity {
                             WebsiteData new_site = new WebsiteData(str_title, str_url, open_url_external.isChecked());
                             WebsiteDataManager.getInstance().addWebsite(new_site);
                             addRow(new_site);
-                            dialog.dismiss();
+                            if (create_shortcut.isChecked())
+                                addShortcutToHomeScreen(new_site);
+//                            dialog.dismiss();
                         }
                         else
                             url.setError("Please input a valid web address.");
@@ -221,22 +214,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openWebView(WebsiteData d) {
-        startActivity(getWebViewIntent(d));
+        startActivity(createWebViewIntent(d));
         finish();
     }
 
-    private Intent getWebViewIntent(WebsiteData d) {
+    private Intent createWebViewIntent(WebsiteData d) {
         Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
-        intent.putExtra("URL", d.getUrl());
-        intent.putExtra("open_external", d.openUrlExternal());
+        intent.putExtra(Utility.INT_ID_URL, d.getUrl());
+        intent.putExtra(Utility.INT_ID_EXTERNAL, d.openUrlExternal());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
         return intent;
     }
-    public void addShortcutToHomeScreen()
+    public void addShortcutToHomeScreen(WebsiteData d)
     {
-        WebsiteData d = new WebsiteData("ORF.at", "https://orf.at");
-        Intent intent = getWebViewIntent(d);
-        intent.addCategory("android.shortcut.conversation");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent intent = createWebViewIntent(d);
 
         if (ShortcutManagerCompat.isRequestPinShortcutSupported(this)) {
             final ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
@@ -248,14 +240,7 @@ public class MainActivity extends AppCompatActivity {
                     .build();
             shortcutManager.requestPinShortcut(pinShortcutInfo, null);
         }
-
-
     }
-
-
-
-
-
 }
 
 
