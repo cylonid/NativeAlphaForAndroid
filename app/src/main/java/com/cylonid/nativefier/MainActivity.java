@@ -1,9 +1,15 @@
 package com.cylonid.nativefier;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,9 +22,16 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.IconCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static android.widget.LinearLayout.HORIZONTAL;
 
@@ -28,9 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mainScreen = (LinearLayout) findViewById(R.id.mainScreen);
         WebsiteDataManager.getInstance().initContext(this);
 //        WebsiteDataManager.getInstance().initDummyData();
@@ -48,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
                 buildAddWebsiteDialog();
             }
         });
+
+        addShortcutToHomeScreen();
     }
 
     @Override
@@ -132,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mainScreen.addView(ll_row);
+
+
     }
 
     private void buildAddWebsiteDialog() {
@@ -204,14 +221,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openWebView(WebsiteData d) {
-        Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
-        Bundle b = new Bundle();
-        b.putString("URL", d.getUrl());
-        b.putBoolean("open_external", d.openUrlExternal());
-        intent.putExtras(b);
-        startActivity(intent);
+        startActivity(getWebViewIntent(d));
         finish();
     }
+
+    private Intent getWebViewIntent(WebsiteData d) {
+        Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+        intent.putExtra("URL", d.getUrl());
+        intent.putExtra("open_external", d.openUrlExternal());
+        return intent;
+    }
+    public void addShortcutToHomeScreen()
+    {
+        WebsiteData d = new WebsiteData("ORF.at", "https://orf.at");
+        Intent intent = getWebViewIntent(d);
+        intent.addCategory("android.shortcut.conversation");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        if (ShortcutManagerCompat.isRequestPinShortcutSupported(this)) {
+            final ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+
+            ShortcutInfo pinShortcutInfo = new ShortcutInfo.Builder(this, d.getName())
+                    .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
+                    .setShortLabel(d.getName())
+                    .setIntent(intent)
+                    .build();
+            shortcutManager.requestPinShortcut(pinShortcutInfo, null);
+        }
+
+
+    }
+
+
 
 
 

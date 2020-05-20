@@ -18,14 +18,8 @@ public class WebViewActivity extends AppCompatActivity {
         setContentView(R.layout.full_webview);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
-
-        Bundle b = getIntent().getExtras();
-        String url = "";
-
-        boolean open_external = false;
-        if(b != null)
-            url = b.getString("URL");
-            open_external = b.getBoolean("open_external");
+        String url = getIntent().getStringExtra("URL");
+        boolean open_external = getIntent().getBooleanExtra("open_external", false);
 
         wv = (WebView)findViewById(R.id.webview);
         wv.getSettings().setBlockNetworkLoads(false);

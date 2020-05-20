@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cylonid.nativefier">
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
     <application
         android:allowBackup="true"
@@ -26,8 +27,9 @@
             android:name=".WebViewActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-
-
+            <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
         </activity>
     </application>
 
