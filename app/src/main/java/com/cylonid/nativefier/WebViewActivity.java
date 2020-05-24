@@ -3,6 +3,7 @@ package com.cylonid.nativefier;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -15,20 +16,24 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.full_webview);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        if (savedInstanceState != null)
+          ((WebView) findViewById(R.id.webview)).restoreState(savedInstanceState.getBundle("webViewState"));
+        else {
+            setContentView(R.layout.full_webview);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
-        String url = getIntent().getStringExtra(Utility.INT_ID_URL);
-        boolean open_external = getIntent().getBooleanExtra(Utility.INT_ID_EXTERNAL, false);
+            String url = getIntent().getStringExtra(Utility.INT_ID_URL);
+            boolean open_external = getIntent().getBooleanExtra(Utility.INT_ID_EXTERNAL, false);
 
-        wv = (WebView)findViewById(R.id.webview);
-        wv.getSettings().setBlockNetworkLoads(false);
-        if (open_external)
-            wv.setWebViewClient(new WebViewClient());
-        else
-            wv.setWebViewClient(new InternalBrowser());
+            wv = (WebView)findViewById(R.id.webview);
+            wv.getSettings().setBlockNetworkLoads(false);
+            if (open_external)
+                wv.setWebViewClient(new WebViewClient());
+            else
+                wv.setWebViewClient(new InternalBrowser());
 
-        wv.loadUrl(url);
+            wv.loadUrl(url);
+            }
 
         }
 
@@ -39,6 +44,21 @@ public class WebViewActivity extends AppCompatActivity {
         else
             moveTaskToBack(true);
     }
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Bundle bundle = new Bundle();
+        wv.saveState(bundle);
+        outState.putBundle("webViewState", bundle);
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+        Bundle bundle = new Bundle();
+        wv.saveState(bundle);
+        state.putBundle("webViewState", bundle);
+    }
+
+
     private class InternalBrowser extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {

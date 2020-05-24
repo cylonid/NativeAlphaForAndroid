@@ -179,8 +179,9 @@ public class MainActivity extends AppCompatActivity {
                             WebsiteDataManager.getInstance().addWebsite(new_site);
                             addRow(new_site);
                             if (create_shortcut.isChecked())
-                                addShortcutToHomeScreen(new_site);
-//                            dialog.dismiss();
+                                addShortcutToHomeScreen(new_site, dialog);
+                            else
+                                dialog.dismiss();
                         }
                         else
                             url.setError("Please input a valid web address.");
@@ -226,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_VIEW);
         return intent;
     }
-    public void addShortcutToHomeScreen(WebsiteData d)
+    public void addShortcutToHomeScreen(WebsiteData d, AlertDialog dialog)
     {
         Intent intent = createWebViewIntent(d);
 
@@ -240,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
                     .build();
             shortcutManager.requestPinShortcut(pinShortcutInfo, null);
         }
+        dialog.dismiss();
     }
 }
 
