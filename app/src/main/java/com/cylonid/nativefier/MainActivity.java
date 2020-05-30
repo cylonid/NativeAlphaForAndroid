@@ -2,10 +2,6 @@ package com.cylonid.nativefier;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.Menu;
@@ -19,7 +15,6 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -52,6 +47,25 @@ public class MainActivity extends AppCompatActivity {
                 buildAddWebsiteDialog();
             }
         });
+
+//                Thread thread = new Thread(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                try  {
+//                    TouchIconExtractor x = new TouchIconExtractor();
+//                    List<net.mm2d.touchicon.Icon> a = x.fromPage("https://mkassling.at", true);
+//
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        thread.start();
+
+
 
     }
 
@@ -178,8 +192,11 @@ public class MainActivity extends AppCompatActivity {
                             WebsiteData new_site = new WebsiteData(str_title, str_url, open_url_external.isChecked());
                             WebsiteDataManager.getInstance().addWebsite(new_site);
                             addRow(new_site);
-                            if (create_shortcut.isChecked())
-                                addShortcutToHomeScreen(new_site, dialog);
+                            if (create_shortcut.isChecked()) {
+                                dialog.dismiss();
+                                ShortcutHelper fav = new ShortcutHelper(new_site, MainActivity.this);
+                                fav.fetchFaviconURL();
+                            }
                             else
                                 dialog.dismiss();
                         }
@@ -215,34 +232,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openWebView(WebsiteData d) {
-        startActivity(createWebViewIntent(d));
+        startActivity(Utility.createWebViewIntent(d, MainActivity.this));
         finish();
     }
 
-    private Intent createWebViewIntent(WebsiteData d) {
-        Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
-        intent.putExtra(Utility.INT_ID_URL, d.getUrl());
-        intent.putExtra(Utility.INT_ID_EXTERNAL, d.openUrlExternal());
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.setAction(Intent.ACTION_VIEW);
-        return intent;
-    }
-    public void addShortcutToHomeScreen(WebsiteData d, AlertDialog dialog)
-    {
-        Intent intent = createWebViewIntent(d);
 
-        if (ShortcutManagerCompat.isRequestPinShortcutSupported(this)) {
-            final ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
-
-            ShortcutInfo pinShortcutInfo = new ShortcutInfo.Builder(this, d.getName())
-                    .setIcon(Icon.createWithResource(this, R.mipmap.ic_launcher))
-                    .setShortLabel(d.getName())
-                    .setIntent(intent)
-                    .build();
-            shortcutManager.requestPinShortcut(pinShortcutInfo, null);
-        }
-        dialog.dismiss();
-    }
 }
 
 
