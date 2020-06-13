@@ -19,6 +19,8 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.IOException;
+
 import static android.widget.LinearLayout.HORIZONTAL;
 
 
@@ -195,7 +197,12 @@ public class MainActivity extends AppCompatActivity {
                             if (create_shortcut.isChecked()) {
                                 dialog.dismiss();
                                 ShortcutHelper fav = new ShortcutHelper(new_site, MainActivity.this);
-                                fav.fetchFaviconURL();
+                                try {
+                                    fav.fetchFaviconURL();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
                             }
                             else
                                 dialog.dismiss();
