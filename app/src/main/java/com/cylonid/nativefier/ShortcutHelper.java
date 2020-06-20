@@ -80,6 +80,7 @@ public class ShortcutHelper {
     private void loadFavicon(String url) {
         Target target = new Target() {
 
+            @Override
             public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                 showFailedMessage();
                 addShortcutToHomeScreen(d, null);
@@ -89,7 +90,7 @@ public class ShortcutHelper {
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 addShortcutToHomeScreen(d, bitmap);
             }
-
+            @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {}
         };
 
@@ -224,13 +225,13 @@ private class FaviconURLTask extends AsyncTask<Void, Void, String>
                 e.printStackTrace();
             }
 
-    //        TouchIconExtractor ex = new TouchIconExtractor();
-    //        List<Icon> icons = ex.fromPage(full_url, true);
-    //        if (icons.isEmpty())
-    //            return NO_ICON;
+            TouchIconExtractor ex = new TouchIconExtractor();
+            List<Icon> icons = ex.fromPage(full_url, true);
+            if (icons.isEmpty())
+                return NO_ICON;
 
-    //        Icon best = getBestIcon(icons);
-            return NO_ICON;
+            Icon best = getBestIcon(icons);
+            return best.getUrl();
         }
 
         @Override
@@ -248,7 +249,7 @@ private class FaviconURLTask extends AsyncTask<Void, Void, String>
 
         return Integer.parseInt(width);
     }
-    private class Content extends AsyncTask<Void, Void, Void> {
+    private class Content extends AsyncTask<Void, Void, String> {
 
         @Override
         protected void onPreExecute() {
@@ -257,7 +258,7 @@ private class FaviconURLTask extends AsyncTask<Void, Void, String>
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected String doInBackground(Void... voids) {
 
             TreeMap<Integer, String> found_icons = new TreeMap<>();
 
@@ -310,16 +311,12 @@ private class FaviconURLTask extends AsyncTask<Void, Void, String>
                     }
                 }
 
-
-                for (Map.Entry<Integer, String> entry : found_icons.entrySet()) {
-                    Integer key = entry.getKey();
-                    String value = entry.getValue();
-
-                    Log.d("MAP", key + " => " + value);
-                }
                 Map.Entry<Integer, String> best_fit = found_icons.lastEntry();
-                Log.d("BEST", best_fit.getValue());
-                
+                if (found_icons.isEmpty() || best_fit.getKey() < 96)
+                    return null;
+                else
+                    return best_fit.getValue();
+
 
             }
             catch(Exception e)
@@ -330,9 +327,12 @@ private class FaviconURLTask extends AsyncTask<Void, Void, String>
         }
 
             @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            if (result == null)
+                showFailedMessage();
+            else
+                loadFavicon(result);
 //            imageView.setImageBitmap(bitmap);
 //            textView.setText(title);
 //            progressDialog.dismiss();
