@@ -29,6 +29,7 @@ import com.squareup.picasso.Target;
 import net.mm2d.touchicon.Icon;
 import net.mm2d.touchicon.TouchIconExtractor;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Connection;
@@ -46,6 +47,8 @@ import java.net.URL;
 import java.nio.channels.ScatteringByteChannel;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -182,62 +185,69 @@ public class ShortcutHelper {
 private class FaviconURLTask extends AsyncTask<Void, Void, String>
 {
 
-    Icon getBestIcon(List<Icon> icons) {
-        Icon best = icons.get(0);
-        Icon best_apple = icons.get(0);
-        String APPLE = "apple-touch-icon";
+        Icon getBestIcon(List<Icon> icons) {
+            Icon best = icons.get(0);
+            Icon best_apple = icons.get(0);
+            String APPLE = "apple-touch-icon";
 
-        for (Icon i : icons) {
+            for (Icon i : icons) {
 
-            if (!best_apple.getRel().getValue().equals(APPLE))
-                best_apple = i; //Replace in case best_apple is non-apple due to wrong initialization.
+                if (!best_apple.getRel().getValue().equals(APPLE))
+                    best_apple = i; //Replace in case best_apple is non-apple due to wrong initialization.
 
-            boolean isAppleIcon = i.getRel().getValue().equals(APPLE);
-            boolean largerThanNonAppleBest = (!isAppleIcon && i.inferArea() > best.inferArea());
-            boolean largerThanAppleBest = (isAppleIcon && i.inferArea() > best_apple.inferArea());
+                boolean isAppleIcon = i.getRel().getValue().equals(APPLE);
+                boolean largerThanNonAppleBest = (!isAppleIcon && i.inferArea() > best.inferArea());
+                boolean largerThanAppleBest = (isAppleIcon && i.inferArea() > best_apple.inferArea());
 
-            if (largerThanNonAppleBest)
-                best = i;
-            if (largerThanAppleBest)
-                best_apple = i;
+                if (largerThanNonAppleBest)
+                    best = i;
+                if (largerThanAppleBest)
+                    best_apple = i;
+            }
+
+            if (best.inferSize().getWidth() < 96 && best_apple.inferSize().getWidth() > 96)
+                return best_apple;
+
+            return best;
         }
 
-        if (best.inferSize().getWidth() < 96 && best_apple.inferSize().getWidth() > 96)
-            return best_apple;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
 
-        return best;
-    }
+        }
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                htmlRequest(full_url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
+    //        TouchIconExtractor ex = new TouchIconExtractor();
+    //        List<Icon> icons = ex.fromPage(full_url, true);
+    //        if (icons.isEmpty())
+    //            return NO_ICON;
 
-    }
-    @Override
-    protected String doInBackground(Void... params) {
-        try {
-            htmlRequest(full_url);
-        } catch (IOException e) {
-            e.printStackTrace();
+    //        Icon best = getBestIcon(icons);
+            return NO_ICON;
         }
 
-//        TouchIconExtractor ex = new TouchIconExtractor();
-//        List<Icon> icons = ex.fromPage(full_url, true);
-//        if (icons.isEmpty())
-//            return NO_ICON;
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            loadFavicon(result);
 
-//        Icon best = getBestIcon(icons);
-        return NO_ICON;
+        }
     }
 
-    @Override
-    protected void onPostExecute(String result) {
-        super.onPostExecute(result);
-        loadFavicon(result);
 
-    }
-    }
+    private Integer getWidthFromIcon(String size_string) {
+        int x_index = size_string.indexOf("x");
+        String width = size_string.substring(0, x_index);
 
+        return Integer.parseInt(width);
+    }
     private class Content extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -248,69 +258,68 @@ private class FaviconURLTask extends AsyncTask<Void, Void, String>
 
         @Override
         protected Void doInBackground(Void... voids) {
-            try
-            {
-            //Connect to the website
-            Document doc = null;
 
-                doc = Jsoup.connect(full_url).followRedirects(true).get();
+            TreeMap<Integer, String> found_icons = new TreeMap<>();
 
+            try {
+                //Connect to the website
+                Document doc = Jsoup.connect(full_url).followRedirects(true).get();
+                Elements metaTags = doc.select("meta[http-equiv=refresh]");
 
-//                Connection.Response response = Jsoup.connect(full_url).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64)").followRedirects(true).execute();
-//                Log.d("ICONx", response.url().toString());
-            Elements metaTags = doc.select("meta[http-equiv=refresh]");
-
-            for (Element metaTag : metaTags) {
-                String content = metaTag.attr("content");
-                Pattern pattern = Pattern.compile(".*URL='?(.*)$", Pattern.CASE_INSENSITIVE);
-                Matcher m = pattern.matcher(content);
-                String redirectUrl = m.matches() ? m.group(1) : null;
-                if (redirectUrl != null) {
-                    full_url = redirectUrl;
+                //Step 1: Check for META Redirect
+                for (Element metaTag : metaTags) {
+                    String content = metaTag.attr("content");
+                    Pattern pattern = Pattern.compile(".*URL='?(.*)$", Pattern.CASE_INSENSITIVE);
+                    Matcher m = pattern.matcher(content);
+                    String redirectUrl = m.matches() ? m.group(1) : null;
+                    if (redirectUrl != null) {
+                        full_url = redirectUrl;
                         doc = Jsoup.connect(full_url).followRedirects(true).get();
+                    }
                 }
-
+                //Step 2: Check PWA manifest
                 Elements manifest = doc.select("link[rel=manifest]");
                 if (!manifest.isEmpty()) {
-
                     for (Element mf : manifest) {
-//                        Document doc2 = Jsoup.connect(mf.absUrl("href")).ignoreContentType(true).get();
-//                        String data = doc2.body().toString();
                         String data = Jsoup.connect(mf.absUrl("href")).ignoreContentType(true).execute().body();
+                        JSONObject json = new JSONObject(data);
+                        JSONArray manifest_icons = json.getJSONArray("icons");
 
-                        JSONObject json = null;
+                        for (int i = 0; i < manifest_icons.length(); i++) {
+                            String icon_href = manifest_icons.getJSONObject(i).getString("src");
+                            String sizes = manifest_icons.getJSONObject(i).getString("sizes");
+                            Integer width = getWidthFromIcon(sizes);
+                            URL base_url = new URL(mf.absUrl("href"));
+                            URL full_url = new URL(base_url, icon_href);
+                            found_icons.put(width, full_url.toString());
+                        }
+                    }
 
-                            json = new JSONObject(data);
+                }
+                //Step 3: Use PNG icons
+                else {
+                    Elements icons = doc.select("link[rel=icon]");
 
+                    for (Element icon : icons) {
 
-                            String title = (String) json.toString();
-                        String src = json.getJSONArray("icons").getJSONObject(0).getString("src");
-
-                        URL base = new URL(mf.absUrl("href"));
-
-                        URL relative2 = new URL(base, src);
-                        Log.d("JSON", relative2.toString());
+                        String icon_href = icon.absUrl("href");
+                        String sizes = icon.attr("sizes");
+                        Integer width = getWidthFromIcon(sizes);
+                        found_icons.put(width, icon_href);
 
                     }
                 }
 
-                Elements icons = doc.select("link[rel=icon]");
 
-                for (Element icon : icons) {
-                    Log.d("ICON", icon.absUrl("href"));
+                for (Map.Entry<Integer, String> entry : found_icons.entrySet()) {
+                    Integer key = entry.getKey();
+                    String value = entry.getValue();
+
+                    Log.d("MAP", key + " => " + value);
                 }
-                //Get the logo source of the website
-//                Element img = document.select("img").first();
-//                // Locate the src attribute
-//                String imgSrc = img.absUrl("src");
-//                // Download image from URL
-//                InputStream input = new java.net.URL(imgSrc).openStream();
-//                // Decode Bitmap
-//                bitmap = BitmapFactory.decodeStream(input);
-//
-//                //Get the title of the website
-//                title = document.title();
-            }
+                Map.Entry<Integer, String> best_fit = found_icons.lastEntry();
+                Log.d("BEST", best_fit.getValue());
+                
 
             }
             catch(Exception e)
