@@ -159,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void buildAddWebsiteDialog() {
         final View inflated_view = getLayoutInflater().inflate(R.layout.add_website_dialogue, null);
-        final EditText title = (EditText) inflated_view.findViewById(R.id.websiteTitle);
         final EditText url = (EditText) inflated_view.findViewById(R.id.websiteUrl);
         final Switch open_url_external = (Switch) inflated_view.findViewById(R.id.switchOpenUrlExternal);
         final Switch create_shortcut = (Switch) inflated_view.findViewById(R.id.switchCreateShortcut);
@@ -177,15 +176,13 @@ public class MainActivity extends AppCompatActivity {
             public void onShow(DialogInterface dialogInterface) {
 
                 Button positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                url.requestFocus();
                 positive.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View view) {
-                        String str_title = title.getText().toString();
                         String str_url = url.getText().toString();
-
-                        if (str_title.trim().equals(""))
-                            str_title = str_url.replace("http://", "").replace("https://", "").replace("www.", "");
+                        String str_title = str_url.replace("http://", "").replace("https://", "").replace("www.", "");;
 
                         if (!(str_url.startsWith("https://")) && !(str_url.startsWith("http://")))
                             str_url = "https://" + str_url;

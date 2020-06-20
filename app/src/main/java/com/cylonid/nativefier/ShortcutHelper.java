@@ -44,7 +44,10 @@ public class ShortcutHelper {
     private Bitmap bitmap;
     private ImageView view_favicon;
     private CircularProgressBar circularProgressBar;
+    private EditText title_field;
     private static String USER_AGENT = "Mozilla/5.0 (Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0";
+    private String shortcut_title;
+    private Button positive;
 
 
     public ShortcutHelper(WebsiteData d, Context c) {
@@ -52,6 +55,8 @@ public class ShortcutHelper {
         this.full_url = d.getUrl();
         this.c = c;
         this.bitmap = null;
+        this.shortcut_title = "";
+
     }
 
     public void fetchFaviconURL() {
@@ -64,27 +69,32 @@ public class ShortcutHelper {
             @Override
             public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                 showFailedMessage();
-                addShortcutToHomeScreen(d, null);
+                circularProgressBar.setVisibility(View.INVISIBLE);
+                positive.setEnabled(true);
+                title_field.requestFocus();
             }
 
             @Override
             public void onBitmapLoaded(Bitmap loaded, Picasso.LoadedFrom from) {
-//                addShortcutToHomeScreen(d, bitmap);
                 bitmap = loaded;
                 view_favicon.setImageBitmap(bitmap);
                 circularProgressBar.setVisibility(View.GONE);
                 view_favicon.setVisibility(View.VISIBLE);
-
+                positive.setEnabled(true);
+                title_field.requestFocus();
             }
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {}
         };
 
-        if (url != null)
+        if (url != null) {
             Picasso.get().load(url).into(target);
+        }
         else {
             showFailedMessage();
-            addShortcutToHomeScreen(d, null);
+            circularProgressBar.setVisibility(View.INVISIBLE);
+            positive.setEnabled(true);
+            title_field.requestFocus();
         }
     }
 
@@ -97,13 +107,16 @@ public class ShortcutHelper {
             icon = IconCompat.createWithBitmap(bitmap);
         else
             icon = IconCompat.createWithResource(c, R.drawable.ic_launcher_background);
+        String final_title = title_field.getText().toString();
+        if (final_title.equals(""))
+            final_title = d.getName();
 
         if (ShortcutManagerCompat.isRequestPinShortcutSupported(c)) {
 
-            ShortcutInfoCompat pinShortcutInfo = new ShortcutInfoCompat.Builder(c, d.getName())
+            ShortcutInfoCompat pinShortcutInfo = new ShortcutInfoCompat.Builder(c, final_title)
                     .setIcon(icon)
-                    .setShortLabel(d.getName())
-                    .setLongLabel(d.getName())
+                    .setShortLabel(final_title)
+                    .setLongLabel(final_title)
                     .setIntent(intent)
                     .build();
             ShortcutManagerCompat.requestPinShortcut(c, pinShortcutInfo, null);
@@ -113,7 +126,7 @@ public class ShortcutHelper {
     }
     private void showFailedMessage() {
         Toast toast = Toast.makeText(c,"We could not retrieve an icon for the selected website.", Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER, 0, 100);
+        toast.setGravity(Gravity.TOP, 0, 100);
         toast.show();
 
     }
@@ -128,7 +141,7 @@ public class ShortcutHelper {
     private void buildShortcutDialog() {
         LayoutInflater li = LayoutInflater.from(c);
         final View inflated_view = li.inflate(R.layout.shortcut_dialog, null);
-        final EditText title = (EditText) inflated_view.findViewById(R.id.websiteTitle);
+        title_field = (EditText) inflated_view.findViewById(R.id.websiteTitle);
         view_favicon = (ImageView) inflated_view.findViewById(R.id.favicon);
         circularProgressBar =  (CircularProgressBar)inflated_view.findViewById(R.id.circularProgressBar);
 
@@ -143,12 +156,14 @@ public class ShortcutHelper {
             @Override
             public void onShow(DialogInterface dialogInterface) {
 
-                Button positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                positive.setEnabled(false);
                 positive.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View view) {
                         addShortcutToHomeScreen(d, bitmap);
+                        dialog.dismiss();
                     }
                 });
             }
@@ -195,6 +210,11 @@ public class ShortcutHelper {
                         JSONObject json = new JSONObject(data);
                         JSONArray manifest_icons = json.getJSONArray("icons");
 
+                        shortcut_title = json.getString("short_name");
+                        if (shortcut_title.equals(""))
+                            shortcut_title = json.getString("name");
+
+
                         for (int i = 0; i < manifest_icons.length(); i++) {
                             String icon_href = manifest_icons.getJSONObject(i).getString("src");
                             String sizes = manifest_icons.getJSONObject(i).getString("sizes");
@@ -208,14 +228,25 @@ public class ShortcutHelper {
                 }
                 //Step 3: Use PNG icons
                 else {
-                    Elements icons = doc.select("link[rel=icon]");
 
+                    Element html_title = doc.selectFirst("title");
+                    shortcut_title = html_title.text();
+                    Elements icons = doc.select("link[rel=icon]");
+                    //If necessary, use apple icons
+                    if (icons.isEmpty()) {
+                        Elements apple_icons = doc.select("link[rel=apple-touch-icon]");
+                        Elements apple_icons_prec = doc.select("link[rel=apple-touch-icon-precomposed]");
+                        icons.addAll(apple_icons);
+                        icons.addAll(apple_icons_prec);
+                    }
                     for (Element icon : icons) {
 
                         String icon_href = icon.absUrl("href");
                         String sizes = icon.attr("sizes");
-                        Integer width = getWidthFromIcon(sizes);
-                        found_icons.put(width, icon_href);
+                        if (!sizes.equals("")) {
+                            Integer width = getWidthFromIcon(sizes);
+                            found_icons.put(width, icon_href);
+                        }
 
                     }
                 }
@@ -239,7 +270,12 @@ public class ShortcutHelper {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+            if (!shortcut_title.equals(""))
+                title_field.setText(shortcut_title);
+            else
+                title_field.setText(d.getName());
             loadFavicon(result);
+
 //            imageView.setImageBitmap(bitmap);
 //            textView.setText(title);
 //            progressDialog.dismiss();
