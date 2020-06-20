@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shortcutDialog"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+<!--    <com.mikhaellopez.circularprogressbar.CircularProgressBar-->
+<!--        android:id="@+id/circularProgressBar"-->
+<!--        android:layout_width="80dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:cpb_background_progressbar_color="#b6bbd8"-->
+<!--        app:cpb_background_progressbar_width="5dp"-->
+<!--        app:cpb_progress_direction="to_right"-->
+<!--        app:cpb_progressbar_color="#3f51b5"-->
+<!--        app:cpb_progressbar_width="10dp"-->
+<!--        app:cpb_indeterminate_mode="true"-->
+<!--        app:cpb_round_border="false" />-->
+    <ImageView
+        android:id="@+id/favicon"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_add_black_24dp" />
+    <EditText
+        android:id="@+id/websiteTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif"
+        android:hint="Downloading icon..."
+        android:inputType="text"
+        android:textAllCaps="false" />
+
+</LinearLayout>

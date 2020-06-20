@@ -1,11 +1,17 @@
 package com.cylonid.nativefier;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -32,22 +38,22 @@ import java.util.regex.Pattern;
 
 public class ShortcutHelper {
     private String full_url;
-    private ImageView view;
     private Context c;
     private WebsiteData d;
-    private static  String NO_ICON = "no_icon_found";
+    private Bitmap bitmap;
+    private ImageView view_favicon;
+
 
     public ShortcutHelper(WebsiteData d, Context c) {
         this.d = d;
         this.full_url = d.getUrl();
         this.c = c;
-        this.view = new ImageView(c);
+        this.bitmap = null;
     }
 
     public void fetchFaviconURL() throws IOException {
-//        new FaviconURLTask().execute();
+        buildShortcutDialog();
         new FaviconURLFetcher().execute();
-
     }
     private void loadFavicon(String url) {
         Target target = new Target() {
@@ -59,8 +65,10 @@ public class ShortcutHelper {
             }
 
             @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                addShortcutToHomeScreen(d, bitmap);
+            public void onBitmapLoaded(Bitmap loaded, Picasso.LoadedFrom from) {
+//                addShortcutToHomeScreen(d, bitmap);
+                bitmap = loaded;
+                view_favicon.setImageBitmap(bitmap);
             }
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {}
@@ -110,6 +118,38 @@ public class ShortcutHelper {
 
         return Integer.parseInt(width);
     }
+
+    private void buildShortcutDialog() {
+        LayoutInflater li = LayoutInflater.from(c);
+        final View inflated_view = li.inflate(R.layout.shortcut_dialog, null);
+        final EditText title = (EditText) inflated_view.findViewById(R.id.websiteTitle);
+        view_favicon = (ImageView) inflated_view.findViewById(R.id.favicon);
+
+        final AlertDialog dialog = new AlertDialog.Builder(c)
+                .setView(inflated_view)
+                .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+
+                Button positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                positive.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        addShortcutToHomeScreen(d, bitmap);
+                    }
+                });
+            }
+        });
+        dialog.show();
+    }
+
+
     private class FaviconURLFetcher extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -121,6 +161,7 @@ public class ShortcutHelper {
         @Override
         protected String doInBackground(Void... voids) {
 
+            //TreeMap<Icon width in px, URL>
             TreeMap<Integer, String> found_icons = new TreeMap<>();
 
             try {
@@ -172,17 +213,19 @@ public class ShortcutHelper {
                     }
                 }
 
-                Map.Entry<Integer, String> best_fit = found_icons.lastEntry();
-                if (found_icons.isEmpty() || best_fit.getKey() < 96)
-                    return null;
-                else
-                    return best_fit.getValue();
-
-
+                if (!found_icons.isEmpty()) {
+                    Map.Entry<Integer, String> best_fit = found_icons.lastEntry();
+                    if (best_fit.getKey() < 96)
+                        return null;
+                    else
+                        return best_fit.getValue();
+                }
             }
             catch(Exception e)
             {
                 e.printStackTrace();
+                showFailedMessage();
+                addShortcutToHomeScreen(d, null);
             }
             return null;
         }

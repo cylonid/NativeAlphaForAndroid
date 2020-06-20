@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                         String str_url = url.getText().toString();
 
                         if (str_title.trim().equals(""))
-                            str_title = str_url.replace("http://", "").replace("https://", "").replace("http://www.", "").replace("https://www.", "");
+                            str_title = str_url.replace("http://", "").replace("https://", "").replace("www.", "");
 
                         if (!(str_url.startsWith("https://")) && !(str_url.startsWith("http://")))
                             str_url = "https://" + str_url;
@@ -194,18 +194,15 @@ public class MainActivity extends AppCompatActivity {
                             WebsiteData new_site = new WebsiteData(str_title, str_url, open_url_external.isChecked());
                             WebsiteDataManager.getInstance().addWebsite(new_site);
                             addRow(new_site);
+                            dialog.dismiss();
                             if (create_shortcut.isChecked()) {
-                                dialog.dismiss();
                                 ShortcutHelper fav = new ShortcutHelper(new_site, MainActivity.this);
                                 try {
                                     fav.fetchFaviconURL();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-
                             }
-                            else
-                                dialog.dismiss();
                         }
                         else
                             url.setError("Please input a valid web address.");
@@ -215,7 +212,6 @@ public class MainActivity extends AppCompatActivity {
         });
         dialog.show();
     }
-
 
     private void buildDeleteItemDialog(final int ID) {
 
