@@ -197,11 +197,8 @@ public class MainActivity extends AppCompatActivity {
                             dialog.dismiss();
                             if (create_shortcut.isChecked()) {
                                 ShortcutHelper fav = new ShortcutHelper(new_site, MainActivity.this);
-                                try {
-                                    fav.fetchFaviconURL();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                                fav.fetchFaviconURL();
+
                             }
                         }
                         else

@@ -3,35 +3,71 @@
     android:id="@+id/shortcutDialog"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-<!--    <com.mikhaellopez.circularprogressbar.CircularProgressBar-->
-<!--        android:id="@+id/circularProgressBar"-->
-<!--        android:layout_width="80dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:cpb_background_progressbar_color="#b6bbd8"-->
-<!--        app:cpb_background_progressbar_width="5dp"-->
-<!--        app:cpb_progress_direction="to_right"-->
-<!--        app:cpb_progressbar_color="#3f51b5"-->
-<!--        app:cpb_progressbar_width="10dp"-->
-<!--        app:cpb_indeterminate_mode="true"-->
-<!--        app:cpb_round_border="false" />-->
-    <ImageView
-        android:id="@+id/favicon"
-        android:layout_width="80dp"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_add_black_24dp" />
-    <EditText
-        android:id="@+id/websiteTitle"
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="16dp"
-        android:fontFamily="sans-serif"
-        android:hint="Downloading icon..."
-        android:inputType="text"
-        android:textAllCaps="false" />
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:text="Shortcut Icon"/>
+        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+            android:id="@+id/circularProgressBar"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="visible"
+            app:cpb_background_progressbar_color="#b6bbd8"
+            app:cpb_background_progressbar_width="5dp"
+            app:cpb_progress_direction="to_right"
+            app:cpb_progressbar_color="#000000"
+            app:cpb_progressbar_width="5dp"
+            app:cpb_indeterminate_mode="true"
+            app:cpb_round_border="false" />
+        <ImageView
+            android:id="@+id/favicon"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_add_black_24dp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_height="wrap_content"
+            android:text="Shortcut Title"/>
+        <EditText
+            android:id="@+id/websiteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif"
+            android:hint="Loading icon and website title..."
+            android:inputType="text"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

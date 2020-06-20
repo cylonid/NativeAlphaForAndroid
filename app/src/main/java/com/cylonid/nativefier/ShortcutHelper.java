@@ -19,6 +19,7 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -42,6 +43,8 @@ public class ShortcutHelper {
     private WebsiteData d;
     private Bitmap bitmap;
     private ImageView view_favicon;
+    private CircularProgressBar circularProgressBar;
+    private static String USER_AGENT = "Mozilla/5.0 (Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0";
 
 
     public ShortcutHelper(WebsiteData d, Context c) {
@@ -51,7 +54,7 @@ public class ShortcutHelper {
         this.bitmap = null;
     }
 
-    public void fetchFaviconURL() throws IOException {
+    public void fetchFaviconURL() {
         buildShortcutDialog();
         new FaviconURLFetcher().execute();
     }
@@ -69,6 +72,9 @@ public class ShortcutHelper {
 //                addShortcutToHomeScreen(d, bitmap);
                 bitmap = loaded;
                 view_favicon.setImageBitmap(bitmap);
+                circularProgressBar.setVisibility(View.GONE);
+                view_favicon.setVisibility(View.VISIBLE);
+
             }
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {}
@@ -124,6 +130,7 @@ public class ShortcutHelper {
         final View inflated_view = li.inflate(R.layout.shortcut_dialog, null);
         final EditText title = (EditText) inflated_view.findViewById(R.id.websiteTitle);
         view_favicon = (ImageView) inflated_view.findViewById(R.id.favicon);
+        circularProgressBar =  (CircularProgressBar)inflated_view.findViewById(R.id.circularProgressBar);
 
         final AlertDialog dialog = new AlertDialog.Builder(c)
                 .setView(inflated_view)
@@ -166,7 +173,7 @@ public class ShortcutHelper {
 
             try {
                 //Connect to the website
-                Document doc = Jsoup.connect(full_url).followRedirects(true).get();
+                Document doc = Jsoup.connect(full_url).userAgent(USER_AGENT).followRedirects(true).get();
                 Elements metaTags = doc.select("meta[http-equiv=refresh]");
 
                 //Step 1: Check for META Redirect
@@ -224,8 +231,6 @@ public class ShortcutHelper {
             catch(Exception e)
             {
                 e.printStackTrace();
-                showFailedMessage();
-                addShortcutToHomeScreen(d, null);
             }
             return null;
         }
