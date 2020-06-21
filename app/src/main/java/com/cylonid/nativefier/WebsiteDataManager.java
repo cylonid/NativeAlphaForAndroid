@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class WebsiteDataManager {
 
 
-    private ArrayList<WebsiteData> websites;
+    private ArrayList<WebApp> websites;
     private int max_assigned_ID;
     private SharedPreferences appdata;
     private static final String shared_pref_data = "WEBSITEDATA";
@@ -30,7 +30,7 @@ public class WebsiteDataManager {
         this.context = context;
     }
 
-    private void saveAppData() {
+    public void saveAppData() {
         assert(context != null);
 
         appdata = context.getApplicationContext().getSharedPreferences(shared_pref_data, Context.MODE_PRIVATE);
@@ -49,7 +49,7 @@ public class WebsiteDataManager {
         if (appdata.contains(shared_pref_data)) {
             Gson gson = new Gson();
             String json = appdata.getString(shared_pref_data, "");
-            websites = gson.fromJson(json, new TypeToken<ArrayList<WebsiteData>>() {}.getType());
+            websites = gson.fromJson(json, new TypeToken<ArrayList<WebApp>>() {}.getType());
         }
         if (appdata.contains(shared_pref_max_id))
             max_assigned_ID = appdata.getInt(shared_pref_max_id, max_assigned_ID);
@@ -58,9 +58,9 @@ public class WebsiteDataManager {
     public void initDummyData()
     {
         loadAppData();
-        WebsiteData d1 = new WebsiteData("ORF.at", "orf.at");
-        WebsiteData d2 = new WebsiteData("Die Presse", "diepresse.com");
-        WebsiteData d3 = new WebsiteData("ÖBB", "oebb.at");
+        WebApp d1 = new WebApp("ORF.at", "orf.at");
+        WebApp d2 = new WebApp("Die Presse", "diepresse.com");
+        WebApp d3 = new WebApp("ÖBB", "oebb.at");
 
         addWebsite(d1);
         addWebsite(d2);
@@ -72,14 +72,13 @@ public class WebsiteDataManager {
         return instance;
     }
 
-
-    public void addWebsite(WebsiteData new_site) {
+    public void addWebsite(WebApp new_site) {
             websites.add(new_site);
             saveAppData();
     }
 
     public void removeWebsite(int ID) {
-        for (WebsiteData d : websites) {
+        for (WebApp d : websites) {
             if (d.getID() == ID) {
                 websites.remove(d);
                 break;
@@ -92,9 +91,13 @@ public class WebsiteDataManager {
         max_assigned_ID++;
         return max_assigned_ID;
     }
-    public ArrayList<WebsiteData> getWebsites() {
+    public ArrayList<WebApp> getWebsites() {
         loadAppData();
         return websites;
+    }
+    public WebApp getWebApp(int i) {
+        loadAppData();
+        return websites.get(i);
     }
 }
 

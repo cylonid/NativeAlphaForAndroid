@@ -38,9 +38,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ShortcutHelper {
-    private String full_url;
+    private String strBaseUrl;
     private Context c;
-    private WebsiteData d;
+    private WebApp d;
     private Bitmap bitmap;
     private ImageView uiFavicon;
     private CircularProgressBar uiProgressBar;
@@ -52,9 +52,9 @@ public class ShortcutHelper {
     TreeMap<Integer, String> found_icons;
 
 
-    public ShortcutHelper(WebsiteData d, Context c) {
+    public ShortcutHelper(WebApp d, Context c) {
         this.d = d;
-        this.full_url = d.getUrl();
+        this.strBaseUrl = d.getUrl();
         this.c = c;
         this.bitmap = null;
         this.shortcut_title = "";
@@ -100,7 +100,7 @@ public class ShortcutHelper {
         }
     }
 
-    private void addShortcutToHomeScreen(WebsiteData d, Bitmap bitmap)
+    private void addShortcutToHomeScreen(Bitmap bitmap)
     {
         Intent intent = Utility.createWebViewIntent(d, c);
 
@@ -141,10 +141,10 @@ public class ShortcutHelper {
     }
 
     private void addHardcodedIcons() {
-        if (full_url.contains("amazon"))
+        if (strBaseUrl.contains("amazon"))
             found_icons.put(300, "https://s3.amazonaws.com/prod-widgetSource/in-shop/pub/images/amzn_favicon_blk.png");
 
-        if (full_url.contains("oebb"))
+        if (strBaseUrl.contains("oebb"))
             found_icons.put(192, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
 
     }
@@ -173,7 +173,7 @@ public class ShortcutHelper {
 
                     @Override
                     public void onClick(View view) {
-                        addShortcutToHomeScreen(d, bitmap);
+                        addShortcutToHomeScreen(bitmap);
                         dialog.dismiss();
                     }
                 });
@@ -196,7 +196,7 @@ public class ShortcutHelper {
 
             try {
                 //Connect to the website
-                Document doc = Jsoup.connect(full_url).userAgent(USER_AGENT).followRedirects(true).get();
+                Document doc = Jsoup.connect(strBaseUrl).userAgent(USER_AGENT).followRedirects(true).get();
                 Elements metaTags = doc.select("meta[http-equiv=refresh]");
 
                 //Step 1: Check for META Redirect
@@ -208,8 +208,8 @@ public class ShortcutHelper {
                     Matcher m = pattern.matcher(content);
                     String redirectUrl = m.matches() ? m.group(1) : null;
                     if (redirectUrl != null) {
-                        full_url = redirectUrl;
-                        doc = Jsoup.connect(full_url).followRedirects(true).get();
+                        strBaseUrl = redirectUrl;
+                        doc = Jsoup.connect(strBaseUrl).followRedirects(true).get();
                     }
                 }
                 //Step 2: Check PWA manifest
@@ -222,6 +222,14 @@ public class ShortcutHelper {
                             JSONArray manifest_icons = json.getJSONArray("icons");
 
                             shortcut_title = json.getString("name");
+
+                            String start_url = json.getString("start_url");
+                            if (!start_url.isEmpty()) {
+                                URL base_url = new URL(mf.absUrl("href"));
+                                URL fl_url = new URL(base_url, start_url);
+                                d.setUrl(fl_url.toString());
+
+                            }
 
                             for (int i = 0; i < manifest_icons.length(); i++) {
                                 String icon_href = manifest_icons.getJSONObject(i).getString("src");

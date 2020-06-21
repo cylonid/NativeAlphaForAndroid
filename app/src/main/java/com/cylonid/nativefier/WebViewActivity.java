@@ -1,5 +1,6 @@
 package com.cylonid.nativefier;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class WebViewActivity extends AppCompatActivity {
     private WebView wv;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +29,8 @@ public class WebViewActivity extends AppCompatActivity {
 
             wv = (WebView)findViewById(R.id.webview);
             wv.getSettings().setBlockNetworkLoads(false);
+            wv.getSettings().setJavaScriptEnabled(true);
+            wv.getSettings().setDomStorageEnabled(true);
             if (open_external)
                 wv.setWebViewClient(new WebViewClient());
             else

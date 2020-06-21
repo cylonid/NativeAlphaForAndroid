@@ -19,8 +19,6 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.IOException;
-
 import static android.widget.LinearLayout.HORIZONTAL;
 
 
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         WebsiteDataManager.getInstance().initContext(this);
 //        WebsiteDataManager.getInstance().initDummyData();
 
-        for (WebsiteData d : WebsiteDataManager.getInstance().getWebsites())
+        for (WebApp d : WebsiteDataManager.getInstance().getWebsites())
             addRow(d);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -77,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             moveTaskToBack(true);
     }
 
-    private void addRow(final WebsiteData data)
+    private void addRow(final WebApp data)
     {
         int row_height = (int)getResources().getDimension(R.dimen.line_height);
         int transparent_color = ResourcesCompat.getColor(getResources(), R.color.transparent, null);
@@ -168,12 +166,13 @@ public class MainActivity extends AppCompatActivity {
                             str_url = "https://" + str_url;
 
                         if (Patterns.WEB_URL.matcher(str_url.toLowerCase()).matches()) {
-                            WebsiteData new_site = new WebsiteData(str_title, str_url, open_url_external.isChecked());
+                            WebApp new_site = new WebApp(str_title, str_url, open_url_external.isChecked());
                             WebsiteDataManager.getInstance().addWebsite(new_site);
-                            addRow(new_site);
+                            int new_id = new_site.getID();
+                            addRow(WebsiteDataManager.getInstance().getWebApp(new_id));
                             dialog.dismiss();
                             if (create_shortcut.isChecked()) {
-                                ShortcutHelper fav = new ShortcutHelper(new_site, MainActivity.this);
+                                ShortcutHelper fav = new ShortcutHelper(WebsiteDataManager.getInstance().getWebApp(new_id), MainActivity.this);
                                 fav.fetchFaviconURL();
 
                             }
@@ -195,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
                 WebsiteDataManager.getInstance().removeWebsite(ID);
                 mainScreen.removeAllViews();
-                for (WebsiteData d : WebsiteDataManager.getInstance().getWebsites())
+                for (WebApp d : WebsiteDataManager.getInstance().getWebsites())
                     addRow(d);
             }
         });
@@ -208,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void openWebView(WebsiteData d) {
+    private void openWebView(WebApp d) {
         startActivity(Utility.createWebViewIntent(d, MainActivity.this));
         finish();
     }
