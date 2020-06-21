@@ -24,13 +24,13 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.TreeMap;
@@ -42,12 +42,14 @@ public class ShortcutHelper {
     private Context c;
     private WebsiteData d;
     private Bitmap bitmap;
-    private ImageView view_favicon;
-    private CircularProgressBar circularProgressBar;
-    private EditText title_field;
-    private static String USER_AGENT = "Mozilla/5.0 (Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0";
+    private ImageView uiFavicon;
+    private CircularProgressBar uiProgressBar;
+    private EditText uiTitle;
+    private final static String USER_AGENT = "Mozilla/5.0 (Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0";
     private String shortcut_title;
-    private Button positive;
+    private Button uiBtnPositive;
+    //TreeMap<Icon width in px, URL>
+    TreeMap<Integer, String> found_icons;
 
 
     public ShortcutHelper(WebsiteData d, Context c) {
@@ -56,7 +58,7 @@ public class ShortcutHelper {
         this.c = c;
         this.bitmap = null;
         this.shortcut_title = "";
-
+        this.found_icons = new TreeMap<>();
     }
 
     public void fetchFaviconURL() {
@@ -69,19 +71,19 @@ public class ShortcutHelper {
             @Override
             public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                 showFailedMessage();
-                circularProgressBar.setVisibility(View.INVISIBLE);
-                positive.setEnabled(true);
-                title_field.requestFocus();
+                uiProgressBar.setVisibility(View.INVISIBLE);
+                uiBtnPositive.setEnabled(true);
+                uiTitle.requestFocus();
             }
 
             @Override
             public void onBitmapLoaded(Bitmap loaded, Picasso.LoadedFrom from) {
                 bitmap = loaded;
-                view_favicon.setImageBitmap(bitmap);
-                circularProgressBar.setVisibility(View.GONE);
-                view_favicon.setVisibility(View.VISIBLE);
-                positive.setEnabled(true);
-                title_field.requestFocus();
+                uiFavicon.setImageBitmap(bitmap);
+                uiProgressBar.setVisibility(View.GONE);
+                uiFavicon.setVisibility(View.VISIBLE);
+                uiBtnPositive.setEnabled(true);
+                uiTitle.requestFocus();
             }
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {}
@@ -92,9 +94,9 @@ public class ShortcutHelper {
         }
         else {
             showFailedMessage();
-            circularProgressBar.setVisibility(View.INVISIBLE);
-            positive.setEnabled(true);
-            title_field.requestFocus();
+            uiProgressBar.setVisibility(View.INVISIBLE);
+            uiBtnPositive.setEnabled(true);
+            uiTitle.requestFocus();
         }
     }
 
@@ -107,7 +109,7 @@ public class ShortcutHelper {
             icon = IconCompat.createWithBitmap(bitmap);
         else
             icon = IconCompat.createWithResource(c, R.drawable.ic_launcher_background);
-        String final_title = title_field.getText().toString();
+        String final_title = uiTitle.getText().toString();
         if (final_title.equals(""))
             final_title = d.getName();
 
@@ -138,12 +140,21 @@ public class ShortcutHelper {
         return Integer.parseInt(width);
     }
 
+    private void addHardcodedIcons() {
+        if (full_url.contains("amazon"))
+            found_icons.put(300, "https://s3.amazonaws.com/prod-widgetSource/in-shop/pub/images/amzn_favicon_blk.png");
+
+        if (full_url.contains("oebb"))
+            found_icons.put(192, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
+
+    }
+
     private void buildShortcutDialog() {
         LayoutInflater li = LayoutInflater.from(c);
         final View inflated_view = li.inflate(R.layout.shortcut_dialog, null);
-        title_field = (EditText) inflated_view.findViewById(R.id.websiteTitle);
-        view_favicon = (ImageView) inflated_view.findViewById(R.id.favicon);
-        circularProgressBar =  (CircularProgressBar)inflated_view.findViewById(R.id.circularProgressBar);
+        uiTitle = (EditText) inflated_view.findViewById(R.id.websiteTitle);
+        uiFavicon = (ImageView) inflated_view.findViewById(R.id.favicon);
+        uiProgressBar =  (CircularProgressBar)inflated_view.findViewById(R.id.circularProgressBar);
 
         final AlertDialog dialog = new AlertDialog.Builder(c)
                 .setView(inflated_view)
@@ -156,9 +167,9 @@ public class ShortcutHelper {
             @Override
             public void onShow(DialogInterface dialogInterface) {
 
-                positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                positive.setEnabled(false);
-                positive.setOnClickListener(new View.OnClickListener() {
+                uiBtnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                uiBtnPositive.setEnabled(false);
+                uiBtnPositive.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View view) {
@@ -183,16 +194,15 @@ public class ShortcutHelper {
         @Override
         protected String doInBackground(Void... voids) {
 
-            //TreeMap<Icon width in px, URL>
-            TreeMap<Integer, String> found_icons = new TreeMap<>();
-
             try {
                 //Connect to the website
                 Document doc = Jsoup.connect(full_url).userAgent(USER_AGENT).followRedirects(true).get();
                 Elements metaTags = doc.select("meta[http-equiv=refresh]");
 
                 //Step 1: Check for META Redirect
-                for (Element metaTag : metaTags) {
+                if (!metaTags.isEmpty())
+                {
+                    Element metaTag = metaTags.first();
                     String content = metaTag.attr("content");
                     Pattern pattern = Pattern.compile(".*URL='?(.*)$", Pattern.CASE_INSENSITIVE);
                     Matcher m = pattern.matcher(content);
@@ -205,28 +215,28 @@ public class ShortcutHelper {
                 //Step 2: Check PWA manifest
                 Elements manifest = doc.select("link[rel=manifest]");
                 if (!manifest.isEmpty()) {
-                    for (Element mf : manifest) {
+                        Element mf = manifest.first();
                         String data = Jsoup.connect(mf.absUrl("href")).ignoreContentType(true).execute().body();
-                        JSONObject json = new JSONObject(data);
-                        JSONArray manifest_icons = json.getJSONArray("icons");
+                        try {
+                            JSONObject json = new JSONObject(data);
+                            JSONArray manifest_icons = json.getJSONArray("icons");
 
-                        shortcut_title = json.getString("short_name");
-                        if (shortcut_title.equals(""))
                             shortcut_title = json.getString("name");
 
-
-                        for (int i = 0; i < manifest_icons.length(); i++) {
-                            String icon_href = manifest_icons.getJSONObject(i).getString("src");
-                            String sizes = manifest_icons.getJSONObject(i).getString("sizes");
-                            Integer width = getWidthFromIcon(sizes);
-                            URL base_url = new URL(mf.absUrl("href"));
-                            URL full_url = new URL(base_url, icon_href);
-                            found_icons.put(width, full_url.toString());
+                            for (int i = 0; i < manifest_icons.length(); i++) {
+                                String icon_href = manifest_icons.getJSONObject(i).getString("src");
+                                String sizes = manifest_icons.getJSONObject(i).getString("sizes");
+                                Integer width = getWidthFromIcon(sizes);
+                                URL base_url = new URL(mf.absUrl("href"));
+                                URL full_url = new URL(base_url, icon_href);
+                                found_icons.put(width, full_url.toString());
+                            }
                         }
-                    }
-
+                        catch(JSONException e) {
+                            e.printStackTrace();
+                        }
                 }
-                //Step 3: Use PNG icons
+                //Step 3: Fallback to PNG icons
                 else {
 
                     Element html_title = doc.selectFirst("title");
@@ -247,10 +257,12 @@ public class ShortcutHelper {
                             Integer width = getWidthFromIcon(sizes);
                             found_icons.put(width, icon_href);
                         }
+                        else
+                            found_icons.put(1, icon_href);
 
                     }
                 }
-
+                addHardcodedIcons();
                 if (!found_icons.isEmpty()) {
                     Map.Entry<Integer, String> best_fit = found_icons.lastEntry();
                     if (best_fit.getKey() < 96)
@@ -271,9 +283,9 @@ public class ShortcutHelper {
             super.onPostExecute(result);
 
             if (!shortcut_title.equals(""))
-                title_field.setText(shortcut_title);
+                uiTitle.setText(shortcut_title);
             else
-                title_field.setText(d.getName());
+                uiTitle.setText(d.getName());
             loadFavicon(result);
 
 //            imageView.setImageBitmap(bitmap);

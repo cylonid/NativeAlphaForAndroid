@@ -49,26 +49,6 @@ public class MainActivity extends AppCompatActivity {
                 buildAddWebsiteDialog();
             }
         });
-
-//                Thread thread = new Thread(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                try  {
-//                    TouchIconExtractor x = new TouchIconExtractor();
-//                    List<net.mm2d.touchicon.Icon> a = x.fromPage("https://mkassling.at", true);
-//
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//
-//        thread.start();
-
-
-
     }
 
     @Override
