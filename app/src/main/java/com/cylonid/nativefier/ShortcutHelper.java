@@ -111,7 +111,7 @@ public class ShortcutHelper {
             icon = IconCompat.createWithResource(c, R.drawable.ic_launcher_background);
         String final_title = uiTitle.getText().toString();
         if (final_title.equals(""))
-            final_title = d.getName();
+            final_title = d.getTitle();
 
         if (ShortcutManagerCompat.isRequestPinShortcutSupported(c)) {
 
@@ -293,7 +293,7 @@ public class ShortcutHelper {
             if (!shortcut_title.equals(""))
                 uiTitle.setText(shortcut_title);
             else
-                uiTitle.setText(d.getName());
+                uiTitle.setText(d.getTitle());
             loadFavicon(result);
 
 //            imageView.setImageBitmap(bitmap);

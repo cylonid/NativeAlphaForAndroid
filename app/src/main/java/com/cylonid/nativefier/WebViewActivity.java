@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class WebViewActivity extends AppCompatActivity {
     private WebView wv;
-    private int webappID = -1;
+    private WebApp webapp;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -25,9 +25,10 @@ public class WebViewActivity extends AppCompatActivity {
             setContentView(R.layout.full_webview);
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
-            webappID = getIntent().getIntExtra(Utility.INT_ID_WEBAPPID, -1);
-            String url = WebsiteDataManager.getInstance().getWebApp(webappID).getLoadableUrl();
-            boolean open_external = getIntent().getBooleanExtra(Utility.INT_ID_EXTERNAL, false);
+            int webappID = getIntent().getIntExtra(Utility.INT_ID_WEBAPPID, -1);
+            webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
+            String url = webapp.getLoadableUrl();
+            boolean open_external = webapp.openUrlExternal();
 
             wv = (WebView)findViewById(R.id.webview);
             wv.getSettings().setBlockNetworkLoads(false);
@@ -54,7 +55,7 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        WebsiteDataManager.getInstance().getWebApp(webappID).saveCurrentUrl(wv.getUrl());
+        webapp.saveCurrentUrl(wv.getUrl());
     }
 
     protected void onSaveInstanceState(Bundle outState) {

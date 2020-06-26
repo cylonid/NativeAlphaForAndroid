@@ -1,8 +1,50 @@
 package com.cylonid.nativefier;
 
 public class WebApp {
-    private String name;
+    private String title;
+    private String base_url;
+    private String last_used_url;
+    private Long timestamp_last_used_url;
+    private int timeout_last_used_url;
+    private int ID;
+    private boolean open_url_external;
+    private boolean active_entry;
 
+    public WebApp(String title, String base_url, boolean open_url_internal) {
+        this.title = title;
+        this.base_url = base_url;
+        this.ID = WebsiteDataManager.getInstance().getIncrementedID();
+        this.open_url_external = open_url_internal;
+        active_entry = true;
+        timeout_last_used_url = 30;
+        last_used_url = null;
+    }
+
+    public WebApp(String title, String base_url) {
+        this.title = title;
+        this.base_url = base_url;
+        this.ID = WebsiteDataManager.getInstance().getIncrementedID();
+        this.open_url_external = false;
+        active_entry = true;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getBaseUrl() {
+        return base_url;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public boolean openUrlExternal() {
+        return open_url_external;
+    }
+
+    public boolean isActive() { return active_entry; }
     public void setBase_url(String base_url) {
         this.base_url = base_url;
         WebsiteDataManager.getInstance().saveAppData();
@@ -35,48 +77,4 @@ public class WebApp {
 
         return base_url;
     }
-
-    private String base_url;
-    private String last_used_url;
-    private Long timestamp_last_used_url;
-    private int timeout_last_used_url;
-    private int ID;
-    private boolean open_url_external;
-    private boolean active_entry;
-
-    public WebApp(String name, String base_url, boolean open_url_internal) {
-        this.name = name;
-        this.base_url = base_url;
-        this.ID = WebsiteDataManager.getInstance().getIncrementedID();
-        this.open_url_external = open_url_internal;
-        active_entry = true;
-        timeout_last_used_url = 30;
-        last_used_url = null;
-    }
-
-    public WebApp(String name, String base_url) {
-        this.name = name;
-        this.base_url = base_url;
-        this.ID = WebsiteDataManager.getInstance().getIncrementedID();
-        this.open_url_external = false;
-        active_entry = true;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getBaseUrl() {
-        return base_url;
-    }
-
-    public int getID() {
-        return ID;
-    }
-
-    public boolean openUrlExternal() {
-        return open_url_external;
-    }
-
-    public boolean isActive() { return active_entry; }
 }

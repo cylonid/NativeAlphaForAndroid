@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         Button btn_title = new Button(this);
 //        btn_title.setId("btn_title");
         btn_title.setBackgroundColor(transparent_color);
-        btn_title.setText(data.getName());
+        btn_title.setText(data.getTitle());
 //        btn_title.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_black_24dp);
 //        btn_title.setGravity(Gravity.START | Gravity.CENTER);
         LinearLayout.LayoutParams layout_title = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, row_height);
