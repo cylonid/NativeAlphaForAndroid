@@ -42,7 +42,7 @@ public class WebsiteDataManager {
         editor.commit();
     }
 
-    private void loadAppData() {
+    public void loadAppData() {
         assert(context != null);
 
         appdata = context.getApplicationContext().getSharedPreferences(shared_pref_data, Context.MODE_PRIVATE);
@@ -78,13 +78,8 @@ public class WebsiteDataManager {
     }
 
     public void removeWebsite(int ID) {
-        for (WebApp d : websites) {
-            if (d.getID() == ID) {
-                websites.remove(d);
-                break;
-            }
-        }
-        saveAppData();
+       websites.get(ID).markInactive();
+       saveAppData();
     }
 
     public int getIncrementedID() {
@@ -95,6 +90,7 @@ public class WebsiteDataManager {
         loadAppData();
         return websites;
     }
+
     public WebApp getWebApp(int i) {
         loadAppData();
         return websites.get(i);

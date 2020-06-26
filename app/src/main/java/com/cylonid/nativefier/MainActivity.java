@@ -33,9 +33,7 @@ public class MainActivity extends AppCompatActivity {
         mainScreen = (LinearLayout) findViewById(R.id.mainScreen);
         WebsiteDataManager.getInstance().initContext(this);
 //        WebsiteDataManager.getInstance().initDummyData();
-
-        for (WebApp d : WebsiteDataManager.getInstance().getWebsites())
-            addRow(d);
+        addActiveWebAppsToUI();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -194,8 +192,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
                 WebsiteDataManager.getInstance().removeWebsite(ID);
                 mainScreen.removeAllViews();
-                for (WebApp d : WebsiteDataManager.getInstance().getWebsites())
-                    addRow(d);
+                addActiveWebAppsToUI();
+
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -205,6 +203,15 @@ public class MainActivity extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void addActiveWebAppsToUI () {
+        for (WebApp d : WebsiteDataManager.getInstance().getWebsites()) {
+            if (d.isActive() == false)
+                continue;
+            else
+                addRow(d);
+        }
     }
 
     private void openWebView(WebApp d) {

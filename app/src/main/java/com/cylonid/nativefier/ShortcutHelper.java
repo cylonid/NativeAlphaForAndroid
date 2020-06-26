@@ -54,7 +54,7 @@ public class ShortcutHelper {
 
     public ShortcutHelper(WebApp d, Context c) {
         this.d = d;
-        this.strBaseUrl = d.getUrl();
+        this.strBaseUrl = d.getBaseUrl();
         this.c = c;
         this.bitmap = null;
         this.shortcut_title = "";
@@ -227,7 +227,7 @@ public class ShortcutHelper {
                             if (!start_url.isEmpty()) {
                                 URL base_url = new URL(mf.absUrl("href"));
                                 URL fl_url = new URL(base_url, start_url);
-                                d.setUrl(fl_url.toString());
+                                d.setBase_url(fl_url.toString());
 
                             }
 
