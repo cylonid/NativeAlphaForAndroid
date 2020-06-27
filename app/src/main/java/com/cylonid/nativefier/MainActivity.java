@@ -167,12 +167,18 @@ public class MainActivity extends AppCompatActivity {
         if (!webapp.isRestorePageSet()) {
             textTimeout.setEnabled(false);
         }
-        else
+        else {
             textTimeout.setEnabled(true);
+            textTimeout.setText(String.valueOf(webapp.getTimeout_last_used_url()));
+        }
         switchRestorePage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
+                if (isChecked) {
                     textTimeout.setEnabled(true);
+                    textTimeout.setText(String.valueOf(webapp.getTimeout_last_used_url()));
+
+                }
+
                 else
                     textTimeout.setEnabled(false);
             }
@@ -203,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        WebsiteDataManager.getInstance().getWebApp(webappID).saveNewSettings(switchCookies.isChecked(), switchJS.isChecked(), switchRestorePage.isChecked());
+                        WebsiteDataManager.getInstance().getWebApp(webappID).saveNewSettings(switchCookies.isChecked(), switchJS.isChecked(), switchRestorePage.isChecked(), Integer.parseInt(textTimeout.getText().toString()));
                         dialog.dismiss();
                     }
                 });

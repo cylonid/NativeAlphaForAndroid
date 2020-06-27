@@ -65,12 +65,18 @@ public class WebApp {
         return base_url;
     }
 
-    public void saveNewSettings(boolean allow_cookies, boolean allow_js, boolean restore_page) {
+    public void saveNewSettings(boolean allow_cookies, boolean allow_js, boolean restore_page, Integer timeout) {
         this.allow_cookies = allow_cookies;
         this.allow_js = allow_js;
         this.restore_page = restore_page;
+        this.timeout_last_used_url = timeout;
         WebsiteDataManager.getInstance().saveAppData();
     }
+
+    public int getTimeout_last_used_url() {
+        return timeout_last_used_url;
+    }
+
 
     public String getTitle() {
         return title;

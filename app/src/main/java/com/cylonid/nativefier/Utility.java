@@ -10,6 +10,7 @@ public final class Utility {
         intent.putExtra(Utility.INT_ID_WEBAPPID, d.getID());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.setAction(Intent.ACTION_VIEW);
+
         return intent;
     }
 
