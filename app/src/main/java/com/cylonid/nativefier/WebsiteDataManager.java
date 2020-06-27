@@ -31,7 +31,7 @@ public class WebsiteDataManager {
     }
 
     public void saveAppData() {
-        assert(context != null);
+//        assert(context != null);
 
         appdata = context.getApplicationContext().getSharedPreferences(shared_pref_data, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = appdata.edit();
@@ -43,7 +43,7 @@ public class WebsiteDataManager {
     }
 
     public void loadAppData() {
-        assert(context != null);
+//        assert(context != null);
 
         appdata = context.getApplicationContext().getSharedPreferences(shared_pref_data, Context.MODE_PRIVATE);
         if (appdata.contains(shared_pref_data)) {

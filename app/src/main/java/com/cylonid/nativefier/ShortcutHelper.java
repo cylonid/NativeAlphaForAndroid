@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.view.Gravity;
@@ -108,7 +109,7 @@ public class ShortcutHelper {
         if (bitmap != null)
             icon = IconCompat.createWithBitmap(bitmap);
         else
-            icon = IconCompat.createWithResource(c, R.drawable.ic_launcher_background);
+            icon = IconCompat.createWithResource(c, R.mipmap.native_alpha_shortcut);
         String final_title = uiTitle.getText().toString();
         if (final_title.equals(""))
             final_title = d.getTitle();

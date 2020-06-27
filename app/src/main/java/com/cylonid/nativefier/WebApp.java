@@ -56,6 +56,7 @@ public class WebApp {
         last_used_url = "";
         timestamp_last_used_url = (long)0;
 
+
     }
 
     public void saveCurrentUrl(String url) {

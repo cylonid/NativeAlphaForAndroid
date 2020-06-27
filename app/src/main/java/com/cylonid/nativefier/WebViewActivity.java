@@ -11,6 +11,8 @@ import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.HashMap;
+
 public class WebViewActivity extends AppCompatActivity {
     private WebView wv;
     private WebApp webapp;
@@ -26,6 +28,8 @@ public class WebViewActivity extends AppCompatActivity {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
             int webappID = getIntent().getIntExtra(Utility.INT_ID_WEBAPPID, -1);
+
+            WebsiteDataManager.getInstance().initContext(this);
             webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
             String url = webapp.getLoadableUrl();
             boolean open_external = webapp.openUrlExternal();
@@ -76,7 +80,9 @@ public class WebViewActivity extends AppCompatActivity {
     private class InternalBrowser extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
+            HashMap<String, String> extraHeaders = new HashMap<String, String>();
+            extraHeaders.put("DNT", "1");
+            view.loadUrl(url, extraHeaders);
             return true;
         }
 

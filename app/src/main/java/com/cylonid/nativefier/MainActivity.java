@@ -105,10 +105,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ImageButton btn_shortcut = new ImageButton(this);
+        btn_shortcut.setBackgroundColor(transparent_color);
+        btn_shortcut.setImageResource(R.drawable.ic_baseline_open_in_new_24);
+        LinearLayout.LayoutParams layout_action_buttons = new LinearLayout.LayoutParams(0, row_height);
+        layout_action_buttons.width = 0;
+        layout_action_buttons.height = row_height;
+        layout_action_buttons.weight = 1;
+        btn_shortcut.setLayoutParams(layout_action_buttons);
+        ll_row.addView(btn_shortcut);
+        btn_shortcut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               ShortcutHelper s = new ShortcutHelper(data, MainActivity.this);
+                s.fetchFaviconURL();
+
+            }
+        });
+
         ImageButton btn_settings = new ImageButton(this);
         btn_settings.setBackgroundColor(transparent_color);
         btn_settings.setImageResource(R.drawable.ic_settings_black_24dp);
-        LinearLayout.LayoutParams layout_action_buttons = new LinearLayout.LayoutParams(0, row_height);
         layout_action_buttons.width = 0;
         layout_action_buttons.height = row_height;
         layout_action_buttons.weight = 1;
@@ -166,11 +183,11 @@ public class MainActivity extends AppCompatActivity {
                         if (Patterns.WEB_URL.matcher(str_url.toLowerCase()).matches()) {
                             WebApp new_site = new WebApp(str_title, str_url, open_url_external.isChecked());
                             WebsiteDataManager.getInstance().addWebsite(new_site);
-                            int new_id = new_site.getID();
-                            addRow(WebsiteDataManager.getInstance().getWebApp(new_id));
+
+                            addRow(new_site);
                             dialog.dismiss();
                             if (create_shortcut.isChecked()) {
-                                ShortcutHelper fav = new ShortcutHelper(WebsiteDataManager.getInstance().getWebApp(new_id), MainActivity.this);
+                                ShortcutHelper fav = new ShortcutHelper(new_site, MainActivity.this);
                                 fav.fetchFaviconURL();
 
                             }
