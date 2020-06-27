@@ -249,7 +249,7 @@ public class ShortcutHelper {
                         }
                 }
                 //Step 3: Fallback to PNG icons
-                else {
+                if (found_icons.isEmpty()) {
 
                     Element html_title = doc.selectFirst("title");
                     shortcut_title = html_title.text();

@@ -3,6 +3,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/webapp_settings">
+    <Button
+        android:id="@+id/btnRecreateShortcut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Re-Create shortcut" />
 
     <Switch
         android:id="@+id/switchOpenUrlExternal"
@@ -13,19 +18,9 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:text="Open links in external browser" />
-    <Switch
-        android:id="@+id/switchCreateShortcut"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="16dp"
-        android:checked="true"
-        android:text="Create shortcut on home screen" />
 
     <Switch
-        android:id="@+id/javascript"
+        android:id="@+id/switchJavascript"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -35,7 +30,7 @@
         android:checked="true"
         android:text="Allow Javascript" />
     <Switch
-        android:id="@+id/cookies"
+        android:id="@+id/switchCookies"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -46,7 +41,7 @@
         android:text="Allow Cookies" />
 
     <Switch
-        android:id="@+id/restorePage"
+        android:id="@+id/switchRestorePage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -67,7 +62,7 @@
             android:layout_height="wrap_content"
             android:text="Timeout for page restore (in minutes)"/>
         <EditText
-            android:id="@+id/websiteTitle"
+            android:id="@+id/textTimeout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="4dp"
@@ -79,10 +74,29 @@
             android:inputType="number" />
 
     </LinearLayout>
-    <Button
-        android:id="@+id/recreateShortcut"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Re-Create shortcut" />
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_height="wrap_content"
+            android:text="Custom user agent"/>
+        <EditText
+            android:id="@+id/textCustomUserAgent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif"
+
+            android:inputType="text" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

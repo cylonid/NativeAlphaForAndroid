@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             moveTaskToBack(true);
     }
 
-    private void addRow(final WebApp data)
+    private void addRow(final WebApp webapp)
     {
         int row_height = (int)getResources().getDimension(R.dimen.line_height);
         int transparent_color = ResourcesCompat.getColor(getResources(), R.color.transparent, null);
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         Button btn_title = new Button(this);
 //        btn_title.setId("btn_title");
         btn_title.setBackgroundColor(transparent_color);
-        btn_title.setText(data.getTitle());
+        btn_title.setText(webapp.getTitle());
 //        btn_title.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_black_24dp);
 //        btn_title.setGravity(Gravity.START | Gravity.CENTER);
         LinearLayout.LayoutParams layout_title = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, row_height);
@@ -98,16 +100,9 @@ public class MainActivity extends AppCompatActivity {
         btn_title.setLayoutParams(layout_title);
         ll_row.addView(btn_title);
 
-        btn_title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openWebView(data);
-            }
-        });
-
         ImageButton btn_shortcut = new ImageButton(this);
         btn_shortcut.setBackgroundColor(transparent_color);
-        btn_shortcut.setImageResource(R.drawable.ic_baseline_open_in_new_24);
+        btn_shortcut.setImageResource(R.drawable.ic_baseline_open_in_browser_24);
         LinearLayout.LayoutParams layout_action_buttons = new LinearLayout.LayoutParams(0, row_height);
         layout_action_buttons.width = 0;
         layout_action_buttons.height = row_height;
@@ -117,10 +112,8 @@ public class MainActivity extends AppCompatActivity {
         btn_shortcut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               ShortcutHelper s = new ShortcutHelper(data, MainActivity.this);
-                s.fetchFaviconURL();
-
-            }
+                        openWebView(webapp);
+            };
         });
 
         ImageButton btn_settings = new ImageButton(this);
@@ -131,6 +124,13 @@ public class MainActivity extends AppCompatActivity {
         layout_action_buttons.weight = 1;
         btn_settings.setLayoutParams(layout_action_buttons);
         ll_row.addView(btn_settings);
+        btn_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buildSettingsDialog(webapp.getID());
+
+            }
+        });
 
         ImageButton btn_delete = new ImageButton(this);
         btn_delete.setBackgroundColor(transparent_color);
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    buildDeleteItemDialog(data.getID());
+                    buildDeleteItemDialog(webapp.getID());
 
             }
         });
@@ -150,6 +150,69 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void buildSettingsDialog(final int webappID) {
+        final View inflated_view = getLayoutInflater().inflate(R.layout.webapp_settings, null);
+        final WebApp webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
+
+        final Switch switchCookies = (Switch) inflated_view.findViewById(R.id.switchCookies);
+        final Switch switchJS = (Switch) inflated_view.findViewById(R.id.switchJavascript);
+        final Switch switchRestorePage = (Switch) inflated_view.findViewById(R.id.switchRestorePage);
+        final EditText textTimeout = (EditText) inflated_view.findViewById(R.id.textTimeout);
+        final Button btnCreateShortcut = (Button) inflated_view.findViewById(R.id.btnRecreateShortcut);
+
+        switchCookies.setChecked(webapp.isAllowCookiesSet());
+        switchJS.setChecked(webapp.isAllowJSSet());
+        switchRestorePage.setChecked(webapp.isRestorePageSet());
+
+        if (!webapp.isRestorePageSet()) {
+            textTimeout.setEnabled(false);
+        }
+        else
+            textTimeout.setEnabled(true);
+        switchRestorePage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    textTimeout.setEnabled(true);
+                else
+                    textTimeout.setEnabled(false);
+            }
+        });
+
+        btnCreateShortcut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShortcutHelper s = new ShortcutHelper(webapp, MainActivity.this);
+                s.fetchFaviconURL();
+            }
+        });
+
+
+        final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                .setView(inflated_view)
+                .setTitle("Edit webapp settings")
+                .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+
+                Button positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+                positive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        WebsiteDataManager.getInstance().getWebApp(webappID).saveNewSettings(switchCookies.isChecked(), switchJS.isChecked(), switchRestorePage.isChecked());
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+        dialog.show();
+
+
+    }
     private void buildAddWebsiteDialog() {
         final View inflated_view = getLayoutInflater().inflate(R.layout.add_website_dialogue, null);
         final EditText url = (EditText) inflated_view.findViewById(R.id.websiteUrl);

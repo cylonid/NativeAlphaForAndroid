@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -16,6 +18,7 @@ import java.util.HashMap;
 public class WebViewActivity extends AppCompatActivity {
     private WebView wv;
     private WebApp webapp;
+    int webappID = -1;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -26,8 +29,7 @@ public class WebViewActivity extends AppCompatActivity {
         else {
             setContentView(R.layout.full_webview);
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
-            int webappID = getIntent().getIntExtra(Utility.INT_ID_WEBAPPID, -1);
+            webappID = getIntent().getIntExtra(Utility.INT_ID_WEBAPPID, -1);
 
             WebsiteDataManager.getInstance().initContext(this);
             webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
@@ -36,8 +38,10 @@ public class WebViewActivity extends AppCompatActivity {
 
             wv = (WebView)findViewById(R.id.webview);
             wv.getSettings().setBlockNetworkLoads(false);
-            wv.getSettings().setJavaScriptEnabled(true);
+            wv.getSettings().setJavaScriptEnabled(webapp.isAllowJSSet());
             wv.getSettings().setDomStorageEnabled(true);
+            CookieManager.getInstance().setAcceptCookie(webapp.isAllowCookiesSet());
+
             if (open_external)
                 wv.setWebViewClient(new WebViewClient());
             else
@@ -59,21 +63,7 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        webapp.saveCurrentUrl(wv.getUrl());
-    }
-
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Bundle bundle = new Bundle();
-        wv.saveState(bundle);
-        outState.putBundle("webViewState", bundle);
-    }
-    @Override
-    protected void onRestoreInstanceState(Bundle state) {
-        super.onRestoreInstanceState(state);
-        Bundle bundle = new Bundle();
-        wv.saveState(bundle);
-        state.putBundle("webViewState", bundle);
+        WebsiteDataManager.getInstance().getWebApp(webappID).saveCurrentUrl(wv.getUrl());
     }
 
 
