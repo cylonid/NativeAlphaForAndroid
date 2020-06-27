@@ -218,19 +218,22 @@ public class ShortcutHelper {
                 if (!manifest.isEmpty()) {
                         Element mf = manifest.first();
                         String data = Jsoup.connect(mf.absUrl("href")).ignoreContentType(true).execute().body();
+                        JSONObject json = new JSONObject(data);
+
                         try {
-                            JSONObject json = new JSONObject(data);
-                            JSONArray manifest_icons = json.getJSONArray("icons");
-
                             shortcut_title = json.getString("name");
-
                             String start_url = json.getString("start_url");
                             if (!start_url.isEmpty()) {
                                 URL base_url = new URL(mf.absUrl("href"));
                                 URL fl_url = new URL(base_url, start_url);
                                 d.setBase_url(fl_url.toString());
-
                             }
+                        }
+                        catch(JSONException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            JSONArray manifest_icons = json.getJSONArray("icons");
 
                             for (int i = 0; i < manifest_icons.length(); i++) {
                                 String icon_href = manifest_icons.getJSONObject(i).getString("src");
@@ -239,8 +242,8 @@ public class ShortcutHelper {
                                 URL base_url = new URL(mf.absUrl("href"));
                                 URL full_url = new URL(base_url, icon_href);
                                 found_icons.put(width, full_url.toString());
+                                }
                             }
-                        }
                         catch(JSONException e) {
                             e.printStackTrace();
                         }
