@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.CookieManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -41,7 +42,7 @@ public class WebViewActivity extends AppCompatActivity {
             wv.getSettings().setDomStorageEnabled(true);
             CookieManager.getInstance().setAcceptCookie(webapp.isAllowCookiesSet());
             CookieManager.getInstance().setAcceptThirdPartyCookies(wv, webapp.isAllowThirdPartyCookiesSet());
-            wv.getSettings().setAppCacheEnabled(true);
+
 
             if (webapp.isRequestDesktopSet()) {
                 wv.getSettings().setUserAgentString(Utility.DESKTOP_USER_AGENT);
@@ -91,12 +92,9 @@ public class WebViewActivity extends AppCompatActivity {
         public boolean shouldOverrideUrlLoading(WebView view, String url)
         {
             WebApp webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
-            String base_url = webapp.getBaseUrl();
-
-            HashMap<String, String> extraHeaders = new HashMap<String, String>();
-            extraHeaders.put("DNT", "1");
 
             if (webapp.openUrlExternal()) {
+                String base_url = webapp.getBaseUrl();
                 Uri uri = Uri.parse(base_url);
                 String host = uri.getHost();
                 if (!url.contains(host)) {
@@ -105,7 +103,11 @@ public class WebViewActivity extends AppCompatActivity {
                     return true;
                 }
             }
+//            view.getSettings().setAppCacheEnabled(false);
+//            view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 
+            HashMap<String, String> extraHeaders = new HashMap<String, String>();
+            extraHeaders.put("DNT", "1");
             view.loadUrl(url, extraHeaders);
             return true;
         }
