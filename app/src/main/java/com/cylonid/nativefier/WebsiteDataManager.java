@@ -82,7 +82,7 @@ public class WebsiteDataManager {
         return max_assigned_ID;
     }
     public ArrayList<WebApp> getWebsites() {
-        Utility.Assert(!websites.isEmpty(), "Websites not loaded");
+        Utility.Assert(websites != null, "Websites not loaded");
         return websites;
     }
 
