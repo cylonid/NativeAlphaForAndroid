@@ -34,11 +34,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mainScreen = (LinearLayout) findViewById(R.id.mainScreen);
         WebsiteDataManager.getInstance().initContext(this);
-//        WebsiteDataManager.getInstance().initDummyData();
+        WebsiteDataManager.getInstance().loadAppData();
         addActiveWebAppsToUI();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setLogo(R.mipmap.native_alpha);
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +49,10 @@ public class MainActivity extends AppCompatActivity {
                 buildAddWebsiteDialog();
             }
         });
+
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -154,13 +159,19 @@ public class MainActivity extends AppCompatActivity {
         final View inflated_view = getLayoutInflater().inflate(R.layout.webapp_settings, null);
         final WebApp webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
 
+        final Switch switchOpenUrlExternal = (Switch) inflated_view.findViewById(R.id.switchOpenUrlExternal);
         final Switch switchCookies = (Switch) inflated_view.findViewById(R.id.switchCookies);
+        final Switch switchThirdPartyCookies = (Switch) inflated_view.findViewById(R.id.switch3PCookies);
+        final Switch switchDesktopVersion = (Switch) inflated_view.findViewById(R.id.switchDesktopSite);
         final Switch switchJS = (Switch) inflated_view.findViewById(R.id.switchJavascript);
         final Switch switchRestorePage = (Switch) inflated_view.findViewById(R.id.switchRestorePage);
         final EditText textTimeout = (EditText) inflated_view.findViewById(R.id.textTimeout);
         final Button btnCreateShortcut = (Button) inflated_view.findViewById(R.id.btnRecreateShortcut);
 
+        switchOpenUrlExternal.setChecked(webapp.openUrlExternal());
         switchCookies.setChecked(webapp.isAllowCookiesSet());
+        switchThirdPartyCookies.setChecked(webapp.isAllowThirdPartyCookiesSet());
+        switchDesktopVersion.setChecked(webapp.isRequestDesktopSet());
         switchJS.setChecked(webapp.isAllowJSSet());
         switchRestorePage.setChecked(webapp.isRestorePageSet());
 
@@ -171,16 +182,25 @@ public class MainActivity extends AppCompatActivity {
             textTimeout.setEnabled(true);
             textTimeout.setText(String.valueOf(webapp.getTimeout_last_used_url()));
         }
+
+        if (!webapp.isAllowCookiesSet())
+            switchThirdPartyCookies.setEnabled(false);
+
         switchRestorePage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
+                if (isChecked)
                     textTimeout.setEnabled(true);
-                    textTimeout.setText(String.valueOf(webapp.getTimeout_last_used_url()));
-
-                }
-
                 else
                     textTimeout.setEnabled(false);
+            }
+        });
+
+        switchCookies.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    switchThirdPartyCookies.setEnabled(true);
+                else
+                    switchThirdPartyCookies.setEnabled(false);
             }
         });
 
@@ -209,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        WebsiteDataManager.getInstance().getWebApp(webappID).saveNewSettings(switchCookies.isChecked(), switchJS.isChecked(), switchRestorePage.isChecked(), Integer.parseInt(textTimeout.getText().toString()));
+                        WebsiteDataManager.getInstance().getWebApp(webappID).saveNewSettings(switchOpenUrlExternal.isChecked(), switchCookies.isChecked(), switchJS.isChecked(), switchRestorePage.isChecked(), Integer.parseInt(textTimeout.getText().toString()));
                         dialog.dismiss();
                     }
                 });
@@ -222,7 +242,6 @@ public class MainActivity extends AppCompatActivity {
     private void buildAddWebsiteDialog() {
         final View inflated_view = getLayoutInflater().inflate(R.layout.add_website_dialogue, null);
         final EditText url = (EditText) inflated_view.findViewById(R.id.websiteUrl);
-        final Switch open_url_external = (Switch) inflated_view.findViewById(R.id.switchOpenUrlExternal);
         final Switch create_shortcut = (Switch) inflated_view.findViewById(R.id.switchCreateShortcut);
 
         final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
@@ -244,13 +263,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         String str_url = url.getText().toString();
-                        String str_title = str_url.replace("http://", "").replace("https://", "").replace("www.", "");;
 
                         if (!(str_url.startsWith("https://")) && !(str_url.startsWith("http://")))
                             str_url = "https://" + str_url;
 
                         if (Patterns.WEB_URL.matcher(str_url.toLowerCase()).matches()) {
-                            WebApp new_site = new WebApp(str_title, str_url, open_url_external.isChecked());
+                            WebApp new_site = new WebApp(str_url);
                             WebsiteDataManager.getInstance().addWebsite(new_site);
 
                             addRow(new_site);
@@ -276,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage("Are you sure you want to remove this website?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                WebsiteDataManager.getInstance().removeWebsite(ID);
+                WebsiteDataManager.getInstance().getWebApp(ID).markInactive();
                 mainScreen.removeAllViews();
                 addActiveWebAppsToUI();
 
@@ -293,9 +311,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addActiveWebAppsToUI () {
         for (WebApp d : WebsiteDataManager.getInstance().getWebsites()) {
-            if (d.isActive() == false)
-                continue;
-            else
+            if (d.isActive())
                 addRow(d);
         }
     }

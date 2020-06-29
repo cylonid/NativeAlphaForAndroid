@@ -24,14 +24,14 @@ public class WebsiteDataManager {
     private WebsiteDataManager()
     {
         websites = new ArrayList<>();
-         max_assigned_ID = -1;
+        max_assigned_ID = -1;
     }
     public void initContext(Context context) {
         this.context = context;
     }
 
     public void saveAppData() {
-//        assert(context != null);
+        Utility.Assert(context != null, "Context null before saving sharedpref");
 
         appdata = context.getApplicationContext().getSharedPreferences(shared_pref_data, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = appdata.edit();
@@ -43,7 +43,7 @@ public class WebsiteDataManager {
     }
 
     public void loadAppData() {
-//        assert(context != null);
+        Utility.Assert(context != null, "Context null before loading sharedpref");
 
         appdata = context.getApplicationContext().getSharedPreferences(shared_pref_data, Context.MODE_PRIVATE);
         if (appdata.contains(shared_pref_data)) {
@@ -58,9 +58,9 @@ public class WebsiteDataManager {
     public void initDummyData()
     {
         loadAppData();
-        WebApp d1 = new WebApp("ORF.at", "orf.at");
-        WebApp d2 = new WebApp("Die Presse", "diepresse.com");
-        WebApp d3 = new WebApp("ÖBB", "oebb.at");
+        WebApp d1 = new WebApp("orf.at");
+        WebApp d2 = new WebApp("diepresse.com");
+        WebApp d3 = new WebApp("oebb.at");
 
         addWebsite(d1);
         addWebsite(d2);
@@ -77,22 +77,16 @@ public class WebsiteDataManager {
             saveAppData();
     }
 
-    public void removeWebsite(int ID) {
-       websites.get(ID).markInactive();
-       saveAppData();
-    }
-
     public int getIncrementedID() {
         max_assigned_ID++;
         return max_assigned_ID;
     }
     public ArrayList<WebApp> getWebsites() {
-        loadAppData();
+        Utility.Assert(!websites.isEmpty(), "Websites not loaded");
         return websites;
     }
 
     public WebApp getWebApp(int i) {
-        loadAppData();
         return websites.get(i);
     }
 }

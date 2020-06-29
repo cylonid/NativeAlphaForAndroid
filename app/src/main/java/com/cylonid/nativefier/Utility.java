@@ -19,4 +19,10 @@ public final class Utility {
         return System.currentTimeMillis() / 1000;
     }
 
+    public static void Assert(boolean condition, String message) {
+        if (!condition) {
+            throw new AssertionError(message);
+        }
+    }
+
 }

@@ -9,49 +9,42 @@ public class WebApp {
     private int ID;
     private boolean open_url_external;
     private boolean allow_cookies;
+    private boolean allow_third_p_cookies;
     private boolean restore_page;
     private boolean allow_js;
     private boolean active_entry;
+    private boolean request_desktop;
 
-    public WebApp(String title, String base_url, boolean open_url_internal) {
-        this.title = title;
+    public WebApp(String base_url) {
+        title = base_url.replace("http://", "").replace("https://", "").replace("www.", "");
         this.base_url = base_url;
-        this.ID = WebsiteDataManager.getInstance().getIncrementedID();
-        this.open_url_external = open_url_internal;
+        ID = WebsiteDataManager.getInstance().getIncrementedID();
+        open_url_external = true;
         active_entry = true;
-        timeout_last_used_url = 30;
+        timeout_last_used_url = 10;
         last_used_url = null;
         restore_page = true;
         allow_cookies = true;
+        allow_third_p_cookies = false;
         allow_js = true;
+        request_desktop = false;
+
     }
-
-    public WebApp(String title, String base_url) {
-        this.title = title;
-        this.base_url = base_url;
-        this.ID = WebsiteDataManager.getInstance().getIncrementedID();
-        this.open_url_external = false;
-        active_entry = true;
-    }
-
-
     public void markInactive() {
         active_entry = false;
-        base_url = "";
-        last_used_url = "";
-        timestamp_last_used_url = (long)0;
-
-
-    }
-
-    public void saveCurrentUrl(String url) {
-        last_used_url = url;
-        timestamp_last_used_url = System.currentTimeMillis() / 1000;
         WebsiteDataManager.getInstance().saveAppData();
     }
 
+    public void saveCurrentUrl(String url) {
+        if (restore_page) {
+            last_used_url = url;
+            timestamp_last_used_url = System.currentTimeMillis() / 1000;
+            WebsiteDataManager.getInstance().saveAppData();
+        }
+    }
+
     public String getLoadableUrl() {
-        WebsiteDataManager.getInstance().loadAppData();
+
         if (last_used_url == null)
             return base_url;
         else if (restore_page) {
@@ -65,7 +58,8 @@ public class WebApp {
         return base_url;
     }
 
-    public void saveNewSettings(boolean allow_cookies, boolean allow_js, boolean restore_page, Integer timeout) {
+    public void saveNewSettings(boolean open_url_external, boolean allow_cookies, boolean allow_js, boolean restore_page, Integer timeout) {
+        this.open_url_external = open_url_external;
         this.allow_cookies = allow_cookies;
         this.allow_js = allow_js;
         this.restore_page = restore_page;
@@ -102,6 +96,9 @@ public class WebApp {
     public boolean isAllowCookiesSet() {
         return allow_cookies;
     }
+    public boolean isAllowThirdPartyCookiesSet() {
+        return allow_third_p_cookies;
+    }
 
     public boolean isRestorePageSet() {
         return restore_page;
@@ -110,5 +107,10 @@ public class WebApp {
     public boolean isAllowJSSet() {
         return allow_js;
     }
+
+    public boolean isRequestDesktopSet() {
+        return request_desktop;
+    }
+
 
 }
