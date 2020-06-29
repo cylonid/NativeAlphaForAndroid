@@ -58,12 +58,14 @@ public class WebApp {
         return base_url;
     }
 
-    public void saveNewSettings(boolean open_url_external, boolean allow_cookies, boolean allow_js, boolean restore_page, Integer timeout) {
+    public void saveNewSettings(boolean open_url_external, boolean request_desktop, boolean allow_cookies, boolean allow_third_p_cookies, boolean allow_js, boolean restore_page, Integer timeout) {
         this.open_url_external = open_url_external;
         this.allow_cookies = allow_cookies;
+        this.allow_third_p_cookies = allow_third_p_cookies;
         this.allow_js = allow_js;
         this.restore_page = restore_page;
         this.timeout_last_used_url = timeout;
+        this.request_desktop = request_desktop;
         WebsiteDataManager.getInstance().saveAppData();
     }
 

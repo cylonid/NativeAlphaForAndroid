@@ -4,11 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.CookieManager;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -33,6 +30,7 @@ public class WebViewActivity extends AppCompatActivity {
             webappID = getIntent().getIntExtra(Utility.INT_ID_WEBAPPID, -1);
 
             WebsiteDataManager.getInstance().initContext(this);
+            Utility.Assert(webappID != -1, "WebApp ID could not be retrieved.");
             webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
             String url = webapp.getLoadableUrl();
             boolean open_external = webapp.openUrlExternal();
@@ -42,23 +40,37 @@ public class WebViewActivity extends AppCompatActivity {
             wv.getSettings().setJavaScriptEnabled(webapp.isAllowJSSet());
             wv.getSettings().setDomStorageEnabled(true);
             CookieManager.getInstance().setAcceptCookie(webapp.isAllowCookiesSet());
+            CookieManager.getInstance().setAcceptThirdPartyCookies(wv, webapp.isAllowThirdPartyCookiesSet());
             wv.getSettings().setAppCacheEnabled(true);
 
+            if (webapp.isRequestDesktopSet()) {
+                wv.getSettings().setUserAgentString(Utility.DESKTOP_USER_AGENT);
+                wv.getSettings().setUseWideViewPort(true);
+                wv.getSettings().setLoadWithOverviewMode(true);
 
+                wv.getSettings().setSupportZoom(true);
+                wv.getSettings().setBuiltInZoomControls(true);
+                wv.getSettings().setDisplayZoomControls(false);
 
-            wv.setWebViewClient(new InternalBrowser());
+                wv.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+                wv.setScrollbarFadingEnabled(false);
+            }
+
+            wv.setWebViewClient(new CustomBrowser());
 
             wv.loadUrl(url);
         }
 
     }
 
+
     @Override
     public void onBackPressed() {
         if (wv.canGoBack())
             wv.goBack();
         else
-            moveTaskToBack(true);
+            wv.loadUrl(WebsiteDataManager.getInstance().getWebApp(webappID).getBaseUrl());
+//            moveTaskToBack(true);
     }
 
     @Override
@@ -68,20 +80,26 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
 
-    private class InternalBrowser extends WebViewClient {
+    private class CustomBrowser extends WebViewClient {
+        @Override
+        public void onLoadResource(WebView view, String url) {
+            super.onLoadResource(view, url);
+            if (WebsiteDataManager.getInstance().getWebApp(webappID).isRequestDesktopSet())
+                view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth / 1024));", null);
+        }
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url)
         {
             WebApp webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
             String base_url = webapp.getBaseUrl();
 
-            Uri uri = Uri.parse(base_url);
-            String host = uri.getHost();
             HashMap<String, String> extraHeaders = new HashMap<String, String>();
             extraHeaders.put("DNT", "1");
 
             if (webapp.openUrlExternal()) {
-                if (!url.startsWith(base_url)) {
+                Uri uri = Uri.parse(base_url);
+                String host = uri.getHost();
+                if (!url.contains(host)) {
                     view.getContext().startActivity(
                             new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                     return true;

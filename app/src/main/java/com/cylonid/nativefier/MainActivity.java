@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        WebsiteDataManager.getInstance().getWebApp(webappID).saveNewSettings(switchOpenUrlExternal.isChecked(), switchCookies.isChecked(), switchJS.isChecked(), switchRestorePage.isChecked(), Integer.parseInt(textTimeout.getText().toString()));
+                        WebsiteDataManager.getInstance().getWebApp(webappID).saveNewSettings(switchOpenUrlExternal.isChecked(), switchDesktopVersion.isChecked(), switchCookies.isChecked(), switchThirdPartyCookies.isChecked(), switchJS.isChecked(), switchRestorePage.isChecked(), Integer.parseInt(textTimeout.getText().toString()));
                         dialog.dismiss();
                     }
                 });

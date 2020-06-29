@@ -18,7 +18,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:checked="true"
-        android:text="Open links in external browser" />
+        android:text="Open external links in browser app" />
 
     <Switch
         android:id="@+id/switchJavascript"
@@ -53,6 +53,17 @@
         android:text="Allow third-party cookies" />
 
     <Switch
+        android:id="@+id/switchDesktopSite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="16dp"
+        android:checked="false"
+        android:text="Request website in desktop version" />
+
+    <Switch
         android:id="@+id/switchRestorePage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,16 +74,6 @@
         android:checked="true"
         android:text="Restore last opened page" />
 
-    <Switch
-        android:id="@+id/switchDesktopSite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="16dp"
-        android:checked="false"
-        android:text="Request website in desktop version" />
 
     <LinearLayout
         android:orientation="vertical"
