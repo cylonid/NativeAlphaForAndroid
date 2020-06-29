@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.native_alpha);
+//        toolbar.setTitleTextColor(Utility.getThemeColor(this, R.attr.colorAccent));
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 //        btn_title.setId("btn_title");
         btn_title.setBackgroundColor(transparent_color);
         btn_title.setText(webapp.getTitle());
-//        btn_title.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_black_24dp);
+//        btn_title.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_24dp);
 //        btn_title.setGravity(Gravity.START | Gravity.CENTER);
         LinearLayout.LayoutParams layout_title = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, row_height);
         layout_title.width = 0;

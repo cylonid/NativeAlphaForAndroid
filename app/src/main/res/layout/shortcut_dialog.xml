@@ -41,7 +41,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:visibility="gone"
-            android:src="@drawable/ic_add_black_24dp" />
+            android:src="@drawable/ic_add_24dp" />
 
     </LinearLayout>
     <LinearLayout

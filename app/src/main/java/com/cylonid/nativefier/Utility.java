@@ -2,6 +2,11 @@ package com.cylonid.nativefier;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.TypedValue;
+
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 
 public final class Utility {
     public static final String INT_ID_WEBAPPID = "webappID";
@@ -24,6 +29,17 @@ public final class Utility {
         if (!condition) {
             throw new AssertionError(message);
         }
+    }
+    @ColorInt
+    public static int getThemeColor
+            (
+                    @NonNull final Context context,
+                    @AttrRes final int attributeColor
+            )
+    {
+        final TypedValue value = new TypedValue();
+        context.getTheme ().resolveAttribute (attributeColor, value, true);
+        return value.data;
     }
 
 }
