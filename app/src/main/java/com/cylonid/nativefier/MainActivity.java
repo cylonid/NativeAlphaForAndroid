@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         final Switch switchDesktopVersion = (Switch) inflated_view.findViewById(R.id.switchDesktopSite);
         final Switch switchJS = (Switch) inflated_view.findViewById(R.id.switchJavascript);
         final Switch switchRestorePage = (Switch) inflated_view.findViewById(R.id.switchRestorePage);
+        final Switch switchCache = (Switch) inflated_view.findViewById(R.id.switchCache);
         final EditText textTimeout = (EditText) inflated_view.findViewById(R.id.textTimeout);
         final Button btnCreateShortcut = (Button) inflated_view.findViewById(R.id.btnRecreateShortcut);
 
@@ -174,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
         switchDesktopVersion.setChecked(webapp.isRequestDesktopSet());
         switchJS.setChecked(webapp.isAllowJSSet());
         switchRestorePage.setChecked(webapp.isRestorePageSet());
+        switchCache.setChecked(webapp.isEnableCacheSet());
 
         if (!webapp.isRestorePageSet()) {
             textTimeout.setEnabled(false);
@@ -229,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        WebsiteDataManager.getInstance().getWebApp(webappID).saveNewSettings(switchOpenUrlExternal.isChecked(), switchDesktopVersion.isChecked(), switchCookies.isChecked(), switchThirdPartyCookies.isChecked(), switchJS.isChecked(), switchRestorePage.isChecked(), Integer.parseInt(textTimeout.getText().toString()));
+                        WebsiteDataManager.getInstance().getWebApp(webappID).saveNewSettings(switchOpenUrlExternal.isChecked(), switchDesktopVersion.isChecked(), switchCookies.isChecked(), switchThirdPartyCookies.isChecked(), switchJS.isChecked(), switchCache.isChecked(), switchRestorePage.isChecked(), Integer.parseInt(textTimeout.getText().toString()));
                         dialog.dismiss();
                     }
                 });

@@ -14,6 +14,9 @@ public class WebApp {
     private boolean allow_js;
     private boolean active_entry;
     private boolean request_desktop;
+    private boolean enable_cache;
+
+
 
     public WebApp(String base_url) {
         title = base_url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -28,6 +31,7 @@ public class WebApp {
         allow_third_p_cookies = false;
         allow_js = true;
         request_desktop = false;
+        enable_cache = true;
 
     }
     public void markInactive() {
@@ -58,7 +62,7 @@ public class WebApp {
         return base_url;
     }
 
-    public void saveNewSettings(boolean open_url_external, boolean request_desktop, boolean allow_cookies, boolean allow_third_p_cookies, boolean allow_js, boolean restore_page, Integer timeout) {
+    public void saveNewSettings(boolean open_url_external, boolean request_desktop, boolean allow_cookies, boolean allow_third_p_cookies, boolean allow_js, boolean enable_cache, boolean restore_page, Integer timeout) {
         this.open_url_external = open_url_external;
         this.allow_cookies = allow_cookies;
         this.allow_third_p_cookies = allow_third_p_cookies;
@@ -66,6 +70,7 @@ public class WebApp {
         this.restore_page = restore_page;
         this.timeout_last_used_url = timeout;
         this.request_desktop = request_desktop;
+        this.enable_cache = enable_cache;
         WebsiteDataManager.getInstance().saveAppData();
     }
 
@@ -112,6 +117,9 @@ public class WebApp {
 
     public boolean isRequestDesktopSet() {
         return request_desktop;
+    }
+    public boolean isEnableCacheSet() {
+        return enable_cache;
     }
 
 

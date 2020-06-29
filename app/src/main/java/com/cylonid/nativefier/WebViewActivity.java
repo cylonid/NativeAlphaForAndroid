@@ -103,8 +103,10 @@ public class WebViewActivity extends AppCompatActivity {
                     return true;
                 }
             }
-//            view.getSettings().setAppCacheEnabled(false);
-//            view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+            if (!webapp.isEnableCacheSet()) {
+                view.getSettings().setAppCacheEnabled(false);
+                view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+            }
 
             HashMap<String, String> extraHeaders = new HashMap<String, String>();
             extraHeaders.put("DNT", "1");

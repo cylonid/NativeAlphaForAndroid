@@ -53,6 +53,17 @@
         android:text="Allow third-party cookies" />
 
     <Switch
+        android:id="@+id/switchCache"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="16dp"
+        android:checked="true"
+        android:text="Enable cache" />
+
+    <Switch
         android:id="@+id/switchDesktopSite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
