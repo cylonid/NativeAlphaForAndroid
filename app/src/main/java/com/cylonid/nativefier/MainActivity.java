@@ -38,10 +38,10 @@ public class MainActivity extends AppCompatActivity {
         addActiveWebAppsToUI();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setLogo(R.mipmap.native_alpha);
-//        toolbar.setTitleTextColor(Utility.getThemeColor(this, R.attr.colorAccent));
 
+        toolbar.setLogo(R.mipmap.native_alpha_white);
+        toolbar.setTitle(R.string.app_name);
+        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

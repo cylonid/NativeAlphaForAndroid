@@ -3,13 +3,16 @@ package com.cylonid.nativefier;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.CookieManager;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.HashMap;
@@ -31,6 +34,7 @@ public class WebViewActivity extends AppCompatActivity {
             webappID = getIntent().getIntExtra(Utility.INT_ID_WEBAPPID, -1);
 
             WebsiteDataManager.getInstance().initContext(this);
+            WebsiteDataManager.getInstance().loadAppData();
             Utility.Assert(webappID != -1, "WebApp ID could not be retrieved.");
             webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
             String url = webapp.getLoadableUrl();
@@ -88,6 +92,8 @@ public class WebViewActivity extends AppCompatActivity {
             if (WebsiteDataManager.getInstance().getWebApp(webappID).isRequestDesktopSet())
                 view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth / 1024));", null);
         }
+
+        @SuppressWarnings("deprecation")
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url)
         {
@@ -113,7 +119,13 @@ public class WebViewActivity extends AppCompatActivity {
             view.loadUrl(url, extraHeaders);
             return true;
         }
-//            @Override
+
+        @RequiresApi(Build.VERSION_CODES.N)
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            return shouldOverrideUrlLoading(view, request.getUrl().toString());
+        }
+        //            @Override
 //            public boolean shouldOverrideUrlLoading(WebView view, String url) {
 //                String base_url = WebsiteDataManager.getInstance().getWebApp(webappID).getBaseUrl();
 //                // all links  with in ur site will be open inside the webview
