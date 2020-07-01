@@ -30,6 +30,7 @@ public class WebViewActivity extends AppCompatActivity {
     private static final int TRESHOLD = 100;
 
 
+
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,9 @@ public class WebViewActivity extends AppCompatActivity {
             wv.setWebViewClient(new CustomBrowser());
             wv.getSettings().setDomStorageEnabled(true);
             wv.getSettings().setBlockNetworkLoads(false);
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                wv.getSettings().setForceDark(WebSettings.FORCE_DARK_OFF);
+            }
 
             wv.getSettings().setJavaScriptEnabled(webapp.isAllowJSSet());
 
@@ -84,6 +87,8 @@ public class WebViewActivity extends AppCompatActivity {
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    if (WebsiteDataManager.getInstance().getWebApp(webappID).isRequestDesktopSet())
+                        return false;
                     switch (event.getAction() & MotionEvent.ACTION_MASK)
                     {
                         case MotionEvent.ACTION_POINTER_DOWN:
