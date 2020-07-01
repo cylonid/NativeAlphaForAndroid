@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebResourceRequest;
@@ -22,7 +24,13 @@ public class WebViewActivity extends AppCompatActivity {
     private WebApp webapp;
     int webappID = -1;
 
-    @SuppressLint("SetJavaScriptEnabled")
+    //Constants for touchlistener
+    private static final int NONE = 0;
+    private static final int SWIPE = 1;
+    private static final int TRESHOLD = 100;
+
+
+    @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,12 +49,15 @@ public class WebViewActivity extends AppCompatActivity {
             boolean open_external = webapp.openUrlExternal();
 
             wv = findViewById(R.id.webview);
-            wv.getSettings().setBlockNetworkLoads(false);
-            wv.getSettings().setJavaScriptEnabled(webapp.isAllowJSSet());
+            wv.setWebViewClient(new CustomBrowser());
             wv.getSettings().setDomStorageEnabled(true);
+            wv.getSettings().setBlockNetworkLoads(false);
+
+
+            wv.getSettings().setJavaScriptEnabled(webapp.isAllowJSSet());
+
             CookieManager.getInstance().setAcceptCookie(webapp.isAllowCookiesSet());
             CookieManager.getInstance().setAcceptThirdPartyCookies(wv, webapp.isAllowThirdPartyCookiesSet());
-
 
             if (webapp.isRequestDesktopSet()) {
                 wv.getSettings().setUserAgentString(Utility.DESKTOP_USER_AGENT);
@@ -59,11 +70,67 @@ public class WebViewActivity extends AppCompatActivity {
 
                 wv.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
                 wv.setScrollbarFadingEnabled(false);
+
             }
 
-            wv.setWebViewClient(new CustomBrowser());
+            HashMap<String, String> extraHeaders = new HashMap<String, String>();
+            extraHeaders.put("DNT", "1");
+            wv.loadUrl(url, extraHeaders);
 
-            wv.loadUrl(url);
+            wv.setOnTouchListener(new View.OnTouchListener() {
+                private int mode = NONE;
+                private float startX;
+                private float stopX;
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction() & MotionEvent.ACTION_MASK)
+                    {
+                        case MotionEvent.ACTION_POINTER_DOWN:
+                            // This happens when you touch the screen with two fingers
+                            mode = SWIPE;
+                            // You can also use event.getY(1) or the average of the two
+                            startX = event.getX(0);
+                            return true;
+
+                        case MotionEvent.ACTION_POINTER_UP:
+                            // This happens when you release the second finger
+                            mode = NONE;
+                            if(Math.abs(startX - stopX) > TRESHOLD)
+                            {
+                                if(startX > stopX)
+                                {
+                                    if (event.getPointerCount() == 3) {
+                                        startActivity(Utility.createWebViewIntent(WebsiteDataManager.getInstance().getPredecessor(webappID), WebViewActivity.this));
+                                        finish();
+                                    }
+                                    else {
+                                        if (wv.canGoForward())
+                                            wv.goForward();
+                                    }
+                                }
+                                else
+                                {
+                                    if (event.getPointerCount() == 3) {
+                                        startActivity(Utility.createWebViewIntent(WebsiteDataManager.getInstance().getSuccessor(webappID), WebViewActivity.this));
+                                        finish();
+                                    }
+                                    else
+                                        onBackPressed();
+                                }
+                            }
+                            return true;
+
+                        case MotionEvent.ACTION_MOVE:
+                            if(mode == SWIPE)
+                            {
+                                stopX = event.getX(0);
+                            }
+                            return false;
+                    }
+                    return false;
+                }
+            });
         }
 
     }
@@ -81,7 +148,11 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        WebsiteDataManager.getInstance().getWebApp(webappID).saveCurrentUrl(wv.getUrl());
+        WebApp webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
+        if (webapp.isRestorePageSet())
+            webapp.saveCurrentUrl(wv.getUrl());
+        if (webapp.isClearCacheSet())
+            wv.clearCache(true);
     }
 
 
@@ -109,15 +180,7 @@ public class WebViewActivity extends AppCompatActivity {
                     return true;
                 }
             }
-            if (!webapp.isEnableCacheSet()) {
-                view.getSettings().setAppCacheEnabled(false);
-                view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-            }
-
-            HashMap<String, String> extraHeaders = new HashMap<String, String>();
-            extraHeaders.put("DNT", "1");
-            view.loadUrl(url, extraHeaders);
-            return true;
+            return false;
         }
 
         @RequiresApi(Build.VERSION_CODES.N)
@@ -125,21 +188,7 @@ public class WebViewActivity extends AppCompatActivity {
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             return shouldOverrideUrlLoading(view, request.getUrl().toString());
         }
-        //            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                String base_url = WebsiteDataManager.getInstance().getWebApp(webappID).getBaseUrl();
-//                // all links  with in ur site will be open inside the webview
-//                //links that start ur domain example(http://www.example.com/)
-//                if (url != null && url.startsWith(base_url)) {
-//                    return true;
-//                }
-//                // all links that points outside the site will be open in a normal android browser
-//                else {
-//                    view.getContext().startActivity(
-//                            new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-//                    return true;
-//                }
-//            }
+
     }
 }
 

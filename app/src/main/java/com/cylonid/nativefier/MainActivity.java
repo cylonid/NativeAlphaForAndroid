@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         switchDesktopVersion.setChecked(webapp.isRequestDesktopSet());
         switchJS.setChecked(webapp.isAllowJSSet());
         switchRestorePage.setChecked(webapp.isRestorePageSet());
-        switchCache.setChecked(webapp.isEnableCacheSet());
+        switchCache.setChecked(webapp.isClearCacheSet());
 
         if (!webapp.isRestorePageSet()) {
             textTimeout.setEnabled(false);

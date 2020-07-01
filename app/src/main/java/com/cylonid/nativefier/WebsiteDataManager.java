@@ -89,5 +89,22 @@ public class WebsiteDataManager {
     public WebApp getWebApp(int i) {
         return websites.get(i);
     }
+
+    public WebApp getSuccessor(int i) {
+        if (i != (websites.size() - 1)) {
+            return websites.get(i + 1);
+        }
+        else
+            return websites.get(0);
+
+    }
+    public WebApp getPredecessor(int i) {
+        if (i != 0) {
+            return websites.get(i - 1);
+        }
+        else
+            return websites.get(websites.size() - 1);
+
+    }
 }
 
