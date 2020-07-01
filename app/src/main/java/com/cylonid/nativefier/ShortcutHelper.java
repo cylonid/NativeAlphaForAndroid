@@ -1,13 +1,11 @@
 package com.cylonid.nativefier;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +19,7 @@ import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
+import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -35,13 +34,18 @@ import org.jsoup.select.Elements;
 import java.net.URL;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import okhttp3.OkHttpClient;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public class ShortcutHelper {
     private String strBaseUrl;
-    private Context c;
-    private WebApp d;
+    private Activity activity;
+    private WebApp webapp;
     private Bitmap bitmap;
     private ImageView uiFavicon;
     private CircularProgressBar uiProgressBar;
@@ -53,10 +57,10 @@ public class ShortcutHelper {
     TreeMap<Integer, String> found_icons;
 
 
-    public ShortcutHelper(WebApp d, Context c) {
-        this.d = d;
-        this.strBaseUrl = d.getBaseUrl();
-        this.c = c;
+    public ShortcutHelper(WebApp webapp, Activity c) {
+        this.webapp = webapp;
+        this.strBaseUrl = webapp.getBaseUrl();
+        this.activity = c;
         this.bitmap = null;
         this.shortcut_title = "";
         this.found_icons = new TreeMap<>();
@@ -64,17 +68,14 @@ public class ShortcutHelper {
 
     public void fetchFaviconURL() {
         buildShortcutDialog();
-        new FaviconURLFetcher().execute();
+        new FaviconURLFetcher(activity, 6, SECONDS).execute();
     }
     private void loadFavicon(String url) {
         Target target = new Target() {
 
             @Override
             public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                showFailedMessage();
-                uiProgressBar.setVisibility(View.INVISIBLE);
-                uiBtnPositive.setEnabled(true);
-                uiTitle.requestFocus();
+                prepareFailedUI();
             }
 
             @Override
@@ -91,47 +92,60 @@ public class ShortcutHelper {
         };
 
         if (url != null) {
-            Picasso.get().load(url).into(target);
+            OkHttpClient client = new OkHttpClient.Builder()
+                            .connectTimeout(6, SECONDS)
+                            .readTimeout(6, SECONDS)
+                            .writeTimeout(6, SECONDS)
+                            .build();
+
+            Picasso picasso = new Picasso.Builder(activity)
+                    .downloader(new OkHttp3Downloader(client))
+                    .build();
+
+            picasso.load(url).into(target);
         }
-        else {
-            showFailedMessage();
-            uiProgressBar.setVisibility(View.INVISIBLE);
-            uiBtnPositive.setEnabled(true);
-            uiTitle.requestFocus();
-        }
+        else
+            prepareFailedUI();
+
     }
 
     private void addShortcutToHomeScreen(Bitmap bitmap)
     {
-        Intent intent = Utility.createWebViewIntent(d, c);
+        Intent intent = Utility.createWebViewIntent(webapp, activity);
 
         IconCompat icon;
         if (bitmap != null)
             icon = IconCompat.createWithBitmap(bitmap);
         else
-            icon = IconCompat.createWithResource(c, R.mipmap.native_alpha_shortcut);
+            icon = IconCompat.createWithResource(activity, R.mipmap.native_alpha_shortcut);
         String final_title = uiTitle.getText().toString();
         if (final_title.equals(""))
-            final_title = d.getTitle();
+            final_title = webapp.getTitle();
 
-        if (ShortcutManagerCompat.isRequestPinShortcutSupported(c)) {
+        if (ShortcutManagerCompat.isRequestPinShortcutSupported(activity)) {
 
-            ShortcutInfoCompat pinShortcutInfo = new ShortcutInfoCompat.Builder(c, final_title)
+            ShortcutInfoCompat pinShortcutInfo = new ShortcutInfoCompat.Builder(activity, final_title)
                     .setIcon(icon)
                     .setShortLabel(final_title)
                     .setLongLabel(final_title)
                     .setIntent(intent)
                     .build();
-            ShortcutManagerCompat.requestPinShortcut(c, pinShortcutInfo, null);
+            ShortcutManagerCompat.requestPinShortcut(activity, pinShortcutInfo, null);
 
         }
 
     }
+
+    private void prepareFailedUI() {
+        showFailedMessage();
+        uiProgressBar.setVisibility(View.INVISIBLE);
+        uiBtnPositive.setEnabled(true);
+        uiTitle.requestFocus();
+    }
     private void showFailedMessage() {
-        Toast toast = Toast.makeText(c,"We could not retrieve an icon for the selected website.", Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(activity,"We could not retrieve an icon for the selected website.", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.TOP, 0, 100);
         toast.show();
-
     }
 
     private Integer getWidthFromIcon(String size_string) {
@@ -151,13 +165,13 @@ public class ShortcutHelper {
     }
 
     private void buildShortcutDialog() {
-        LayoutInflater li = LayoutInflater.from(c);
+        LayoutInflater li = LayoutInflater.from(activity);
         final View inflated_view = li.inflate(R.layout.shortcut_dialog, null);
         uiTitle = (EditText) inflated_view.findViewById(R.id.websiteTitle);
         uiFavicon = (ImageView) inflated_view.findViewById(R.id.favicon);
         uiProgressBar =  (CircularProgressBar)inflated_view.findViewById(R.id.circularProgressBar);
 
-        final AlertDialog dialog = new AlertDialog.Builder(c)
+        final AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setView(inflated_view)
                 .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick
                 .setNegativeButton(android.R.string.cancel, null)
@@ -184,23 +198,27 @@ public class ShortcutHelper {
     }
 
 
-    private class FaviconURLFetcher extends AsyncTask<Void, Void, String> {
+    private class FaviconURLFetcher extends AsyncTaskTimeout<Void, Void, String> {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
+        public FaviconURLFetcher(Activity context, long timeout, TimeUnit units) {
+            super(context, timeout, units);
         }
 
         @Override
-        protected String doInBackground(Void... voids) {
+        protected void onTimeout() {
+            super.onTimeout();
+            prepareFailedUI();
+        }
+
+        @Override
+        protected String runInBackground(Void... voids) {
 
             try {
                 //Connect to the website
                 Document doc = Jsoup.connect(strBaseUrl).userAgent(USER_AGENT).followRedirects(true).get();
-                Elements metaTags = doc.select("meta[http-equiv=refresh]");
 
                 //Step 1: Check for META Redirect
+                Elements metaTags = doc.select("meta[http-equiv=refresh]");
                 if (!metaTags.isEmpty())
                 {
                     Element metaTag = metaTags.first();
@@ -226,7 +244,7 @@ public class ShortcutHelper {
                             if (!start_url.isEmpty()) {
                                 URL base_url = new URL(mf.absUrl("href"));
                                 URL fl_url = new URL(base_url, start_url);
-                                d.setBase_url(fl_url.toString());
+                                webapp.setBase_url(fl_url.toString());
                             }
                         }
                         catch(JSONException e) {
@@ -297,12 +315,9 @@ public class ShortcutHelper {
             if (!shortcut_title.equals(""))
                 uiTitle.setText(shortcut_title);
             else
-                uiTitle.setText(d.getTitle());
+                uiTitle.setText(webapp.getTitle());
             loadFavicon(result);
 
-//            imageView.setImageBitmap(bitmap);
-//            textView.setText(title);
-//            progressDialog.dismiss();
         }
     }
 }
