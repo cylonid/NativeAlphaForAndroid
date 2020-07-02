@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.core.content.pm.ShortcutInfoCompat;
@@ -50,6 +51,7 @@ public class ShortcutHelper {
     private ImageView uiFavicon;
     private CircularProgressBar uiProgressBar;
     private EditText uiTitle;
+    private LinearLayout uiIconLayout;
     private final static String USER_AGENT = "Mozilla/5.0 (Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0";
     private String shortcut_title;
     private Button uiBtnPositive;
@@ -138,11 +140,12 @@ public class ShortcutHelper {
 
     private void prepareFailedUI() {
         showFailedMessage();
-        uiProgressBar.setVisibility(View.INVISIBLE);
+        uiIconLayout.setVisibility(View.GONE);
         uiBtnPositive.setEnabled(true);
         uiTitle.requestFocus();
     }
     private void showFailedMessage() {
+//        •bulletpoint works in toast
         Toast toast = Toast.makeText(activity,"We could not retrieve an icon for the selected website.", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.TOP, 0, 100);
         toast.show();
@@ -167,6 +170,7 @@ public class ShortcutHelper {
     private void buildShortcutDialog() {
         LayoutInflater li = LayoutInflater.from(activity);
         final View inflated_view = li.inflate(R.layout.shortcut_dialog, null);
+        uiIconLayout = inflated_view.findViewById(R.id.layoutIcon);
         uiTitle = (EditText) inflated_view.findViewById(R.id.websiteTitle);
         uiFavicon = (ImageView) inflated_view.findViewById(R.id.favicon);
         uiProgressBar =  (CircularProgressBar)inflated_view.findViewById(R.id.circularProgressBar);

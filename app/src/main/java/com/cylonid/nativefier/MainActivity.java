@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
         WebsiteDataManager.getInstance().loadAppData();
         addActiveWebAppsToUI();
 
+        if (WebsiteDataManager.getInstance().getWebsites().size() == 0) {
+            buildAddWebsiteDialog("Welcome!\nAdd your first web shortcut:");
+        }
+
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         toolbar.setLogo(R.mipmap.native_alpha_white);
@@ -47,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buildAddWebsiteDialog();
+                buildAddWebsiteDialog("Add website");
             }
         });
 
@@ -242,14 +246,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    private void buildAddWebsiteDialog() {
+    private void buildAddWebsiteDialog(String title) {
         final View inflated_view = getLayoutInflater().inflate(R.layout.add_website_dialogue, null);
         final EditText url = (EditText) inflated_view.findViewById(R.id.websiteUrl);
         final Switch create_shortcut = (Switch) inflated_view.findViewById(R.id.switchCreateShortcut);
 
         final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
                 .setView(inflated_view)
-                .setTitle("Add website")
+                .setTitle(title)
                 .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
@@ -300,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
                 WebsiteDataManager.getInstance().getWebApp(ID).markInactive();
                 mainScreen.removeAllViews();
                 addActiveWebAppsToUI();
+
 
             }
         });
