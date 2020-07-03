@@ -1,4 +1,4 @@
-package com.cylonid.nativefier;
+package com.cylonid.nativealpha;
 
 //Credits to SO user ban-geo-engineering https://stackoverflow.com/users/1617737/ban-geoengineering
 //https://stackoverflow.com/questions/46370836/android-movable-draggable-floating-action-button-fab

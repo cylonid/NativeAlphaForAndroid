@@ -1,4 +1,4 @@
-package com.cylonid.nativefier;
+package com.cylonid.nativealpha;
 
 import android.content.Context;
 import android.content.SharedPreferences;

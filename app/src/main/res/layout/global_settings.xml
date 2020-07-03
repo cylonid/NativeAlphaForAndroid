@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/mainScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/header1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Global settings"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+        <TextView
+            android:id="@+id/headerDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="These settings are applied globally and override app-specific settings."
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="50dp"/>
+
+        <Switch
+            android:id="@+id/switchGlobalCache"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear cache after usage" />
+
+        <Switch
+            android:id="@+id/switchGlobalCookies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear cookies after usage" />
+
+        <Switch
+            android:id="@+id/switchMultiTouch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use two-finger swipes for browser forward and backward navigation" />
+
+
+        <Switch
+            android:id="@+id/switchMultiTouch3Fingers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use three-finger swipes to switch web apps (experimental)" />
+    </LinearLayout>
+
+</ScrollView>
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

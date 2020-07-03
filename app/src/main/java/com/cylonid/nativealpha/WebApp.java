@@ -1,4 +1,4 @@
-package com.cylonid.nativefier;
+package com.cylonid.nativealpha;
 
 public class WebApp {
     private String title;
