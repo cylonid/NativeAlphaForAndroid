@@ -1,5 +1,6 @@
 package com.cylonid.nativealpha;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.TypedValue;
@@ -7,6 +8,8 @@ import android.util.TypedValue;
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public final class Utility {
     public static final String INT_ID_WEBAPPID = "webappID";
@@ -30,6 +33,14 @@ public final class Utility {
             throw new AssertionError(message);
         }
     }
+
+    public static void personalizeToolbar(AppCompatActivity a)  {
+        Toolbar toolbar = a.findViewById(R.id.toolbar);
+        toolbar.setLogo(R.mipmap.native_alpha_white);
+        toolbar.setTitle(R.string.app_name);
+        a.setSupportActionBar(toolbar);
+    }
+
     @ColorInt
     public static int getThemeColor
             (

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,12 +42,7 @@ public class MainActivity extends AppCompatActivity {
             buildAddWebsiteDialog("Welcome!\nAdd your first web shortcut:");
         }
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
-        toolbar.setLogo(R.mipmap.native_alpha_white);
-        toolbar.setTitle(R.string.app_name);
-        setSupportActionBar(toolbar);
-
+        Utility.personalizeToolbar(this);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, NewActivity.class);
+            Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
         }
