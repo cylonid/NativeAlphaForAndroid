@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,11 +32,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainScreen = (LinearLayout) findViewById(R.id.mainScreen);
-        WebsiteDataManager.getInstance().initContext(this);
-        WebsiteDataManager.getInstance().loadAppData();
+        DataManager.getInstance().initContext(this);
+        DataManager.getInstance().loadAppData();
         addActiveWebAppsToUI();
 
-        if (WebsiteDataManager.getInstance().getWebsites().size() == 0) {
+        if (DataManager.getInstance().getWebsites().size() == 0) {
             buildAddWebsiteDialog("Welcome!\nAdd your first web shortcut:");
         }
 
@@ -160,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void buildSettingsDialog(final int webappID) {
         final View inflated_view = getLayoutInflater().inflate(R.layout.webapp_settings, null);
-        final WebApp webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
+        final WebApp webapp = DataManager.getInstance().getWebApp(webappID);
 
         final Switch switchOpenUrlExternal = (Switch) inflated_view.findViewById(R.id.switchOpenUrlExternal);
         final Switch switchCookies = (Switch) inflated_view.findViewById(R.id.switchCookies);
@@ -234,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        WebsiteDataManager.getInstance().getWebApp(webappID).saveNewSettings(switchOpenUrlExternal.isChecked(), switchDesktopVersion.isChecked(), switchCookies.isChecked(), switchThirdPartyCookies.isChecked(), switchJS.isChecked(), switchCache.isChecked(), switchRestorePage.isChecked(), Integer.parseInt(textTimeout.getText().toString()));
+                        DataManager.getInstance().getWebApp(webappID).saveNewSettings(switchOpenUrlExternal.isChecked(), switchDesktopVersion.isChecked(), switchCookies.isChecked(), switchThirdPartyCookies.isChecked(), switchJS.isChecked(), switchCache.isChecked(), switchRestorePage.isChecked(), Integer.parseInt(textTimeout.getText().toString()));
                         dialog.dismiss();
                     }
                 });
@@ -274,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (Patterns.WEB_URL.matcher(str_url.toLowerCase()).matches()) {
                             WebApp new_site = new WebApp(str_url);
-                            WebsiteDataManager.getInstance().addWebsite(new_site);
+                            DataManager.getInstance().addWebsite(new_site);
 
                             addRow(new_site);
                             dialog.dismiss();
@@ -299,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage("Are you sure you want to remove this website?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                WebsiteDataManager.getInstance().getWebApp(ID).markInactive();
+                DataManager.getInstance().getWebApp(ID).markInactive();
                 mainScreen.removeAllViews();
                 addActiveWebAppsToUI();
 
@@ -316,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addActiveWebAppsToUI () {
-        for (WebApp d : WebsiteDataManager.getInstance().getWebsites()) {
+        for (WebApp d : DataManager.getInstance().getWebsites()) {
             if (d.isActive())
                 addRow(d);
         }

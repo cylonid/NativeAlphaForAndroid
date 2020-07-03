@@ -8,29 +8,49 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 
 
-public class WebsiteDataManager {
+public class DataManager {
+
+    private static final String shared_pref_data = "WEBSITEDATA";
+    private static final String shared_pref_max_id  = "MAX_ID";
+    private static final String shared_pref_glob_cache = "GLOBAL:Cache";
+    private static final String shared_pref_glob_cookie = "GLOBAL:Cookies";
+    private static final String shared_pref_glob_2fmultitouch = "GLOBAL:2FingerMultiTouch";
+    private static final String shared_pref_glob_3fmultitouch = "GLOBAL:3FingerMultiTouch";
 
 
+    private static final DataManager instance = new DataManager();
     private ArrayList<WebApp> websites;
     private int max_assigned_ID;
     private SharedPreferences appdata;
-    private static final String shared_pref_data = "WEBSITEDATA";
-    private static final String shared_pref_max_id  = "MAX_ID";
     private Context context = null;
+    private GlobalSettings settings;
 
-
-    private static final WebsiteDataManager instance = new WebsiteDataManager();
-
-    private WebsiteDataManager()
+    private DataManager()
     {
         websites = new ArrayList<>();
         max_assigned_ID = -1;
+        settings = new GlobalSettings();
     }
+
+    public static DataManager getInstance(){
+//        assert(context != null);
+        return instance;
+    }
+
+    public GlobalSettings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(GlobalSettings settings) {
+        this.settings = settings;
+        saveGlobalSettings();
+    }
+
     public void initContext(Context context) {
         this.context = context;
     }
 
-    public void saveAppData() {
+    public void saveWebAppData() {
         Utility.Assert(context != null, "Context null before saving sharedpref");
 
         appdata = context.getApplicationContext().getSharedPreferences(shared_pref_data, Context.MODE_PRIVATE);
@@ -46,6 +66,7 @@ public class WebsiteDataManager {
         Utility.Assert(context != null, "Context null before loading sharedpref");
 
         appdata = context.getApplicationContext().getSharedPreferences(shared_pref_data, Context.MODE_PRIVATE);
+        //Webapp data
         if (appdata.contains(shared_pref_data)) {
             Gson gson = new Gson();
             String json = appdata.getString(shared_pref_data, "");
@@ -53,6 +74,29 @@ public class WebsiteDataManager {
         }
         if (appdata.contains(shared_pref_max_id))
             max_assigned_ID = appdata.getInt(shared_pref_max_id, max_assigned_ID);
+
+        //Global app data
+        if (appdata.contains(shared_pref_glob_cache))
+            settings.setClearCache(appdata.getBoolean(shared_pref_glob_cache, false));
+        if (appdata.contains(shared_pref_glob_cookie))
+            settings.setClearCookies(appdata.getBoolean(shared_pref_glob_cookie, false));
+        if (appdata.contains(shared_pref_glob_2fmultitouch))
+            settings.setTwoFingerMultitouch(appdata.getBoolean(shared_pref_glob_2fmultitouch, true));
+        if (appdata.contains(shared_pref_glob_3fmultitouch))
+            settings.setThreeFingerMultitouch(appdata.getBoolean(shared_pref_glob_3fmultitouch, false));
+
+    }
+
+    private void saveGlobalSettings() {
+        Utility.Assert(context != null, "Context null before saving appdata to sharedpref");
+
+        appdata = context.getApplicationContext().getSharedPreferences(shared_pref_data, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = appdata.edit();
+        editor.putBoolean(shared_pref_glob_cache, settings.isClearCache());
+        editor.putBoolean(shared_pref_glob_cookie, settings.isClearCookies());
+        editor.putBoolean(shared_pref_glob_2fmultitouch, settings.isTwoFingerMultitouch());
+        editor.putBoolean(shared_pref_glob_3fmultitouch, settings.isThreeFingerMultitouch());
+        editor.commit();
     }
 
     public void initDummyData()
@@ -67,14 +111,10 @@ public class WebsiteDataManager {
         addWebsite(d3);
 
     }
-    public static WebsiteDataManager getInstance(){
-//        assert(context != null);
-        return instance;
-    }
 
     public void addWebsite(WebApp new_site) {
             websites.add(new_site);
-            saveAppData();
+            saveWebAppData();
     }
 
     public int getIncrementedID() {

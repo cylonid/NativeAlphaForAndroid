@@ -41,10 +41,10 @@ public class WebViewActivity extends AppCompatActivity {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
             webappID = getIntent().getIntExtra(Utility.INT_ID_WEBAPPID, -1);
 
-            WebsiteDataManager.getInstance().initContext(this);
-            WebsiteDataManager.getInstance().loadAppData();
+            DataManager.getInstance().initContext(this);
+            DataManager.getInstance().loadAppData();
             Utility.Assert(webappID != -1, "WebApp ID could not be retrieved.");
-            webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
+            webapp = DataManager.getInstance().getWebApp(webappID);
             String url = webapp.getLoadableUrl();
             boolean open_external = webapp.openUrlExternal();
 
@@ -86,7 +86,7 @@ public class WebViewActivity extends AppCompatActivity {
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    if (WebsiteDataManager.getInstance().getWebApp(webappID).isRequestDesktopSet())
+                    if (DataManager.getInstance().getWebApp(webappID).isRequestDesktopSet())
                         return false;
                     switch (event.getAction() & MotionEvent.ACTION_MASK)
                     {
@@ -105,7 +105,7 @@ public class WebViewActivity extends AppCompatActivity {
                                 if(startX > stopX)
                                 {
                                     if (event.getPointerCount() == 3) {
-                                        startActivity(Utility.createWebViewIntent(WebsiteDataManager.getInstance().getPredecessor(webappID), WebViewActivity.this));
+                                        startActivity(Utility.createWebViewIntent(DataManager.getInstance().getPredecessor(webappID), WebViewActivity.this));
                                         finish();
                                     }
                                     else {
@@ -116,7 +116,7 @@ public class WebViewActivity extends AppCompatActivity {
                                 else
                                 {
                                     if (event.getPointerCount() == 3) {
-                                        startActivity(Utility.createWebViewIntent(WebsiteDataManager.getInstance().getSuccessor(webappID), WebViewActivity.this));
+                                        startActivity(Utility.createWebViewIntent(DataManager.getInstance().getSuccessor(webappID), WebViewActivity.this));
                                         finish();
                                     }
                                     else
@@ -145,14 +145,14 @@ public class WebViewActivity extends AppCompatActivity {
         if (wv.canGoBack())
             wv.goBack();
         else
-            wv.loadUrl(WebsiteDataManager.getInstance().getWebApp(webappID).getBaseUrl());
+            wv.loadUrl(DataManager.getInstance().getWebApp(webappID).getBaseUrl());
 //            moveTaskToBack(true);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        WebApp webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
+        WebApp webapp = DataManager.getInstance().getWebApp(webappID);
         if (webapp.isRestorePageSet())
             webapp.saveCurrentUrl(wv.getUrl());
         if (webapp.isClearCacheSet())
@@ -164,7 +164,7 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         public void onLoadResource(WebView view, String url) {
             super.onLoadResource(view, url);
-            if (WebsiteDataManager.getInstance().getWebApp(webappID).isRequestDesktopSet())
+            if (DataManager.getInstance().getWebApp(webappID).isRequestDesktopSet())
                 view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth / 1024));", null);
         }
 
@@ -172,7 +172,7 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url)
         {
-            WebApp webapp = WebsiteDataManager.getInstance().getWebApp(webappID);
+            WebApp webapp = DataManager.getInstance().getWebApp(webappID);
 
             if (webapp.openUrlExternal()) {
                 String base_url = webapp.getBaseUrl();

@@ -21,7 +21,7 @@ public class WebApp {
     public WebApp(String base_url) {
         title = base_url.replace("http://", "").replace("https://", "").replace("www.", "");
         this.base_url = base_url;
-        ID = WebsiteDataManager.getInstance().getIncrementedID();
+        ID = DataManager.getInstance().getIncrementedID();
         open_url_external = true;
         active_entry = true;
         timeout_last_used_url = 10;
@@ -36,14 +36,14 @@ public class WebApp {
     }
     public void markInactive() {
         active_entry = false;
-        WebsiteDataManager.getInstance().saveAppData();
+        DataManager.getInstance().saveWebAppData();
     }
 
     public void saveCurrentUrl(String url) {
         if (restore_page) {
             last_used_url = url;
             timestamp_last_used_url = System.currentTimeMillis() / 1000;
-            WebsiteDataManager.getInstance().saveAppData();
+            DataManager.getInstance().saveWebAppData();
         }
     }
 
@@ -71,7 +71,7 @@ public class WebApp {
         this.timeout_last_used_url = timeout;
         this.request_desktop = request_desktop;
         this.clear_cache = clear_cache;
-        WebsiteDataManager.getInstance().saveAppData();
+        DataManager.getInstance().saveWebAppData();
     }
 
     public int getTimeout_last_used_url() {
@@ -98,7 +98,7 @@ public class WebApp {
     public boolean isActive() { return active_entry; }
     public void setBase_url(String base_url) {
         this.base_url = base_url;
-        WebsiteDataManager.getInstance().saveAppData();
+        DataManager.getInstance().saveWebAppData();
     }
     public boolean isAllowCookiesSet() {
         return allow_cookies;
