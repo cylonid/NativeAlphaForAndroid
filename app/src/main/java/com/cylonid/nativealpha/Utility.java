@@ -9,6 +9,7 @@ import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
 public final class Utility {
@@ -39,6 +40,21 @@ public final class Utility {
         toolbar.setLogo(R.mipmap.native_alpha_white);
         toolbar.setTitle(R.string.app_name);
         a.setSupportActionBar(toolbar);
+    }
+
+    public static void applyUITheme() {
+        int id = DataManager.getInstance().getSettings().getThemeId();
+        switch (id) {
+            case 0:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                break;
+            case 1:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case 2:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+        }
     }
 
     @ColorInt

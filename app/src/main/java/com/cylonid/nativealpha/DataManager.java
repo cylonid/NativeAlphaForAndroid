@@ -3,19 +3,24 @@ package com.cylonid.nativealpha;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
+
+import okhttp3.internal.Util;
 
 
 public class DataManager {
 
     private static final String shared_pref_data = "WEBSITEDATA";
     private static final String shared_pref_max_id  = "MAX_ID";
-    private static final String shared_pref_glob_cache = "GLOBAL:Cache";
-    private static final String shared_pref_glob_cookie = "GLOBAL:Cookies";
-    private static final String shared_pref_glob_2fmultitouch = "GLOBAL:2FingerMultiTouch";
-    private static final String shared_pref_glob_3fmultitouch = "GLOBAL:3FingerMultiTouch";
+    private static final String shared_pref_glob_cache = "globalCache";
+    private static final String shared_pref_glob_cookie = "globalCookies";
+    private static final String shared_pref_glob_2fmultitouch = "global2FingerMultiTouch";
+    private static final String shared_pref_glob_3fmultitouch = "global3FingerMultiTouch";
+    private static final String shared_pref_glob_ui_theme = "globalUITheme";
 
 
     private static final DataManager instance = new DataManager();
@@ -72,19 +77,17 @@ public class DataManager {
             String json = appdata.getString(shared_pref_data, "");
             websites = gson.fromJson(json, new TypeToken<ArrayList<WebApp>>() {}.getType());
         }
-        if (appdata.contains(shared_pref_max_id))
-            max_assigned_ID = appdata.getInt(shared_pref_max_id, max_assigned_ID);
+
+        max_assigned_ID = appdata.getInt(shared_pref_max_id, max_assigned_ID);
 
         //Global app data
-        if (appdata.contains(shared_pref_glob_cache))
-            settings.setClearCache(appdata.getBoolean(shared_pref_glob_cache, false));
-        if (appdata.contains(shared_pref_glob_cookie))
-            settings.setClearCookies(appdata.getBoolean(shared_pref_glob_cookie, false));
-        if (appdata.contains(shared_pref_glob_2fmultitouch))
-            settings.setTwoFingerMultitouch(appdata.getBoolean(shared_pref_glob_2fmultitouch, true));
-        if (appdata.contains(shared_pref_glob_3fmultitouch))
-            settings.setThreeFingerMultitouch(appdata.getBoolean(shared_pref_glob_3fmultitouch, false));
+        settings.setClearCache(appdata.getBoolean(shared_pref_glob_cache, false));
+        settings.setClearCookies(appdata.getBoolean(shared_pref_glob_cookie, false));
+        settings.setTwoFingerMultitouch(appdata.getBoolean(shared_pref_glob_2fmultitouch, true));
+        settings.setThreeFingerMultitouch(appdata.getBoolean(shared_pref_glob_3fmultitouch, false));
+        settings.setThemeId(appdata.getInt(shared_pref_glob_ui_theme, 0));
 
+        Utility.applyUITheme();
     }
 
     private void saveGlobalSettings() {
@@ -96,6 +99,7 @@ public class DataManager {
         editor.putBoolean(shared_pref_glob_cookie, settings.isClearCookies());
         editor.putBoolean(shared_pref_glob_2fmultitouch, settings.isTwoFingerMultitouch());
         editor.putBoolean(shared_pref_glob_3fmultitouch, settings.isThreeFingerMultitouch());
+        editor.putInt(shared_pref_glob_ui_theme, settings.getThemeId());
         editor.commit();
     }
 

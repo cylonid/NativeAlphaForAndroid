@@ -3,6 +3,7 @@ package com.cylonid.nativealpha;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mainScreen = (LinearLayout) findViewById(R.id.mainScreen);
+        mainScreen = findViewById(R.id.mainScreen);
         DataManager.getInstance().initContext(this);
         DataManager.getInstance().loadAppData();
         addActiveWebAppsToUI();

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -88,6 +89,7 @@ public class WebViewActivity extends AppCompatActivity {
                 public boolean onTouch(View v, MotionEvent event) {
                     if (DataManager.getInstance().getWebApp(webappID).isRequestDesktopSet())
                         return false;
+
                     switch (event.getAction() & MotionEvent.ACTION_MASK)
                     {
                         case MotionEvent.ACTION_POINTER_DOWN:
@@ -100,31 +102,25 @@ public class WebViewActivity extends AppCompatActivity {
                         case MotionEvent.ACTION_POINTER_UP:
                             // This happens when you release the second finger
                             mode = NONE;
-                            if(Math.abs(startX - stopX) > TRESHOLD)
-                            {
-                                if(startX > stopX)
-                                {
-                                    if (event.getPointerCount() == 3) {
+                            if(Math.abs(startX - stopX) > TRESHOLD) {
+                                if (startX > stopX) {
+                                    if (event.getPointerCount() == 3 && DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
                                         startActivity(Utility.createWebViewIntent(DataManager.getInstance().getPredecessor(webappID), WebViewActivity.this));
                                         finish();
-                                    }
-                                    else {
+                                    } else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch()) {
                                         if (wv.canGoForward())
                                             wv.goForward();
                                     }
-                                }
-                                else
-                                {
-                                    if (event.getPointerCount() == 3) {
+                                } else {
+                                    if (event.getPointerCount() == 3 && DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
                                         startActivity(Utility.createWebViewIntent(DataManager.getInstance().getSuccessor(webappID), WebViewActivity.this));
                                         finish();
-                                    }
-                                    else
+                                    } else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch())
                                         onBackPressed();
-                                }
-                            }
-                            return true;
 
+                                }
+                                return true;
+                            }
                         case MotionEvent.ACTION_MOVE:
                             if(mode == SWIPE)
                             {
@@ -155,8 +151,11 @@ public class WebViewActivity extends AppCompatActivity {
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
         if (webapp.isRestorePageSet())
             webapp.saveCurrentUrl(wv.getUrl());
-        if (webapp.isClearCacheSet())
+        if (webapp.isClearCacheSet() || DataManager.getInstance().getSettings().isClearCache())
             wv.clearCache(true);
+
+        if (DataManager.getInstance().getSettings().isClearCookies())
+            CookieManager.getInstance().flush();
     }
 
 
