@@ -3,7 +3,9 @@ package com.cylonid.nativealpha;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.TypedValue;
+import android.webkit.WebSettings;
 
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
@@ -43,17 +45,19 @@ public final class Utility {
     }
 
     public static void applyUITheme() {
-        int id = DataManager.getInstance().getSettings().getThemeId();
-        switch (id) {
-            case 0:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                break;
-            case 1:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                break;
-            case 2:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            int id = DataManager.getInstance().getSettings().getThemeId();
+            switch (id) {
+                case 0:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                    break;
+                case 1:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    break;
+                case 2:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    break;
+            }
         }
     }
 

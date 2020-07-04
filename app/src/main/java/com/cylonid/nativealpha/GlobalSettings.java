@@ -31,7 +31,7 @@ public class GlobalSettings {
     }
 
     public void setTwoFingerMultitouch(boolean twoFingerMultitouch) {
-        this.two_finger_multitouch = two_finger_multitouch;
+        this.two_finger_multitouch = twoFingerMultitouch;
     }
 
     public boolean isThreeFingerMultitouch() {
@@ -39,7 +39,7 @@ public class GlobalSettings {
     }
 
     public void setThreeFingerMultitouch(boolean threeFingerMultitouch) {
-        this.three_finger_multitouch = three_finger_multitouch;
+        this.three_finger_multitouch = threeFingerMultitouch;
     }
 
     public boolean isClearCache() {

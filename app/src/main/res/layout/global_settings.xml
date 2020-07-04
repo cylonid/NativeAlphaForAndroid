@@ -83,7 +83,7 @@
                     android:id="@+id/switchGlobalMultiTouch3Fingers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Use three-finger swipes to switchGlobal web apps (experimental)" />
+                    android:text="Use three-finger swipes to switch between web apps (experimental)" />
                 <LinearLayout
                     android:id="@+id/layoutUIModeSelection"
                     android:layout_width="match_parent"

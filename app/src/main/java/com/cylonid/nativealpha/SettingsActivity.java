@@ -19,7 +19,7 @@ public class SettingsActivity extends AppCompatActivity {
     Switch uiMultiTouchTwoFingers;
     Switch uiMultiTouchThreeFingers;
     Spinner uiDropDownTheme;
-    int new_theme = 0;
+    int theme_id = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,15 +41,15 @@ public class SettingsActivity extends AppCompatActivity {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     switch (position) {
                         case 0:
-                            new_theme = 0;
+                            theme_id = 0;
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                             break;
                         case 1:
-                            new_theme = 1;
+                            theme_id = 1;
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                             break;
                         case 2:
-                            new_theme = 2;
+                            theme_id = 2;
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                             break;
                     }
@@ -64,7 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DataManager.getInstance().setSettings(new GlobalSettings(uiCache.isChecked(), uiCookies.isChecked(), uiMultiTouchTwoFingers.isChecked(), uiMultiTouchThreeFingers.isChecked(), new_theme));
+                DataManager.getInstance().setSettings(new GlobalSettings(uiCache.isChecked(), uiCookies.isChecked(), uiMultiTouchTwoFingers.isChecked(), uiMultiTouchThreeFingers.isChecked(), theme_id));
                 onBackPressed();
             }
         });
@@ -91,7 +91,7 @@ public class SettingsActivity extends AppCompatActivity {
         uiCookies.setChecked(s.isClearCookies());
         uiMultiTouchTwoFingers.setChecked(s.isTwoFingerMultitouch());
         uiMultiTouchThreeFingers.setChecked(s.isThreeFingerMultitouch());
-
+        theme_id = s.getThemeId();
         switch (s.getThemeId()) {
             case 0:
                 uiDropDownTheme.setSelection(0, false);

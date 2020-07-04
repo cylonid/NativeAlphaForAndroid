@@ -70,7 +70,7 @@ public class ShortcutHelper {
 
     public void fetchFaviconURL() {
         buildShortcutDialog();
-        new FaviconURLFetcher(activity, 6, SECONDS).execute();
+        new FaviconURLFetcher(activity, 15, SECONDS).execute();
     }
     private void loadFavicon(String url) {
         Target target = new Target() {
@@ -162,9 +162,11 @@ public class ShortcutHelper {
         if (strBaseUrl.contains("amazon"))
             found_icons.put(300, "https://s3.amazonaws.com/prod-widgetSource/in-shop/pub/images/amzn_favicon_blk.png");
 
-        if (strBaseUrl.contains("oebb"))
+        if (strBaseUrl.contains("oebb.at"))
             found_icons.put(192, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
 
+        if (strBaseUrl.contains("chelseafc.com"))
+            found_icons.put(192, "https://res.cloudinary.com/chelsea-production/image/upload/v1531308404/logos/browser-logo/mask_3x.png");
     }
 
     private void buildShortcutDialog() {
@@ -276,6 +278,7 @@ public class ShortcutHelper {
                     Element html_title = doc.selectFirst("title");
                     shortcut_title = html_title.text();
                     Elements icons = doc.select("link[rel=icon]");
+                    icons.addAll(doc.select("link[rel=shortcut icon]"));
                     //If necessary, use apple icons
                     if (icons.isEmpty()) {
                         Elements apple_icons = doc.select("link[rel=apple-touch-icon]");

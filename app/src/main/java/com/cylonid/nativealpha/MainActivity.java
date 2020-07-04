@@ -188,9 +188,10 @@ public class MainActivity extends AppCompatActivity {
             textTimeout.setText(String.valueOf(webapp.getTimeout_last_used_url()));
         }
 
-        if (!webapp.isAllowCookiesSet())
+        if (!webapp.isAllowCookiesSet()) {
+            switchThirdPartyCookies.setChecked(false);
             switchThirdPartyCookies.setEnabled(false);
-
+        }
         switchRestorePage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked)
@@ -204,8 +205,10 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked)
                     switchThirdPartyCookies.setEnabled(true);
-                else
+                else {
+                    switchThirdPartyCookies.setChecked(false);
                     switchThirdPartyCookies.setEnabled(false);
+                }
             }
         });
 
@@ -324,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void openWebView(WebApp d) {
         startActivity(Utility.createWebViewIntent(d, MainActivity.this));
-        finish();
+        //finish();
     }
 
 
