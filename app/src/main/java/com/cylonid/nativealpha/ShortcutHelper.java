@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -120,6 +121,7 @@ public class ShortcutHelper {
             icon = IconCompat.createWithBitmap(bitmap);
         else
             icon = IconCompat.createWithResource(activity, R.mipmap.native_alpha_shortcut);
+
         String final_title = uiTitle.getText().toString();
         if (final_title.equals(""))
             final_title = webapp.getTitle();

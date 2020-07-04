@@ -162,15 +162,16 @@ public class MainActivity extends AppCompatActivity {
         final View inflated_view = getLayoutInflater().inflate(R.layout.webapp_settings, null);
         final WebApp webapp = DataManager.getInstance().getWebApp(webappID);
 
-        final Switch switchOpenUrlExternal = (Switch) inflated_view.findViewById(R.id.switchOpenUrlExternal);
-        final Switch switchCookies = (Switch) inflated_view.findViewById(R.id.switchCookies);
-        final Switch switchThirdPartyCookies = (Switch) inflated_view.findViewById(R.id.switch3PCookies);
-        final Switch switchDesktopVersion = (Switch) inflated_view.findViewById(R.id.switchDesktopSite);
-        final Switch switchJS = (Switch) inflated_view.findViewById(R.id.switchJavascript);
-        final Switch switchRestorePage = (Switch) inflated_view.findViewById(R.id.switchRestorePage);
-        final Switch switchCache = (Switch) inflated_view.findViewById(R.id.switchCache);
-        final EditText textTimeout = (EditText) inflated_view.findViewById(R.id.textTimeout);
-        final Button btnCreateShortcut = (Button) inflated_view.findViewById(R.id.btnRecreateShortcut);
+        final Switch switchOpenUrlExternal = inflated_view.findViewById(R.id.switchOpenUrlExternal);
+        final Switch switchCookies = inflated_view.findViewById(R.id.switchCookies);
+        final Switch switchThirdPartyCookies = inflated_view.findViewById(R.id.switch3PCookies);
+        final Switch switchDesktopVersion = inflated_view.findViewById(R.id.switchDesktopSite);
+        final Switch switchJS = inflated_view.findViewById(R.id.switchJavascript);
+        final Switch switchRestorePage = inflated_view.findViewById(R.id.switchRestorePage);
+        final Switch switchCache = inflated_view.findViewById(R.id.switchCache);
+        final Switch switchAdblock = inflated_view.findViewById(R.id.switchAdblock);
+        final EditText textTimeout = inflated_view.findViewById(R.id.textTimeout);
+        final Button btnCreateShortcut = inflated_view.findViewById(R.id.btnRecreateShortcut);
 
         switchOpenUrlExternal.setChecked(webapp.openUrlExternal());
         switchCookies.setChecked(webapp.isAllowCookiesSet());
@@ -179,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         switchJS.setChecked(webapp.isAllowJSSet());
         switchRestorePage.setChecked(webapp.isRestorePageSet());
         switchCache.setChecked(webapp.isClearCacheSet());
+        switchAdblock.setChecked(webapp.isUseAdblock());
 
         if (!webapp.isRestorePageSet()) {
             textTimeout.setEnabled(false);
@@ -237,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DataManager.getInstance().getWebApp(webappID).saveNewSettings(switchOpenUrlExternal.isChecked(), switchDesktopVersion.isChecked(), switchCookies.isChecked(), switchThirdPartyCookies.isChecked(), switchJS.isChecked(), switchCache.isChecked(), switchRestorePage.isChecked(), Integer.parseInt(textTimeout.getText().toString()));
+                        DataManager.getInstance().getWebApp(webappID).saveNewSettings(switchAdblock.isChecked(), switchOpenUrlExternal.isChecked(), switchDesktopVersion.isChecked(), switchCookies.isChecked(), switchThirdPartyCookies.isChecked(), switchJS.isChecked(), switchCache.isChecked(), switchRestorePage.isChecked(), Integer.parseInt(textTimeout.getText().toString()));
                         dialog.dismiss();
                     }
                 });

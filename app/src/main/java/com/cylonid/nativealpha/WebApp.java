@@ -15,8 +15,7 @@ public class WebApp {
     private boolean active_entry;
     private boolean request_desktop;
     private boolean clear_cache;
-
-
+    private boolean use_adblock;
 
     public WebApp(String base_url) {
         title = base_url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -32,8 +31,11 @@ public class WebApp {
         allow_js = true;
         request_desktop = false;
         clear_cache = false;
+        use_adblock = true;
 
     }
+
+
     public void markInactive() {
         active_entry = false;
         DataManager.getInstance().saveWebAppData();
@@ -62,7 +64,7 @@ public class WebApp {
         return base_url;
     }
 
-    public void saveNewSettings(boolean open_url_external, boolean request_desktop, boolean allow_cookies, boolean allow_third_p_cookies, boolean allow_js, boolean clear_cache, boolean restore_page, Integer timeout) {
+    public void saveNewSettings(boolean use_adblock, boolean open_url_external, boolean request_desktop, boolean allow_cookies, boolean allow_third_p_cookies, boolean allow_js, boolean clear_cache, boolean restore_page, Integer timeout) {
         this.open_url_external = open_url_external;
         this.allow_cookies = allow_cookies;
         this.allow_third_p_cookies = allow_third_p_cookies;
@@ -71,6 +73,7 @@ public class WebApp {
         this.timeout_last_used_url = timeout;
         this.request_desktop = request_desktop;
         this.clear_cache = clear_cache;
+        this.use_adblock = use_adblock;
         DataManager.getInstance().saveWebAppData();
     }
 
@@ -121,6 +124,7 @@ public class WebApp {
     public boolean isClearCacheSet() {
         return clear_cache;
     }
-
-
+    public boolean isUseAdblock() {
+        return use_adblock;
+    }
 }
