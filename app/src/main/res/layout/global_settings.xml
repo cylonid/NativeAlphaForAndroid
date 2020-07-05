@@ -44,7 +44,7 @@
                     android:id="@+id/header1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Global settings"
+                    android:text="@string/global_settings"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textColor="@android:color/black" />
 
@@ -52,7 +52,7 @@
                     android:id="@+id/headerDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="These settings are applied globally and override app-specific settings."
+                    android:text="@string/these_settings_are_applied_globally_and_override_app_specific_settings"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@android:color/black" />
 
@@ -64,26 +64,28 @@
                     android:id="@+id/switchGlobalCache"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Clear cache after usage" />
+                    android:text="@string/clear_cache_after_usage" />
+
 
                 <Switch
                     android:id="@+id/switchGlobalCookies"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Clear cookies after usage" />
+                    android:text="@string/clear_cookies_after_usage" />
+
 
                 <Switch
                     android:id="@+id/switchGlobalMultiTouch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Use two-finger swipes for browser forward and backward navigation" />
+                    android:text="@string/use_two_finger_swipes_for_browser_forward_and_backward_navigation" />
 
 
                 <Switch
                     android:id="@+id/switchGlobalMultiTouch3Fingers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Use three-finger swipes to switch between web apps (experimental)" />
+                    android:text="@string/use_three_finger_swipes_to_switch_between_web_apps_experimental" />
                 <LinearLayout
                     android:id="@+id/layoutUIModeSelection"
                     android:layout_width="match_parent"
@@ -95,7 +97,7 @@
                         android:id="@+id/textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Select UI mode" />
+                        android:text="@string/select_ui_mode" />
 
                     <Spinner
                         android:id="@+id/dropDownTheme"
@@ -120,13 +122,13 @@
                         android:id="@+id/btnCancel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cancel" />
+                        android:text="@android:string/cancel" />
 
                     <Button
                         android:id="@+id/btnSave"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Save" />
+                        android:text="@string/save" />
 
                 </LinearLayout>
             </LinearLayout>

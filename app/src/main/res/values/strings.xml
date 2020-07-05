@@ -1,13 +1,29 @@
 <resources>
-    <string name="app_name">Native Alpha</string>
-    <string name="app_name_unicode">Native α</string>
+    <string name="app_name" translatable="false">NativeAlpha</string>
+    <string name="app_name_unicode" translatable="false">Native α</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="spinner_prompt">UI Mode</string>
+    <string name="global_settings">Global settings</string>
+    <string name="these_settings_are_applied_globally_and_override_app_specific_settings">These settings are applied globally and override webapp-specific settings.</string>
+    <string name="clear_cookies_after_usage">Clear cookies after usage</string>
+    <string name="use_three_finger_swipes_to_switch_between_web_apps_experimental">Use three-finger swipes to switch between web apps (experimental)</string>
+    <string name="select_ui_mode">Select UI mode</string>
+    <string name="save">Save</string>
+    <string name="loading_icon_and_website_title">Loading icon and website title...</string>
+    <string name="open_external_links_in_browser_app">Open external links in browser app</string>
+    <string name="allow_javascript">Allow Javascript</string>
+    <string name="accept_cookies">Accept cookies</string>
+    <string name="accept_third_party_cookies">Accept third-party cookies</string>
+    <string name="clear_cache_after_usage">Clear cache after usage</string>
+    <string name="enable_adblock_experimental">Enable adblock (experimental)</string>
+    <string name="timeout_for_page_restore_in_minutes">Timeout for page restore (in minutes)</string>
+    <string name="re_create_shortcut">Re-Create shortcut</string>
+    <string name="create_shortcut_on_home_screen">Create shortcut on home screen</string>
+    <string name="url" translatable="false">URL</string>
+    <string name="use_two_finger_swipes_for_browser_forward_and_backward_navigation">Use two-finger swipes for browser forward and backward navigation</string>
 
 
     <string-array name="ui_modes">
@@ -15,5 +31,15 @@
         <item>Light Mode</item>
         <item>Dark Mode</item>
     </string-array>
+    <string name="icon_fetch_failed_line1">We could not retrieve an icon for the selected website.\\nPossible reasons:\\n</string>
+    <string name="icon_fetch_failed_line2">• No internet connection\\n</string>
+    <string name="icon_fetch_failed_line3">• The website has no suitable icon stored.</string>
+    <string name="delete_question">Are you sure you want to remove this website?</string>
+    <string name="enter_valid_url">Please enter a valid web address.</string>
+    <string name="edit_webapp_settings">Edit webapp settings</string>
+    <string name="add_webapp">Add web app</string>
+    <string name="welcome_msg">Welcome!\\nAdd your first web app:</string>
+    <string name="restore_last_opened_page">Restore last opened page</string>
+    <string name="request_website_in_desktop_version">Request website in desktop version</string>
 
 </resources>

@@ -13,7 +13,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:hint="URL" />
+        android:hint="@string/url" />
 
     <Switch
         android:id="@+id/switchCreateShortcut"
@@ -24,5 +24,5 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:checked="true"
-        android:text="Create shortcut on home screen" />
+        android:text="@string/create_shortcut_on_home_screen" />
 </LinearLayout>

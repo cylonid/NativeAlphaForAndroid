@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         addActiveWebAppsToUI();
 
         if (DataManager.getInstance().getWebsites().size() == 0) {
-            buildAddWebsiteDialog("Welcome!\nAdd your first web shortcut:");
+            buildAddWebsiteDialog(getString(R.string.welcome_msg));
         }
 
         Utility.personalizeToolbar(this);
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buildAddWebsiteDialog("Add website");
+                buildAddWebsiteDialog(getString(R.string.add_webapp));
             }
         });
 
@@ -179,13 +179,14 @@ public class MainActivity extends AppCompatActivity {
         switchRestorePage.setChecked(webapp.isRestorePageSet());
         switchCache.setChecked(webapp.isClearCacheSet());
         switchAdblock.setChecked(webapp.isUseAdblock());
+        textTimeout.setText(String.valueOf(webapp.getTimeoutLastUsedUrl()));
 
         if (!webapp.isRestorePageSet()) {
             textTimeout.setEnabled(false);
         }
         else {
             textTimeout.setEnabled(true);
-            textTimeout.setText(String.valueOf(webapp.getTimeou()));
+            textTimeout.setText(String.valueOf(webapp.getTimeoutLastUsedUrl()));
         }
 
         if (!webapp.isAllowCookiesSet()) {
@@ -245,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
 
         final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
                 .setView(inflated_view)
-                .setTitle("Edit webapp settings")
+                .setTitle(getString(R.string.edit_webapp_settings))
                 .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
@@ -310,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         else
-                            url.setError("Please input a valid web address.");
+                            url.setError(getString(R.string.enter_valid_url));
                     }
                 });
             }
@@ -321,8 +322,8 @@ public class MainActivity extends AppCompatActivity {
     private void buildDeleteItemDialog(final int ID) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setMessage("Are you sure you want to remove this website?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.delete_question));
+        builder.setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 DataManager.getInstance().getWebApp(ID).markInactive();
                 mainScreen.removeAllViews();
@@ -331,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }

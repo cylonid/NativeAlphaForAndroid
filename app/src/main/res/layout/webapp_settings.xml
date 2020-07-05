@@ -13,7 +13,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:checked="true"
-        android:text="Open external links in browser app" />
+        android:text="@string/open_external_links_in_browser_app" />
 
     <Switch
         android:id="@+id/switchJavascript"
@@ -24,7 +24,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:checked="true"
-        android:text="Allow Javascript" />
+        android:text="@string/allow_javascript" />
     <Switch
         android:id="@+id/switchCookies"
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:checked="true"
-        android:text="Allow cookies" />
+        android:text="@string/accept_cookies" />
 
     <Switch
         android:id="@+id/switch3PCookies"
@@ -45,7 +45,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:checked="false"
-        android:text="Allow third-party cookies" />
+        android:text="@string/accept_third_party_cookies" />
 
     <Switch
         android:id="@+id/switchCache"
@@ -56,7 +56,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:checked="false"
-        android:text="Clear cache after usage" />
+        android:text="@string/clear_cache_after_usage" />
 
     <Switch
         android:id="@+id/switchAdblock"
@@ -67,7 +67,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:checked="true"
-        android:text="Enable adblock (experimental)" />
+        android:text="@string/enable_adblock_experimental" />
 
 
     <Switch
@@ -79,7 +79,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:checked="false"
-        android:text="Request website in desktop version" />
+        android:text="@string/request_website_in_desktop_version" />
 
     <Switch
         android:id="@+id/switchRestorePage"
@@ -90,7 +90,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:checked="true"
-        android:text="Restore last opened page" />
+        android:text="@string/restore_last_opened_page" />
 
 
     <LinearLayout
@@ -102,7 +102,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginTop="4dp"
             android:layout_height="wrap_content"
-            android:text="Timeout for page restore (in minutes)"/>
+            android:text="@string/timeout_for_page_restore_in_minutes"/>
         <EditText
             android:id="@+id/textTimeout"
             android:layout_width="match_parent"
@@ -144,7 +144,7 @@
         android:id="@+id/btnRecreateShortcut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Re-Create shortcut" />
+        android:text="@string/re_create_shortcut" />
 
 
 
