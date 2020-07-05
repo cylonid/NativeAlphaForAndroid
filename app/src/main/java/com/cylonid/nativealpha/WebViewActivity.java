@@ -22,7 +22,8 @@ import org.adblockplus.libadblockplus.android.webview.AdblockWebView;
 import java.util.HashMap;
 
 public class WebViewActivity extends AppCompatActivity {
-    private AdblockWebView wv;
+
+    private WebView wv;
     private WebApp webapp;
     int webappID = -1;
     boolean exit_on_next_back_pressed = false;
@@ -51,6 +52,12 @@ public class WebViewActivity extends AppCompatActivity {
 
         wv = findViewById(R.id.webview);
 
+        if (webapp.isUseAdblock()) {
+            wv.setVisibility(View.GONE);
+            wv = findViewById(R.id.adblockwebview);
+            wv.setVisibility(View.VISIBLE);
+            ((AdblockWebView)wv).setAdblockEnabled(webapp.isUseAdblock());
+        }
 
         wv.setWebViewClient(new CustomBrowser());
         wv.getSettings().setDomStorageEnabled(true);
@@ -58,7 +65,7 @@ public class WebViewActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             wv.getSettings().setForceDark(WebSettings.FORCE_DARK_OFF);
         }
-        wv.setAdblockEnabled(webapp.isUseAdblock());
+
         wv.getSettings().setJavaScriptEnabled(webapp.isAllowJSSet());
 
         CookieManager.getInstance().setAcceptCookie(webapp.isAllowCookiesSet());

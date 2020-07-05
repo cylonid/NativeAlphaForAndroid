@@ -3,18 +3,15 @@ package com.cylonid.nativealpha;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import androidx.appcompat.app.AppCompatDelegate;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 
-import okhttp3.internal.Util;
-
 
 public class DataManager {
 
-    private static final String shared_pref_data = "WEBSITEDATA";
+    private static final String shared_pref_webapps = "WEBSITEDATA";
+    private static final String shared_pref_globaldata = "GLOBALSETTINGS";
     private static final String shared_pref_max_id  = "MAX_ID";
     private static final String shared_pref_glob_cache = "globalCache";
     private static final String shared_pref_glob_cookie = "globalCookies";
@@ -58,11 +55,11 @@ public class DataManager {
     public void saveWebAppData() {
         Utility.Assert(context != null, "Context null before saving sharedpref");
 
-        appdata = context.getApplicationContext().getSharedPreferences(shared_pref_data, Context.MODE_PRIVATE);
+        appdata = context.getApplicationContext().getSharedPreferences(shared_pref_webapps, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = appdata.edit();
         Gson gson = new Gson();
         String json = gson.toJson(websites);
-        editor.putString(shared_pref_data, json);
+        editor.putString(shared_pref_webapps, json);
         editor.putInt(shared_pref_max_id, max_assigned_ID);
         editor.commit();
     }
@@ -70,17 +67,18 @@ public class DataManager {
     public void loadAppData() {
         Utility.Assert(context != null, "Context null before loading sharedpref");
 
-        appdata = context.getApplicationContext().getSharedPreferences(shared_pref_data, Context.MODE_PRIVATE);
+        appdata = context.getApplicationContext().getSharedPreferences(shared_pref_webapps, Context.MODE_PRIVATE);
         //Webapp data
-        if (appdata.contains(shared_pref_data)) {
+        if (appdata.contains(shared_pref_webapps)) {
             Gson gson = new Gson();
-            String json = appdata.getString(shared_pref_data, "");
+            String json = appdata.getString(shared_pref_webapps, "");
             websites = gson.fromJson(json, new TypeToken<ArrayList<WebApp>>() {}.getType());
         }
 
         max_assigned_ID = appdata.getInt(shared_pref_max_id, max_assigned_ID);
 
         //Global app data
+        appdata = context.getApplicationContext().getSharedPreferences(shared_pref_globaldata, Context.MODE_PRIVATE);
         settings.setClearCache(appdata.getBoolean(shared_pref_glob_cache, false));
         settings.setClearCookies(appdata.getBoolean(shared_pref_glob_cookie, false));
         settings.setTwoFingerMultitouch(appdata.getBoolean(shared_pref_glob_2fmultitouch, true));
@@ -93,7 +91,7 @@ public class DataManager {
     private void saveGlobalSettings() {
         Utility.Assert(context != null, "Context null before saving appdata to sharedpref");
 
-        appdata = context.getApplicationContext().getSharedPreferences(shared_pref_data, Context.MODE_PRIVATE);
+        appdata = context.getApplicationContext().getSharedPreferences(shared_pref_globaldata, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = appdata.edit();
         editor.putBoolean(shared_pref_glob_cache, settings.isClearCache());
         editor.putBoolean(shared_pref_glob_cookie, settings.isClearCookies());

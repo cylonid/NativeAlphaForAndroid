@@ -194,6 +194,13 @@ public class MainActivity extends AppCompatActivity {
             switchThirdPartyCookies.setChecked(false);
             switchThirdPartyCookies.setEnabled(false);
         }
+
+        if (!webapp.isAllowJSSet()) {
+            switchDesktopVersion.setChecked(false);
+            switchDesktopVersion.setEnabled(false);
+            switchAdblock.setChecked(false);
+            switchAdblock.setEnabled(false);
+        }
         switchRestorePage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked)
@@ -210,6 +217,21 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     switchThirdPartyCookies.setChecked(false);
                     switchThirdPartyCookies.setEnabled(false);
+                }
+            }
+        });
+
+        switchJS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    switchDesktopVersion.setEnabled(true);
+                    switchAdblock.setEnabled(true);
+                }
+                else {
+                    switchDesktopVersion.setChecked(false);
+                    switchDesktopVersion.setEnabled(false);
+                    switchAdblock.setChecked(false);
+                    switchAdblock.setEnabled(false);
                 }
             }
         });

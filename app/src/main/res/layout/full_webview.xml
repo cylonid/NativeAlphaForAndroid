@@ -6,10 +6,17 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <org.adblockplus.libadblockplus.android.webview.AdblockWebView
+    <WebView
         android:id="@+id/webview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        tools:ignore="MissingConstraints" />
+
+    <org.adblockplus.libadblockplus.android.webview.AdblockWebView
+        android:id="@+id/adblockwebview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone"
         tools:ignore="MissingConstraints" />
 
 <!--    <fragment-->
