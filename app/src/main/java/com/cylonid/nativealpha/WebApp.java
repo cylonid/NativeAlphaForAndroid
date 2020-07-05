@@ -77,10 +77,9 @@ public class WebApp {
         DataManager.getInstance().saveWebAppData();
     }
 
-    public int getTimeout_last_used_url() {
+    public int getTimeoutLastUsedUrl() {
         return timeout_last_used_url;
     }
-
 
     public String getTitle() {
         return title;
@@ -99,7 +98,7 @@ public class WebApp {
     }
 
     public boolean isActive() { return active_entry; }
-    public void setBase_url(String base_url) {
+    public void setBaseUrl(String base_url) {
         this.base_url = base_url;
         DataManager.getInstance().saveWebAppData();
     }

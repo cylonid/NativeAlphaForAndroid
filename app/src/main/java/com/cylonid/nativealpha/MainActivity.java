@@ -3,7 +3,6 @@ package com.cylonid.nativealpha;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.Menu;
@@ -17,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -187,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             textTimeout.setEnabled(true);
-            textTimeout.setText(String.valueOf(webapp.getTimeout_last_used_url()));
+            textTimeout.setText(String.valueOf(webapp.getTimeou()));
         }
 
         if (!webapp.isAllowCookiesSet()) {

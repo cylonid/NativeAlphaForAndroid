@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +44,7 @@ import okhttp3.OkHttpClient;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class ShortcutHelper {
-    private String strBaseUrl;
+
     private Activity activity;
     private WebApp webapp;
     private Bitmap bitmap;
@@ -54,24 +53,20 @@ public class ShortcutHelper {
     private EditText uiTitle;
     private LinearLayout uiIconLayout;
     private final static String USER_AGENT = "Mozilla/5.0 (Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0";
-    private String shortcut_title;
+
     private Button uiBtnPositive;
-    //TreeMap<Icon width in px, URL>
-    TreeMap<Integer, String> found_icons;
 
 
     public ShortcutHelper(WebApp webapp, Activity c) {
         this.webapp = webapp;
-        this.strBaseUrl = webapp.getBaseUrl();
         this.activity = c;
         this.bitmap = null;
-        this.shortcut_title = "";
-        this.found_icons = new TreeMap<>();
+
     }
 
     public void fetchFaviconURL() {
         buildShortcutDialog();
-        new FaviconURLFetcher(activity, 15, SECONDS).execute();
+        new FaviconURLFetcher(this, activity, webapp, 15, SECONDS).execute();
     }
     private void loadFavicon(String url) {
         Target target = new Target() {
@@ -146,29 +141,12 @@ public class ShortcutHelper {
         uiBtnPositive.setEnabled(true);
         uiTitle.requestFocus();
     }
+
     private void showFailedMessage() {
 //        •bulletpoint works in toast
         Toast toast = Toast.makeText(activity,"We could not retrieve an icon for the selected website.", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.TOP, 0, 100);
         toast.show();
-    }
-
-    private Integer getWidthFromIcon(String size_string) {
-        int x_index = size_string.indexOf("x");
-        String width = size_string.substring(0, x_index);
-
-        return Integer.parseInt(width);
-    }
-
-    private void addHardcodedIcons() {
-        if (strBaseUrl.contains("amazon"))
-            found_icons.put(300, "https://s3.amazonaws.com/prod-widgetSource/in-shop/pub/images/amzn_favicon_blk.png");
-
-        if (strBaseUrl.contains("oebb.at"))
-            found_icons.put(192, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
-
-        if (strBaseUrl.contains("chelseafc.com"))
-            found_icons.put(192, "https://res.cloudinary.com/chelsea-production/image/upload/v1531308404/logos/browser-logo/mask_3x.png");
     }
 
     private void buildShortcutDialog() {
@@ -206,16 +184,45 @@ public class ShortcutHelper {
     }
 
 
-    private class FaviconURLFetcher extends AsyncTaskTimeout<Void, Void, String> {
+    private static class FaviconURLFetcher extends AsyncTaskTimeout<Void, Void, String> {
+        private String shortcut_title;
+        private String strBaseUrl;
+        //TreeMap<Icon width in px, URL>
+        TreeMap<Integer, String> found_icons;
+        private int webappID = -1;
+        private ShortcutHelper shortcutHelper;
 
-        public FaviconURLFetcher(Activity context, long timeout, TimeUnit units) {
+
+        public FaviconURLFetcher(ShortcutHelper s, Activity context, WebApp webapp, long timeout, TimeUnit units) {
             super(context, timeout, units);
+            found_icons = new TreeMap<>();
+            this.strBaseUrl = webapp.getBaseUrl();
+            this.webappID = webapp.getID();
+            shortcutHelper = s;
         }
+        private void addHardcodedIcons() {
+            if (strBaseUrl.contains("amazon"))
+                found_icons.put(300, "https://s3.amazonaws.com/prod-widgetSource/in-shop/pub/images/amzn_favicon_blk.png");
+
+            if (strBaseUrl.contains("oebb.at"))
+                found_icons.put(192, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
+
+            if (strBaseUrl.contains("chelseafc.com"))
+                found_icons.put(192, "https://res.cloudinary.com/chelsea-production/image/upload/v1531308404/logos/browser-logo/mask_3x.png");
+        }
+
+        private Integer getWidthFromIcon(String size_string) {
+            int x_index = size_string.indexOf("x");
+            String width = size_string.substring(0, x_index);
+
+            return Integer.parseInt(width);
+        }
+
 
         @Override
         protected void onTimeout() {
             super.onTimeout();
-            prepareFailedUI();
+            shortcutHelper.prepareFailedUI();
         }
 
         @Override
@@ -252,7 +259,7 @@ public class ShortcutHelper {
                             if (!start_url.isEmpty()) {
                                 URL base_url = new URL(mf.absUrl("href"));
                                 URL fl_url = new URL(base_url, start_url);
-                                webapp.setBase_url(fl_url.toString());
+                                DataManager.getInstance().getWebApp(webappID).setBaseUrl(fl_url.toString());
                             }
                         }
                         catch(JSONException e) {
@@ -322,10 +329,10 @@ public class ShortcutHelper {
             super.onPostExecute(result);
 
             if (!shortcut_title.equals(""))
-                uiTitle.setText(shortcut_title);
+                shortcutHelper.uiTitle.setText(shortcut_title);
             else
-                uiTitle.setText(webapp.getTitle());
-            loadFavicon(result);
+                shortcutHelper.uiTitle.setText(DataManager.getInstance().getWebApp(webappID).getTitle());
+                shortcutHelper.loadFavicon(result);
 
         }
     }
