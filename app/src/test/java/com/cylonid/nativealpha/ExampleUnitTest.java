@@ -1,6 +1,11 @@
 package com.cylonid.nativealpha;
 
+import android.app.Instrumentation;
+import android.os.AsyncTask;
+
 import org.junit.Test;
+
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.*;
 
@@ -14,4 +19,12 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+    @Test
+    public void getWidthFromHTMLElementString() {
+        assertEquals((Integer)192, Utility.getWidthFromIcon("192x192"));
+    }
+
+
 }
+

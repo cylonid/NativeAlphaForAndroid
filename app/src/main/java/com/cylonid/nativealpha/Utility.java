@@ -44,6 +44,14 @@ public final class Utility {
         a.setSupportActionBar(toolbar);
     }
 
+    public static Integer getWidthFromIcon(String size_string) {
+        int x_index = size_string.indexOf("x");
+        String width = size_string.substring(0, x_index);
+
+        return Integer.parseInt(width);
+    }
+
+
     public static void applyUITheme() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             int id = DataManager.getInstance().getSettings().getThemeId();
