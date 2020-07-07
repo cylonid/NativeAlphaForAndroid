@@ -35,7 +35,6 @@ import org.jsoup.select.Elements;
 import java.net.URL;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,10 +63,6 @@ public class ShortcutHelper {
 
     }
 
-    public void fetchFaviconURL() {
-        buildShortcutDialog();
-        new FaviconURLFetcher(this, activity, webapp, 15, SECONDS).execute();
-    }
     private void loadFavicon(String url) {
         Target target = new Target() {
 
@@ -85,30 +80,30 @@ public class ShortcutHelper {
                 uiBtnPositive.setEnabled(true);
                 uiTitle.requestFocus();
             }
+
             @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {}
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+            }
         };
 
         if (url != null) {
             OkHttpClient client = new OkHttpClient.Builder()
-                            .connectTimeout(6, SECONDS)
-                            .readTimeout(6, SECONDS)
-                            .writeTimeout(6, SECONDS)
-                            .build();
+                    .connectTimeout(6, SECONDS)
+                    .readTimeout(6, SECONDS)
+                    .writeTimeout(6, SECONDS)
+                    .build();
 
             Picasso picasso = new Picasso.Builder(activity)
                     .downloader(new OkHttp3Downloader(client))
                     .build();
 
             picasso.load(url).into(target);
-        }
-        else
+        } else
             prepareFailedUI();
 
     }
 
-    private void addShortcutToHomeScreen(Bitmap bitmap)
-    {
+    private void addShortcutToHomeScreen(Bitmap bitmap) {
         Intent intent = Utility.createWebViewIntent(webapp, activity);
 
         IconCompat icon;
@@ -143,18 +138,18 @@ public class ShortcutHelper {
     }
 
     private void showFailedMessage() {
-        Toast toast = Toast.makeText(activity,activity.getString(R.string.icon_fetch_failed_line1) + activity.getString(R.string.icon_fetch_failed_line2) + activity.getString(R.string.icon_fetch_failed_line3), Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(activity, activity.getString(R.string.icon_fetch_failed_line1) + activity.getString(R.string.icon_fetch_failed_line2) + activity.getString(R.string.icon_fetch_failed_line3), Toast.LENGTH_LONG);
         toast.setGravity(Gravity.TOP, 0, 100);
         toast.show();
     }
 
-    private void buildShortcutDialog() {
+    public void buildShortcutDialog() {
         LayoutInflater li = LayoutInflater.from(activity);
         final View inflated_view = li.inflate(R.layout.shortcut_dialog, null);
         uiIconLayout = inflated_view.findViewById(R.id.layoutIcon);
         uiTitle = (EditText) inflated_view.findViewById(R.id.websiteTitle);
         uiFavicon = (ImageView) inflated_view.findViewById(R.id.favicon);
-        uiProgressBar =  (CircularProgressBar)inflated_view.findViewById(R.id.circularProgressBar);
+        uiProgressBar = (CircularProgressBar) inflated_view.findViewById(R.id.circularProgressBar);
 
         final AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setView(inflated_view)
@@ -182,39 +177,45 @@ public class ShortcutHelper {
         dialog.show();
     }
 
+    private void setShortcutTitle(String shortcut_title) {
+        if (!shortcut_title.equals(""))
+            uiTitle.setText(shortcut_title);
+        else
+            uiTitle.setText(DataManager.getInstance().getWebApp(webapp.getID()).getTitle());
+    }
 
-    private static class FaviconURLFetcher extends AsyncTaskTimeout<Void, Void, String> {
+
+    public static class FaviconURLFetcher extends AsyncTaskTimeout<Void, Void, String> {
         private String shortcut_title;
-        private String strBaseUrl;
+        private String base_url;
         //TreeMap<Icon width in px, URL>
         TreeMap<Integer, String> found_icons;
-        private int webappID = -1;
+        private int webappID;
         private ShortcutHelper shortcutHelper;
 
-
-        public FaviconURLFetcher(ShortcutHelper s, Activity context, WebApp webapp, long timeout, TimeUnit units) {
-            super(context, timeout, units);
+        public FaviconURLFetcher(ShortcutHelper s) {
+            super(s.activity, 5, SECONDS);
             found_icons = new TreeMap<>();
-            this.strBaseUrl = webapp.getBaseUrl();
-            this.webappID = webapp.getID();
+            this.base_url = s.webapp.getBaseUrl();
+            this.webappID = s.webapp.getID();
             shortcutHelper = s;
         }
-        private void addHardcodedIcons() {
-            if (strBaseUrl.contains("amazon"))
-                found_icons.put(300, "https://s3.amazonaws.com/prod-widgetSource/in-shop/pub/images/amzn_favicon_blk.png");
 
-            if (strBaseUrl.contains("oebb.at"))
-                found_icons.put(192, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
-
-            if (strBaseUrl.contains("chelseafc.com"))
-                found_icons.put(192, "https://res.cloudinary.com/chelsea-production/image/upload/v1531308404/logos/browser-logo/mask_3x.png");
+        @Override
+        protected void onPreExec() {
+            super.onPreExec();
+            shortcutHelper.buildShortcutDialog();
         }
 
-        private Integer getWidthFromIcon(String size_string) {
-            int x_index = size_string.indexOf("x");
-            String width = size_string.substring(0, x_index);
+        private void addHardcodedIcons() {
+            if (base_url.contains("amazon"))
+                found_icons.put(300, "https://s3.amazonaws.com/prod-widgetSource/in-shop/pub/images/amzn_favicon_blk.png");
 
-            return Integer.parseInt(width);
+            if (base_url.contains("oebb.at"))
+                found_icons.put(192, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
+
+            if (base_url.contains("chelseafc.com"))
+                found_icons.put(192, "https://res.cloudinary.com/chelsea-production/image/upload/v1531308404/logos/browser-logo/mask_3x.png");
         }
 
 
@@ -229,56 +230,53 @@ public class ShortcutHelper {
 
             try {
                 //Connect to the website
-                Document doc = Jsoup.connect(strBaseUrl).userAgent(USER_AGENT).followRedirects(true).get();
+                Document doc = Jsoup.connect(base_url).userAgent(USER_AGENT).followRedirects(true).get();
 
                 //Step 1: Check for META Redirect
                 Elements metaTags = doc.select("meta[http-equiv=refresh]");
-                if (!metaTags.isEmpty())
-                {
+                if (!metaTags.isEmpty()) {
                     Element metaTag = metaTags.first();
                     String content = metaTag.attr("content");
                     Pattern pattern = Pattern.compile(".*URL='?(.*)$", Pattern.CASE_INSENSITIVE);
                     Matcher m = pattern.matcher(content);
                     String redirectUrl = m.matches() ? m.group(1) : null;
                     if (redirectUrl != null) {
-                        strBaseUrl = redirectUrl;
-                        doc = Jsoup.connect(strBaseUrl).followRedirects(true).get();
+                        base_url = redirectUrl;
+                        doc = Jsoup.connect(base_url).followRedirects(true).get();
                     }
                 }
                 //Step 2: Check PWA manifest
                 Elements manifest = doc.select("link[rel=manifest]");
                 if (!manifest.isEmpty()) {
-                        Element mf = manifest.first();
-                        String data = Jsoup.connect(mf.absUrl("href")).ignoreContentType(true).execute().body();
-                        JSONObject json = new JSONObject(data);
+                    Element mf = manifest.first();
+                    String data = Jsoup.connect(mf.absUrl("href")).ignoreContentType(true).execute().body();
+                    JSONObject json = new JSONObject(data);
 
-                        try {
-                            shortcut_title = json.getString("name");
-                            String start_url = json.getString("start_url");
-                            if (!start_url.isEmpty()) {
-                                URL base_url = new URL(mf.absUrl("href"));
-                                URL fl_url = new URL(base_url, start_url);
-                                DataManager.getInstance().getWebApp(webappID).setBaseUrl(fl_url.toString());
-                            }
+                    try {
+                        shortcut_title = json.getString("name");
+                        String start_url = json.getString("start_url");
+                        if (!start_url.isEmpty()) {
+                            URL base_url = new URL(mf.absUrl("href"));
+                            URL fl_url = new URL(base_url, start_url);
+                            DataManager.getInstance().getWebApp(webappID).setBaseUrl(fl_url.toString());
                         }
-                        catch(JSONException e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            JSONArray manifest_icons = json.getJSONArray("icons");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        JSONArray manifest_icons = json.getJSONArray("icons");
 
-                            for (int i = 0; i < manifest_icons.length(); i++) {
-                                String icon_href = manifest_icons.getJSONObject(i).getString("src");
-                                String sizes = manifest_icons.getJSONObject(i).getString("sizes");
-                                Integer width = getWidthFromIcon(sizes);
-                                URL base_url = new URL(mf.absUrl("href"));
-                                URL full_url = new URL(base_url, icon_href);
-                                found_icons.put(width, full_url.toString());
-                                }
-                            }
-                        catch(JSONException e) {
-                            e.printStackTrace();
+                        for (int i = 0; i < manifest_icons.length(); i++) {
+                            String icon_href = manifest_icons.getJSONObject(i).getString("src");
+                            String sizes = manifest_icons.getJSONObject(i).getString("sizes");
+                            Integer width = Utility.getWidthFromIcon(sizes);
+                            URL base_url = new URL(mf.absUrl("href"));
+                            URL full_url = new URL(base_url, icon_href);
+                            found_icons.put(width, full_url.toString());
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
                 //Step 3: Fallback to PNG icons
                 if (found_icons.isEmpty()) {
@@ -299,10 +297,9 @@ public class ShortcutHelper {
                         String icon_href = icon.absUrl("href");
                         String sizes = icon.attr("sizes");
                         if (!sizes.equals("")) {
-                            Integer width = getWidthFromIcon(sizes);
+                            Integer width = Utility.getWidthFromIcon(sizes);
                             found_icons.put(width, icon_href);
-                        }
-                        else
+                        } else
                             found_icons.put(1, icon_href);
 
                     }
@@ -315,23 +312,18 @@ public class ShortcutHelper {
                     else
                         return best_fit.getValue();
                 }
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
         }
 
-            @Override
+        @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            if (!shortcut_title.equals(""))
-                shortcutHelper.uiTitle.setText(shortcut_title);
-            else
-                shortcutHelper.uiTitle.setText(DataManager.getInstance().getWebApp(webappID).getTitle());
-                shortcutHelper.loadFavicon(result);
+            shortcutHelper.setShortcutTitle(shortcut_title);
+            shortcutHelper.loadFavicon(result);
 
         }
     }

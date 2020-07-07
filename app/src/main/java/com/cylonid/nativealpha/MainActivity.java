@@ -238,8 +238,8 @@ public class MainActivity extends AppCompatActivity {
         btnCreateShortcut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShortcutHelper s = new ShortcutHelper(webapp, MainActivity.this);
-                s.fetchFaviconURL();
+                ShortcutHelper.FaviconURLFetcher f = new ShortcutHelper.FaviconURLFetcher(new ShortcutHelper(webapp, MainActivity.this));
+                f.execute();
             }
         });
 
@@ -305,9 +305,8 @@ public class MainActivity extends AppCompatActivity {
                             addRow(new_site);
                             dialog.dismiss();
                             if (create_shortcut.isChecked()) {
-                                ShortcutHelper fav = new ShortcutHelper(new_site, MainActivity.this);
-                                fav.fetchFaviconURL();
-
+                                ShortcutHelper.FaviconURLFetcher f = new ShortcutHelper.FaviconURLFetcher(new ShortcutHelper(new_site, MainActivity.this));
+                                f.execute();
                             }
                         }
                         else
