@@ -24,8 +24,8 @@ import static android.widget.LinearLayout.HORIZONTAL;
 
 
 public class MainActivity extends AppCompatActivity {
-    LinearLayout mainScreen;
-
+    private LinearLayout mainScreen;
+    private ShortcutHelper.FaviconURLFetcher faviconFetcher = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_NoActionBar);
@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -76,14 +75,21 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onBackPressed() {
-            moveTaskToBack(true);
+        moveTaskToBack(true);
     }
 
-    private void addRow(final WebApp webapp)
-    {
-        int row_height = (int)getResources().getDimension(R.dimen.line_height);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (faviconFetcher != null)
+            faviconFetcher.cancel(true);
+    }
+
+    private void addRow(final WebApp webapp) {
+        int row_height = (int) getResources().getDimension(R.dimen.line_height);
         int transparent_color = ResourcesCompat.getColor(getResources(), R.color.transparent, null);
 
         LinearLayout ll_row = new LinearLayout(this);
@@ -101,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 //        btn_title.setGravity(Gravity.START | Gravity.CENTER);
         LinearLayout.LayoutParams layout_title = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, row_height);
         layout_title.width = 0;
-        layout_title.height = (int)getResources().getDimension(R.dimen.line_height);
+        layout_title.height = (int) getResources().getDimension(R.dimen.line_height);
         layout_title.weight = 4;
         btn_title.setLayoutParams(layout_title);
         ll_row.addView(btn_title);
@@ -118,8 +124,10 @@ public class MainActivity extends AppCompatActivity {
         btn_shortcut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                        openWebView(webapp);
-            };
+                openWebView(webapp);
+            }
+
+            ;
         });
 
         ImageButton btn_settings = new ImageButton(this);
@@ -146,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    buildDeleteItemDialog(webapp.getID());
+                buildDeleteItemDialog(webapp.getID());
 
             }
         });
@@ -183,8 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (!webapp.isRestorePageSet()) {
             textTimeout.setEnabled(false);
-        }
-        else {
+        } else {
             textTimeout.setEnabled(true);
             textTimeout.setText(String.valueOf(webapp.getTimeoutLastUsedUrl()));
         }
@@ -225,8 +232,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isChecked) {
                     switchDesktopVersion.setEnabled(true);
                     switchAdblock.setEnabled(true);
-                }
-                else {
+                } else {
                     switchDesktopVersion.setChecked(false);
                     switchDesktopVersion.setEnabled(false);
                     switchAdblock.setChecked(false);
@@ -238,8 +244,9 @@ public class MainActivity extends AppCompatActivity {
         btnCreateShortcut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShortcutHelper.FaviconURLFetcher f = new ShortcutHelper.FaviconURLFetcher(new ShortcutHelper(webapp, MainActivity.this));
-                f.execute();
+                faviconFetcher = new ShortcutHelper.FaviconURLFetcher(new ShortcutHelper(webapp, MainActivity.this));
+                faviconFetcher.execute();
+                faviconFetcher = null;
             }
         });
 
@@ -270,6 +277,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
     private void buildAddWebsiteDialog(String title) {
         final View inflated_view = getLayoutInflater().inflate(R.layout.add_website_dialogue, null);
         final EditText url = (EditText) inflated_view.findViewById(R.id.websiteUrl);
@@ -308,8 +316,7 @@ public class MainActivity extends AppCompatActivity {
                                 ShortcutHelper.FaviconURLFetcher f = new ShortcutHelper.FaviconURLFetcher(new ShortcutHelper(new_site, MainActivity.this));
                                 f.execute();
                             }
-                        }
-                        else
+                        } else
                             url.setError(getString(R.string.enter_valid_url));
                     }
                 });
@@ -340,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void addActiveWebAppsToUI () {
+    private void addActiveWebAppsToUI() {
         for (WebApp d : DataManager.getInstance().getWebsites()) {
             if (d.isActive())
                 addRow(d);

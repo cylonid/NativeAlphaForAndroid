@@ -26,11 +26,11 @@ public class RoboTests {
         ShortcutHelper.FaviconURLFetcher f = new ShortcutHelper.FaviconURLFetcher(new ShortcutHelper(webapp, activity)) {
 
             @Override
-            protected void onPostExecute(String result) {
+            protected void onPostExecute(String[] result) {
                 if (expect_null)
-                    assertNull(result);
+                    assertNull(result[0]);
                 else
-                assertTrue(result.equals(expected));
+                assertTrue(result[0].equals(expected));
             }
         };
         f.execute();

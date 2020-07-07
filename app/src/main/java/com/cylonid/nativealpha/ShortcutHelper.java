@@ -191,24 +191,23 @@ public class ShortcutHelper {
         }
     }
 
+    private void applyNewBaseUrl(String url) {
+        if (url != null)
+            DataManager.getInstance().getWebApp(webapp.getID()).setBaseUrl(url);
+    }
 
-    public static class FaviconURLFetcher extends AsyncTask<Void, Void, String> {
 
+    public static class FaviconURLFetcher extends AsyncTask<Void, Void, String[]> {
 
         //TreeMap<Icon width in px, URL>
         TreeMap<Integer, String> found_icons;
-        private int webappID;
         private String base_url;
         private ShortcutHelper shortcutHelper;
         private FaviconURLFetcher asyncObject;
-        String shortcut_title;
-        String new_base_url;
-
 
         public FaviconURLFetcher(ShortcutHelper s) {
             found_icons = new TreeMap<>();
             this.base_url = s.webapp.getBaseUrl();
-            this.webappID = s.webapp.getID();
             shortcutHelper = s;
         }
 
@@ -217,7 +216,7 @@ public class ShortcutHelper {
             super.onPreExecute();
             shortcutHelper.buildShortcutDialog();
                 asyncObject = this;
-                new CountDownTimer(15000, 15000) {
+                new CountDownTimer(12000, 12000) {
                     public void onTick(long millisUntilFinished) {
                         // You can monitor the progress here as well by changing the onTick() time
                     }
@@ -225,32 +224,25 @@ public class ShortcutHelper {
                         // stop async task if not in progress
                         if (asyncObject.getStatus() == AsyncTask.Status.RUNNING) {
                             asyncObject.cancel(true);
-                            shortcutHelper.prepareFailedUI();
+
                             Log.d("SHORTCUT", "Timeout");
-                            // Add any specific task you wish to do as your extended class variable works here as well.
                         }
                     }
                 }.start();
         }
 
-        private void addHardcodedIcons() {
-            if (base_url.contains("amazon"))
-                found_icons.put(300, "https://s3.amazonaws.com/prod-widgetSource/in-shop/pub/images/amzn_favicon_blk.png");
-
-            if (base_url.contains("oebb.at"))
-                found_icons.put(192, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
-
-            if (base_url.contains("chelseafc.com"))
-                found_icons.put(192, "https://res.cloudinary.com/chelsea-production/image/upload/v1531308404/logos/browser-logo/mask_3x.png");
-
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            shortcutHelper.prepareFailedUI();
         }
 
-
-
         @Override
-        protected String doInBackground(Void... voids) {
+        protected String[] doInBackground(Void... voids) {
 
+            //[0] = Favicon URL, [1] = shortcut title, [2] = new base url from web manifest
             String[] result = new String[] {null, null, null};
+            String shortcut_title = null;
             try {
                 //Connect to the website
                 Document doc = Jsoup.connect(base_url).userAgent(USER_AGENT).followRedirects(true).get();
@@ -281,7 +273,7 @@ public class ShortcutHelper {
                         if (!start_url.isEmpty()) {
                             URL base_url = new URL(mf.absUrl("href"));
                             URL fl_url = new URL(base_url, start_url);
-                            new_base_url = fl_url.toString();
+                            result[2] = fl_url.toString();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -336,20 +328,35 @@ public class ShortcutHelper {
                     Map.Entry<Integer, String> best_fit = found_icons.lastEntry();
 
                     if (best_fit.getKey() >= 96)
-                        return best_fit.getValue();
+                        result[0] = best_fit.getValue();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return null;
+            result[1] = shortcut_title;
+            return result;
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(String[] result) {
             super.onPostExecute(result);
 
-            shortcutHelper.setShortcutTitle(shortcut_title);
-            shortcutHelper.loadFavicon(result);
+            shortcutHelper.setShortcutTitle(result[1]);
+            shortcutHelper.applyNewBaseUrl(result[2]);
+
+            shortcutHelper.loadFavicon(result[0]);
+
+
+        }
+        private void addHardcodedIcons() {
+            if (base_url.contains("amazon"))
+                found_icons.put(300, "https://s3.amazonaws.com/prod-widgetSource/in-shop/pub/images/amzn_favicon_blk.png");
+
+            if (base_url.contains("oebb.at"))
+                found_icons.put(192, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
+
+            if (base_url.contains("chelseafc.com"))
+                found_icons.put(192, "https://res.cloudinary.com/chelsea-production/image/upload/v1531308404/logos/browser-logo/mask_3x.png");
 
         }
     }
