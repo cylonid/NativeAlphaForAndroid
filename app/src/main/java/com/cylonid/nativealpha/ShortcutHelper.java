@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,6 +96,8 @@ public class ShortcutHelper {
                     .writeTimeout(6, SECONDS)
                     .build();
 
+
+
             Picasso picasso = new Picasso.Builder(activity)
                     .downloader(new OkHttp3Downloader(client))
                     .build();
@@ -178,23 +183,29 @@ public class ShortcutHelper {
     }
 
     private void setShortcutTitle(String shortcut_title) {
-        if (!shortcut_title.equals(""))
-            uiTitle.setText(shortcut_title);
-        else
-            uiTitle.setText(DataManager.getInstance().getWebApp(webapp.getID()).getTitle());
+        if (shortcut_title != null) {
+            if (!shortcut_title.equals(""))
+                uiTitle.setText(shortcut_title);
+            else
+                uiTitle.setText(DataManager.getInstance().getWebApp(webapp.getID()).getTitle());
+        }
     }
 
 
-    public static class FaviconURLFetcher extends AsyncTaskTimeout<Void, Void, String> {
-        private String shortcut_title;
-        private String base_url;
+    public static class FaviconURLFetcher extends AsyncTask<Void, Void, String> {
+
+
         //TreeMap<Icon width in px, URL>
         TreeMap<Integer, String> found_icons;
         private int webappID;
+        private String base_url;
         private ShortcutHelper shortcutHelper;
+        private FaviconURLFetcher asyncObject;
+        String shortcut_title;
+        String new_base_url;
+
 
         public FaviconURLFetcher(ShortcutHelper s) {
-            super(s.activity, 5, SECONDS);
             found_icons = new TreeMap<>();
             this.base_url = s.webapp.getBaseUrl();
             this.webappID = s.webapp.getID();
@@ -202,9 +213,24 @@ public class ShortcutHelper {
         }
 
         @Override
-        protected void onPreExec() {
-            super.onPreExec();
+        protected void onPreExecute() {
+            super.onPreExecute();
             shortcutHelper.buildShortcutDialog();
+                asyncObject = this;
+                new CountDownTimer(15000, 15000) {
+                    public void onTick(long millisUntilFinished) {
+                        // You can monitor the progress here as well by changing the onTick() time
+                    }
+                    public void onFinish() {
+                        // stop async task if not in progress
+                        if (asyncObject.getStatus() == AsyncTask.Status.RUNNING) {
+                            asyncObject.cancel(true);
+                            shortcutHelper.prepareFailedUI();
+                            Log.d("SHORTCUT", "Timeout");
+                            // Add any specific task you wish to do as your extended class variable works here as well.
+                        }
+                    }
+                }.start();
         }
 
         private void addHardcodedIcons() {
@@ -216,18 +242,15 @@ public class ShortcutHelper {
 
             if (base_url.contains("chelseafc.com"))
                 found_icons.put(192, "https://res.cloudinary.com/chelsea-production/image/upload/v1531308404/logos/browser-logo/mask_3x.png");
+
         }
 
 
-        @Override
-        protected void onTimeout() {
-            super.onTimeout();
-            shortcutHelper.prepareFailedUI();
-        }
 
         @Override
-        protected String runInBackground(Void... voids) {
+        protected String doInBackground(Void... voids) {
 
+            String[] result = new String[] {null, null, null};
             try {
                 //Connect to the website
                 Document doc = Jsoup.connect(base_url).userAgent(USER_AGENT).followRedirects(true).get();
@@ -258,7 +281,7 @@ public class ShortcutHelper {
                         if (!start_url.isEmpty()) {
                             URL base_url = new URL(mf.absUrl("href"));
                             URL fl_url = new URL(base_url, start_url);
-                            DataManager.getInstance().getWebApp(webappID).setBaseUrl(fl_url.toString());
+                            new_base_url = fl_url.toString();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -281,17 +304,20 @@ public class ShortcutHelper {
                 //Step 3: Fallback to PNG icons
                 if (found_icons.isEmpty()) {
 
-                    Element html_title = doc.selectFirst("title");
-                    shortcut_title = html_title.text();
+                    Elements html_title = doc.select("title");
+                    if (!html_title.isEmpty())
+                        shortcut_title = html_title.first().text();
+
                     Elements icons = doc.select("link[rel=icon]");
                     icons.addAll(doc.select("link[rel=shortcut icon]"));
                     //If necessary, use apple icons
-                    if (icons.isEmpty()) {
+                    if (icons.size() < 2) {
                         Elements apple_icons = doc.select("link[rel=apple-touch-icon]");
                         Elements apple_icons_prec = doc.select("link[rel=apple-touch-icon-precomposed]");
                         icons.addAll(apple_icons);
                         icons.addAll(apple_icons_prec);
                     }
+
                     for (Element icon : icons) {
 
                         String icon_href = icon.absUrl("href");
@@ -300,16 +326,16 @@ public class ShortcutHelper {
                             Integer width = Utility.getWidthFromIcon(sizes);
                             found_icons.put(width, icon_href);
                         } else
-                            found_icons.put(1, icon_href);
+                            found_icons.put(0, icon_href);
 
                     }
                 }
                 addHardcodedIcons();
+
                 if (!found_icons.isEmpty()) {
                     Map.Entry<Integer, String> best_fit = found_icons.lastEntry();
-                    if (best_fit.getKey() < 96)
-                        return null;
-                    else
+
+                    if (best_fit.getKey() >= 96)
                         return best_fit.getValue();
                 }
             } catch (Exception e) {

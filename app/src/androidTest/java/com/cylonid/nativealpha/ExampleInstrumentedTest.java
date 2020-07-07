@@ -26,4 +26,6 @@ public class ExampleInstrumentedTest {
 
         assertEquals("com.cylonid.nativefier", appContext.getPackageName());
     }
+
+
 }

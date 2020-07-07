@@ -46,6 +46,11 @@ public final class Utility {
 
     public static Integer getWidthFromIcon(String size_string) {
         int x_index = size_string.indexOf("x");
+        if (x_index == -1)
+            x_index = size_string.indexOf("×");
+
+        if (x_index == -1)
+            return 1;
         String width = size_string.substring(0, x_index);
 
         return Integer.parseInt(width);
