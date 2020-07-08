@@ -13,11 +13,11 @@ public class DataManager {
     private static final String shared_pref_webapps = "WEBSITEDATA";
     private static final String shared_pref_globaldata = "GLOBALSETTINGS";
     private static final String shared_pref_max_id  = "MAX_ID";
-    private static final String shared_pref_glob_cache = "globalCache";
-    private static final String shared_pref_glob_cookie = "globalCookies";
-    private static final String shared_pref_glob_2fmultitouch = "global2FingerMultiTouch";
-    private static final String shared_pref_glob_3fmultitouch = "global3FingerMultiTouch";
-    private static final String shared_pref_glob_ui_theme = "globalUITheme";
+    private static final String shared_pref_glob_cache = "Cache";
+    private static final String shared_pref_glob_cookie = "Cookies";
+    private static final String shared_pref_glob_2fmultitouch = "TwoFingerMultiTouch";
+    private static final String shared_pref_glob_3fmultitouch = "ThreeFingerMultiTouch";
+    private static final String shared_pref_glob_ui_theme = "UITheme";
 
 
     private static final DataManager instance = new DataManager();

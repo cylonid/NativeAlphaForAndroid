@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -41,7 +40,7 @@ public class WebViewActivity extends AppCompatActivity {
 
         setContentView(R.layout.full_webview);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        webappID = getIntent().getIntExtra(Utility.INT_ID_WEBAPPID, -1);
+        webappID = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
 
         DataManager.getInstance().initContext(this);
         DataManager.getInstance().loadAppData();
@@ -72,7 +71,7 @@ public class WebViewActivity extends AppCompatActivity {
         CookieManager.getInstance().setAcceptThirdPartyCookies(wv, webapp.isAllowThirdPartyCookiesSet());
 
         if (webapp.isRequestDesktopSet()) {
-            wv.getSettings().setUserAgentString(Utility.DESKTOP_USER_AGENT);
+            wv.getSettings().setUserAgentString(Const.DESKTOP_USER_AGENT);
             wv.getSettings().setUseWideViewPort(true);
             wv.getSettings().setLoadWithOverviewMode(true);
 

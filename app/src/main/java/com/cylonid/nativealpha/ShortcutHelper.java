@@ -54,7 +54,7 @@ public class ShortcutHelper {
     private CircularProgressBar uiProgressBar;
     private EditText uiTitle;
     private LinearLayout uiIconLayout;
-    private final static String USER_AGENT = "Mozilla/5.0 (Android 10; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0";
+
 
     private Button uiBtnPositive;
 
@@ -240,12 +240,11 @@ public class ShortcutHelper {
         @Override
         protected String[] doInBackground(Void... voids) {
 
-            //[0] = Favicon URL, [1] = shortcut title, [2] = new base url from web manifest
             String[] result = new String[] {null, null, null};
-            String shortcut_title = null;
+
             try {
                 //Connect to the website
-                Document doc = Jsoup.connect(base_url).userAgent(USER_AGENT).followRedirects(true).get();
+                Document doc = Jsoup.connect(base_url).userAgent(Const.MOBILE_USER_AGENT).followRedirects(true).get();
 
                 //Step 1: Check for META Redirect
                 Elements metaTags = doc.select("meta[http-equiv=refresh]");
@@ -268,12 +267,12 @@ public class ShortcutHelper {
                     JSONObject json = new JSONObject(data);
 
                     try {
-                        shortcut_title = json.getString("name");
+                        result[Const.RESULT_IDX_TITLE] = json.getString("name");
                         String start_url = json.getString("start_url");
                         if (!start_url.isEmpty()) {
                             URL base_url = new URL(mf.absUrl("href"));
                             URL fl_url = new URL(base_url, start_url);
-                            result[2] = fl_url.toString();
+                            result[Const.RESULT_IDX_NEW_BASEURL] = fl_url.toString();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -298,7 +297,7 @@ public class ShortcutHelper {
 
                     Elements html_title = doc.select("title");
                     if (!html_title.isEmpty())
-                        shortcut_title = html_title.first().text();
+                        result[Const.RESULT_IDX_TITLE] = html_title.first().text();
 
                     Elements icons = doc.select("link[rel=icon]");
                     icons.addAll(doc.select("link[rel=shortcut icon]"));
@@ -311,7 +310,6 @@ public class ShortcutHelper {
                     }
 
                     for (Element icon : icons) {
-
                         String icon_href = icon.absUrl("href");
                         String sizes = icon.attr("sizes");
                         if (!sizes.equals("")) {
@@ -328,12 +326,12 @@ public class ShortcutHelper {
                     Map.Entry<Integer, String> best_fit = found_icons.lastEntry();
 
                     if (best_fit.getKey() >= 96)
-                        result[0] = best_fit.getValue();
+                        result[Const.RESULT_IDX_FAVICON] = best_fit.getValue();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            result[1] = shortcut_title;
+
             return result;
         }
 
@@ -341,10 +339,10 @@ public class ShortcutHelper {
         protected void onPostExecute(String[] result) {
             super.onPostExecute(result);
 
-            shortcutHelper.setShortcutTitle(result[1]);
-            shortcutHelper.applyNewBaseUrl(result[2]);
+            shortcutHelper.setShortcutTitle(result[Const.RESULT_IDX_TITLE]);
+            shortcutHelper.applyNewBaseUrl(result[Const.RESULT_IDX_NEW_BASEURL]);
 
-            shortcutHelper.loadFavicon(result[0]);
+            shortcutHelper.loadFavicon(result[Const.RESULT_IDX_FAVICON]);
 
 
         }
@@ -354,10 +352,7 @@ public class ShortcutHelper {
 
             if (base_url.contains("oebb.at"))
                 found_icons.put(192, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
-
-            if (base_url.contains("chelseafc.com"))
-                found_icons.put(192, "https://res.cloudinary.com/chelsea-production/image/upload/v1531308404/logos/browser-logo/mask_3x.png");
-
+            
         }
     }
 }
