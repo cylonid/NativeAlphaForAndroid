@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_settings">Allgemeine Einstellungen</string>
-    <string name="next">Weiter</string>
-    <string name="previous">Zurück</string>
     <string name="these_settings_are_applied_globally_and_override_app_specific_settings">Diese Einstellungen werden global angewendet und überschreiben webappspezifische Einstellungen.</string>
     <string name="spinner_prompt">Farbschema</string>
     <string name="clear_cache_after_usage">Cache nach Benutzung löschen</string>
@@ -17,7 +15,7 @@
         <item>Heller Modus</item>
         <item>Dunkler Modus</item>
     </string-array>
-    <string name="loading_icon_and_website_title">Icon und Website-Titel laden...</string>
+    <string name="loading_icon_and_website_title">Icon und Website-Titel laden…</string>
     <string name="open_external_links_in_browser_app">Externe Links in Browser-App öffnen</string>
     <string name="allow_javascript">Javascript zulassen</string>
     <string name="accept_cookies">Cookies akzeptieren</string>
@@ -37,4 +35,6 @@
     <string name="welcome_msg">Willkommen!\nFügen Sie Ihre erste Web-App hinzu:</string>
     <string name="restore_last_opened_page">Letzte geöffnete Seite wiederherstellen</string>
     <string name="request_website_in_desktop_version">Desktop-Version der Website anfordern</string>
+    <string name="shortcut_icon">Symbol</string>
+    <string name="shortcut_title">Beschriftung</string>
 </resources>

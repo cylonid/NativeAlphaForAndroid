@@ -47,8 +47,8 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class ShortcutHelper {
 
-    private Activity activity;
-    private WebApp webapp;
+    private final Activity activity;
+    private final WebApp webapp;
     private Bitmap bitmap;
     private ImageView uiFavicon;
     private CircularProgressBar uiProgressBar;
@@ -197,9 +197,9 @@ public class ShortcutHelper {
     public static class FaviconURLFetcher extends AsyncTask<Void, Void, String[]> {
 
         //TreeMap<Icon width in px, URL>
-        TreeMap<Integer, String> found_icons;
+        final TreeMap<Integer, String> found_icons;
         private String base_url;
-        private ShortcutHelper shortcutHelper;
+        private final ShortcutHelper shortcutHelper;
         private FaviconURLFetcher asyncObject;
 
         public FaviconURLFetcher(ShortcutHelper s) {

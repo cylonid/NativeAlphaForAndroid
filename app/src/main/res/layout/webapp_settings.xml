@@ -2,8 +2,7 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_dialog"
-    android:id="@+id/webapp_settings">
+    android:layout_margin="@dimen/margin_dialog">
 
     <Switch
         android:id="@+id/switchOpenUrlExternal"
@@ -100,7 +99,7 @@
         android:layout_height="match_parent">
         <TextView
             android:layout_width="match_parent"
-            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:layout_height="wrap_content"
             android:text="@string/timeout_for_page_restore_in_minutes"/>
@@ -124,12 +123,11 @@
         android:visibility="gone">
         <TextView
             android:layout_width="match_parent"
-            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:layout_height="wrap_content"
             android:text="Custom user agent"/>
         <EditText
-            android:id="@+id/textCustomUserAgent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="4dp"

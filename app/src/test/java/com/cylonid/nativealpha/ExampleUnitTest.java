@@ -1,11 +1,6 @@
 package com.cylonid.nativealpha;
 
-import android.app.Instrumentation;
-import android.os.AsyncTask;
-
 import org.junit.Test;
-
-import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.*;
 

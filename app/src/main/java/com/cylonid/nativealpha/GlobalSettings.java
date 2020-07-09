@@ -1,7 +1,5 @@
 package com.cylonid.nativealpha;
 
-import androidx.appcompat.app.AppCompatDelegate;
-
 public class GlobalSettings {
 
     private boolean clear_cache;

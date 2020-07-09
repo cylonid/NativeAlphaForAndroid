@@ -20,9 +20,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -34,14 +32,12 @@
             android:fillViewport="true">
 
             <LinearLayout
-                android:id="@+id/settingsScreen"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="25dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/header1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/global_settings"
@@ -49,7 +45,6 @@
                     android:textColor="@android:color/black" />
 
                 <TextView
-                    android:id="@+id/headerDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/these_settings_are_applied_globally_and_override_app_specific_settings"
@@ -94,7 +89,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <TextView
-                        android:id="@+id/textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/select_ui_mode" />
@@ -111,10 +105,9 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/buttons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     android:layout_margin="25dp"
                     android:orientation="horizontal">
 

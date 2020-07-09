@@ -55,8 +55,8 @@ public class WebApp {
             return base_url;
         else if (restore_page) {
 
-            Long current_time_sec = System.currentTimeMillis() / 1000;
-            Long diff = Math.abs(timestamp_last_used_url - current_time_sec);
+            long current_time_sec = System.currentTimeMillis() / 1000;
+            long diff = Math.abs(timestamp_last_used_url - current_time_sec);
             if (diff <= timeout_last_used_url * 60)
                 return last_used_url;
         }

@@ -3,8 +3,6 @@
     <string name="app_name_unicode" translatable="false">Native α</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
     <string name="spinner_prompt">UI Mode</string>
     <string name="global_settings">Global settings</string>
     <string name="these_settings_are_applied_globally_and_override_app_specific_settings">These settings are applied globally and override webapp-specific settings.</string>
@@ -12,7 +10,7 @@
     <string name="use_three_finger_swipes_to_switch_between_web_apps_experimental">Use three-finger swipes to switch between web apps (experimental)</string>
     <string name="select_ui_mode">Select UI mode</string>
     <string name="save">Save</string>
-    <string name="loading_icon_and_website_title">Loading icon and website title...</string>
+    <string name="loading_icon_and_website_title">Loading icon and website title…</string>
     <string name="open_external_links_in_browser_app">Open external links in browser app</string>
     <string name="allow_javascript">Allow Javascript</string>
     <string name="accept_cookies">Accept cookies</string>
@@ -41,5 +39,7 @@
     <string name="welcome_msg">Welcome!\nAdd your first web app:</string>
     <string name="restore_last_opened_page">Restore last opened page</string>
     <string name="request_website_in_desktop_version">Request website in desktop version</string>
+    <string name="shortcut_icon">Shortcut Icon</string>
+    <string name="shortcut_title">Shortcut Title</string>
 
 </resources>

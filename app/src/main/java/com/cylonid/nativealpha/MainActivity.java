@@ -128,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
                 openWebView(webapp);
             }
 
-            ;
         });
 
         ImageButton btn_settings = new ImageButton(this);

@@ -61,7 +61,7 @@ public class DataManager {
         String json = gson.toJson(websites);
         editor.putString(shared_pref_webapps, json);
         editor.putInt(shared_pref_max_id, max_assigned_ID);
-        editor.commit();
+        editor.apply();
     }
 
     public void loadAppData() {
@@ -98,7 +98,7 @@ public class DataManager {
         editor.putBoolean(shared_pref_glob_2fmultitouch, settings.isTwoFingerMultitouch());
         editor.putBoolean(shared_pref_glob_3fmultitouch, settings.isThreeFingerMultitouch());
         editor.putInt(shared_pref_glob_ui_theme, settings.getThemeId());
-        editor.commit();
+        editor.apply();
     }
 
     public void initDummyData()

@@ -23,7 +23,6 @@ import java.util.HashMap;
 public class WebViewActivity extends AppCompatActivity {
 
     private WebView wv;
-    private WebApp webapp;
     int webappID = -1;
     boolean exit_on_next_back_pressed = false;
 
@@ -45,9 +44,8 @@ public class WebViewActivity extends AppCompatActivity {
         DataManager.getInstance().initContext(this);
         DataManager.getInstance().loadAppData();
         Utility.Assert(webappID != -1, "WebApp ID could not be retrieved.");
-        webapp = DataManager.getInstance().getWebApp(webappID);
+        WebApp webapp = DataManager.getInstance().getWebApp(webappID);
         String url = webapp.getLoadableUrl();
-        boolean open_external = webapp.openUrlExternal();
 
         wv = findViewById(R.id.webview);
 
@@ -84,7 +82,7 @@ public class WebViewActivity extends AppCompatActivity {
 
         }
 
-        HashMap<String, String> extraHeaders = new HashMap<String, String>();
+        HashMap<String, String> extraHeaders = new HashMap<>();
         extraHeaders.put("DNT", "1");
         wv.loadUrl(url, extraHeaders);
 
