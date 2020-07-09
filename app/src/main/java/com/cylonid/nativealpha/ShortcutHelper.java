@@ -54,10 +54,7 @@ public class ShortcutHelper {
     private CircularProgressBar uiProgressBar;
     private EditText uiTitle;
     private LinearLayout uiIconLayout;
-
-
     private Button uiBtnPositive;
-
 
     public ShortcutHelper(WebApp webapp, Activity c) {
         this.webapp = webapp;

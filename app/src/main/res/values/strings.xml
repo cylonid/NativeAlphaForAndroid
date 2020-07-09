@@ -38,7 +38,7 @@
     <string name="enter_valid_url">Please enter a valid web address.</string>
     <string name="edit_webapp_settings">Edit webapp settings</string>
     <string name="add_webapp">Add web app</string>
-    <string name="welcome_msg">Welcome!\\nAdd your first web app:</string>
+    <string name="welcome_msg">Welcome!\nAdd your first web app:</string>
     <string name="restore_last_opened_page">Restore last opened page</string>
     <string name="request_website_in_desktop_version">Request website in desktop version</string>
 

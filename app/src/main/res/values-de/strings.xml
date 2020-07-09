@@ -34,7 +34,7 @@
     <string name="enter_valid_url">Bitte geben Sie eine gültige URL an.</string>
     <string name="edit_webapp_settings">Web-App-Einstellungen bearbeiten</string>
     <string name="add_webapp">Web-App hinzufügen</string>
-    <string name="welcome_msg">Willkommen!\\nFügen Sie Ihre erste Web-App hinzu:</string>
+    <string name="welcome_msg">Willkommen!\nFügen Sie Ihre erste Web-App hinzu:</string>
     <string name="restore_last_opened_page">Letzte geöffnete Seite wiederherstellen</string>
     <string name="request_website_in_desktop_version">Desktop-Version der Website anfordern</string>
 </resources>

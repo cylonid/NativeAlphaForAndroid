@@ -65,6 +65,11 @@ public class WebApp {
     }
 
     public void saveNewSettings(boolean use_adblock, boolean open_url_external, boolean request_desktop, boolean allow_cookies, boolean allow_third_p_cookies, boolean allow_js, boolean clear_cache, boolean restore_page, Integer timeout) {
+        setNewSettings(use_adblock, open_url_external, request_desktop, allow_cookies, allow_third_p_cookies, allow_js, clear_cache, restore_page, timeout);
+        DataManager.getInstance().saveWebAppData();
+    }
+
+    public void setNewSettings(boolean use_adblock, boolean open_url_external, boolean request_desktop, boolean allow_cookies, boolean allow_third_p_cookies, boolean allow_js, boolean clear_cache, boolean restore_page, Integer timeout) {
         this.open_url_external = open_url_external;
         this.allow_cookies = allow_cookies;
         this.allow_third_p_cookies = allow_third_p_cookies;
@@ -74,7 +79,6 @@ public class WebApp {
         this.request_desktop = request_desktop;
         this.clear_cache = clear_cache;
         this.use_adblock = use_adblock;
-        DataManager.getInstance().saveWebAppData();
     }
 
     public int getTimeoutLastUsedUrl() {

@@ -112,16 +112,17 @@ public class MainActivity extends AppCompatActivity {
         btn_title.setLayoutParams(layout_title);
         ll_row.addView(btn_title);
 
-        ImageButton btn_shortcut = new ImageButton(this);
-        btn_shortcut.setBackgroundColor(transparent_color);
-        btn_shortcut.setImageResource(R.drawable.ic_baseline_open_in_browser_24);
+        ImageButton btn_open_webview = new ImageButton(this);
+        btn_open_webview.setTag("btnOpenWebview" + webapp.getID());
+        btn_open_webview.setBackgroundColor(transparent_color);
+        btn_open_webview.setImageResource(R.drawable.ic_baseline_open_in_browser_24);
         LinearLayout.LayoutParams layout_action_buttons = new LinearLayout.LayoutParams(0, row_height);
         layout_action_buttons.width = 0;
         layout_action_buttons.height = row_height;
         layout_action_buttons.weight = 1;
-        btn_shortcut.setLayoutParams(layout_action_buttons);
-        ll_row.addView(btn_shortcut);
-        btn_shortcut.setOnClickListener(new View.OnClickListener() {
+        btn_open_webview.setLayoutParams(layout_action_buttons);
+        ll_row.addView(btn_open_webview);
+        btn_open_webview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openWebView(webapp);
@@ -132,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton btn_settings = new ImageButton(this);
         btn_settings.setBackgroundColor(transparent_color);
+        btn_settings.setTag("btnSettings" + webapp.getID());
         btn_settings.setImageResource(R.drawable.ic_settings_black_24dp);
         layout_action_buttons.width = 0;
         layout_action_buttons.height = row_height;
@@ -148,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton btn_delete = new ImageButton(this);
         btn_delete.setBackgroundColor(transparent_color);
+        btn_delete.setTag("btnDelete" + webapp.getID());
         btn_delete.setImageResource(R.drawable.ic_delete_black_24dp);
         btn_delete.setLayoutParams(layout_action_buttons);
         ll_row.addView(btn_delete);
@@ -160,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mainScreen.addView(ll_row);
-
 
     }
 
@@ -347,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void addActiveWebAppsToUI() {
+    public void addActiveWebAppsToUI() {
         for (WebApp d : DataManager.getInstance().getWebsites()) {
             if (d.isActive())
                 addRow(d);

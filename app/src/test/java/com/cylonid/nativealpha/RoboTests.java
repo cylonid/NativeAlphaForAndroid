@@ -2,8 +2,10 @@ package com.cylonid.nativealpha;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import static androidx.core.content.ContextCompat.startActivity;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -18,7 +20,7 @@ public class RoboTests {
 //                .create()
 //                .resume()
 //                .get();
-//
+
         WebApp webapp = new WebApp(base_url);
         ShortcutHelper.FaviconURLFetcher f = new ShortcutHelper.FaviconURLFetcher(new ShortcutHelper(webapp, null)) {
 
@@ -57,4 +59,6 @@ public class RoboTests {
     public void getWebAppTitleFromManifest() {
         testShortcutHelper("https://online.tugraz.at", "TUGRAZonline Go", Const.RESULT_IDX_TITLE);
     }
+
+
 }
