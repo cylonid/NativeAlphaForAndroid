@@ -63,12 +63,12 @@ public class WebViewActivity extends AppCompatActivity {
             wv.getSettings().setForceDark(WebSettings.FORCE_DARK_OFF);
         }
 
-        wv.getSettings().setJavaScriptEnabled(webapp.isAllowJSSet());
+        wv.getSettings().setJavaScriptEnabled(webapp.isAllowJs());
 
-        CookieManager.getInstance().setAcceptCookie(webapp.isAllowCookiesSet());
-        CookieManager.getInstance().setAcceptThirdPartyCookies(wv, webapp.isAllowThirdPartyCookiesSet());
+        CookieManager.getInstance().setAcceptCookie(webapp.isAllowCookies());
+        CookieManager.getInstance().setAcceptThirdPartyCookies(wv, webapp.isAllowThirdPartyCookies());
 
-        if (webapp.isRequestDesktopSet()) {
+        if (webapp.isRequestDesktop()) {
             wv.getSettings().setUserAgentString(Const.DESKTOP_USER_AGENT);
             wv.getSettings().setUseWideViewPort(true);
             wv.getSettings().setLoadWithOverviewMode(true);
@@ -93,7 +93,7 @@ public class WebViewActivity extends AppCompatActivity {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (DataManager.getInstance().getWebApp(webappID).isRequestDesktopSet())
+                if (DataManager.getInstance().getWebApp(webappID).isRequestDesktop())
                     return false;
 
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -158,9 +158,9 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
-        if (webapp.isRestorePageSet())
+        if (webapp.isRestorePage())
             webapp.saveCurrentUrl(wv.getUrl());
-        if (webapp.isClearCacheSet() || DataManager.getInstance().getSettings().isClearCache())
+        if (webapp.isClearCache() || DataManager.getInstance().getSettings().isClearCache())
             wv.clearCache(true);
 
         if (DataManager.getInstance().getSettings().isClearCookies())
@@ -176,7 +176,7 @@ public class WebViewActivity extends AppCompatActivity {
         @Override
         public void onLoadResource(WebView view, String url) {
             super.onLoadResource(view, url);
-            if (DataManager.getInstance().getWebApp(webappID).isRequestDesktopSet())
+            if (DataManager.getInstance().getWebApp(webappID).isRequestDesktop())
                 view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth / 1024));", null);
         }
 
@@ -185,7 +185,7 @@ public class WebViewActivity extends AppCompatActivity {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             WebApp webapp = DataManager.getInstance().getWebApp(webappID);
 
-            if (webapp.openUrlExternal()) {
+            if (webapp.isOpenUrlExternal()) {
                 String base_url = webapp.getBaseUrl();
                 Uri uri = Uri.parse(base_url);
                 String host = uri.getHost();

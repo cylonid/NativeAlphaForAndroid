@@ -1,6 +1,12 @@
 package com.cylonid.nativealpha;
 
+
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.Switch;
+
 public class WebApp {
+
     private String title;
     private String base_url;
     private String last_used_url;
@@ -32,7 +38,6 @@ public class WebApp {
         request_desktop = false;
         clear_cache = false;
         use_adblock = true;
-
     }
 
 
@@ -64,22 +69,24 @@ public class WebApp {
         return base_url;
     }
 
-    public void saveNewSettings(boolean use_adblock, boolean open_url_external, boolean request_desktop, boolean allow_cookies, boolean allow_third_p_cookies, boolean allow_js, boolean clear_cache, boolean restore_page, Integer timeout) {
-        setNewSettings(use_adblock, open_url_external, request_desktop, allow_cookies, allow_third_p_cookies, allow_js, clear_cache, restore_page, timeout);
-        DataManager.getInstance().saveWebAppData();
+    public WebApp(WebApp other) {
+        this.title = other.title;
+        this.base_url = other.base_url;
+        this.last_used_url = other.last_used_url;
+        this.timestamp_last_used_url = other.timestamp_last_used_url;
+        this.timeout_last_used_url = other.timeout_last_used_url;
+        this.ID = other.ID;
+        this.open_url_external = other.open_url_external;
+        this.allow_cookies = other.allow_cookies;
+        this.allow_third_p_cookies = other.allow_third_p_cookies;
+        this.restore_page = other.restore_page;
+        this.allow_js = other.allow_js;
+        this.active_entry = other.active_entry;
+        this.request_desktop = other.request_desktop;
+        this.clear_cache = other.clear_cache;
+        this.use_adblock = other.use_adblock;
     }
 
-    public void setNewSettings(boolean use_adblock, boolean open_url_external, boolean request_desktop, boolean allow_cookies, boolean allow_third_p_cookies, boolean allow_js, boolean clear_cache, boolean restore_page, Integer timeout) {
-        this.open_url_external = open_url_external;
-        this.allow_cookies = allow_cookies;
-        this.allow_third_p_cookies = allow_third_p_cookies;
-        this.allow_js = allow_js;
-        this.restore_page = restore_page;
-        this.timeout_last_used_url = timeout;
-        this.request_desktop = request_desktop;
-        this.clear_cache = clear_cache;
-        this.use_adblock = use_adblock;
-    }
 
     public int getTimeoutLastUsedUrl() {
         return timeout_last_used_url;
@@ -97,37 +104,123 @@ public class WebApp {
         return ID;
     }
 
-    public boolean openUrlExternal() {
+    public boolean isOpenUrlExternal() {
         return open_url_external;
     }
 
-    public boolean isActive() { return active_entry; }
-    public void setBaseUrl(String base_url) {
-        this.base_url = base_url;
-        DataManager.getInstance().saveWebAppData();
-    }
-    public boolean isAllowCookiesSet() {
+    public boolean isActiveEntry() { return active_entry; }
+
+    public boolean isAllowCookies() {
         return allow_cookies;
     }
-    public boolean isAllowThirdPartyCookiesSet() {
+    public boolean isAllowThirdPartyCookies() {
         return allow_third_p_cookies;
     }
 
-    public boolean isRestorePageSet() {
+    public boolean isRestorePage() {
         return restore_page;
     }
 
-    public boolean isAllowJSSet() {
+    public boolean isAllowJs() {
         return allow_js;
     }
 
-    public boolean isRequestDesktopSet() {
+    public boolean isRequestDesktop() {
         return request_desktop;
     }
-    public boolean isClearCacheSet() {
+    public boolean isClearCache() {
         return clear_cache;
     }
     public boolean isUseAdblock() {
         return use_adblock;
     }
+
+    public void setBaseUrl(String base_url) {
+        this.base_url = base_url;
+        DataManager.getInstance().saveWebAppData();
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setLastUsedUrl(String last_used_url) {
+        this.last_used_url = last_used_url;
+    }
+
+    public void setTimestampLastUsedUrl(Long timestamp_last_used_url) {
+        this.timestamp_last_used_url = timestamp_last_used_url;
+    }
+
+    public void setTimeoutLastUsedUrl(int timeout_last_used_url) {
+        this.timeout_last_used_url = timeout_last_used_url;
+    }
+
+    public void setOpenUrlExternal(boolean open_url_external) {
+        this.open_url_external = open_url_external;
+    }
+
+    public void setAllowCookies(boolean allow_cookies) {
+        this.allow_cookies = allow_cookies;
+    }
+
+    public void setAllowThirdPartyCookies(boolean allow_third_p_cookies) {
+        this.allow_third_p_cookies = allow_third_p_cookies;
+    }
+
+    public void setRestorePage(boolean restore_page) {
+        this.restore_page = restore_page;
+    }
+
+    public void setAllowJs(boolean allow_js) {
+        this.allow_js = allow_js;
+    }
+
+    public void setActiveEntry(boolean active_entry) {
+        this.active_entry = active_entry;
+    }
+
+    public void setRequestDesktop(boolean request_desktop) {
+        this.request_desktop = request_desktop;
+    }
+
+    public void setClearCache(boolean clear_cache) {
+        this.clear_cache = clear_cache;
+    }
+
+    public void setUseAdblock(boolean use_adblock) {
+        this.use_adblock = use_adblock;
+    }
+
+    public void onSwitchCookiesChanged(CompoundButton mSwitch, boolean isChecked) {
+        Switch third_party_cookies = mSwitch.getRootView().findViewById(R.id.switch3PCookies);
+        if (isChecked)
+            third_party_cookies.setEnabled(true);
+        else {
+            third_party_cookies.setEnabled(false);
+            third_party_cookies.setChecked(false);
+        }
+    }
+    public void onSwitchJsChanged(CompoundButton mSwitch, boolean isChecked) {
+        Switch switchDesktopVersion = mSwitch.getRootView().findViewById(R.id.switchDesktopSite);
+        Switch switchAdblock = mSwitch.getRootView().findViewById(R.id.switchAdblock);
+        if (isChecked) {
+            switchDesktopVersion.setEnabled(true);
+            switchAdblock.setEnabled(true);
+        } else {
+            switchDesktopVersion.setChecked(false);
+            switchDesktopVersion.setEnabled(false);
+            switchAdblock.setChecked(false);
+            switchAdblock.setEnabled(false);
+        }
+    }
+
+    public void onSwitchRestorePageChanged(CompoundButton mSwitch, boolean isChecked) {
+        EditText textTimeout = mSwitch.getRootView().findViewById(R.id.textTimeout);
+        if (isChecked) {
+            textTimeout.setEnabled(true);
+        }
+        else
+            textTimeout.setEnabled(false);
+     }
 }

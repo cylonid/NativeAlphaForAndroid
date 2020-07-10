@@ -127,6 +127,12 @@ public class DataManager {
         return websites.get(i);
     }
 
+    public void replaceWebApp(WebApp webapp) {
+        int index = webapp.getID();
+        websites.set(index, webapp);
+        saveWebAppData();
+    }
+
     public WebApp getSuccessor(int i) {
         if (i != (websites.size() - 1)) {
             return websites.get(i + 1);

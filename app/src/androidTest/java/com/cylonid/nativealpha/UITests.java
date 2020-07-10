@@ -81,7 +81,7 @@ public class UITests {
         TestUtils.alertDialogAccept();
         onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
         onWebView().withNoTimeout().withElement(findElement(Locator.ID, "detected_value")).check(webMatches(getText(), containsString("No")));
-        TestUtils.waitFor(10000);
+        TestUtils.waitFor(3000);
     }
 
 

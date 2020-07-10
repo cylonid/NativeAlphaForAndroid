@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,9 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.databinding.DataBindingUtil;
 
+import com.cylonid.nativealpha.databinding.WebappSettingsBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import static android.widget.LinearLayout.HORIZONTAL;
@@ -145,82 +148,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void buildSettingsDialog(final int webappID) {
-        final View inflated_view = getLayoutInflater().inflate(R.layout.webapp_settings, null);
+
+        WebappSettingsBinding binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.webapp_settings, null, false);
+        final View inflated_view = binding.getRoot();
         final WebApp webapp = DataManager.getInstance().getWebApp(webappID);
+        final WebApp modified_webapp = new WebApp(webapp);
+        binding.setWebapp(modified_webapp);
 
-        final Switch switchOpenUrlExternal = inflated_view.findViewById(R.id.switchOpenUrlExternal);
-        final Switch switchCookies = inflated_view.findViewById(R.id.switchCookies);
-        final Switch switchThirdPartyCookies = inflated_view.findViewById(R.id.switch3PCookies);
-        final Switch switchDesktopVersion = inflated_view.findViewById(R.id.switchDesktopSite);
-        final Switch switchJS = inflated_view.findViewById(R.id.switchJavascript);
-        final Switch switchRestorePage = inflated_view.findViewById(R.id.switchRestorePage);
-        final Switch switchCache = inflated_view.findViewById(R.id.switchCache);
-        final Switch switchAdblock = inflated_view.findViewById(R.id.switchAdblock);
-        final EditText textTimeout = inflated_view.findViewById(R.id.textTimeout);
         final Button btnCreateShortcut = inflated_view.findViewById(R.id.btnRecreateShortcut);
-
-        switchOpenUrlExternal.setChecked(webapp.openUrlExternal());
-        switchCookies.setChecked(webapp.isAllowCookiesSet());
-        switchThirdPartyCookies.setChecked(webapp.isAllowThirdPartyCookiesSet());
-        switchDesktopVersion.setChecked(webapp.isRequestDesktopSet());
-        switchJS.setChecked(webapp.isAllowJSSet());
-        switchRestorePage.setChecked(webapp.isRestorePageSet());
-        switchCache.setChecked(webapp.isClearCacheSet());
-        switchAdblock.setChecked(webapp.isUseAdblock());
-        textTimeout.setText(String.valueOf(webapp.getTimeoutLastUsedUrl()));
-
-        if (!webapp.isRestorePageSet()) {
-            textTimeout.setEnabled(false);
-        } else {
-            textTimeout.setEnabled(true);
-            textTimeout.setText(String.valueOf(webapp.getTimeoutLastUsedUrl()));
-        }
-
-        if (!webapp.isAllowCookiesSet()) {
-            switchThirdPartyCookies.setChecked(false);
-            switchThirdPartyCookies.setEnabled(false);
-        }
-
-        if (!webapp.isAllowJSSet()) {
-            switchDesktopVersion.setChecked(false);
-            switchDesktopVersion.setEnabled(false);
-            switchAdblock.setChecked(false);
-            switchAdblock.setEnabled(false);
-        }
-        switchRestorePage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                    textTimeout.setEnabled(true);
-                else
-                    textTimeout.setEnabled(false);
-            }
-        });
-
-        switchCookies.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                    switchThirdPartyCookies.setEnabled(true);
-                else {
-                    switchThirdPartyCookies.setChecked(false);
-                    switchThirdPartyCookies.setEnabled(false);
-                }
-            }
-        });
-
-        switchJS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    switchDesktopVersion.setEnabled(true);
-                    switchAdblock.setEnabled(true);
-                } else {
-                    switchDesktopVersion.setChecked(false);
-                    switchDesktopVersion.setEnabled(false);
-                    switchAdblock.setChecked(false);
-                    switchAdblock.setEnabled(false);
-                }
-            }
-        });
 
         btnCreateShortcut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -238,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
+
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
             @Override
@@ -248,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DataManager.getInstance().getWebApp(webappID).saveNewSettings(switchAdblock.isChecked(), switchOpenUrlExternal.isChecked(), switchDesktopVersion.isChecked(), switchCookies.isChecked(), switchThirdPartyCookies.isChecked(), switchJS.isChecked(), switchCache.isChecked(), switchRestorePage.isChecked(), Integer.parseInt(textTimeout.getText().toString()));
+                        DataManager.getInstance().replaceWebApp(modified_webapp);
                         dialog.dismiss();
                     }
                 });
@@ -330,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void addActiveWebAppsToUI() {
         for (WebApp d : DataManager.getInstance().getWebsites()) {
-            if (d.isActive())
+            if (d.isActiveEntry())
                 addRow(d);
         }
     }
