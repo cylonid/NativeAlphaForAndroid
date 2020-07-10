@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 public class WebViewActivity extends AppCompatActivity {
 
+
     private WebView wv;
     int webappID = -1;
     boolean exit_on_next_back_pressed = false;
@@ -166,6 +167,10 @@ public class WebViewActivity extends AppCompatActivity {
             CookieManager.getInstance().flush();
     }
 
+    public WebView getWebView() {
+        return wv;
+    }
+
 
     private class CustomBrowser extends WebViewClient {
         @Override
@@ -198,7 +203,6 @@ public class WebViewActivity extends AppCompatActivity {
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             return shouldOverrideUrlLoading(view, request.getUrl().toString());
         }
-
     }
 }
 

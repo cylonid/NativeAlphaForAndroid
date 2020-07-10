@@ -36,6 +36,8 @@ repositories {
     dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+//    api 'com.google.dagger:dagger:2.28.1'
+//    annotationProcessor 'com.google.dagger:dagger-compiler:2.28.1'
     implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'org.adblockplus:adblock-android-webview:3.0'
@@ -49,6 +51,7 @@ repositories {
     implementation 'com.google.code.gson:gson:2.8.6'
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:4.3.1"
+    androidTestImplementation 'androidx.test.espresso:espresso-web:3.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

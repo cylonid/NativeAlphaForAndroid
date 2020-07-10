@@ -1,11 +1,14 @@
 package com.cylonid.nativealpha;
 
 import android.view.View;
+import android.webkit.WebView;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.espresso.web.webdriver.Locator;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.hamcrest.Matcher;
@@ -22,9 +25,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
+import static androidx.test.espresso.web.assertion.WebViewAssertions.webMatches;
+import static androidx.test.espresso.web.sugar.Web.onWebView;
+import static androidx.test.espresso.web.webdriver.DriverAtoms.findElement;
+import static androidx.test.espresso.web.webdriver.DriverAtoms.getText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -34,8 +42,11 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 public class UITests {
+//    @Rule
+//    public ActivityTestRule<Activity> activityTestRule = new ActivityTestRule<>(Activity.class, false, false);
     @Rule
     public CleanActivityTestRule<MainActivity> activityTestRule = new CleanActivityTestRule<>(MainActivity.class);
+
     @Test
     public void addWebsite() {
         onView(withId(R.id.websiteUrl)).perform(clearText(), typeText("github.com"));
@@ -43,30 +54,35 @@ public class UITests {
         onView(withId(android.R.id.button1)).perform(click());
         assertEquals(DataManager.getInstance().getWebApp(0).getBaseUrl(), "https://github.com");
         onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
-//        onView(isRoot()).perform(waitFor(5000));
+        TestUtils.waitFor(2000);
     }
 
-//    @Rule
-//    public ActivityTestRule<Activity> activityTestRule = new ActivityTestRule<>(Activity.class, false, false);
     @Test
     public void startWebView() {
-
         initSingleWebsite("https://twitter.com");
-
         onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
         onView(withId(R.id.adblockwebview)).check(matches(isDisplayed()));
-        onView(isRoot()).perform(waitFor(2000));
     }
 
     @Test(expected = NoMatchingViewException.class)
     public void deleteWebsite() {
         initSingleWebsite("https://twitter.com");
         onView(allOf(withTagValue(is((Object) "btnDelete0")))).perform(click());
-        alertDialogAccept();
+        TestUtils.alertDialogAccept();
 
         onView(allOf(withTagValue(is((Object) "btnDelete0")))).check(matches(not(isDisplayed()))); //Throws exception
     }
 
+    @Test
+    public void changeWebAppSettings() {
+        initSingleWebsite("https://whatismybrowser.com/detect/are-cookies-enabled");
+        onView(allOf(withTagValue(is((Object) "btnSettings0")))).perform(click());
+        onView(withId(R.id.switchCookies)).perform(click());
+        TestUtils.alertDialogAccept();
+        onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
+        onWebView().withNoTimeout().withElement(findElement(Locator.ID, "detected_value")).check(webMatches(getText(), containsString("No")));
+        TestUtils.waitFor(10000);
+    }
 
 
     private void initSingleWebsite(final String base_url) {
@@ -78,47 +94,8 @@ public class UITests {
             }
         });
         //Get rid of welcome message
-        alertDialogDismiss();
+        TestUtils.alertDialogDismiss();
 
-    }
-
-    private void alertDialogAccept() {
-        onView(withId(android.R.id.button1)).perform(click());
-    }
-    private void alertDialogDismiss() {
-        onView(withId(android.R.id.button2)).perform(click());
-    }
-    
-//
-//    public static boolean viewIsDisplayed(int viewId)
-//    {
-//        final boolean[] isDisplayed = {true};
-//        onView(withId(viewId)).withFailureHandler(new FailureHandler()
-//        {
-//            @Override
-//            public void handle(Throwable error, Matcher<View> viewMatcher)
-//            {
-//                isDisplayed[0] = false;
-//            }
-//        }).check(matches(isDisplayed()));
-//        return isDisplayed[0];
-//    }
-//
-
-    public static ViewAction waitFor(final long delay) {
-        return new ViewAction() {
-            @Override public Matcher<View> getConstraints() {
-                return ViewMatchers.isRoot();
-            }
-
-            @Override public String getDescription() {
-                return "wait for " + delay + "milliseconds";
-            }
-
-            @Override public void perform(UiController uiController, View view) {
-                uiController.loopMainThreadForAtLeast(delay);
-            }
-        };
     }
 
 
