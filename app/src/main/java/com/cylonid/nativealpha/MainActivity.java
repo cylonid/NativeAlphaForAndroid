@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainScreen = findViewById(R.id.mainScreen);
-        DataManager.getInstance().initContext(this);
+
         DataManager.getInstance().loadAppData();
         addActiveWebAppsToUI();
 
@@ -88,6 +88,20 @@ public class MainActivity extends AppCompatActivity {
             faviconFetcher.cancel(true);
     }
 
+    private ImageButton generateImageButton(String name, int resourceID, int webappID, LinearLayout ll_row) {
+        int row_height = (int) getResources().getDimension(R.dimen.line_height);
+        int transparent_color = ResourcesCompat.getColor(getResources(), R.color.transparent, null);
+
+        ImageButton btn = new ImageButton(this);
+        btn.setTag(name + webappID);
+        btn.setBackgroundColor(transparent_color);
+        btn.setImageResource(resourceID);
+        LinearLayout.LayoutParams layout_action_buttons = new LinearLayout.LayoutParams(0, row_height, 1);
+        btn.setLayoutParams(layout_action_buttons);
+        ll_row.addView(btn);
+
+        return btn;
+    }
     private void addRow(final WebApp webapp) {
         int row_height = (int) getResources().getDimension(R.dimen.line_height);
         int transparent_color = ResourcesCompat.getColor(getResources(), R.color.transparent, null);
@@ -95,33 +109,16 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout ll_row = new LinearLayout(this);
         ll_row.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams layout_row = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, row_height);
-        layout_row.width = LinearLayout.LayoutParams.MATCH_PARENT;
-        layout_row.height = row_height;
         ll_row.setLayoutParams(layout_row);
 
         Button btn_title = new Button(this);
-//        btn_title.setId("btn_title");
         btn_title.setBackgroundColor(transparent_color);
         btn_title.setText(webapp.getTitle());
-//        btn_title.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_24dp);
-//        btn_title.setGravity(Gravity.START | Gravity.CENTER);
-        LinearLayout.LayoutParams layout_title = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, row_height);
-        layout_title.width = 0;
-        layout_title.height = (int) getResources().getDimension(R.dimen.line_height);
-        layout_title.weight = 4;
+        LinearLayout.LayoutParams layout_title = new LinearLayout.LayoutParams(0, row_height, 4);
         btn_title.setLayoutParams(layout_title);
         ll_row.addView(btn_title);
 
-        ImageButton btn_open_webview = new ImageButton(this);
-        btn_open_webview.setTag("btnOpenWebview" + webapp.getID());
-        btn_open_webview.setBackgroundColor(transparent_color);
-        btn_open_webview.setImageResource(R.drawable.ic_baseline_open_in_browser_24);
-        LinearLayout.LayoutParams layout_action_buttons = new LinearLayout.LayoutParams(0, row_height);
-        layout_action_buttons.width = 0;
-        layout_action_buttons.height = row_height;
-        layout_action_buttons.weight = 1;
-        btn_open_webview.setLayoutParams(layout_action_buttons);
-        ll_row.addView(btn_open_webview);
+        ImageButton btn_open_webview = generateImageButton("btnOpenWebview", R.drawable.ic_baseline_open_in_browser_24, webapp.getID(), ll_row);
         btn_open_webview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,34 +127,17 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        ImageButton btn_settings = new ImageButton(this);
-        btn_settings.setBackgroundColor(transparent_color);
-        btn_settings.setTag("btnSettings" + webapp.getID());
-        btn_settings.setImageResource(R.drawable.ic_settings_black_24dp);
-        layout_action_buttons.width = 0;
-        layout_action_buttons.height = row_height;
-        layout_action_buttons.weight = 1;
-        btn_settings.setLayoutParams(layout_action_buttons);
-        ll_row.addView(btn_settings);
+        ImageButton btn_settings = generateImageButton("btnSettings", R.drawable.ic_settings_black_24dp, webapp.getID(), ll_row);
         btn_settings.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                buildSettingsDialog(webapp.getID());
-
+            public void onClick(View v) { buildSettingsDialog(webapp.getID());
             }
         });
 
-        ImageButton btn_delete = new ImageButton(this);
-        btn_delete.setBackgroundColor(transparent_color);
-        btn_delete.setTag("btnDelete" + webapp.getID());
-        btn_delete.setImageResource(R.drawable.ic_delete_black_24dp);
-        btn_delete.setLayoutParams(layout_action_buttons);
-        ll_row.addView(btn_delete);
+        ImageButton btn_delete = generateImageButton("btnDelete", R.drawable.ic_delete_black_24dp, webapp.getID(), ll_row);
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                buildDeleteItemDialog(webapp.getID());
-
+            public void onClick(View v) { buildDeleteItemDialog(webapp.getID());
             }
         });
 

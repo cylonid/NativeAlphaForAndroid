@@ -41,7 +41,6 @@ public class WebViewActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         webappID = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
 
-        DataManager.getInstance().initContext(this);
         DataManager.getInstance().loadAppData();
         Utility.Assert(webappID != -1, "WebApp ID could not be retrieved.");
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
