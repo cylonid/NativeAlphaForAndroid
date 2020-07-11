@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">NativeAlpha</string>
+    <string name="app_name" translatable="false">Native Alpha</string>
     <string name="app_name_unicode" translatable="false">Native α</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
@@ -22,8 +22,6 @@
     <string name="create_shortcut_on_home_screen">Create shortcut on home screen</string>
     <string name="url" translatable="false">URL</string>
     <string name="use_two_finger_swipes_for_browser_forward_and_backward_navigation">Use two-finger swipes for browser forward and backward navigation</string>
-
-
     <string-array name="ui_modes">
         <item>System default</item>
         <item>Light Mode</item>

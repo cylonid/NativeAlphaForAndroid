@@ -16,7 +16,7 @@ public class RoboTests {
 //                .get();
 
         WebApp webapp = new WebApp(base_url);
-        ShortcutHelper.FaviconURLFetcher f = new ShortcutHelper.FaviconURLFetcher(new ShortcutHelper(webapp, null)) {
+        ShortcutHelper.FaviconFetcher f = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, null)) {
 
             @Override
             protected void onPreExecute() {

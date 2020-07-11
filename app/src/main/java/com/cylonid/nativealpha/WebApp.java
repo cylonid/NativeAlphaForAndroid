@@ -37,7 +37,7 @@ public class WebApp {
         allow_js = true;
         request_desktop = false;
         clear_cache = false;
-        use_adblock = true;
+        use_adblock = false;
     }
 
 

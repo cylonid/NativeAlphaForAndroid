@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -28,7 +27,7 @@ import static android.widget.LinearLayout.HORIZONTAL;
 
 public class MainActivity extends AppCompatActivity {
     private LinearLayout mainScreen;
-    private ShortcutHelper.FaviconURLFetcher faviconFetcher = null;
+    private ShortcutHelper.FaviconFetcher faviconFetcher = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme_NoActionBar);
@@ -162,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         btnCreateShortcut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                faviconFetcher = new ShortcutHelper.FaviconURLFetcher(new ShortcutHelper(webapp, MainActivity.this));
+                faviconFetcher = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, MainActivity.this));
                 faviconFetcher.execute();
                 faviconFetcher = null;
             }
@@ -232,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
                             addRow(new_site);
                             dialog.dismiss();
                             if (create_shortcut.isChecked()) {
-                                ShortcutHelper.FaviconURLFetcher f = new ShortcutHelper.FaviconURLFetcher(new ShortcutHelper(new_site, MainActivity.this));
+                                ShortcutHelper.FaviconFetcher f = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(new_site, MainActivity.this));
                                 f.execute();
                             }
                         } else

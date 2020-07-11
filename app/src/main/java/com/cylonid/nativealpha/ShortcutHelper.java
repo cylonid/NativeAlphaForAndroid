@@ -5,7 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -23,10 +23,6 @@ import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
-import com.squareup.picasso.OkHttp3Downloader;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,15 +31,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import okhttp3.OkHttpClient;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class ShortcutHelper {
 
@@ -60,49 +55,6 @@ public class ShortcutHelper {
         this.webapp = webapp;
         this.activity = c;
         this.bitmap = null;
-
-    }
-
-    private void loadFavicon(String url) {
-        Target target = new Target() {
-
-            @Override
-            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                prepareFailedUI();
-            }
-
-            @Override
-            public void onBitmapLoaded(Bitmap loaded, Picasso.LoadedFrom from) {
-                bitmap = loaded;
-                uiFavicon.setImageBitmap(bitmap);
-                uiProgressBar.setVisibility(View.GONE);
-                uiFavicon.setVisibility(View.VISIBLE);
-                uiBtnPositive.setEnabled(true);
-                uiTitle.requestFocus();
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-            }
-        };
-
-        if (url != null) {
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .connectTimeout(6, SECONDS)
-                    .readTimeout(6, SECONDS)
-                    .writeTimeout(6, SECONDS)
-                    .build();
-
-
-
-            Picasso picasso = new Picasso.Builder(activity)
-                    .downloader(new OkHttp3Downloader(client))
-                    .build();
-
-            picasso.load(url).into(target);
-        } else
-            prepareFailedUI();
-
     }
 
     private void addShortcutToHomeScreen(Bitmap bitmap) {
@@ -136,6 +88,7 @@ public class ShortcutHelper {
         showFailedMessage();
         uiIconLayout.setVisibility(View.GONE);
         uiBtnPositive.setEnabled(true);
+        uiTitle.setText(DataManager.getInstance().getWebApp(webapp.getID()).getTitle());
         uiTitle.requestFocus();
     }
 
@@ -194,15 +147,15 @@ public class ShortcutHelper {
     }
 
 
-    public static class FaviconURLFetcher extends AsyncTask<Void, Void, String[]> {
+    public static class FaviconFetcher extends AsyncTask<Void, Void, String[]> {
 
         //TreeMap<Icon width in px, URL>
         final TreeMap<Integer, String> found_icons;
         private String base_url;
         private final ShortcutHelper shortcutHelper;
-        private FaviconURLFetcher asyncObject;
+        private FaviconFetcher asyncObject;
 
-        public FaviconURLFetcher(ShortcutHelper s) {
+        public FaviconFetcher(ShortcutHelper s) {
             found_icons = new TreeMap<>();
             this.base_url = s.webapp.getBaseUrl();
             shortcutHelper = s;
@@ -213,7 +166,7 @@ public class ShortcutHelper {
             super.onPreExecute();
             shortcutHelper.buildShortcutDialog();
                 asyncObject = this;
-                new CountDownTimer(12000, 12000) {
+                new CountDownTimer(7000, 7000) {
                     public void onTick(long millisUntilFinished) {
                         // You can monitor the progress here as well by changing the onTick() time
                     }
@@ -313,7 +266,7 @@ public class ShortcutHelper {
                             Integer width = Utility.getWidthFromIcon(sizes);
                             found_icons.put(width, icon_href);
                         } else
-                            found_icons.put(0, icon_href);
+                            found_icons.put(1, icon_href);
 
                     }
                 }
@@ -321,9 +274,9 @@ public class ShortcutHelper {
 
                 if (!found_icons.isEmpty()) {
                     Map.Entry<Integer, String> best_fit = found_icons.lastEntry();
+                    result[Const.RESULT_IDX_FAVICON] = best_fit.getValue();
+                    loadBitmap(best_fit.getValue());
 
-                    if (best_fit.getKey() >= 96)
-                        result[Const.RESULT_IDX_FAVICON] = best_fit.getValue();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -336,20 +289,52 @@ public class ShortcutHelper {
         protected void onPostExecute(String[] result) {
             super.onPostExecute(result);
 
+            if (shortcutHelper.bitmap != null) {
+                shortcutHelper.uiFavicon.setImageBitmap(shortcutHelper.bitmap);
+                shortcutHelper.uiProgressBar.setVisibility(View.GONE);
+                shortcutHelper.uiFavicon.setVisibility(View.VISIBLE);
+                shortcutHelper.uiBtnPositive.setEnabled(true);
+                shortcutHelper.uiTitle.requestFocus();
+            }
+            else
+                shortcutHelper.prepareFailedUI();
+
             shortcutHelper.setShortcutTitle(result[Const.RESULT_IDX_TITLE]);
             shortcutHelper.applyNewBaseUrl(result[Const.RESULT_IDX_NEW_BASEURL]);
 
-            shortcutHelper.loadFavicon(result[Const.RESULT_IDX_FAVICON]);
-
 
         }
+
+        private void loadBitmap(String url)  {
+            InputStream inputStream;
+            try {
+                inputStream = new java.net.URL(url).openStream();
+                shortcutHelper.bitmap = BitmapFactory.decodeStream(inputStream);
+                if (shortcutHelper.bitmap.getWidth() < 96)
+                    shortcutHelper.bitmap = null;
+
+            } catch (IOException e) {
+                shortcutHelper.bitmap = null;
+                e.printStackTrace();
+            }
+        }
         private void addHardcodedIcons() {
+
+            //Amazon has no icon other than low-res favicon.ico
             if (base_url.contains("amazon"))
                 found_icons.put(300, "https://s3.amazonaws.com/prod-widgetSource/in-shop/pub/images/amzn_favicon_blk.png");
 
+            //Google has no icon other than low-res favicon.ico
+            if (base_url.contains("https://google."))
+                found_icons.put(240, "https://www.gstatic.com/images/branding/googleg/2x/googleg_standard_color_120dp.png");
+
+            //OEBB has a typo in its web manifest
             if (base_url.contains("oebb.at"))
-                found_icons.put(192, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
-            
+                found_icons.put(Integer.MAX_VALUE, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
+
+            //XDA has a wrong relative path in its web manifest
+            if (base_url.contains("xda-developers.com"))
+                found_icons.put(Integer.MAX_VALUE, "https://www.xda-developers.com/wp-content/themes/trendyblog-theme/images/android-chrome-512x512.png");
         }
     }
 }
