@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.databinding.DataBindingUtil;
 
 import com.cylonid.nativealpha.databinding.GlobalSettingsBinding;
+import com.cylonid.nativealpha.model.DataManager;
+import com.cylonid.nativealpha.model.GlobalSettings;
+import com.cylonid.nativealpha.util.Utility;
 
 public class SettingsActivity extends AppCompatActivity {
 

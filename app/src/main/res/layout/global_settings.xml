@@ -2,7 +2,7 @@
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <variable name="settings" type="com.cylonid.nativealpha.GlobalSettings"/>
+        <variable name="settings" type="com.cylonid.nativealpha.model.GlobalSettings"/>
     </data>
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout

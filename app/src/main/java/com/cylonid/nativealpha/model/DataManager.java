@@ -1,7 +1,9 @@
-package com.cylonid.nativealpha;
+package com.cylonid.nativealpha.model;
 
 import android.content.SharedPreferences;
 
+import com.cylonid.nativealpha.util.App;
+import com.cylonid.nativealpha.util.Utility;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;

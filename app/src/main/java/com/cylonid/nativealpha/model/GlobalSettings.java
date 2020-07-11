@@ -1,4 +1,4 @@
-package com.cylonid.nativealpha;
+package com.cylonid.nativealpha.model;
 
 public class GlobalSettings {
 

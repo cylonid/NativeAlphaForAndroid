@@ -1,4 +1,4 @@
-package com.cylonid.nativealpha;
+package com.cylonid.nativealpha.util;
 
 import android.annotation.SuppressLint;
 import android.app.Application;

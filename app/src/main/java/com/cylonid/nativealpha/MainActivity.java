@@ -20,6 +20,9 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.cylonid.nativealpha.databinding.WebappSettingsBinding;
+import com.cylonid.nativealpha.model.DataManager;
+import com.cylonid.nativealpha.model.WebApp;
+import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import static android.widget.LinearLayout.HORIZONTAL;

@@ -1,5 +1,7 @@
 package com.cylonid.nativealpha;
 
+import com.cylonid.nativealpha.util.Utility;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -1,9 +1,11 @@
-package com.cylonid.nativealpha;
+package com.cylonid.nativealpha.model;
 
 
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+
+import com.cylonid.nativealpha.R;
 
 public class WebApp {
 

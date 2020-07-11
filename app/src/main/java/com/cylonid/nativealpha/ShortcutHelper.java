@@ -22,6 +22,10 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
+import com.cylonid.nativealpha.model.DataManager;
+import com.cylonid.nativealpha.model.WebApp;
+import com.cylonid.nativealpha.util.Const;
+import com.cylonid.nativealpha.util.Utility;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import org.json.JSONArray;
 import org.json.JSONException;

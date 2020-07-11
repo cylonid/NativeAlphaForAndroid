@@ -1,5 +1,8 @@
 package com.cylonid.nativealpha;
 
+import com.cylonid.nativealpha.model.WebApp;
+import com.cylonid.nativealpha.util.Const;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;

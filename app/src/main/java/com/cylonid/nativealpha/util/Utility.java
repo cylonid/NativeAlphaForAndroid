@@ -1,4 +1,4 @@
-package com.cylonid.nativealpha;
+package com.cylonid.nativealpha.util;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+
+import com.cylonid.nativealpha.model.DataManager;
+import com.cylonid.nativealpha.R;
+import com.cylonid.nativealpha.model.WebApp;
+import com.cylonid.nativealpha.WebViewActivity;
 
 public final class Utility {
 
