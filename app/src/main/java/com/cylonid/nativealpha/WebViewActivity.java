@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -142,6 +144,8 @@ public class WebViewActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        WebApp webapp = DataManager.getInstance().getWebApp(webappID);
+//        Log.d("URL", "1: " + wv.getUrl() + " 2: " + webapp.getBaseUrl());
         if (exit_on_next_back_pressed)
             moveTaskToBack(true);
 
@@ -149,7 +153,7 @@ public class WebViewActivity extends AppCompatActivity {
             wv.goBack();
         } else {
             exit_on_next_back_pressed = true;
-            wv.loadUrl(DataManager.getInstance().getWebApp(webappID).getBaseUrl());
+            wv.loadUrl(webapp.getBaseUrl());
         }
 
     }
@@ -163,8 +167,11 @@ public class WebViewActivity extends AppCompatActivity {
         if (webapp.isClearCache() || DataManager.getInstance().getSettings().isClearCache())
             wv.clearCache(true);
 
-        if (DataManager.getInstance().getSettings().isClearCookies())
+        if (DataManager.getInstance().getSettings().isClearCookies()) {
+            CookieManager.getInstance().removeAllCookies(null);
             CookieManager.getInstance().flush();
+        }
+
     }
 
     public WebView getWebView() {
