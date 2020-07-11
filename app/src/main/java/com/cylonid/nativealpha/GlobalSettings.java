@@ -8,6 +8,14 @@ public class GlobalSettings {
     private boolean three_finger_multitouch;
     private int theme_id;
 
+    public GlobalSettings(GlobalSettings other) {
+        this.clear_cache = other.clear_cache;
+        this.clear_cookies = other.clear_cookies;
+        this.two_finger_multitouch = other.two_finger_multitouch;
+        this.three_finger_multitouch = other.three_finger_multitouch;
+        this.theme_id = other.theme_id;
+    }
+
     public GlobalSettings(boolean clear_cache, boolean clear_cookies, boolean two_finger_multitouch, boolean three_finger_multitouch, int theme_id) {
         this.clear_cache = clear_cache;
         this.clear_cookies = clear_cookies;

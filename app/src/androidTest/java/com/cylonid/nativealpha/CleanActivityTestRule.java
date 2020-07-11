@@ -19,6 +19,7 @@ public class CleanActivityTestRule<T extends Activity> extends ActivityTestRule<
         super.beforeActivityLaunched();
         File root = InstrumentationRegistry.getInstrumentation().getTargetContext().getFilesDir().getParentFile();
         String[] sharedPreferencesFileNames = new File(root, "shared_prefs").list();
+        assert sharedPreferencesFileNames != null;
         for (String fileName : sharedPreferencesFileNames) {
             InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(fileName.replace(".xml", ""), Context.MODE_PRIVATE).edit().clear().commit();
         }
