@@ -14,7 +14,7 @@
 ## FAQ
 *Q: Why is it not possible to find an icon for a certain website?*
 
-A: This problem can occur due to multiple reasons. In most cases, the website does not offer a high-resolution icon. If you are a website maintainer and your website icon cannot be found, look at []RealFaviconGenerator](https://realfavicongenerator.net) for further information. If you think it should work, feel free to post the URL and I will look into it.
+A: This problem can occur due to multiple reasons. In most cases, the website does not offer a high-resolution icon. If you are a website maintainer and your website icon cannot be found, look at [RealFaviconGenerator](https://realfavicongenerator.net) for further information. If you think it should work, feel free to post the URL and I will look into it.
 
 *Q: Why would I need this app if any mobile browser can do the same?*
 
@@ -22,7 +22,7 @@ A: Mobile browser can only produce shortcuts which give a native, borderless ful
 
 *Q: Is this a web browser?*
 
-A: No. As stated, this app relies on the system built-in Android WebView in order to display the website. For privacy reasons, you can opt to use alternative webviews such as [Bromite](https://www.bromite.org/system_web_view)on rooted phones.
+A: No. As stated, this app relies on the system built-in Android WebView in order to display the website. For privacy reasons, you can opt to use alternative webviews such as [Bromite](https://www.bromite.org/system_web_view) on rooted phones.
 
 *Q: Why does this app require Android Oreo?*
 
