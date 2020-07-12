@@ -14,7 +14,7 @@
 ## FAQ
 *Q: Why is it not possible to find an icon for a certain website?*
 
-A: This problem can occur due to multiple reasons. In most cases, the website does not offer a high-resolution icon. If you are a website maintainer and your website icon cannot be found, look at realfavicongenerator.net for further information. If you think it should work, feel free to post the URL and I will look into it.
+A: This problem can occur due to multiple reasons. In most cases, the website does not offer a high-resolution icon. If you are a website maintainer and your website icon cannot be found, look at []RealFaviconGenerator](https://realfavicongenerator.net) for further information. If you think it should work, feel free to post the URL and I will look into it.
 
 *Q: Why would I need this app if any mobile browser can do the same?*
 
@@ -22,15 +22,15 @@ A: Mobile browser can only produce shortcuts which give a native, borderless ful
 
 *Q: Is this a web browser?*
 
-A: No. As stated, this app relies on the system built-in Android WebView in order to display the website. For privacy reasons, you can opt to use alternative webviews such as Bromite on rooted phones.
+A: No. As stated, this app relies on the system built-in Android WebView in order to display the website. For privacy reasons, you can opt to use alternative webviews such as [Bromite](https://www.bromite.org/system_web_view)on rooted phones.
 
 *Q: Why does this app require Android Oreo?*
 
-A: Android introduced a new shortcut API with Oreo. I will try to support legacy shortcuts later, then Nougat and Marshmallow should also work.
+A: Android introduced a new shortcut API with Oreo. However, it is planned to add legacy shortcut support. Older versions should also work then.
 
 *Q: In constrast to your promise, this app has a huge memory footprint!*
 
-A: This is because Native Alpha makes use of caching in the same way your browser app does, i.e., it saves web content locally on your device. Then it can be loaded faster if you visit the same page again. I will look into a way for better cache management. In the meantime, you can either delete cache regularly yourself or set the "Clear cache after usage" setting in the global settings if memory footprint is a concern for you. However, then websites will take a longer time to load because everything has to be loaded from internet.
+A: This is because Native Alpha makes use of caching in the same way your browser app does, i.e., it saves web content locally on your device. Then it can be loaded faster if you visit the same page again. I will look into a way for better cache management. In the meantime, you can either delete cache regularly yourself or set the "Clear cache after usage" setting in the global settings if memory footprint is a concern for you. However, then websites will take a longer time to load because everything has to be loaded from net.
 
 ## Used libraries/resources
 * [CircularProgressBar](https://github.com/lopspower/CircularProgressBar)
