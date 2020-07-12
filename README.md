@@ -33,16 +33,16 @@ A: Android introduced a new shortcut API with Oreo. I will try to support legacy
 A: This is because Native Alpha makes use of caching in the same way your browser app does, i.e., it saves web content locally on your device. Then it can be loaded faster if you visit the same page again. I will look into a way for better cache management. In the meantime, you can either delete cache regularly yourself or set the "Clear cache after usage" setting in the global settings if memory footprint is a concern for you. However, then websites will take a longer time to load because everything has to be loaded from internet.
 
 ## Used libraries/resources
-* https://github.com/lopspower/CircularProgressBar
-* https://jsoup.org/
-* https://github.com/mikepenz/AboutLibraries
-mikhaellopez:circularprogressbar
-org.jsoup:jsoup:1.13.1
-org.adblockplus:adblock-android-webview:3.0
-MovableFloatingActionButton https://stackoverflow.com/questions/46370836/android-movable-draggable-floating-action-button-fab
+* [CircularProgressBar](https://github.com/lopspower/CircularProgressBar)
+* [JSoup](https://jsoup.org/)
+* [AboutPage](https://github.com/medyo/android-about-page)
+* [AdBlock+WebView](https://github.com/adblockplus/libadblockplus-android)
+* [MovableFloatingActionButton](https://stackoverflow.com/questions/46370836/android-movable-draggable-floating-action-button-fab)
+* [Android About Page](https://github.com/medyo/android-about-page)
+
+A list of used open-source libraries can also be found inside the app ("About" section).
 
 ## License
-
 Native Alpha is Free Software: You can use, study share and improve it at your
 will. Specifically you can redistribute and/or modify it under the terms of the
 [GNU General Public License](https://www.gnu.org/licenses/gpl.html) as

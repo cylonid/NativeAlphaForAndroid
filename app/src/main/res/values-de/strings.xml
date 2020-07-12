@@ -37,4 +37,9 @@
     <string name="request_website_in_desktop_version">Desktop-Version der Website anfordern</string>
     <string name="shortcut_icon">Symbol</string>
     <string name="shortcut_title">Beschriftung</string>
+    <string name="eula_title">Endbenutzer-Lizenzvereinbarung</string>
+    <string name="open_source_libs">Verwendete Open-Source-Bibliotheken anzeigen</string>
+    <string name="app_info">Über die App</string>
+    <string name="gnu_license">Diese Software unterliegt der GNU General Public License - Version 3.\nhttps://www.gnu.org/licenses/gpl-3.0.txt</string>
+    <string name="license">Lizenz</string>
 </resources>

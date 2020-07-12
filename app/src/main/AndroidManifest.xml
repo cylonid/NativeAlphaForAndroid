@@ -46,6 +46,24 @@
             android:roundIcon="@mipmap/native_alpha"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <activity
+            android:name="com.cylonid.nativealpha.AboutActivity"
+            android:label="@string/app_name_unicode"
+            android:parentActivityName=".MainActivity"
+            android:icon="@mipmap/native_alpha"
+            android:roundIcon="@mipmap/native_alpha"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
     </application>
 
 </manifest>
