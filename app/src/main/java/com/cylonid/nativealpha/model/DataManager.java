@@ -136,20 +136,40 @@ public class DataManager {
     }
 
     public WebApp getSuccessor(int i) {
-        if (i != (websites.size() - 1)) {
-            return websites.get(i + 1);
+        int INVALID = websites.size();
+        int neighbor = i;
+        do {
+            neighbor = neighbor + 1;
+            if (neighbor == INVALID)
+                neighbor = 0;
         }
-        else
-            return websites.get(0);
+        while (!websites.get(neighbor).isActiveEntry());
+        return websites.get(neighbor);
 
     }
     public WebApp getPredecessor(int i) {
-        if (i != 0) {
-            return websites.get(i - 1);
+        int INVALID = -1;
+        int neighbor = i;
+        do {
+            neighbor = neighbor - 1;
+            if (neighbor == INVALID)
+                neighbor = websites.size() - 1;
         }
-        else
-            return websites.get(websites.size() - 1);
+        while (!websites.get(neighbor).isActiveEntry());
+        return websites.get(neighbor);
 
+//        if (i != (websites.size() - 1)) {
+//            return websites.get(i + 1);
+//        }
+//        else
+//            return websites.get(0);
+
+//
+//        if (i != 0) {
+//            return websites.get(i - 1);
+//        }
+//        else
+//            return websites.get(websites.size() - 1);
     }
 }
 
