@@ -46,5 +46,6 @@
     <string name="gnu_license">This software is released under GNU General Public License - Version 3.\nhttps://www.gnu.org/licenses/gpl-3.0.txt</string>
     <string name="app_info">About</string>
     <string name="license">License</string>
+    <string name="os_libraries_title">Open source libraries</string>
 
 </resources>

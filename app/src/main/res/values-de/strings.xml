@@ -42,4 +42,5 @@
     <string name="app_info">Über die App</string>
     <string name="gnu_license">Diese Software unterliegt der GNU General Public License - Version 3.\nhttps://www.gnu.org/licenses/gpl-3.0.txt</string>
     <string name="license">Lizenz</string>
+    <string name="os_libraries_title">Open-Source-Bibliotheken</string>
 </resources>

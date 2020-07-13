@@ -68,7 +68,12 @@ public class AboutActivity extends AppCompatActivity {
         os.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               startActivity(new Intent(AboutActivity.this, OssLicensesMenuActivity.class));
+                OssLicensesMenuActivity.setActivityTitle("Open source libraries");
+                Intent intent = new Intent(AboutActivity.this, OssLicensesMenuActivity.class);
+                String title = getString(R.string.os_libraries_title);
+                intent.putExtra("title", title);
+                startActivity(intent);
+
             }
         });
         return os;

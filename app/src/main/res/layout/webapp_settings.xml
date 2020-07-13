@@ -65,6 +65,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
+        android:visibility="gone"
         android:checked="@={webapp.clearCache}"
         android:text="@string/clear_cache_after_usage" />
 
