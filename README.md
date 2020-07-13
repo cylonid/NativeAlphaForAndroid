@@ -23,7 +23,7 @@ A: Mobile browsers usually only are able to create shortcuts which give a native
 
 *Q: Is this a web browser?*
 
-A: No. As stated, this app relies on the system built-in Android WebView in order to display the website. For privacy reasons, you can opt to use alternative webviews such as [Bromite](https://www.bromite.org/system_web_view) on rooted phones.
+A: No. As stated, this app relies on the system built-in Android WebView in order to display the website. For privacy reasons, you can opt to use alternative webviews such as [Bromite](https://www.bromite.org/system_web_view) on rooted phones. Always make sure to use to most recent version of any WebView implementation you use!
 
 *Q: Why does this app require Android Oreo?*
 
