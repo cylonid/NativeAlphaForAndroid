@@ -44,9 +44,12 @@ A: This is because Native Alpha makes use of caching in the same way your browse
 A list of used open-source libraries can also be found inside the app ("About" section).
 
 ## Screenshots
+<div style="text-align: center; margin: auto;">
 <img src="graphics/sc3.png" alt="Native Alpha Logo" width="350"/>
 <img src="graphics/sc2.png" alt="Native Alpha Logo" width="350"/>
 <img src="graphics/sc1.png" alt="Native Alpha Logo" width="350"/>
+</div>
+
 
 ## License
 Native Alpha is Free Software: You can use, study share and improve it at your
