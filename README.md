@@ -8,6 +8,7 @@
   * Navigation with multi-touch gestures while browsing.
   * Opt-in adblock using an AdBlock Plus custom webview.
   * Less memory footprint and no privacy-invading app permissions in comparison to native apps
+  * Dark mode for Android 10+
 
 
 
@@ -18,7 +19,7 @@ A: This problem can occur due to multiple reasons. In most cases, the website do
 
 *Q: Why would I need this app if any mobile browser can do the same?*
 
-A: Mobile browser can only produce shortcuts which give a native, borderless fullscreen experience if the website has a Progressive Web App (PWA) manifest. Unfortunately, most websites do not offer this feature yet.
+A: Mobile browsers usually only are able to create shortcuts which give a native, borderless fullscreen experience if the website has a Progressive Web App (PWA) manifest. Unfortunately, most websites do not offer this feature yet.
 
 *Q: Is this a web browser?*
 
@@ -28,7 +29,7 @@ A: No. As stated, this app relies on the system built-in Android WebView in orde
 
 A: Android introduced a new shortcut API with Oreo. However, it is planned to add legacy shortcut support. Older versions should also work then.
 
-*Q: In constrast to your promise, this app has a huge memory footprint!*
+*Q: In constrast to your promise, this app has a large memory footprint!*
 
 A: This is because Native Alpha makes use of caching in the same way your browser app does, i.e., it saves web content locally on your device. Then it can be loaded faster if you visit the same page again. I will look into a way for better cache management. In the meantime, you can either delete cache regularly yourself or set the "Clear cache after usage" setting in the global settings if memory footprint is a concern for you. However, then websites will take a longer time to load because everything has to be loaded from net.
 
@@ -41,6 +42,11 @@ A: This is because Native Alpha makes use of caching in the same way your browse
 * [Android About Page](https://github.com/medyo/android-about-page)
 
 A list of used open-source libraries can also be found inside the app ("About" section).
+
+## Screenshots
+<img src="graphics/sc3.png" alt="Native Alpha Logo" width="350"/>
+<img src="graphics/sc2.png" alt="Native Alpha Logo" width="350"/>
+<img src="graphics/sc1.png" alt="Native Alpha Logo" width="350"/>
 
 ## License
 Native Alpha is Free Software: You can use, study share and improve it at your
