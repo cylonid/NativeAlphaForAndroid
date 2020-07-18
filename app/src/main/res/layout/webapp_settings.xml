@@ -55,6 +55,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:checked="@={webapp.allowThirdPartyCookies}"
+        android:enabled="@{webapp.allowCookies}"
         android:text="@string/accept_third_party_cookies" />
 
     <Switch
@@ -78,6 +79,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:checked="@={webapp.useAdblock}"
+        android:enabled="@{webapp.allowJs}"
         android:text="@string/enable_adblock_experimental" />
 
 
@@ -90,6 +92,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
         android:checked="@={webapp.requestDesktop}"
+        android:enabled="@{webapp.allowJs}"
         android:text="@string/request_website_in_desktop_version" />
 
     <Switch

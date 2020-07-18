@@ -40,6 +40,11 @@ A: This is because Native Alpha makes use of caching in the same way your browse
 * [AdBlock+WebView](https://github.com/adblockplus/libadblockplus-android)
 * [MovableFloatingActionButton](https://stackoverflow.com/questions/46370836/android-movable-draggable-floating-action-button-fab)
 * [Android About Page](https://github.com/medyo/android-about-page)
+* [Android Databinding](https://developer.android.com/topic/libraries/data-binding)
+
+For testing purposes:
+* [Robolectric](https://github.com/robolectric/robolectric)
+* [Espresso](https://developer.android.com/training/testing/espresso/)
 
 A list of used open-source libraries can also be found inside the app ("About" section).
 
