@@ -43,5 +43,7 @@
     <string name="gnu_license">Diese Software unterliegt der GNU General Public License - Version 3.\nhttps://www.gnu.org/licenses/gpl-3.0.txt</string>
     <string name="license">Lizenz</string>
     <string name="os_libraries_title">Open-Source-Bibliotheken</string>
-    <string name="web_app_settings">Web App Settings</string>
+    <string name="web_app_settings">Web-App-Einstellungen</string>
+    <string name="do_not_load_images">Keine Bilder laden</string>
+    <string name="request_data_saving_page">Datensparsame Seite anfordern</string>
 </resources>

@@ -29,7 +29,6 @@ public class SettingsActivity extends AppCompatActivity {
         final GlobalSettings modified_settings = new GlobalSettings(settings);
         binding.setSettings(modified_settings);
 
-        Utility.personalizeToolbar(this);
         handleThemeSelection(modified_settings.getThemeId(), modified_settings);
         Button btnSave = findViewById(R.id.btnSave);
         Button btnCancel = findViewById(R.id.btnCancel);

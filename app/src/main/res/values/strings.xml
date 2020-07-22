@@ -7,7 +7,7 @@
     <string name="global_settings">Global settings</string>
     <string name="these_settings_are_applied_globally_and_override_app_specific_settings">These settings are applied globally and override webapp-specific settings.</string>
     <string name="clear_cookies_after_usage">Clear cookies after usage</string>
-    <string name="use_three_finger_swipes_to_switch_between_web_apps_experimental">Use three-finger swipes to switch between web apps (experimental)</string>
+    <string name="use_three_finger_swipes_to_switch_between_web_apps_experimental">Use three-finger swipes to switch between Web Apps (experimental)</string>
     <string name="select_ui_mode">Select UI mode</string>
     <string name="save">Save</string>
     <string name="loading_icon_and_website_title">Loading icon and website title…</string>
@@ -32,9 +32,9 @@
     <string name="icon_fetch_failed_line3">• The website has no suitable icon stored.</string>
     <string name="delete_question">Are you sure you want to remove this website?</string>
     <string name="enter_valid_url">Please enter a valid web address.</string>
-    <string name="edit_webapp_settings">Edit webapp settings</string>
-    <string name="add_webapp">Add web app</string>
-    <string name="welcome_msg">Welcome!\nAdd your first web app:</string>
+    <string name="edit_webapp_settings">Edit Web App settings</string>
+    <string name="add_webapp">Add Web App</string>
+    <string name="welcome_msg">Welcome!\nAdd your first Web App:</string>
     <string name="restore_last_opened_page">Restore last opened page</string>
     <string name="request_website_in_desktop_version">Request website in desktop version</string>
     <string name="shortcut_icon">Shortcut Icon</string>
@@ -48,5 +48,7 @@
     <string name="license">License</string>
     <string name="os_libraries_title">Open source libraries</string>
     <string name="web_app_settings">Web App Settings</string>
+    <string name="do_not_load_images">Do not load images</string>
+    <string name="request_data_saving_page">Request data-saving page</string>
 
 </resources>

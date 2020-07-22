@@ -2,4 +2,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="line_height">60dp</dimen>
     <dimen name="margin_dialog">15dp</dimen>
+    <dimen name="margin_activity">10dp</dimen>
+    <dimen name="settings_bottom">12dp</dimen>
+
 </resources>

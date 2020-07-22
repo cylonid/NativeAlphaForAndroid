@@ -1,248 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="webapp"
-            type="com.cylonid.nativealpha.model.WebApp" />
+        <variable name="webapp"
+                  type="com.cylonid.nativealpha.model.WebApp" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".WebAppSettingsActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true">
-
-                <LinearLayout
+            android:layout_margin="@dimen/margin_activity"
+            android:orientation="vertical">
+                <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="25dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/web_app_settings"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@android:color/black" />
-
-                    <Space
-                        android:layout_width="1dp"
-                        android:layout_height="10dp" />
-
-                    <Switch
-                        android:id="@+id/switchOpenUrlExternal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginBottom="16dp"
-                        android:checked="@={webapp.openUrlExternal}"
-                        android:text="@string/open_external_links_in_browser_app" />
-
-                    <Switch
-                        android:id="@+id/switchJavascript"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginBottom="16dp"
-                        android:checked="@={webapp.allowJs}"
-                        android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchJsChanged(switch, checked)}"
-                        android:text="@string/allow_javascript" />
-
-                    <Switch
-                        android:id="@+id/switchCookies"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginBottom="16dp"
-                        android:checked="@={webapp.allowCookies}"
-                        android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchCookiesChanged(switch, checked)}"
-                        android:text="@string/accept_cookies" />
-
-                    <Switch
-                        android:id="@+id/switch3PCookies"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginBottom="16dp"
-                        android:checked="@={webapp.allowThirdPartyCookies}"
-                        android:enabled="@{webapp.allowCookies}"
-                        android:text="@string/accept_third_party_cookies" />
-
-                    <Switch
-                        android:id="@+id/switchCache"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginBottom="16dp"
-                        android:checked="@={webapp.clearCache}"
-                        android:text="@string/clear_cache_after_usage"
-                        android:visibility="gone" />
-
-                    <Switch
-                        android:id="@+id/switchAdblock"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginBottom="16dp"
-                        android:checked="@={webapp.useAdblock}"
-                        android:enabled="@{webapp.allowJs}"
-                        android:text="@string/enable_adblock_experimental" />
-
-
-                    <Switch
-                        android:id="@+id/switchDesktopSite"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginBottom="16dp"
-                        android:checked="@={webapp.requestDesktop}"
-                        android:enabled="@{webapp.allowJs}"
-                        android:text="@string/request_website_in_desktop_version" />
-
-                    <Switch
-                        android:id="@+id/switchSaveDataRequest"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginBottom="16dp"
-                        android:checked="@={webapp.sendSavedataRequest}"
-                        android:enabled="true"
-                        android:text="Request data-saving page" />
-
-                    <Switch
-                        android:id="@+id/switchBlockImages"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginBottom="16dp"
-                        android:checked="@={webapp.blockImages}"
-                        android:enabled="true"
-                        android:text="Do not load images" />
-
-                    <Switch
-                        android:id="@+id/switchRestorePage"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginBottom="16dp"
-                        android:checked="@={webapp.restorePage}"
-                        android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchRestorePageChanged(switch, checked)}"
-                        android:text="@string/restore_last_opened_page" />
-
+                    android:fillViewport="false">
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:visibility="visible"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginTop="4dp"
-                            android:text="@string/timeout_for_page_restore_in_minutes" />
-
-                        <EditText
-                            android:id="@+id/textTimeout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="16dp"
-                            android:fontFamily="sans-serif"
-                            android:inputType="number"
-                            android:text="@={`` + webapp.timeoutLastUsedUrl}" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:visibility="gone">
+                        android:visibility="visible">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/web_app_settings"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColor="@android:color/black" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginTop="4dp"
-                            android:text="Custom user agent" />
+                            android:gravity="center_horizontal"
+                            android:text="@{webapp.title}"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@android:color/black" />
 
-                        <EditText
+                        <Space
+                            android:layout_width="1dp"
+                            android:layout_height="10dp" />
+
+                        <Switch
+                            android:id="@+id/switchOpenUrlExternal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:checked="@={webapp.openUrlExternal}"
+                            android:text="@string/open_external_links_in_browser_app" />
+
+                        <Switch
+                            android:id="@+id/switchJavascript"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:checked="@={webapp.allowJs}"
+                            android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchJsChanged(switch, checked)}"
+                            android:text="@string/allow_javascript" />
+
+                        <Switch
+                            android:id="@+id/switchCookies"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:checked="@={webapp.allowCookies}"
+                            android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchCookiesChanged(switch, checked)}"
+                            android:text="@string/accept_cookies" />
+
+                        <Switch
+                            android:id="@+id/switch3PCookies"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:checked="@={webapp.allowThirdPartyCookies}"
+                            android:enabled="@{webapp.allowCookies}"
+                            android:text="@string/accept_third_party_cookies" />
+
+                        <Switch
+                            android:id="@+id/switchCache"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:checked="@={webapp.clearCache}"
+                            android:text="@string/clear_cache_after_usage"
+                            android:visibility="gone" />
+
+                        <Switch
+                            android:id="@+id/switchAdblock"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:checked="@={webapp.useAdblock}"
+                            android:enabled="@{webapp.allowJs}"
+                            android:text="@string/enable_adblock_experimental" />
+
+
+                        <Switch
+                            android:id="@+id/switchDesktopSite"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:checked="@={webapp.requestDesktop}"
+                            android:enabled="@{webapp.allowJs}"
+                            android:text="@string/request_website_in_desktop_version" />
+
+                        <Switch
+                            android:id="@+id/switchSaveDataRequest"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:checked="@={webapp.sendSavedataRequest}"
+                            android:enabled="true"
+                            android:text="@string/request_data_saving_page" />
+
+                        <Switch
+                            android:id="@+id/switchBlockImages"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:checked="@={webapp.blockImages}"
+                            android:enabled="true"
+                            android:text="@string/do_not_load_images" />
+
+                        <Switch
+                            android:id="@+id/switchRestorePage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:checked="@={webapp.restorePage}"
+                            android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchRestorePageChanged(switch, checked)}"
+                            android:text="@string/restore_last_opened_page" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginTop="4dp"
+                                android:text="@string/timeout_for_page_restore_in_minutes" />
+
+                            <EditText
+                                android:id="@+id/textTimeout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+              
+                                android:fontFamily="sans-serif"
+                                android:inputType="number"
+                                android:text="@={`` + webapp.timeoutLastUsedUrl}" />
+
+                        </LinearLayout>
+                        <Button
+                            android:id="@+id/btnRecreateShortcut"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/re_create_shortcut" />
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="4dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginRight="4dp"
-                            android:layout_marginBottom="16dp"
-                            android:fontFamily="sans-serif"
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
-                            android:inputType="text" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginTop="4dp"
+                                android:text="Custom user agent" />
 
-                    </LinearLayout>
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+              
+                                android:fontFamily="sans-serif"
 
-                    <Button
-                        android:id="@+id/btnRecreateShortcut"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/re_create_shortcut" />
+                                android:inputType="text" />
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_margin="25dp"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/btnCancel"
-                            style="?android:attr/buttonBarButtonStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@android:string/cancel" />
-
-                        <Button
-                            android:id="@+id/btnSave"
-                            style="?android:attr/buttonBarButtonStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/save" />
+                        </LinearLayout>
+                        <Space
+                            android:layout_width="1dp"
+                            android:layout_height="15dp" />
 
                     </LinearLayout>
-                </LinearLayout>
-            </ScrollView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                </ScrollView>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/cancel" />
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save" />
+
+            </LinearLayout>
+        </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

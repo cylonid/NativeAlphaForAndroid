@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -8,53 +9,39 @@
             type="com.cylonid.nativealpha.model.GlobalSettings" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".SettingsActivity">
+        tools:context=".WebAppSettingsActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
+            android:layout_margin="@dimen/margin_activity"
+            android:orientation="vertical">
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true">
-
+                android:layout_height="wrap_content"
+                android:fillViewport="false">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="25dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/global_settings"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@android:color/black" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/these_settings_are_applied_globally_and_override_app_specific_settings"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         android:textColor="@android:color/black" />
 
                     <Space
@@ -114,32 +101,32 @@
                             android:spinnerMode="dropdown"
                             tools:listitem="@android:layout/simple_spinner_item" />
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_margin="25dp"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/btnCancel"
-                            style="?android:attr/buttonBarButtonStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@android:string/cancel" />
-
-                        <Button
-                            android:id="@+id/btnSave"
-                            style="?android:attr/buttonBarButtonStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/save" />
 
                     </LinearLayout>
+                    <Space
+                        android:layout_width="1dp"
+                        android:layout_height="15dp" />
                 </LinearLayout>
             </ScrollView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/cancel" />
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save" />
+
+            </LinearLayout>
+        </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
