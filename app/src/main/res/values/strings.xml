@@ -47,5 +47,6 @@
     <string name="app_info">About</string>
     <string name="license">License</string>
     <string name="os_libraries_title">Open source libraries</string>
+    <string name="web_app_settings">Web App Settings</string>
 
 </resources>

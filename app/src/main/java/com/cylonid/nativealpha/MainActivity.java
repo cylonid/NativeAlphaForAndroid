@@ -15,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
@@ -22,6 +24,7 @@ import androidx.databinding.DataBindingUtil;
 import com.cylonid.nativealpha.databinding.WebappSettingsBinding;
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
+import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,9 +35,10 @@ import static android.widget.LinearLayout.HORIZONTAL;
 public class MainActivity extends AppCompatActivity {
     private LinearLayout mainScreen;
     private ShortcutHelper.FaviconFetcher faviconFetcher = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme_NoActionBar);
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainScreen = findViewById(R.id.mainScreen);
@@ -142,7 +146,12 @@ public class MainActivity extends AppCompatActivity {
         ImageButton btn_settings = generateImageButton("btnSettings", R.drawable.ic_settings_black_24dp, webapp.getID(), ll_row);
         btn_settings.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { buildSettingsDialog(webapp.getID());
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, WebAppSettingsActivity.class);
+                intent.putExtra(Const.INTENT_WEBAPPID, webapp.getID());
+                intent.setAction(Intent.ACTION_VIEW);
+                startActivity(intent);
+
             }
         });
 

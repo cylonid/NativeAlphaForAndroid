@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="webapp"
             type="com.cylonid.nativealpha.model.WebApp" />
@@ -13,20 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".WebAppSettingsActivity">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -47,13 +32,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Web App Settings"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                        android:text="@string/web_app_settings"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@android:color/black" />
 
                     <Space
                         android:layout_width="1dp"
-                        android:layout_height="30dp" />
+                        android:layout_height="10dp" />
 
                     <Switch
                         android:id="@+id/switchOpenUrlExternal"
