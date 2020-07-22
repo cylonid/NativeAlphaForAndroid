@@ -24,6 +24,8 @@ public class WebApp {
     private boolean request_desktop;
     private boolean clear_cache;
     private boolean use_adblock;
+    private boolean send_savedata_request;
+    private boolean block_images;
 
     public WebApp(String base_url) {
         title = base_url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -40,8 +42,45 @@ public class WebApp {
         request_desktop = false;
         clear_cache = false;
         use_adblock = false;
+        send_savedata_request = false;
+        block_images = false;
     }
 
+    public WebApp(WebApp other) {
+        this.title = other.title;
+        this.base_url = other.base_url;
+        this.last_used_url = other.last_used_url;
+        this.timestamp_last_used_url = other.timestamp_last_used_url;
+        this.timeout_last_used_url = other.timeout_last_used_url;
+        this.ID = other.ID;
+        this.open_url_external = other.open_url_external;
+        this.allow_cookies = other.allow_cookies;
+        this.allow_third_p_cookies = other.allow_third_p_cookies;
+        this.restore_page = other.restore_page;
+        this.allow_js = other.allow_js;
+        this.active_entry = other.active_entry;
+        this.request_desktop = other.request_desktop;
+        this.clear_cache = other.clear_cache;
+        this.use_adblock = other.use_adblock;
+        this.send_savedata_request = other.send_savedata_request;
+        this.block_images = other.block_images;
+    }
+
+    public boolean isSendSavedataRequest() {
+        return send_savedata_request;
+    }
+
+    public void setSendSavedataRequest(boolean send_savedata_request) {
+        this.send_savedata_request = send_savedata_request;
+    }
+
+    public boolean isBlockImages() {
+        return block_images;
+    }
+
+    public void setBlockImages(boolean block_images) {
+        this.block_images = block_images;
+    }
 
     public void markInactive() {
         active_entry = false;
@@ -71,35 +110,29 @@ public class WebApp {
         return base_url;
     }
 
-    public WebApp(WebApp other) {
-        this.title = other.title;
-        this.base_url = other.base_url;
-        this.last_used_url = other.last_used_url;
-        this.timestamp_last_used_url = other.timestamp_last_used_url;
-        this.timeout_last_used_url = other.timeout_last_used_url;
-        this.ID = other.ID;
-        this.open_url_external = other.open_url_external;
-        this.allow_cookies = other.allow_cookies;
-        this.allow_third_p_cookies = other.allow_third_p_cookies;
-        this.restore_page = other.restore_page;
-        this.allow_js = other.allow_js;
-        this.active_entry = other.active_entry;
-        this.request_desktop = other.request_desktop;
-        this.clear_cache = other.clear_cache;
-        this.use_adblock = other.use_adblock;
-    }
-
-
     public int getTimeoutLastUsedUrl() {
         return timeout_last_used_url;
+    }
+
+    public void setTimeoutLastUsedUrl(int timeout_last_used_url) {
+        this.timeout_last_used_url = timeout_last_used_url;
     }
 
     public String getTitle() {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getBaseUrl() {
         return base_url;
+    }
+
+    public void setBaseUrl(String base_url) {
+        this.base_url = base_url;
+        DataManager.getInstance().saveWebAppData();
     }
 
     public int getID() {
@@ -110,40 +143,70 @@ public class WebApp {
         return open_url_external;
     }
 
+    public void setOpenUrlExternal(boolean open_url_external) {
+        this.open_url_external = open_url_external;
+    }
+
     public boolean isActiveEntry() { return active_entry; }
+
+    public void setActiveEntry(boolean active_entry) {
+        this.active_entry = active_entry;
+    }
 
     public boolean isAllowCookies() {
         return allow_cookies;
     }
+
+    public void setAllowCookies(boolean allow_cookies) {
+        this.allow_cookies = allow_cookies;
+    }
+
     public boolean isAllowThirdPartyCookies() {
         return allow_third_p_cookies;
+    }
+
+    public void setAllowThirdPartyCookies(boolean allow_third_p_cookies) {
+        this.allow_third_p_cookies = allow_third_p_cookies;
     }
 
     public boolean isRestorePage() {
         return restore_page;
     }
 
+    public void setRestorePage(boolean restore_page) {
+        this.restore_page = restore_page;
+    }
+
     public boolean isAllowJs() {
         return allow_js;
+    }
+
+    public void setAllowJs(boolean allow_js) {
+        this.allow_js = allow_js;
     }
 
     public boolean isRequestDesktop() {
         return request_desktop;
     }
+
+    public void setRequestDesktop(boolean request_desktop) {
+        this.request_desktop = request_desktop;
+    }
+
     public boolean isClearCache() {
         return clear_cache;
     }
+
+    public void setClearCache(boolean clear_cache) {
+        this.clear_cache = clear_cache;
+    }
+
     public boolean isUseAdblock() {
         return use_adblock;
     }
 
-    public void setBaseUrl(String base_url) {
-        this.base_url = base_url;
-        DataManager.getInstance().saveWebAppData();
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setUseAdblock(boolean use_adblock) {
+        this.use_adblock = use_adblock;
     }
 
     public void setLastUsedUrl(String last_used_url) {
@@ -152,46 +215,6 @@ public class WebApp {
 
     public void setTimestampLastUsedUrl(Long timestamp_last_used_url) {
         this.timestamp_last_used_url = timestamp_last_used_url;
-    }
-
-    public void setTimeoutLastUsedUrl(int timeout_last_used_url) {
-        this.timeout_last_used_url = timeout_last_used_url;
-    }
-
-    public void setOpenUrlExternal(boolean open_url_external) {
-        this.open_url_external = open_url_external;
-    }
-
-    public void setAllowCookies(boolean allow_cookies) {
-        this.allow_cookies = allow_cookies;
-    }
-
-    public void setAllowThirdPartyCookies(boolean allow_third_p_cookies) {
-        this.allow_third_p_cookies = allow_third_p_cookies;
-    }
-
-    public void setRestorePage(boolean restore_page) {
-        this.restore_page = restore_page;
-    }
-
-    public void setAllowJs(boolean allow_js) {
-        this.allow_js = allow_js;
-    }
-
-    public void setActiveEntry(boolean active_entry) {
-        this.active_entry = active_entry;
-    }
-
-    public void setRequestDesktop(boolean request_desktop) {
-        this.request_desktop = request_desktop;
-    }
-
-    public void setClearCache(boolean clear_cache) {
-        this.clear_cache = clear_cache;
-    }
-
-    public void setUseAdblock(boolean use_adblock) {
-        this.use_adblock = use_adblock;
     }
 
     public void onSwitchCookiesChanged(CompoundButton mSwitch, boolean isChecked) {

@@ -23,7 +23,9 @@ import com.cylonid.nativealpha.util.Utility;
 
 import org.adblockplus.libadblockplus.android.webview.AdblockWebView;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 public class WebViewActivity extends AppCompatActivity {
 
@@ -36,6 +38,7 @@ public class WebViewActivity extends AppCompatActivity {
     private static final int NONE = 0;
     private static final int SWIPE = 1;
     private static final int TRESHOLD = 100;
+    private Map<String, String> CUSTOM_HEADERS;
 
 
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
@@ -64,6 +67,7 @@ public class WebViewActivity extends AppCompatActivity {
         wv.setWebViewClient(new CustomBrowser());
         wv.getSettings().setDomStorageEnabled(true);
         wv.getSettings().setBlockNetworkLoads(false);
+//        wv.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             wv.getSettings().setForceDark(WebSettings.FORCE_DARK_OFF);
         }
@@ -72,6 +76,9 @@ public class WebViewActivity extends AppCompatActivity {
 
         CookieManager.getInstance().setAcceptCookie(webapp.isAllowCookies());
         CookieManager.getInstance().setAcceptThirdPartyCookies(wv, webapp.isAllowThirdPartyCookies());
+
+        if (webapp.isBlockImages())
+            wv.getSettings().setBlockNetworkImage(true);
 
         if (webapp.isRequestDesktop()) {
             wv.getSettings().setUserAgentString(Const.DESKTOP_USER_AGENT);
@@ -87,9 +94,8 @@ public class WebViewActivity extends AppCompatActivity {
 
         }
 
-        HashMap<String, String> extraHeaders = new HashMap<>();
-        extraHeaders.put("DNT", "1");
-        wv.loadUrl(url, extraHeaders);
+        CUSTOM_HEADERS = initCustomHeaders(webapp.isSendSavedataRequest());
+        wv.loadUrl(url, CUSTOM_HEADERS);
 
         wv.setOnTouchListener(new View.OnTouchListener() {
             private int mode = NONE;
@@ -180,6 +186,14 @@ public class WebViewActivity extends AppCompatActivity {
     public WebView getWebView() {
         return wv;
     }
+    private Map<String, String> initCustomHeaders(boolean save_data) {
+        Map<String, String> extraHeaders = new HashMap<>();
+        extraHeaders.put("DNT", "1");
+        if (save_data)
+            extraHeaders.put("Save-Data", "on");
+        return Collections.unmodifiableMap(extraHeaders);
+    }
+
 
 
     private class CustomBrowser extends WebViewClient {
@@ -205,7 +219,8 @@ public class WebViewActivity extends AppCompatActivity {
                     return true;
                 }
             }
-            return false;
+            view.loadUrl(url, CUSTOM_HEADERS);
+            return true;
         }
 
         @RequiresApi(Build.VERSION_CODES.N)

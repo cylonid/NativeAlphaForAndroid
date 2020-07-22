@@ -125,6 +125,30 @@
                         android:text="@string/request_website_in_desktop_version" />
 
                     <Switch
+                        android:id="@+id/switchSaveDataRequest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_marginBottom="16dp"
+                        android:checked="@={webapp.sendSavedataRequest}"
+                        android:enabled="true"
+                        android:text="Request data-saving page" />
+
+                    <Switch
+                        android:id="@+id/switchBlockImages"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_marginBottom="16dp"
+                        android:checked="@={webapp.blockImages}"
+                        android:enabled="true"
+                        android:text="Do not load images" />
+
+                    <Switch
                         android:id="@+id/switchRestorePage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
