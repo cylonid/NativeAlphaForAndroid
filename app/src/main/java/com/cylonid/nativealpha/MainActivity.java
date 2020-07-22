@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button btn_title = new Button(this);
         btn_title.setBackgroundColor(transparent_color);
-        btn_title.setText(webapp.getTitle());
+        btn_title.setText(webapp.getSingleLineTitle());
         LinearLayout.LayoutParams layout_title = new LinearLayout.LayoutParams(0, row_height, 4);
         btn_title.setLayoutParams(layout_title);
         ll_row.addView(btn_title);
@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onClick(View view) {
-                        String str_url = url.getText().toString();
+                        String str_url = url.getText().toString().trim();
 
                         if (!(str_url.startsWith("https://")) && !(str_url.startsWith("http://")))
                             str_url = "https://" + str_url;

@@ -95,6 +95,16 @@ public class WebApp {
         }
     }
 
+    public String getSingleLineTitle() {
+        if (title.length() > 24) {
+            String single_line = title.substring(0, 25);
+            single_line += " ...";
+            return single_line;
+        }
+
+        return title;
+    }
+
     public String getLoadableUrl() {
 
         if (last_used_url == null)
