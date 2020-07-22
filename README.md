@@ -1,5 +1,10 @@
-#  Native Alpha for Android
-<img src="graphics/logo.png" alt="Native Alpha Logo" width="200"/>
+
+# <img src="graphics/logo.png" width="50px" alt=""></img> Native Alpha
+
+[![GitHub release](https://img.shields.io/github/v/release/cylonid/NativeAlphaForAndroid?include_prereleases&color=blueviolet)](https://github.com/cylonid/NativeAlphaForAndroid/releases)
+[![Github all releases](https://img.shields.io/github/downloads/cylonid/NativeAlphaForAndroid/total?color=blue)](https://github.com/cylonid/NativeAlphaForAndroid/releases)
+[![GitHub license](https://img.shields.io/github/license/cylonid/NativeAlphaForAndroid?color=orange)](https://github.com/cylonid/NativeAlphaForAndroid/blob/master/LICENSE)
+![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
 
 ## Features
   * Show any website in a borderless full-screen window using Android System WebView.
