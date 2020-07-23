@@ -32,7 +32,7 @@
             android:parentActivityName=".MainActivity"
             android:icon="@mipmap/native_alpha"
             android:roundIcon="@mipmap/native_alpha"
-            android:theme="@style/AppTheme.Webapp"
+            android:theme="@style/AppTheme.NoActionBar.Webapp"
             android:launchMode="singleInstance"
             android:alwaysRetainTaskState="true">
             <intent-filter>
@@ -45,7 +45,7 @@
             android:parentActivityName=".MainActivity"
             android:icon="@mipmap/native_alpha"
             android:roundIcon="@mipmap/native_alpha"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name="com.cylonid.nativealpha.WebAppSettingsActivity"
@@ -62,7 +62,7 @@
             android:parentActivityName=".MainActivity"
             android:icon="@mipmap/native_alpha"
             android:roundIcon="@mipmap/native_alpha"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
 
