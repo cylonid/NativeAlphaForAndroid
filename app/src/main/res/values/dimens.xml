@@ -3,6 +3,6 @@
     <dimen name="line_height">60dp</dimen>
     <dimen name="margin_dialog">15dp</dimen>
     <dimen name="margin_activity">25dp</dimen>
-    <dimen name="settings_bottom">12dp</dimen>
-
+    <dimen name="settings_bottom">20dp</dimen>
+    <dimen name="settings_bottom_innersection">10dp</dimen>
 </resources>

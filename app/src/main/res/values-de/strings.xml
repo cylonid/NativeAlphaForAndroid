@@ -21,7 +21,7 @@
     <string name="accept_cookies">Cookies akzeptieren</string>
     <string name="accept_third_party_cookies">Third-Party-Cookies akzeptieren</string>
     <string name="enable_adblock_experimental">Adblock aktivieren (experimentell)</string>
-    <string name="timeout_for_page_restore_in_minutes">Timeout für Seitenwiederherstellung (in min)</string>
+    <string name="timeout_for_page_restore_in_minutes">Timeout in min</string>
     <string name="re_create_shortcut">Startseitenverknüpfung erstellen</string>
     <string name="create_shortcut_on_home_screen">Startseitenverknüpfung erstellen</string>
     <string name="use_two_finger_swipes_for_browser_forward_and_backward_navigation">Mit Zwei-Finger-Wischen im Browser vor und zurück wechseln</string>
@@ -62,4 +62,5 @@
     <string name="webapp_section_cookies">Cookies</string>
     <string name="webapp_section_datasaving">Daten sparen</string>
     <string name="webapp_section_misc">Sonstiges</string>
+    <string name="webapp_section_restorepage">Seitenwiederherstellung</string>
 </resources>

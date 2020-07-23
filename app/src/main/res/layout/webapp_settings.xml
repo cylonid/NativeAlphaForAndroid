@@ -70,7 +70,7 @@
                         android:id="@+id/switchJavascript"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
+                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
                         android:checked="@={webapp.allowJs}"
                         android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchJsChanged(switch, checked)}"
                         android:text="@string/allow_javascript" />
@@ -93,7 +93,7 @@
                         android:id="@+id/switchCookies"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
+                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
                         android:checked="@={webapp.allowCookies}"
                         android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchCookiesChanged(switch, checked)}"
                         android:text="@string/accept_cookies" />
@@ -117,7 +117,7 @@
                         android:id="@+id/switchSaveDataRequest"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
+                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
                         android:checked="@={webapp.sendSavedataRequest}"
                         android:enabled="true"
                         android:text="@string/request_data_saving_page" />
@@ -142,7 +142,7 @@
                         android:id="@+id/switchAdblock"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
+                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
                         android:checked="@={webapp.useAdblock}"
                         android:enabled="@{webapp.allowJs}"
                         android:text="@string/enable_adblock_experimental" />
@@ -151,7 +151,7 @@
                         android:id="@+id/switchDesktopSite"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
+                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
                         android:checked="@={webapp.requestDesktop}"
                         android:enabled="@{webapp.allowJs}"
                         android:text="@string/request_website_in_desktop_version" />
@@ -164,11 +164,16 @@
                         android:checked="@={webapp.openUrlExternal}"
                         android:text="@string/open_external_links_in_browser_app" />
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/webapp_section_restorepage"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                     <Switch
                         android:id="@+id/switchRestorePage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
+                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
                         android:checked="@={webapp.restorePage}"
                         android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchRestorePageChanged(switch, checked)}"
                         android:text="@string/restore_last_opened_page" />
@@ -182,15 +187,13 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginTop="4dp"
+                            android:textColor="?android:attr/textColorPrimary"
                             android:text="@string/timeout_for_page_restore_in_minutes" />
 
                         <EditText
                             android:id="@+id/textTimeout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
                             android:fontFamily="sans-serif"
                             android:inputType="number"
                             android:text="@={`` + webapp.timeoutLastUsedUrl}" />

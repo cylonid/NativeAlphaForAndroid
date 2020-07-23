@@ -17,7 +17,7 @@
     <string name="accept_third_party_cookies">Accept third-party cookies</string>
     <string name="clear_cache_after_usage">Clear cache after usage</string>
     <string name="enable_adblock_experimental">Enable adblock (experimental)</string>
-    <string name="timeout_for_page_restore_in_minutes">Timeout for page restore (in minutes)</string>
+    <string name="timeout_for_page_restore_in_minutes">Timeout in min</string>
     <string name="re_create_shortcut">Re-Create shortcut</string>
     <string name="create_shortcut_on_home_screen">Create shortcut on home screen</string>
     <string name="url" translatable="false">URL</string>
@@ -67,5 +67,6 @@
     <string name="webapp_section_datasaving">Data saving</string>
     <string name="webapp_section_misc">Miscellaneous</string>
     <string name="paypal" translatable="false">" ☕ Buy me a coffee on PayPal"</string>
+    <string name="webapp_section_restorepage">Restore page</string>
 
 </resources>
