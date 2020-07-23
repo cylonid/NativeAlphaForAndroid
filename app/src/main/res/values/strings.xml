@@ -50,5 +50,13 @@
     <string name="web_app_settings">Web App Settings</string>
     <string name="do_not_load_images">Do not load images</string>
     <string name="request_data_saving_page">Request data-saving page</string>
+    <string name="ssl_error_msg_line1">This page has a problem with its SSL certificate.</string>
+    <string name="ssl_error_unknown_authority">The certificate authority is not trusted.</string>
+    <string name="ssl_error_expired">The certificate has expired.</string>
+    <string name="ssl_error_id_mismatch">The certificate does not match the host name.</string>
+    <string name="ssl_error_notyetvalid">The certificate is not yet valid.</string>
+    <string name="ssl_error_msg_line2">It is not recommended to load the page.</string>
+    <string name="ssl_error_title">Warning: Potential security threat</string>
+    <string name="load_anyway">Load anyway</string>
 
 </resources>

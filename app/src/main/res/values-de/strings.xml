@@ -46,4 +46,12 @@
     <string name="web_app_settings">Web-App-Einstellungen</string>
     <string name="do_not_load_images">Keine Bilder laden</string>
     <string name="request_data_saving_page">Datensparsame Seite anfordern</string>
+    <string name="ssl_error_msg_line1">"Diese Seite hat ein Problem mit dem SSL-Zertifikat. "</string>
+    <string name="ssl_error_unknown_authority">Der Aussteller des Zertifikats ist unbekannt.</string>
+    <string name="ssl_error_expired">Das Zertifikat ist abgelaufen.</string>
+    <string name="ssl_error_id_mismatch">Der Hostname entspricht nicht dem Zertifikat.</string>
+    <string name="ssl_error_notyetvalid">Das Zertifikat ist noch nicht gültig.</string>
+    <string name="ssl_error_msg_line2">Es wird empfohlen, die Seite nicht zu laden.</string>
+    <string name="ssl_error_title">Warnung: Mögliches Sicherheitsrisiko</string>
+    <string name="load_anyway">Trotzdem laden</string>
 </resources>

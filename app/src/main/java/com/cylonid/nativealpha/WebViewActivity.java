@@ -1,20 +1,25 @@
 package com.cylonid.nativealpha;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.CookieManager;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
@@ -195,8 +200,52 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
 
-
     private class CustomBrowser extends WebViewClient {
+
+        @Override
+        public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewActivity.this);
+
+            String message = getString(R.string.ssl_error_msg_line1) + " ";
+            switch (error.getPrimaryError()) {
+                case SslError.SSL_UNTRUSTED:
+                    message += getString(R.string.ssl_error_unknown_authority ) + "\n";
+                    break;
+                case SslError.SSL_EXPIRED:
+                    message += getString(R.string.ssl_error_expired) + "\n";
+                    break;
+                case SslError.SSL_IDMISMATCH:
+                    message += getString(R.string.ssl_error_id_mismatch) + "\n";
+                    break;
+                case SslError.SSL_NOTYETVALID:
+                    message += getString(R.string.ssl_error_notyetvalid) + "\n";
+                    break;
+            }
+            message += getString(R.string.ssl_error_msg_line2) + "\n";
+
+            builder.setTitle(getString(R.string.ssl_error_title));
+            builder.setMessage(message);
+            builder.setIcon(android.R.drawable.ic_dialog_alert);
+            builder.setPositiveButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    handler.cancel();
+                }
+            });
+            builder.setNegativeButton(getString(R.string.load_anyway), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    handler.proceed();
+                }
+            });
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(WebViewActivity.this, android.R.color.holo_red_dark));
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(WebViewActivity.this, android.R.color.holo_green_dark));
+        }
+
         @Override
         public void onLoadResource(WebView view, String url) {
             super.onLoadResource(view, url);
