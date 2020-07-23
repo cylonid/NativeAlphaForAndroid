@@ -54,4 +54,7 @@
     <string name="ssl_error_msg_line2">Es wird empfohlen, die Seite nicht zu laden.</string>
     <string name="ssl_error_title">Warnung: Mögliches Sicherheitsrisiko</string>
     <string name="load_anyway">Trotzdem laden</string>
+    <string name="no_https_dialog_title">Keine HTTPS-Verschlüsselung</string>
+    <string name="no_https_dialog_accept">HTTP in dieser Web-App zulassen</string>
+    <string name="no_https_dialog_msg">Diese Seite verwendet HTTP (unverschlüsselt). Geben Sie keine sensiblen Daten ein.</string>
 </resources>

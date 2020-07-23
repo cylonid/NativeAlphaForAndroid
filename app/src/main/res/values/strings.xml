@@ -58,5 +58,8 @@
     <string name="ssl_error_msg_line2">It is not recommended to load the page.</string>
     <string name="ssl_error_title">Warning: Potential security threat</string>
     <string name="load_anyway">Load anyway</string>
+    <string name="no_https_dialog_title">No HTTPS encryption</string>
+    <string name="no_https_dialog_accept">Allow HTTP within this Web App</string>
+    <string name="no_https_dialog_msg">This page uses an unencrypted HTTP connection. Do not enter any sensible data.</string>
 
 </resources>

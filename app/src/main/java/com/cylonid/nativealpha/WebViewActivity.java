@@ -100,7 +100,7 @@ public class WebViewActivity extends AppCompatActivity {
         }
 
         CUSTOM_HEADERS = initCustomHeaders(webapp.isSendSavedataRequest());
-        wv.loadUrl(url, CUSTOM_HEADERS);
+        loadURL(wv, url);
 
         wv.setOnTouchListener(new View.OnTouchListener() {
             private int mode = NONE;
@@ -167,7 +167,7 @@ public class WebViewActivity extends AppCompatActivity {
             wv.goBack();
         } else {
             exit_on_next_back_pressed = true;
-            wv.loadUrl(webapp.getBaseUrl());
+            loadURL(wv, webapp.getBaseUrl());
         }
 
     }
@@ -197,6 +197,35 @@ public class WebViewActivity extends AppCompatActivity {
         if (save_data)
             extraHeaders.put("Save-Data", "on");
         return Collections.unmodifiableMap(extraHeaders);
+    }
+
+    private void loadURL(final WebView view, final String url) {
+        final WebApp webApp = DataManager.getInstance().getWebApp(webappID);
+        if (url.contains("http") && !webApp.isAllowHttp()) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewActivity.this);
+
+            builder.setTitle(getString(R.string.no_https_dialog_title));
+            builder.setMessage(getString(R.string.no_https_dialog_msg));
+            builder.setIcon(android.R.drawable.ic_dialog_alert);
+            builder.setPositiveButton(getString(R.string.no_https_dialog_accept), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    webApp.allowHTTP();
+                    view.loadUrl(url, CUSTOM_HEADERS);
+                }
+            });
+            builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    onBackPressed();
+                }
+            });
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+        else
+          view.loadUrl(url, CUSTOM_HEADERS);
+
     }
 
 
@@ -269,7 +298,7 @@ public class WebViewActivity extends AppCompatActivity {
                     return true;
                 }
             }
-            view.loadUrl(url, CUSTOM_HEADERS);
+            loadURL(view, url);
             return true;
         }
 

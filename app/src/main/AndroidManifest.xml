@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/native_alpha"
         android:supportsRtl="true"
         android:screenOrientation="portrait"
-        android:usesCleartextTraffic="false"
+        android:usesCleartextTraffic="true"
         android:fullBackupContent="true">
 
         <activity

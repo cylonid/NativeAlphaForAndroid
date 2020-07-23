@@ -26,6 +26,7 @@ public class WebApp {
     private boolean use_adblock;
     private boolean send_savedata_request;
     private boolean block_images;
+    private boolean allow_http;
 
     public WebApp(String base_url) {
         title = base_url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -44,6 +45,7 @@ public class WebApp {
         use_adblock = false;
         send_savedata_request = false;
         block_images = false;
+        allow_http = false;
     }
 
     public WebApp(WebApp other) {
@@ -64,6 +66,15 @@ public class WebApp {
         this.use_adblock = other.use_adblock;
         this.send_savedata_request = other.send_savedata_request;
         this.block_images = other.block_images;
+        this.allow_http = other.allow_http;
+    }
+
+    public boolean isAllowHttp() {
+        return allow_http;
+    }
+
+    public void setAllowHttp(boolean allow_http) {
+        this.allow_http = allow_http;
     }
 
     public boolean isSendSavedataRequest() {
@@ -84,6 +95,11 @@ public class WebApp {
 
     public void markInactive() {
         active_entry = false;
+        DataManager.getInstance().saveWebAppData();
+    }
+
+    public void allowHTTP() {
+        allow_http = true;
         DataManager.getInstance().saveWebAppData();
     }
 
