@@ -25,6 +25,7 @@ public class AboutActivity extends AppCompatActivity {
                 .setImage(R.drawable.native_alpha_foreground)
                 .addItem(new Element().setTitle("Version " + BuildConfig.VERSION_NAME))
                 .addGitHub("cylonid", "Find us on GitHub")
+                .addItem(showPayPal())
 
 
                 .addGroup(getString(R.string.eula_title))
@@ -59,6 +60,21 @@ public class AboutActivity extends AppCompatActivity {
         });
         return license;
 
+    }
+    Element showPayPal() {
+        Element license = new Element();
+
+        license.setTitle(getString(R.string.paypal));
+        license.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://paypal.me/cylonid";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+        return license;
 
     }
 

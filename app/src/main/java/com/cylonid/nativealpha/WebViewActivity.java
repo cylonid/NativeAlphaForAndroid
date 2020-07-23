@@ -201,7 +201,7 @@ public class WebViewActivity extends AppCompatActivity {
 
     private void loadURL(final WebView view, final String url) {
         final WebApp webApp = DataManager.getInstance().getWebApp(webappID);
-        if (url.contains("http") && !webApp.isAllowHttp()) {
+        if (url.contains("http://") && !webApp.isAllowHttp()) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewActivity.this);
 
             builder.setTitle(getString(R.string.no_https_dialog_title));

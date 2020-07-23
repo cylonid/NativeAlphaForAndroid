@@ -45,8 +45,8 @@
     <string name="os_libraries_title">Open-Source-Bibliotheken</string>
     <string name="web_app_settings">Web-App-Einstellungen</string>
     <string name="do_not_load_images">Keine Bilder laden</string>
-    <string name="request_data_saving_page">Datensparsame Seite anfordern</string>
-    <string name="ssl_error_msg_line1">"Diese Seite hat ein Problem mit dem SSL-Zertifikat. "</string>
+    <string name="request_data_saving_page">\"Save Data\"-Anfrage senden</string>
+    <string name="ssl_error_msg_line1">Diese Seite hat ein Problem mit dem SSL-Zertifikat.</string>
     <string name="ssl_error_unknown_authority">Der Aussteller des Zertifikats ist unbekannt.</string>
     <string name="ssl_error_expired">Das Zertifikat ist abgelaufen.</string>
     <string name="ssl_error_id_mismatch">Der Hostname entspricht nicht dem Zertifikat.</string>
@@ -57,4 +57,9 @@
     <string name="no_https_dialog_title">Keine HTTPS-Verschlüsselung</string>
     <string name="no_https_dialog_accept">HTTP in dieser Web-App zulassen</string>
     <string name="no_https_dialog_msg">Diese Seite verwendet HTTP (unverschlüsselt). Geben Sie keine sensiblen Daten ein.</string>
+    <string name="allow_http">HTTP zulassen</string>
+    <string name="webapp_section_security">Sicherheit</string>
+    <string name="webapp_section_cookies">Cookies</string>
+    <string name="webapp_section_datasaving">Daten sparen</string>
+    <string name="webapp_section_misc">Sonstiges</string>
 </resources>

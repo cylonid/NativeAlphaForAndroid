@@ -60,7 +60,7 @@ public class UITests {
     public void startWebView() {
         initSingleWebsite("https://twitter.com");
         onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
-        onView(withId(R.id.adblockwebview)).check(matches(isDisplayed()));
+        onView(withId(R.id.webview)).check(matches(isDisplayed()));
     }
 
     @Test(expected = NoMatchingViewException.class)
@@ -77,7 +77,7 @@ public class UITests {
         initSingleWebsite("https://whatismybrowser.com/detect/are-cookies-enabled");
         onView(allOf(withTagValue(is((Object) "btnSettings0")))).perform(click());
         onView(withId(R.id.switchCookies)).perform(click());
-        TestUtils.alertDialogAccept();
+        onView(withId(R.id.btnSave)).perform(click());
         onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
         onWebView().withNoTimeout().withElement(findElement(Locator.ID, "detected_value")).check(webMatches(getText(), containsString("No")));
 

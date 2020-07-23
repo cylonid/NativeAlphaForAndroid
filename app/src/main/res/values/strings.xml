@@ -49,7 +49,7 @@
     <string name="os_libraries_title">Open source libraries</string>
     <string name="web_app_settings">Web App Settings</string>
     <string name="do_not_load_images">Do not load images</string>
-    <string name="request_data_saving_page">Request data-saving page</string>
+    <string name="request_data_saving_page">Send \"Save Data\" request</string>
     <string name="ssl_error_msg_line1">This page has a problem with its SSL certificate.</string>
     <string name="ssl_error_unknown_authority">The certificate authority is not trusted.</string>
     <string name="ssl_error_expired">The certificate has expired.</string>
@@ -61,5 +61,11 @@
     <string name="no_https_dialog_title">No HTTPS encryption</string>
     <string name="no_https_dialog_accept">Allow HTTP within this Web App</string>
     <string name="no_https_dialog_msg">This page uses an unencrypted HTTP connection. Do not enter any sensible data.</string>
+    <string name="allow_http">Allow HTTP</string>
+    <string name="webapp_section_security">Security</string>
+    <string name="webapp_section_cookies">Cookies</string>
+    <string name="webapp_section_datasaving">Data saving</string>
+    <string name="webapp_section_misc">Miscellaneous</string>
+    <string name="paypal" translatable="false">" ☕ Buy me a coffee on PayPal"</string>
 
 </resources>
