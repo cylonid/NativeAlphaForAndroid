@@ -26,10 +26,12 @@ import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import static android.widget.LinearLayout.HORIZONTAL;
+import com.mikepenz.aboutlibraries.Libs;
+import com.mikepenz.aboutlibraries.LibsBuilder;
+
 
 
 public class MainActivity extends AppCompatActivity {

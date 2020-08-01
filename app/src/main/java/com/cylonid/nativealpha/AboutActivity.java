@@ -8,7 +8,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+import com.mikepenz.aboutlibraries.LibsBuilder;
 
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
@@ -84,11 +84,14 @@ public class AboutActivity extends AppCompatActivity {
         os.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OssLicensesMenuActivity.setActivityTitle("Open source libraries");
-                Intent intent = new Intent(AboutActivity.this, OssLicensesMenuActivity.class);
-                String title = getString(R.string.os_libraries_title);
-                intent.putExtra("title", title);
-                startActivity(intent);
+//                OssLicensesMenuActivity.setActivityTitle("Open source libraries");
+//                Intent intent = new Intent(AboutActivity.this, OssLicensesMenuActivity.class);
+//                String title = getString(R.string.os_libraries_title);
+//                intent.putExtra("title", title);
+//                startActivity(intent);
+                new LibsBuilder()
+                        .withFields(R.string.class.getFields())
+                        .start(AboutActivity.this);
 
             }
         });
