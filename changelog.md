@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## Version 0.82.1
+* Removed Google Play Services dependency for displaying used open-source libraries to comply with F-Droid policy
+
 ## Version 0.82
 * HTTP connection handling: Added an option "Allow HTTP" on Web App level. Upon establishing a HTTP connection for the first time, the user gets a prompt and can decide to allow HTTP within the currently opened Web App (i.e., the user will not get prompted again).
 * SSL error handling: Alert dialog is shown, the user is advised to leave.

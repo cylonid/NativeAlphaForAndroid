@@ -9,7 +9,7 @@
 ## Features
   * Show any website in a borderless full-screen window using Android System WebView.
   * Offers to create home screen shortcuts and retrieves icons in suitable resolution.
-  * Various settings (JavaScript, Cookies, Third-Party-Cookies, Caching) can be set for every web app individually
+  * Various settings (JavaScript, Cookies, Third-Party-Cookies, AdBlock) can be set for every web app individually
   * Navigation with multi-touch gestures while browsing.
   * Opt-in adblock using an AdBlock Plus custom webview.
   * Less memory footprint and no privacy-invading app permissions in comparison to native apps
@@ -46,6 +46,7 @@ A: This is because Native Alpha makes use of caching in the same way your browse
 * [MovableFloatingActionButton](https://stackoverflow.com/questions/46370836/android-movable-draggable-floating-action-button-fab)
 * [Android About Page](https://github.com/medyo/android-about-page)
 * [Android Databinding](https://developer.android.com/topic/libraries/data-binding)
+* [AboutLibraries](https://github.com/mikepenz/AboutLibraries)
 
 For testing purposes:
 * [Robolectric](https://github.com/robolectric/robolectric)
@@ -55,9 +56,10 @@ A list of used open-source libraries can also be found inside the app ("About" s
 
 ## Screenshots
 <div style="text-align: center; margin: auto;">
-<img src="graphics/sc3.png" alt="Native Alpha Logo" width="350"/>
 <img src="graphics/sc2.png" alt="Native Alpha Logo" width="350"/>
-<img src="graphics/sc1.png" alt="Native Alpha Logo" width="350"/>
+<img src="graphics/sc3.png" alt="Native Alpha Logo" width="350"/>
+<img src="graphics/sc4.png" alt="Native Alpha Logo" width="350"/>
+<img src="graphics/sc5.png" alt="Native Alpha Logo" width="350"/>
 </div>
 
 
