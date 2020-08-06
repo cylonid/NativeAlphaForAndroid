@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat;
 
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
+import com.cylonid.nativealpha.util.App;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 
@@ -171,6 +172,7 @@ public class WebViewActivity extends AppCompatActivity {
         }
 
     }
+
 
     @Override
     protected void onPause() {

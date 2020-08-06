@@ -20,6 +20,7 @@
         <activity
             android:name="com.cylonid.nativealpha.MainActivity"
             android:label="@string/app_name_unicode"
+
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,11 +34,9 @@
             android:icon="@mipmap/native_alpha"
             android:roundIcon="@mipmap/native_alpha"
             android:theme="@style/AppTheme.NoActionBar.Webapp"
-            android:launchMode="singleInstance"
-            android:alwaysRetainTaskState="true">
-            <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
+            android:launchMode="standard"
+            android:documentLaunchMode="intoExisting"
+         >
         </activity>
         <activity
             android:name="com.cylonid.nativealpha.SettingsActivity"
@@ -64,15 +63,6 @@
             android:roundIcon="@mipmap/native_alpha"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
-
-        <activity
-            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-            android:theme="@style/Theme.AppCompat.DayNight" />
-
-        <activity
-            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
-            android:theme="@style/Theme.AppCompat.DayNight" />
 
         <activity android:name="com.mikepenz.aboutlibraries.ui.LibsActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">

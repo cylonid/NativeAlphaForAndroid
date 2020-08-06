@@ -1,7 +1,9 @@
 package com.cylonid.nativealpha.util;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.util.TypedValue;
 
@@ -22,7 +24,7 @@ public final class Utility {
     public static Intent createWebViewIntent(WebApp d, Context c) {
         Intent intent = new Intent(c, WebViewActivity.class);
         intent.putExtra(Const.INTENT_WEBAPPID, d.getID());
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setData(Uri.parse(d.getBaseUrl()));
         intent.setAction(Intent.ACTION_VIEW);
 
         return intent;
