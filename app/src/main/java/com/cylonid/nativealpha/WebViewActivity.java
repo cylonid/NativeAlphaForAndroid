@@ -38,7 +38,6 @@ public class WebViewActivity extends AppCompatActivity {
 
     private WebView wv;
     int webappID = -1;
-    boolean exit_on_next_back_pressed = false;
 
     //Constants for touchlistener
     private static final int NONE = 0;
@@ -160,16 +159,13 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
-//        Log.d("URL", "1: " + wv.getUrl() + " 2: " + webapp.getBaseUrl());
-        if (exit_on_next_back_pressed)
-            moveTaskToBack(true);
 
-        if (wv.canGoBack()) {
+        if (wv.getUrl().equals(webapp.getBaseUrl() + "/")) {
+            moveTaskToBack(true);
+        } else if (wv.canGoBack())
             wv.goBack();
-        } else {
-            exit_on_next_back_pressed = true;
+        else
             loadURL(wv, webapp.getBaseUrl());
-        }
 
     }
 
