@@ -19,6 +19,9 @@ import com.cylonid.nativealpha.R;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.WebViewActivity;
 
+import java.io.File;
+import java.io.FileWriter;
+
 public final class Utility {
 
     public static Intent createWebViewIntent(WebApp d, Context c) {
@@ -75,6 +78,19 @@ public final class Utility {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     break;
             }
+        }
+    }
+
+    public static void writeFileOnInternalStorage(Context mcoContext, String sFileName, String sBody){
+
+        try {
+            File gpxfile = new File(mcoContext.getExternalFilesDir(null), sFileName);
+            FileWriter writer = new FileWriter(gpxfile);
+            writer.append(sBody);
+            writer.flush();
+            writer.close();
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 

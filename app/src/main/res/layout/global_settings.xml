@@ -47,7 +47,17 @@
                     <Space
                         android:layout_width="1dp"
                         android:layout_height="30dp" />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Export settings &amp; Web Apps"
+                        android:id="@+id/btnExportSettings" />
 
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Import settings &amp; Web Apps"
+                        android:id="@+id/btnImportSettings" />
                     <Switch
                         android:id="@+id/switchGlobalCache"
                         android:layout_width="match_parent"

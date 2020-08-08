@@ -1,7 +1,11 @@
 package com.cylonid.nativealpha;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -20,6 +24,19 @@ import com.cylonid.nativealpha.util.Utility;
 
 public class SettingsActivity extends AppCompatActivity {
 
+//    Intent intent = new Intent()
+//            .setType("*/*")
+//            .setAction(Intent.ACTION_GET_CONTENT);
+//
+//    startActivityForResult(Intent.createChooser(intent, "Select a file"), 123);
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == 123 && resultCode == RESULT_OK) {
+//            Uri selectedfile = data.getData(); //The uri with the location of the file
+//        }
+//    }
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,6 +49,28 @@ public class SettingsActivity extends AppCompatActivity {
         handleThemeSelection(modified_settings.getThemeId(), modified_settings);
         Button btnSave = findViewById(R.id.btnSave);
         Button btnCancel = findViewById(R.id.btnCancel);
+        Button btnExport = findViewById(R.id.btnExportSettings);
+        Button btnImport = findViewById(R.id.btnImportSettings);
+        btnExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DataManager.getInstance().saveSharedPreferencesToFile(SettingsActivity.this);
+
+            }
+
+        });
+
+        btnImport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DataManager.getInstance().loadSharedPreferencesFromFile(SettingsActivity.this);
+                Intent i = new Intent(SettingsActivity.this, MainActivity.class);
+                finish();
+                startActivity(i);
+
+            }
+
+        });
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
     }
 
 
