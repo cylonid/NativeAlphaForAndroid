@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.util.TypedValue;
 
 import androidx.annotation.AttrRes;
@@ -19,8 +20,14 @@ import com.cylonid.nativealpha.R;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.WebViewActivity;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public final class Utility {
 
@@ -92,6 +99,36 @@ public final class Utility {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public static String readFromFile(File file) {
+
+        String ret = "";
+
+        try {
+            InputStream inputStream = new FileInputStream(file);
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException  e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        return ret;
     }
 
     @ColorInt
