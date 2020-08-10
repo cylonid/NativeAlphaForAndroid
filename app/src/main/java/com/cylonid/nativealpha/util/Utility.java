@@ -20,6 +20,8 @@ import com.cylonid.nativealpha.R;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.WebViewActivity;
 
+import org.json.JSONArray;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,6 +30,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public final class Utility {
 
@@ -129,6 +135,12 @@ public final class Utility {
         }
 
         return ret;
+    }
+
+    public static String convertWithStream(Map<String, ?> map) {
+        Map<String, ?> sortedMap = new TreeMap<>(map);
+        return sortedMap.toString();
+
     }
 
     @ColorInt

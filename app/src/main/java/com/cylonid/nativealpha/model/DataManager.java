@@ -3,6 +3,8 @@ package com.cylonid.nativealpha.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
+import android.util.Base64InputStream;
+import android.util.Base64OutputStream;
 
 import com.cylonid.nativealpha.util.App;
 import com.cylonid.nativealpha.util.Utility;
@@ -21,6 +23,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -172,21 +175,21 @@ public class DataManager {
     }
 
 
+
     public boolean saveSharedPreferencesToFile(Context context) {
         boolean res = false;
         File dst = new File(context.getExternalFilesDir(null), "settings_backup");
         ObjectOutputStream output = null;
         try {
-            ByteArrayOutputStream bytestream = new ByteArrayOutputStream();
-            output = new ObjectOutputStream(bytestream);
-            appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE);
-            output.writeObject(appdata.getAll());
-            String checksum = Hasher.Companion.hash(new String(bytestream.toByteArray()), HashType.SHA_256);
             FileOutputStream fileOutputStream = new FileOutputStream(dst);
-            fileOutputStream.write(Base64.encode(bytestream.toByteArray(), Base64.DEFAULT));
-            fileOutputStream.write(0x5C);
-            fileOutputStream.write(Base64.encode(checksum.getBytes(), Base64.DEFAULT));
-            bytestream.close();
+            Base64OutputStream b64os = new Base64OutputStream(fileOutputStream, Base64.DEFAULT);
+            output = new ObjectOutputStream(b64os);
+            appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE);
+            Map<String, ?> map = appdata.getAll();
+            output.writeObject(Hasher.Companion.hash(Utility.convertWithStream(map), HashType.SHA_256));
+            output.writeObject(map);
+
+            output.close();
             res = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -207,24 +210,17 @@ public class DataManager {
     public boolean loadSharedPreferencesFromFile(Context context) {
         boolean res = false;
         File src = new File(context.getExternalFilesDir(null), "settings_backup");
-        String str_file = Utility.readFromFile(src);
-        int sep_index = str_file.indexOf(0x5C);
-        String webapps = new String(Base64.decode(str_file.substring(0, sep_index), Base64.DEFAULT));
-        String checksum = new String(Base64.decode(str_file.substring(sep_index + 1), Base64.DEFAULT));
-        String new_checksum = Hasher.Companion.hash(webapps, HashType.SHA_256);
 
         ObjectInputStream input = null;
         try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(webapps); //write the string as object
-            oos.close();
-            input = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
-//            input = new ObjectInputStream(new FileInputStream(src));
+            Base64InputStream b64is = new Base64InputStream(new FileInputStream(src), Base64.DEFAULT);
+            input = new ObjectInputStream(b64is);
             SharedPreferences.Editor prefEdit = context.getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE).edit();
             prefEdit.clear();
+            String checksum = (String) input.readObject();
+            Map<String, ?> entries = ((Map<String, ?>) input.readObject());
+            String new_checksum = Hasher.Companion.hash(Utility.convertWithStream(entries), HashType.SHA_256);
 
-            Map<String, ?> entries = (Map<String, ?>) input.readObject();
             for (Map.Entry<String, ?> entry : entries.entrySet()) {
                 Object v = entry.getValue();
                 String key = entry.getKey();
