@@ -137,12 +137,6 @@ public final class Utility {
         return ret;
     }
 
-    public static String convertWithStream(Map<String, ?> map) {
-        Map<String, ?> sortedMap = new TreeMap<>(map);
-        return sortedMap.toString();
-
-    }
-
     @ColorInt
     public static int getThemeColor
             (

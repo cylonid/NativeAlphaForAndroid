@@ -6,11 +6,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,22 +22,42 @@ import androidx.databinding.DataBindingUtil;
 import com.cylonid.nativealpha.databinding.GlobalSettingsBinding;
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.GlobalSettings;
+import com.cylonid.nativealpha.util.InvalidChecksumException;
 import com.cylonid.nativealpha.util.Utility;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import static android.widget.Toast.LENGTH_LONG;
 
 public class SettingsActivity extends AppCompatActivity {
 
-//    Intent intent = new Intent()
-//            .setType("*/*")
-//            .setAction(Intent.ACTION_GET_CONTENT);
-//
-//    startActivityForResult(Intent.createChooser(intent, "Select a file"), 123);
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == 123 && resultCode == RESULT_OK) {
-//            Uri selectedfile = data.getData(); //The uri with the location of the file
-//        }
-//    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 55 && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            DataManager.getInstance().saveSharedPreferencesToFile(uri);
+        }
+        if(requestCode == 56 && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            try {
+                DataManager.getInstance().loadSharedPreferencesFromFile(uri);
+            } catch (InvalidChecksumException e) {
+                Toast toast = Toast.makeText(SettingsActivity.this, "Aha.", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP, 0, 100);
+                toast.show();
+                e.printStackTrace();
+            }
+            Intent i = new Intent(SettingsActivity.this, MainActivity.class);
+            finish();
+            startActivity(i);
+        }
+    }
 
 
     @Override
@@ -54,7 +76,12 @@ public class SettingsActivity extends AppCompatActivity {
         btnExport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DataManager.getInstance().saveSharedPreferencesToFile(SettingsActivity.this);
+
+                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                String currentDateandTime = sdf.format(new Date());
+                intent.putExtra(Intent.EXTRA_TITLE, "NativeAlpha_" + currentDateandTime);
+                startActivityForResult(intent, 55);
 
             }
 
@@ -63,11 +90,8 @@ public class SettingsActivity extends AppCompatActivity {
         btnImport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DataManager.getInstance().loadSharedPreferencesFromFile(SettingsActivity.this);
-                Intent i = new Intent(SettingsActivity.this, MainActivity.class);
-                finish();
-                startActivity(i);
-
+                    Intent intent = new Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select a file"), 56);
             }
 
         });

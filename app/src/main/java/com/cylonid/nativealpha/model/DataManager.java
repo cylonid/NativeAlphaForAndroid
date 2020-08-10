@@ -2,12 +2,15 @@ package com.cylonid.nativealpha.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.util.Base64;
 import android.util.Base64InputStream;
 import android.util.Base64OutputStream;
 
 import com.cylonid.nativealpha.util.App;
+import com.cylonid.nativealpha.util.InvalidChecksumException;
 import com.cylonid.nativealpha.util.Utility;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.himanshurawat.hasher.HashType;
@@ -176,18 +179,18 @@ public class DataManager {
 
 
 
-    public boolean saveSharedPreferencesToFile(Context context) {
+    public boolean saveSharedPreferencesToFile(Uri uri) {
         boolean res = false;
-        File dst = new File(context.getExternalFilesDir(null), "settings_backup");
+
         ObjectOutputStream output = null;
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(dst);
+            FileOutputStream fileOutputStream = (FileOutputStream) App.getAppContext().getContentResolver().openOutputStream(uri);
             Base64OutputStream b64os = new Base64OutputStream(fileOutputStream, Base64.DEFAULT);
             output = new ObjectOutputStream(b64os);
             appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE);
-            Map<String, ?> map = appdata.getAll();
-            output.writeObject(Hasher.Companion.hash(Utility.convertWithStream(map), HashType.SHA_256));
-            output.writeObject(map);
+            TreeMap<String, ?> shared_pref_map = new TreeMap<>(appdata.getAll());
+            output.writeObject(Hasher.Companion.hash(shared_pref_map.toString(), HashType.SHA_256));
+            output.writeObject(shared_pref_map);
 
             output.close();
             res = true;
@@ -207,21 +210,22 @@ public class DataManager {
     }
 
     @SuppressWarnings({ "unchecked" })
-    public boolean loadSharedPreferencesFromFile(Context context) {
+    public boolean loadSharedPreferencesFromFile(Uri uri) throws InvalidChecksumException {
         boolean res = false;
-        File src = new File(context.getExternalFilesDir(null), "settings_backup");
 
         ObjectInputStream input = null;
         try {
-            Base64InputStream b64is = new Base64InputStream(new FileInputStream(src), Base64.DEFAULT);
+            FileInputStream fis = (FileInputStream) App.getAppContext().getContentResolver().openInputStream(uri);
+            Base64InputStream b64is = new Base64InputStream(fis, Base64.DEFAULT);
             input = new ObjectInputStream(b64is);
-            SharedPreferences.Editor prefEdit = context.getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE).edit();
+            SharedPreferences.Editor prefEdit = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE).edit();
             prefEdit.clear();
             String checksum = (String) input.readObject();
-            Map<String, ?> entries = ((Map<String, ?>) input.readObject());
-            String new_checksum = Hasher.Companion.hash(Utility.convertWithStream(entries), HashType.SHA_256);
-
-            for (Map.Entry<String, ?> entry : entries.entrySet()) {
+            TreeMap<String, ?> shared_pref_map = ((TreeMap<String, ?>) input.readObject());
+            String new_checksum = Hasher.Companion.hash(shared_pref_map.toString(), HashType.SHA_256);
+            if (!checksum.equals(new_checksum))
+                throw new InvalidChecksumException("Checksums between backup and restored settings do not match.");
+            for (Map.Entry<String, ?> entry : shared_pref_map.entrySet()) {
                 Object v = entry.getValue();
                 String key = entry.getKey();
 
@@ -240,6 +244,7 @@ public class DataManager {
             res = true;
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
+
         } finally {
             try {
                 if (input != null) {
