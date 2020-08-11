@@ -1,6 +1,8 @@
 package com.cylonid.nativealpha;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,50 +14,58 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.cylonid.nativealpha.databinding.GlobalSettingsBinding;
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.GlobalSettings;
+import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.InvalidChecksumException;
 import com.cylonid.nativealpha.util.Utility;
-
-import java.io.File;
-import java.io.FileNotFoundException;
+import com.google.android.material.snackbar.Snackbar;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static android.widget.Toast.LENGTH_LONG;
+
+
 
 public class SettingsActivity extends AppCompatActivity {
 
-
+    private static final int CODE_OPEN_FILE = 512;
+    private static final int CODE_WRITE_FILE = 4096;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 55 && resultCode == RESULT_OK) {
+        if(requestCode == CODE_WRITE_FILE && resultCode == RESULT_OK) {
             Uri uri = data.getData();
-            DataManager.getInstance().saveSharedPreferencesToFile(uri);
-        }
-        if(requestCode == 56 && resultCode == RESULT_OK) {
-            Uri uri = data.getData();
-            try {
-                DataManager.getInstance().loadSharedPreferencesFromFile(uri);
-            } catch (InvalidChecksumException e) {
-                Toast toast = Toast.makeText(SettingsActivity.this, "Aha.", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 0, 100);
-                toast.show();
-                e.printStackTrace();
+            if (!DataManager.getInstance().saveSharedPreferencesToFile(uri)) {
+                Utility.showInfoSnackbar(this, getString(R.string.export_failed), Snackbar.LENGTH_LONG);
+            } else {
+                Utility.showInfoSnackbar(this, getString(R.string.export_success), Snackbar.LENGTH_SHORT);
             }
-            Intent i = new Intent(SettingsActivity.this, MainActivity.class);
-            finish();
-            startActivity(i);
+        }
+        if (requestCode == CODE_OPEN_FILE && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+
+            if (!DataManager.getInstance().loadSharedPreferencesFromFile(uri)) {
+                Utility.showInfoSnackbar(this, getString(R.string.import_failed), Snackbar.LENGTH_LONG);
+            } else {
+                Intent i = new Intent(SettingsActivity.this, MainActivity.class);
+                i.putExtra(Const.INTENT_BACKUP_RESTORED, true);
+                finish();
+                startActivity(i);
+            }
         }
     }
 
@@ -81,7 +91,7 @@ public class SettingsActivity extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
                 String currentDateandTime = sdf.format(new Date());
                 intent.putExtra(Intent.EXTRA_TITLE, "NativeAlpha_" + currentDateandTime);
-                startActivityForResult(intent, 55);
+                startActivityForResult(intent, CODE_WRITE_FILE);
 
             }
 
@@ -91,7 +101,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                     Intent intent = new Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Select a file"), 56);
+                    startActivityForResult(Intent.createChooser(intent, "Select a file"), CODE_OPEN_FILE);
             }
 
         });

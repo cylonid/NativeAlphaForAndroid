@@ -63,4 +63,8 @@
     <string name="webapp_section_datasaving">Daten sparen</string>
     <string name="webapp_section_misc">Sonstiges</string>
     <string name="webapp_section_restorepage">Seitenwiederherstellung</string>
+    <string name="import_failed">Die Sicherung konnte nicht wiederhergestellt werden.</string>
+    <string name="import_success">Die Sicherung wurde wiederhergestellt.</string>
+    <string name="export_failed">Die Sicherung konnte nicht exportiert werden.</string>
+    <string name="export_success">Die Sicherung wurde erfolgreich erstellt.</string>
 </resources>

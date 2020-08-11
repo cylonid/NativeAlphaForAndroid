@@ -92,7 +92,7 @@ public class ShortcutHelper {
         showFailedMessage();
         uiIconLayout.setVisibility(View.GONE);
         uiBtnPositive.setEnabled(true);
-        uiTitle.setText(DataManager.getInstance().getWebApp(webapp.getID()).getTitle());
+        uiTitle.setText(webapp.getTitle());
         uiTitle.requestFocus();
     }
 
@@ -141,13 +141,13 @@ public class ShortcutHelper {
             if (!shortcut_title.equals(""))
                 uiTitle.setText(shortcut_title);
             else
-                uiTitle.setText(DataManager.getInstance().getWebApp(webapp.getID()).getTitle());
+                uiTitle.setText(webapp.getTitle());
         }
     }
 
     private void applyNewBaseUrl(String url) {
         if (url != null)
-            DataManager.getInstance().getWebApp(webapp.getID()).setBaseUrl(url);
+            webapp.setBaseUrl(url);
     }
 
 

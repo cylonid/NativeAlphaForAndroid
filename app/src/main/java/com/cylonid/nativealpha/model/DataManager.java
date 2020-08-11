@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.util.Base64;
 import android.util.Base64InputStream;
 import android.util.Base64OutputStream;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.cylonid.nativealpha.util.App;
 import com.cylonid.nativealpha.util.InvalidChecksumException;
@@ -168,7 +170,16 @@ public class DataManager {
     }
 
     public WebApp getWebApp(int i) {
-        return websites.get(i);
+
+        try {
+            return websites.get(i);
+        }
+        catch (IndexOutOfBoundsException e) {
+            Toast toast = Toast.makeText(App.getAppContext(), "The Web App you are trying to reach is no longer available.", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP, 0, 100);
+            toast.show();
+        }
+        return new WebApp("");
     }
 
     public void replaceWebApp(WebApp webapp) {
@@ -180,49 +191,35 @@ public class DataManager {
 
 
     public boolean saveSharedPreferencesToFile(Uri uri) {
-        boolean res = false;
-
-        ObjectOutputStream output = null;
-        try {
-            FileOutputStream fileOutputStream = (FileOutputStream) App.getAppContext().getContentResolver().openOutputStream(uri);
-            Base64OutputStream b64os = new Base64OutputStream(fileOutputStream, Base64.DEFAULT);
-            output = new ObjectOutputStream(b64os);
+        boolean result = false;
+        try(FileOutputStream fos = (FileOutputStream) App.getAppContext().getContentResolver().openOutputStream(uri);
+            Base64OutputStream b64os = new Base64OutputStream(fos, Base64.DEFAULT);  ObjectOutputStream oos = new ObjectOutputStream(b64os);) {
             appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE);
             TreeMap<String, ?> shared_pref_map = new TreeMap<>(appdata.getAll());
-            output.writeObject(Hasher.Companion.hash(shared_pref_map.toString(), HashType.SHA_256));
-            output.writeObject(shared_pref_map);
 
-            output.close();
-            res = true;
+            oos.writeObject(Hasher.Companion.hash(shared_pref_map.toString(), HashType.SHA_256));
+            oos.writeObject(shared_pref_map);
+
+            result = true;
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (output != null) {
-                    output.flush();
-                    output.close();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
         }
-        return res;
+        return result;
     }
 
     @SuppressWarnings({ "unchecked" })
-    public boolean loadSharedPreferencesFromFile(Uri uri) throws InvalidChecksumException {
-        boolean res = false;
+    public boolean loadSharedPreferencesFromFile(Uri uri){
+        boolean result = false;
+        try (FileInputStream fis = (FileInputStream) App.getAppContext().getContentResolver().openInputStream(uri);
+             Base64InputStream b64is = new Base64InputStream(fis, Base64.DEFAULT);
+             ObjectInputStream ois = new ObjectInputStream(b64is);) {
 
-        ObjectInputStream input = null;
-        try {
-            FileInputStream fis = (FileInputStream) App.getAppContext().getContentResolver().openInputStream(uri);
-            Base64InputStream b64is = new Base64InputStream(fis, Base64.DEFAULT);
-            input = new ObjectInputStream(b64is);
             SharedPreferences.Editor prefEdit = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE).edit();
             prefEdit.clear();
-            String checksum = (String) input.readObject();
-            TreeMap<String, ?> shared_pref_map = ((TreeMap<String, ?>) input.readObject());
+            String checksum = (String) ois.readObject();
+            TreeMap<String, ?> shared_pref_map = ((TreeMap<String, ?>) ois.readObject());
             String new_checksum = Hasher.Companion.hash(shared_pref_map.toString(), HashType.SHA_256);
+
             if (!checksum.equals(new_checksum))
                 throw new InvalidChecksumException("Checksums between backup and restored settings do not match.");
             for (Map.Entry<String, ?> entry : shared_pref_map.entrySet()) {
@@ -241,21 +238,16 @@ public class DataManager {
                     prefEdit.putString(key, ((String) v));
             }
             prefEdit.apply();
-            res = true;
-        } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
+            result = true;
 
-        } finally {
-            try {
-                if (input != null) {
-                    input.close();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        } catch (InvalidChecksumException | IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
-        return res;
+
+        return result;
     }
 
     public WebApp getSuccessor(int i) {

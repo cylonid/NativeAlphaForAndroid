@@ -1,12 +1,17 @@
 package com.cylonid.nativealpha.util;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
@@ -14,11 +19,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.R;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.WebViewActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 
@@ -105,6 +112,32 @@ public final class Utility {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public static void showInfoSnackbar(Activity activity, String msg, int duration) {
+
+        Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content), msg, duration);
+
+        snackbar.setAction(App.getAppContext().getString(android.R.string.ok), (View.OnClickListener) v -> snackbar.dismiss());
+
+        View snackBarView = snackbar.getView();
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        params.setMargins(0, 30, 0, 20);
+
+
+        snackBarView.setLayoutParams(params);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            snackBarView.setForceDarkAllowed(false);
+
+        TextView tv = (TextView) snackBarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        tv.setMaxLines(10);
+        snackbar.setBackgroundTint(ResourcesCompat.getColor(App.getAppContext().getResources(), R.color.snackbar_background, null));
+        snackbar.setTextColor(Color.BLACK);
+        snackbar.show();
+
     }
 
     public static String readFromFile(File file) {

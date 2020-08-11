@@ -29,6 +29,8 @@ import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import static android.widget.LinearLayout.HORIZONTAL;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
@@ -60,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
                 buildAddWebsiteDialog(getString(R.string.add_webapp));
             }
         });
-
+        if (getIntent().getBooleanExtra(Const.INTENT_BACKUP_RESTORED, false))
+            Utility.showInfoSnackbar(this, getString(R.string.import_success), Snackbar.LENGTH_SHORT);
     }
 
 

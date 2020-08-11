@@ -68,5 +68,9 @@
     <string name="webapp_section_misc">Miscellaneous</string>
     <string name="paypal" translatable="false">" ☕ Buy me a coffee on PayPal"</string>
     <string name="webapp_section_restorepage">Restore page</string>
+    <string name="import_failed">The backup could not restored.</string>
+    <string name="import_success">The backup was restored successfully.</string>
+    <string name="export_failed">The backup could not be exported.</string>
+    <string name="export_success">The backup was created successfully.</string>
 
 </resources>
