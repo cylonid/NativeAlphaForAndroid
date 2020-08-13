@@ -9,6 +9,7 @@ import android.util.Base64OutputStream;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import com.cylonid.nativealpha.R;
 import com.cylonid.nativealpha.util.App;
 import com.cylonid.nativealpha.util.InvalidChecksumException;
 import com.cylonid.nativealpha.util.Utility;
@@ -175,7 +176,7 @@ public class DataManager {
             return websites.get(i);
         }
         catch (IndexOutOfBoundsException e) {
-            Toast toast = Toast.makeText(App.getAppContext(), "The Web App you are trying to reach is no longer available.", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(App.getAppContext(), App.getAppContext().getString(R.string.webapp_not_found), Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP, 0, 100);
             toast.show();
         }
@@ -188,6 +189,14 @@ public class DataManager {
         saveWebAppData();
     }
 
+    public int getActiveWebsitesCount() {
+        int c = 0;
+        for (WebApp webapp : websites) {
+            if (webapp.isActiveEntry())
+                c += 1;
+        }
+        return c;
+    }
 
 
     public boolean saveSharedPreferencesToFile(Uri uri) {

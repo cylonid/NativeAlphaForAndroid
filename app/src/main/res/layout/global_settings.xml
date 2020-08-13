@@ -51,13 +51,13 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Export settings &amp; Web Apps"
+                        android:text="@string/export_settings_web_apps"
                         android:id="@+id/btnExportSettings" />
 
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Import settings &amp; Web Apps"
+                        android:text="@string/import_settings_web_apps"
                         android:id="@+id/btnImportSettings" />
                     <Switch
                         android:id="@+id/switchGlobalCache"

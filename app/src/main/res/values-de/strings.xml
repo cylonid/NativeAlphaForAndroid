@@ -67,4 +67,11 @@
     <string name="import_success">Die Sicherung wurde wiederhergestellt.</string>
     <string name="export_failed">Die Sicherung konnte nicht exportiert werden.</string>
     <string name="export_success">Die Sicherung wurde erfolgreich erstellt.</string>
+    <string name="webapp_not_found">Diese Web-App ist nicht mehr verfügbar.</string>
+    <string name="import_success_dialog_txt1">Die Sicherung enthielt</string>
+    <string name="import_success_dialog_txt2">Web-Apps. Wollen Sie die Startseitenverknüpfungen wiederherstellen?</string>
+    <string name="import_success_dialog_txt3">Bitte beachten Sie, dass jede Verknüpfung einzeln bestätigt werden muss.</string>
+    <string name="no_filemanager">Bitte installieren Sie einen Datei-Manager.</string>
+    <string name="export_settings_web_apps"><![CDATA[Einstellungen & Web-Apps exportieren]]></string>
+    <string name="import_settings_web_apps"><![CDATA[Einstellungen & Web-Apps importieren]]></string>
 </resources>

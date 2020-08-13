@@ -3,6 +3,7 @@ package com.cylonid.nativealpha;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -62,8 +63,33 @@ public class MainActivity extends AppCompatActivity {
                 buildAddWebsiteDialog(getString(R.string.add_webapp));
             }
         });
-        if (getIntent().getBooleanExtra(Const.INTENT_BACKUP_RESTORED, false))
-            Utility.showInfoSnackbar(this, getString(R.string.import_success), Snackbar.LENGTH_SHORT);
+
+        if (getIntent().getBooleanExtra(Const.INTENT_BACKUP_RESTORED, false)) {
+            buildImportSuccessDialog();
+            
+
+        }
+    }
+
+    private void buildImportSuccessDialog() {
+        final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+
+        String message =  getString(R.string.import_success_dialog_txt1) + " " + DataManager.getInstance().getActiveWebsitesCount() + " " + getString(R.string.import_success_dialog_txt2) + "\n\n" + getString(R.string.import_success_dialog_txt3);
+
+        builder.setMessage(message);
+        builder.setTitle(R.string.import_success);
+        builder.setPositiveButton(getString(android.R.string.yes), (dialog, id) -> {
+            for (WebApp webapp : DataManager.getInstance().getWebsites()) {
+                if (webapp.isActiveEntry()) {
+                    faviconFetcher = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, MainActivity.this));
+                    faviconFetcher.execute();
+                    faviconFetcher = null;
+                }
+            }
+        });
+        builder.setNegativeButton(getString(android.R.string.no), null);
+        final androidx.appcompat.app.AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 
