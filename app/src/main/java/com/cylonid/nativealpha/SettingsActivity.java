@@ -83,21 +83,17 @@ public class SettingsActivity extends AppCompatActivity {
         Button btnCancel = findViewById(R.id.btnCancel);
         Button btnExport = findViewById(R.id.btnExportSettings);
         Button btnImport = findViewById(R.id.btnImportSettings);
-        btnExport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnExport.setOnClickListener(v -> {
 
-                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*");
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-                String currentDateTime = sdf.format(new Date());
-                intent.putExtra(Intent.EXTRA_TITLE, "NativeAlpha_" + currentDateTime);
-                try {
-                    startActivityForResult(intent, CODE_WRITE_FILE);
-                } catch (android.content.ActivityNotFoundException e) {
-                    Utility.showInfoSnackbar(SettingsActivity.this, getString(R.string.no_filemanager), Snackbar.LENGTH_LONG);
-                    e.printStackTrace();
-                }
-
+            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+            String currentDateTime = sdf.format(new Date());
+            intent.putExtra(Intent.EXTRA_TITLE, "NativeAlpha_" + currentDateTime);
+            try {
+                startActivityForResult(intent, CODE_WRITE_FILE);
+            } catch (android.content.ActivityNotFoundException e) {
+                Utility.showInfoSnackbar(SettingsActivity.this, getString(R.string.no_filemanager), Snackbar.LENGTH_LONG);
+                e.printStackTrace();
             }
 
         });

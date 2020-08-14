@@ -69,12 +69,12 @@
     <string name="paypal" translatable="false">" ☕ Buy me a coffee on PayPal"</string>
     <string name="webapp_section_restorepage">Restore page</string>
     <string name="import_failed">The backup could not restored.</string>
-    <string name="import_success">The backup was restored successfully.</string>
+    <string name="import_success">Backup with %1$d Web App(s) was restored successfully.</string>
     <string name="export_failed">The backup could not be exported.</string>
     <string name="export_success">The backup was created successfully.</string>
     <string name="webapp_not_found">The Web App you are trying to reach is no longer available.</string>
     <string name="import_success_dialog_txt1">The backup contained</string>
-    <string name="import_success_dialog_txt2">Web Apps. Do you want to re-create shortcuts for all Web Apps?</string>
+    <string name="import_success_dialog_txt2">Do you want to re-create shortcuts for all Web Apps?</string>
     <string name="import_success_dialog_txt3">Please note you will have to manually confirm the addition of every shortcut.</string>
     <string name="no_filemanager">Please install a file manager.</string>
     <string name="export_settings_web_apps"><![CDATA[Export settings & Web Apps]]></string>

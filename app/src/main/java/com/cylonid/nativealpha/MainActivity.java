@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         mainScreen = findViewById(R.id.mainScreen);
 
         DataManager.getInstance().loadAppData();
+        Utility.applyUITheme();
         addActiveWebAppsToUI();
 
         if (DataManager.getInstance().getWebsites().size() == 0) {
@@ -64,31 +65,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if (getIntent().getBooleanExtra(Const.INTENT_BACKUP_RESTORED, false)) {
-            buildImportSuccessDialog();
-            
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getBooleanExtra(Const.INTENT_BACKUP_RESTORED, false)) {
+            DataManager.getInstance().loadAppData();
+            mainScreen.removeAllViews();
+            addActiveWebAppsToUI();
+            buildImportSuccessDialog();
+            intent.putExtra(Const.INTENT_BACKUP_RESTORED, false);
         }
     }
 
     private void buildImportSuccessDialog() {
         final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
 
-        String message =  getString(R.string.import_success_dialog_txt1) + " " + DataManager.getInstance().getActiveWebsitesCount() + " " + getString(R.string.import_success_dialog_txt2) + "\n\n" + getString(R.string.import_success_dialog_txt3);
+        String message =  getString(R.string.import_success_dialog_txt2) + "\n\n" + getString(R.string.import_success_dialog_txt3);
 
         builder.setMessage(message);
-        builder.setTitle(R.string.import_success);
+        builder.setTitle(getString(R.string.import_success, DataManager.getInstance().getActiveWebsitesCount()));
         builder.setPositiveButton(getString(android.R.string.yes), (dialog, id) -> {
+            int timeout_factor = 1;
             for (WebApp webapp : DataManager.getInstance().getWebsites()) {
                 if (webapp.isActiveEntry()) {
-                    faviconFetcher = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, MainActivity.this));
+                    faviconFetcher = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, MainActivity.this, timeout_factor));
                     faviconFetcher.execute();
                     faviconFetcher = null;
+                    timeout_factor +=1;
                 }
             }
         });
         builder.setNegativeButton(getString(android.R.string.no), null);
         final androidx.appcompat.app.AlertDialog dialog = builder.create();
+        dialog.setOnDismissListener(dialogInterface -> {
+            Utility.applyUITheme();
+        });
         dialog.show();
     }
 
@@ -211,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
         btnCreateShortcut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                faviconFetcher = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, MainActivity.this));
+                faviconFetcher = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, MainActivity.this, 1));
                 faviconFetcher.execute();
                 faviconFetcher = null;
             }
@@ -281,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
                             addRow(new_site);
                             dialog.dismiss();
                             if (create_shortcut.isChecked()) {
-                                ShortcutHelper.FaviconFetcher f = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(new_site, MainActivity.this));
+                                ShortcutHelper.FaviconFetcher f = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(new_site, MainActivity.this, 1));
                                 f.execute();
                             }
                         } else

@@ -56,6 +56,7 @@ public class WebViewActivity extends AppCompatActivity {
         webappID = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
 
         DataManager.getInstance().loadAppData();
+        Utility.applyUITheme();
         Utility.Assert(webappID != -1, "WebApp ID could not be retrieved.");
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
         String url = webapp.getLoadableUrl();

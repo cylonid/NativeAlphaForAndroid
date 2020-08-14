@@ -54,11 +54,14 @@ public class ShortcutHelper {
     private EditText uiTitle;
     private LinearLayout uiIconLayout;
     private Button uiBtnPositive;
+    private int timeout_factor;
 
-    public ShortcutHelper(WebApp webapp, Activity c) {
+    public ShortcutHelper(WebApp webapp, Activity c, int timeout_factor) {
         this.webapp = webapp;
         this.activity = c;
         this.bitmap = null;
+        this.timeout_factor = timeout_factor;
+
     }
 
     private void addShortcutToHomeScreen(Bitmap bitmap) {
@@ -170,7 +173,7 @@ public class ShortcutHelper {
             super.onPreExecute();
             shortcutHelper.buildShortcutDialog();
                 asyncObject = this;
-                new CountDownTimer(7000, 7000) {
+                new CountDownTimer(7000 * shortcutHelper.timeout_factor, 7000 * shortcutHelper.timeout_factor) {
                     public void onTick(long millisUntilFinished) {
                         // You can monitor the progress here as well by changing the onTick() time
                     }

@@ -111,7 +111,6 @@ public class DataManager {
             settings.setThemeId(appdata.getInt(shared_pref_glob_ui_theme, 0));
         }
 
-        Utility.applyUITheme();
     }
 
 

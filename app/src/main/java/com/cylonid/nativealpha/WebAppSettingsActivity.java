@@ -52,31 +52,20 @@ public class WebAppSettingsActivity extends AppCompatActivity {
 
         final Button btnCreateShortcut = inflated_view.findViewById(R.id.btnRecreateShortcut);
 
-        btnCreateShortcut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                faviconFetcher = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, WebAppSettingsActivity.this));
-                faviconFetcher.execute();
-                faviconFetcher = null;
-            }
+        btnCreateShortcut.setOnClickListener(view -> {
+            faviconFetcher = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, WebAppSettingsActivity.this, 1));
+            faviconFetcher.execute();
+            faviconFetcher = null;
         });
         Button btnSave = findViewById(R.id.btnSave);
         Button btnCancel = findViewById(R.id.btnCancel);
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataManager.getInstance().replaceWebApp(modified_webapp);
-                onBackPressed();
-            }
+        btnSave.setOnClickListener(v -> {
+            DataManager.getInstance().replaceWebApp(modified_webapp);
+            onBackPressed();
         });
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        btnCancel.setOnClickListener(v -> onBackPressed());
 
     }
     @Override

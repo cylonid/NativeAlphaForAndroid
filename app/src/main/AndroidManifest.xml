@@ -4,8 +4,8 @@
     package="com.cylonid.nativealpha">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+<!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
 
 
     <application
@@ -22,7 +22,7 @@
         <activity
             android:name="com.cylonid.nativealpha.MainActivity"
             android:label="@string/app_name_unicode"
-
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
