@@ -5,7 +5,7 @@
     <string name="spinner_prompt">Farbschema</string>
     <string name="clear_cache_after_usage">Cache nach Benutzung löschen</string>
     <string name="clear_cookies_after_usage">Cookies nach Benutzung löschen</string>
-    <string name="use_three_finger_swipes_to_switch_between_web_apps_experimental">Mit Drei-Finger-Wischen zwischen Web-Apps wechseln (experimentell)</string>
+    <string name="use_three_finger_swipes_to_switch_between_web_apps_experimental">Mit Drei-Finger-Wischen ⇄ zwischen Web-Apps wechseln (experimentell)</string>
     <string name="select_ui_mode">Farbschema wählen</string>
     <string name="save">Speichern</string>
     <string name="action_settings">Einstellungen</string>
@@ -24,7 +24,7 @@
     <string name="timeout_for_page_restore_in_minutes">Timeout in min</string>
     <string name="re_create_shortcut">Startseitenverknüpfung erstellen</string>
     <string name="create_shortcut_on_home_screen">Startseitenverknüpfung erstellen</string>
-    <string name="use_two_finger_swipes_for_browser_forward_and_backward_navigation">Mit Zwei-Finger-Wischen im Browser vor und zurück wechseln</string>
+    <string name="use_two_finger_swipes_for_browser_forward_and_backward_navigation">Mit Zwei-Finger-Wischen ⇄ im Browser vor und zurück wechseln</string>
     <string name="icon_fetch_failed_line1">Es konnte kein Icon für %1$s geladen werden.\nMögliche Gründe:\n</string>
     <string name="icon_fetch_failed_line2">• Keine Internetverbindung.\n</string>
     <string name="icon_fetch_failed_line3">• Die Website hat kein passendes Icon gespeichert.</string>
@@ -74,4 +74,5 @@
     <string name="no_filemanager">Bitte installieren Sie einen Datei-Manager.</string>
     <string name="export_settings_web_apps"><![CDATA[Einstellungen & Web-Apps exportieren]]></string>
     <string name="import_settings_web_apps"><![CDATA[Einstellungen & Web-Apps importieren]]></string>
+    <string name="global_settings_multitouch_reload">Mit Zwei-Finger-Wischen ↓ die Seite neu laden</string>
 </resources>

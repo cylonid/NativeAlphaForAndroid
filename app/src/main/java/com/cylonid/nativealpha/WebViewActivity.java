@@ -107,6 +107,8 @@ public class WebViewActivity extends AppCompatActivity {
             private int mode = NONE;
             private float startX;
             private float stopX;
+            private float startY;
+            private float stopY;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -119,6 +121,7 @@ public class WebViewActivity extends AppCompatActivity {
                         mode = SWIPE;
                         // You can also use event.getY(1) or the average of the two
                         startX = event.getX(0);
+                        startY = event.getY(0);
                         return true;
 
                     case MotionEvent.ACTION_POINTER_UP:
@@ -143,9 +146,16 @@ public class WebViewActivity extends AppCompatActivity {
                             }
                             return true;
                         }
+                        if (DataManager.getInstance().getSettings().isMultitouchReload() && Math.abs(startY - stopY) > TRESHOLD) {
+                            if (stopY > startY) {
+                                wv.reload();
+                            }
+                            return true;
+                        }
                     case MotionEvent.ACTION_MOVE:
                         if (mode == SWIPE) {
                             stopX = event.getX(0);
+                            stopY = event.getY(0);
                         }
                         return false;
                 }

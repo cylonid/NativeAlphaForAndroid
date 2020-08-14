@@ -6,6 +6,9 @@ public class GlobalSettings {
     private boolean clear_cookies;
     private boolean two_finger_multitouch;
     private boolean three_finger_multitouch;
+
+
+    private boolean multitouch_reload;
     private int theme_id;
 
     public GlobalSettings(GlobalSettings other) {
@@ -14,14 +17,16 @@ public class GlobalSettings {
         this.two_finger_multitouch = other.two_finger_multitouch;
         this.three_finger_multitouch = other.three_finger_multitouch;
         this.theme_id = other.theme_id;
+        this.multitouch_reload = other.multitouch_reload;
     }
 
-    public GlobalSettings(boolean clear_cache, boolean clear_cookies, boolean two_finger_multitouch, boolean three_finger_multitouch, int theme_id) {
+    public GlobalSettings(boolean clear_cache, boolean clear_cookies, boolean two_finger_multitouch, boolean three_finger_multitouch, boolean multitouch_reload, int theme_id) {
         this.clear_cache = clear_cache;
         this.clear_cookies = clear_cookies;
         this.two_finger_multitouch = two_finger_multitouch;
         this.three_finger_multitouch = three_finger_multitouch;
         this.theme_id = theme_id;
+        this.multitouch_reload = multitouch_reload;
     }
 
     public GlobalSettings() {
@@ -29,6 +34,7 @@ public class GlobalSettings {
         clear_cookies = false;
         two_finger_multitouch = true;
         three_finger_multitouch = false;
+        multitouch_reload = true;
         theme_id = 0;
     }
 
@@ -68,6 +74,14 @@ public class GlobalSettings {
     }
     public void setThemeId(int theme_id) {
         this.theme_id = theme_id;
+    }
+
+    public boolean isMultitouchReload() {
+        return multitouch_reload;
+    }
+
+    public void setMultitouchReload(boolean multitouch_reload) {
+        this.multitouch_reload = multitouch_reload;
     }
 
 

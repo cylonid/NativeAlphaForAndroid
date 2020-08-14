@@ -7,7 +7,7 @@
     <string name="global_settings">Global settings</string>
     <string name="these_settings_are_applied_globally_and_override_app_specific_settings">These settings are applied globally and override webapp-specific settings.</string>
     <string name="clear_cookies_after_usage">Clear cookies after usage</string>
-    <string name="use_three_finger_swipes_to_switch_between_web_apps_experimental">Use three-finger swipes to switch between Web Apps (experimental)</string>
+    <string name="use_three_finger_swipes_to_switch_between_web_apps_experimental">Use three-finger swipes ⇄ to switch between Web Apps (experimental)</string>
     <string name="select_ui_mode">Select UI mode</string>
     <string name="save">Save</string>
     <string name="loading_icon_and_website_title">Loading icon and website title…</string>
@@ -21,7 +21,7 @@
     <string name="re_create_shortcut">Re-Create shortcut</string>
     <string name="create_shortcut_on_home_screen">Create shortcut on home screen</string>
     <string name="url" translatable="false">URL</string>
-    <string name="use_two_finger_swipes_for_browser_forward_and_backward_navigation">Use two-finger swipes for browser forward and backward navigation</string>
+    <string name="use_two_finger_swipes_for_browser_forward_and_backward_navigation">Use two-finger swipes ⇄ for browser forward and backward navigation</string>
     <string-array name="ui_modes">
         <item>System default</item>
         <item>Light Mode</item>
@@ -79,6 +79,7 @@
     <string name="no_filemanager">Please install a file manager.</string>
     <string name="export_settings_web_apps"><![CDATA[Export settings & Web Apps]]></string>
     <string name="import_settings_web_apps"><![CDATA[Import settings & Web Apps]]></string>
+    <string name="global_settings_multitouch_reload">Use two-finger swipes ↓ to reload page</string>
 
 
 </resources>

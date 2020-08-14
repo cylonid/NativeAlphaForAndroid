@@ -74,6 +74,12 @@
                         android:checked="@={settings.clearCookies}"
                         android:text="@string/clear_cookies_after_usage" />
 
+                    <Switch
+                        android:id="@+id/switchGlobalMultiTouchReload"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="@={settings.multitouchReload}"
+                        android:text="@string/global_settings_multitouch_reload" />
 
                     <Switch
                         android:id="@+id/switchGlobalMultiTouch"
