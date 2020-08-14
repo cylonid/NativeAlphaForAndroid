@@ -25,7 +25,7 @@
     <string name="re_create_shortcut">Startseitenverknüpfung erstellen</string>
     <string name="create_shortcut_on_home_screen">Startseitenverknüpfung erstellen</string>
     <string name="use_two_finger_swipes_for_browser_forward_and_backward_navigation">Mit Zwei-Finger-Wischen im Browser vor und zurück wechseln</string>
-    <string name="icon_fetch_failed_line1">Es konnte kein Icon geladen werden.\nMögliche Gründe:\n</string>
+    <string name="icon_fetch_failed_line1">Es konnte kein Icon für %1$s geladen werden.\nMögliche Gründe:\n</string>
     <string name="icon_fetch_failed_line2">• Keine Internetverbindung.\n</string>
     <string name="icon_fetch_failed_line3">• Die Website hat kein passendes Icon gespeichert.</string>
     <string name="delete_question">Sind Sie sicher, dass Sie diese Website entfernen wollen?</string>

@@ -27,7 +27,7 @@
         <item>Light Mode</item>
         <item>Dark Mode</item>
     </string-array>
-    <string name="icon_fetch_failed_line1">We could not retrieve an icon for the selected website.\nPossible reasons:\n</string>
+    <string name="icon_fetch_failed_line1">We could not retrieve an icon for %1$s.\nPossible reasons:\n</string>
     <string name="icon_fetch_failed_line2">• No internet connection\n</string>
     <string name="icon_fetch_failed_line3">• The website has no suitable icon stored.</string>
     <string name="delete_question">Are you sure you want to remove this website?</string>

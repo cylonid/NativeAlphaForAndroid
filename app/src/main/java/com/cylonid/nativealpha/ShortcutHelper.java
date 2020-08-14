@@ -100,7 +100,7 @@ public class ShortcutHelper {
     }
 
     private void showFailedMessage() {
-        Toast toast = Toast.makeText(activity, activity.getString(R.string.icon_fetch_failed_line1) + activity.getString(R.string.icon_fetch_failed_line2) + activity.getString(R.string.icon_fetch_failed_line3), Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(activity, activity.getString(R.string.icon_fetch_failed_line1, webapp.getTitle()) + activity.getString(R.string.icon_fetch_failed_line2) + activity.getString(R.string.icon_fetch_failed_line3), Toast.LENGTH_LONG);
         toast.setGravity(Gravity.TOP, 0, 100);
         toast.show();
     }
