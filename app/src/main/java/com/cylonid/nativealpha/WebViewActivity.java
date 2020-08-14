@@ -45,6 +45,9 @@ public class WebViewActivity extends AppCompatActivity {
     private static final int TRESHOLD = 100;
     private Map<String, String> CUSTOM_HEADERS;
 
+    private boolean quit_on_next_backpress = false;
+    private String last_onbackpress_url = "";
+
 
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     @Override
@@ -170,13 +173,18 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
+        String current_onbackpress_url = wv.getUrl();
 
-        if (wv.getUrl().equals(webapp.getBaseUrl() + "/")) {
+        if (quit_on_next_backpress || Utility.URLEqual(current_onbackpress_url, webapp.getBaseUrl()) || Utility.URLEqual(current_onbackpress_url, last_onbackpress_url)) {
             moveTaskToBack(true);
+            quit_on_next_backpress = false;
         } else if (wv.canGoBack())
             wv.goBack();
-        else
+        else {
             loadURL(wv, webapp.getBaseUrl());
+            quit_on_next_backpress = true;
+        }
+        last_onbackpress_url = wv.getUrl();
 
     }
 

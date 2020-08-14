@@ -140,6 +140,15 @@ public final class Utility {
 
     }
 
+    public static boolean URLEqual(String left, String right) {
+        String stripped_left = left.replace("/", "").replace("www.", "");
+        String stripped_right = right.replace("/", "").replace("www.", "");
+        if (stripped_left.equals(stripped_right))
+            return true;
+        else
+            return false;
+    }
+
     public static String readFromFile(File file) {
 
         String ret = "";
