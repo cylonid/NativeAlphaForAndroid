@@ -1,6 +1,8 @@
 package com.cylonid.nativealpha;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -22,6 +24,7 @@ import androidx.databinding.DataBindingUtil;
 import com.cylonid.nativealpha.databinding.WebappSettingsBinding;
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
+import com.cylonid.nativealpha.util.App;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 
@@ -61,6 +64,15 @@ public class WebAppSettingsActivity extends AppCompatActivity {
         Button btnCancel = findViewById(R.id.btnCancel);
 
         btnSave.setOnClickListener(v -> {
+            ActivityManager activityManager =
+                    (ActivityManager) App.getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
+
+            for (ActivityManager.AppTask task : activityManager.getAppTasks()) {
+                int id = task.getTaskInfo().baseIntent.getIntExtra(Const.INTENT_WEBAPPID, -1);
+                if (id == webappID)
+                    task.finishAndRemoveTask();
+
+            }
             DataManager.getInstance().replaceWebApp(modified_webapp);
             onBackPressed();
         });
