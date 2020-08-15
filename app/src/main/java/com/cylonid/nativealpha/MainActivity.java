@@ -212,54 +212,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void buildSettingsDialog(final int webappID) {
-
-        WebappSettingsBinding binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.webapp_settings, null, false);
-        final View inflated_view = binding.getRoot();
-        final WebApp webapp = DataManager.getInstance().getWebApp(webappID);
-        final WebApp modified_webapp = new WebApp(webapp);
-        binding.setWebapp(modified_webapp);
-
-        final Button btnCreateShortcut = inflated_view.findViewById(R.id.btnRecreateShortcut);
-
-        btnCreateShortcut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                faviconFetcher = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, MainActivity.this, 1));
-                faviconFetcher.execute();
-                faviconFetcher = null;
-            }
-        });
-
-
-        final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
-                .setView(inflated_view)
-                .setTitle(getString(R.string.edit_webapp_settings))
-                .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick
-                .setNegativeButton(android.R.string.cancel, null)
-                .create();
-
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-
-                Button positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-
-                positive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        DataManager.getInstance().replaceWebApp(modified_webapp);
-                        dialog.dismiss();
-                    }
-                });
-            }
-        });
-        dialog.show();
-
-
-    }
-
     private void buildAddWebsiteDialog(String title) {
         final View inflated_view = getLayoutInflater().inflate(R.layout.add_website_dialogue, null);
         final EditText url = (EditText) inflated_view.findViewById(R.id.websiteUrl);
@@ -313,7 +265,10 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(getString(R.string.delete_question));
         builder.setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                DataManager.getInstance().getWebApp(ID).markInactive();
+                WebApp webapp = DataManager.getInstance().getWebApp(ID);
+                if (webapp != null) {
+                    webapp.markInactive();
+                }
                 mainScreen.removeAllViews();
                 addActiveWebAppsToUI();
 

@@ -1,6 +1,7 @@
 package com.cylonid.nativealpha.model;
 
 
+import android.provider.ContactsContract;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -27,6 +28,8 @@ public class WebApp {
     private boolean send_savedata_request;
     private boolean block_images;
     private boolean allow_http;
+    private String url_on_first_pageload;
+    private boolean test;
 
     public WebApp(String base_url) {
         title = base_url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -46,6 +49,8 @@ public class WebApp {
         send_savedata_request = false;
         block_images = false;
         allow_http = false;
+        url_on_first_pageload = null;
+
     }
 
     public WebApp(WebApp other) {
@@ -67,6 +72,8 @@ public class WebApp {
         this.send_savedata_request = other.send_savedata_request;
         this.block_images = other.block_images;
         this.allow_http = other.allow_http;
+        this.url_on_first_pageload = other.url_on_first_pageload;
+
     }
 
     public boolean isAllowHttp() {
@@ -242,6 +249,24 @@ public class WebApp {
     public void setTimestampLastUsedUrl(Long timestamp_last_used_url) {
         this.timestamp_last_used_url = timestamp_last_used_url;
     }
+
+    public String getNonNullUrlOnFirstPageload() {
+        if (url_on_first_pageload != null)
+            return url_on_first_pageload;
+
+        return base_url;
+    }
+
+    public String getUrlOnFirstPageload() {
+            return url_on_first_pageload;
+    }
+
+
+    public void saveUrlOnFirstPageLoad(String url) {
+        url_on_first_pageload = url;
+        DataManager.getInstance().saveWebAppData();
+    }
+
 
     public void onSwitchCookiesChanged(CompoundButton mSwitch, boolean isChecked) {
         Switch third_party_cookies = mSwitch.getRootView().findViewById(R.id.switch3PCookies);

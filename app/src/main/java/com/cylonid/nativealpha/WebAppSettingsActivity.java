@@ -50,35 +50,39 @@ public class WebAppSettingsActivity extends AppCompatActivity {
 
         final View inflated_view = binding.getRoot();
         final WebApp webapp = DataManager.getInstance().getWebApp(webappID);
-        final WebApp modified_webapp = new WebApp(webapp);
-        binding.setWebapp(modified_webapp);
+        if (webapp == null) {
+            finish();
+        }
+        else {
+            final WebApp modified_webapp = new WebApp(webapp);
+            binding.setWebapp(modified_webapp);
 
-        final Button btnCreateShortcut = inflated_view.findViewById(R.id.btnRecreateShortcut);
+            final Button btnCreateShortcut = inflated_view.findViewById(R.id.btnRecreateShortcut);
 
-        btnCreateShortcut.setOnClickListener(view -> {
-            faviconFetcher = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, WebAppSettingsActivity.this, 1));
-            faviconFetcher.execute();
-            faviconFetcher = null;
-        });
-        Button btnSave = findViewById(R.id.btnSave);
-        Button btnCancel = findViewById(R.id.btnCancel);
+            btnCreateShortcut.setOnClickListener(view -> {
+                faviconFetcher = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, WebAppSettingsActivity.this, 1));
+                faviconFetcher.execute();
+                faviconFetcher = null;
+            });
+            Button btnSave = findViewById(R.id.btnSave);
+            Button btnCancel = findViewById(R.id.btnCancel);
 
-        btnSave.setOnClickListener(v -> {
-            ActivityManager activityManager =
-                    (ActivityManager) App.getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
+            btnSave.setOnClickListener(v -> {
+                ActivityManager activityManager =
+                        (ActivityManager) App.getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
 
-            for (ActivityManager.AppTask task : activityManager.getAppTasks()) {
-                int id = task.getTaskInfo().baseIntent.getIntExtra(Const.INTENT_WEBAPPID, -1);
-                if (id == webappID)
-                    task.finishAndRemoveTask();
+                for (ActivityManager.AppTask task : activityManager.getAppTasks()) {
+                    int id = task.getTaskInfo().baseIntent.getIntExtra(Const.INTENT_WEBAPPID, -1);
+                    if (id == webappID)
+                        task.finishAndRemoveTask();
 
-            }
-            DataManager.getInstance().replaceWebApp(modified_webapp);
-            onBackPressed();
-        });
+                }
+                DataManager.getInstance().replaceWebApp(modified_webapp);
+                onBackPressed();
+            });
 
-        btnCancel.setOnClickListener(v -> onBackPressed());
-
+            btnCancel.setOnClickListener(v -> onBackPressed());
+        }
     }
     @Override
     protected void onDestroy() {

@@ -15,6 +15,7 @@ import com.cylonid.nativealpha.util.InvalidChecksumException;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.himanshurawat.hasher.HashType;
 import com.himanshurawat.hasher.Hasher;
@@ -93,7 +94,10 @@ public class DataManager {
         appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE);
         //Webapp data
         if (appdata.contains(shared_pref_webappdata)) {
-            Gson gson = new Gson();
+
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(WebApp.class, new WebAppInstanceCreator());
+            Gson gson = gsonBuilder.create();
             String json = appdata.getString(shared_pref_webappdata, "");
             websites = gson.fromJson(json, new TypeToken<ArrayList<WebApp>>() {}.getType());
         }
@@ -160,6 +164,7 @@ public class DataManager {
 
     public void addWebsite(WebApp new_site) {
             websites.add(new_site);
+            Utility.Assert(new_site.getBaseUrl().equals(websites.get(new_site.getID()).getBaseUrl()), "WebApp ID and array position out of sync.");
             saveWebAppData();
     }
 
@@ -182,7 +187,7 @@ public class DataManager {
             toast.setGravity(Gravity.TOP, 0, 100);
             toast.show();
         }
-        return new WebApp("");
+        return null;
     }
 
     public void replaceWebApp(WebApp webapp) {

@@ -23,7 +23,6 @@ import androidx.core.content.ContextCompat;
 
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
-import com.cylonid.nativealpha.util.App;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 
@@ -62,111 +61,119 @@ public class WebViewActivity extends AppCompatActivity {
         Utility.applyUITheme();
         Utility.Assert(webappID != -1, "WebApp ID could not be retrieved.");
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
-        String url = webapp.getLoadableUrl();
-
-        wv = findViewById(R.id.webview);
-
-        if (webapp.isUseAdblock()) {
-            wv.setVisibility(View.GONE);
-            wv = findViewById(R.id.adblockwebview);
-            wv.setVisibility(View.VISIBLE);
-            ((AdblockWebView)wv).setAdblockEnabled(webapp.isUseAdblock());
+        if (webapp == null) {
+            finish();
         }
+        else {
+            String url = webapp.getLoadableUrl();
 
-        wv.setWebViewClient(new CustomBrowser());
-        wv.getSettings().setDomStorageEnabled(true);
-        wv.getSettings().setBlockNetworkLoads(false);
-//        wv.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            wv.getSettings().setForceDark(WebSettings.FORCE_DARK_OFF);
-        }
+            wv = findViewById(R.id.webview);
 
-        wv.getSettings().setJavaScriptEnabled(webapp.isAllowJs());
-
-        CookieManager.getInstance().setAcceptCookie(webapp.isAllowCookies());
-        CookieManager.getInstance().setAcceptThirdPartyCookies(wv, webapp.isAllowThirdPartyCookies());
-
-        if (webapp.isBlockImages())
-            wv.getSettings().setBlockNetworkImage(true);
-
-        if (webapp.isRequestDesktop()) {
-            wv.getSettings().setUserAgentString(Const.DESKTOP_USER_AGENT);
-            wv.getSettings().setUseWideViewPort(true);
-            wv.getSettings().setLoadWithOverviewMode(true);
-
-            wv.getSettings().setSupportZoom(true);
-            wv.getSettings().setBuiltInZoomControls(true);
-            wv.getSettings().setDisplayZoomControls(false);
-
-            wv.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
-            wv.setScrollbarFadingEnabled(false);
-
-        }
-
-        CUSTOM_HEADERS = initCustomHeaders(webapp.isSendSavedataRequest());
-        loadURL(wv, url);
-
-        wv.setOnTouchListener(new View.OnTouchListener() {
-            private int mode = NONE;
-            private float startX;
-            private float stopX;
-            private float startY;
-            private float stopY;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (DataManager.getInstance().getWebApp(webappID).isRequestDesktop())
-                    return false;
-
-                switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_POINTER_DOWN:
-                        // This happens when you touch the screen with two fingers
-                        mode = SWIPE;
-                        // You can also use event.getY(1) or the average of the two
-                        startX = event.getX(0);
-                        startY = event.getY(0);
-                        return true;
-
-                    case MotionEvent.ACTION_POINTER_UP:
-                        // This happens when you release the second finger
-                        mode = NONE;
-                        if (Math.abs(startX - stopX) > TRESHOLD) {
-                            if (startX > stopX) {
-                                if (event.getPointerCount() == 3 && DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
-                                    startActivity(Utility.createWebViewIntent(DataManager.getInstance().getPredecessor(webappID), WebViewActivity.this));
-                                    finish();
-                                } else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch()) {
-                                    if (wv.canGoForward())
-                                        wv.goForward();
-                                }
-                            } else {
-                                if (event.getPointerCount() == 3 && DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
-                                    startActivity(Utility.createWebViewIntent(DataManager.getInstance().getSuccessor(webappID), WebViewActivity.this));
-                                    finish();
-                                } else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch())
-                                    onBackPressed();
-
-                            }
-                            return true;
-                        }
-                        if (DataManager.getInstance().getSettings().isMultitouchReload() && Math.abs(startY - stopY) > TRESHOLD) {
-                            if (stopY > startY) {
-                                wv.reload();
-                            }
-                            return true;
-                        }
-                    case MotionEvent.ACTION_MOVE:
-                        if (mode == SWIPE) {
-                            stopX = event.getX(0);
-                            stopY = event.getY(0);
-                        }
-                        return false;
-                }
-                return false;
+            if (webapp.isUseAdblock()) {
+                wv.setVisibility(View.GONE);
+                wv = findViewById(R.id.adblockwebview);
+                wv.setVisibility(View.VISIBLE);
+                ((AdblockWebView) wv).setAdblockEnabled(webapp.isUseAdblock());
             }
-        });
 
+            wv.setWebViewClient(new CustomBrowser());
+            wv.getSettings().setDomStorageEnabled(true);
+            wv.getSettings().setBlockNetworkLoads(false);
+//        wv.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                wv.getSettings().setForceDark(WebSettings.FORCE_DARK_OFF);
+            }
 
+            wv.getSettings().setJavaScriptEnabled(webapp.isAllowJs());
+
+            CookieManager.getInstance().setAcceptCookie(webapp.isAllowCookies());
+            CookieManager.getInstance().setAcceptThirdPartyCookies(wv, webapp.isAllowThirdPartyCookies());
+
+            if (webapp.isBlockImages())
+                wv.getSettings().setBlockNetworkImage(true);
+
+            if (webapp.isRequestDesktop()) {
+                wv.getSettings().setUserAgentString(Const.DESKTOP_USER_AGENT);
+                wv.getSettings().setUseWideViewPort(true);
+                wv.getSettings().setLoadWithOverviewMode(true);
+
+                wv.getSettings().setSupportZoom(true);
+                wv.getSettings().setBuiltInZoomControls(true);
+                wv.getSettings().setDisplayZoomControls(false);
+
+                wv.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+                wv.setScrollbarFadingEnabled(false);
+
+            }
+
+            CUSTOM_HEADERS = initCustomHeaders(webapp.isSendSavedataRequest());
+            loadURL(wv, url);
+
+            wv.setOnTouchListener(new View.OnTouchListener() {
+                private int mode = NONE;
+                private float startX;
+                private float stopX;
+                private float startY;
+                private float stopY;
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    WebApp webapp = DataManager.getInstance().getWebApp(webappID);
+                    if (webapp.getUrlOnFirstPageload() == null)
+                        DataManager.getInstance().getWebApp(webappID).saveUrlOnFirstPageLoad(wv.getUrl());
+
+                    if (webapp.isRequestDesktop())
+                        return false;
+
+                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                        case MotionEvent.ACTION_POINTER_DOWN:
+                            // This happens when you touch the screen with two fingers
+                            mode = SWIPE;
+                            // You can also use event.getY(1) or the average of the two
+                            startX = event.getX(0);
+                            startY = event.getY(0);
+                            return true;
+
+                        case MotionEvent.ACTION_POINTER_UP:
+                            // This happens when you release the second finger
+                            mode = NONE;
+                            if (Math.abs(startX - stopX) > TRESHOLD) {
+                                if (startX > stopX) {
+                                    if (event.getPointerCount() == 3 && DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
+                                        startActivity(Utility.createWebViewIntent(DataManager.getInstance().getPredecessor(webappID), WebViewActivity.this));
+                                        finish();
+                                    } else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch()) {
+                                        if (wv.canGoForward())
+                                            wv.goForward();
+                                    }
+                                } else {
+                                    if (event.getPointerCount() == 3 && DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
+                                        startActivity(Utility.createWebViewIntent(DataManager.getInstance().getSuccessor(webappID), WebViewActivity.this));
+                                        finish();
+                                    } else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch())
+                                        onBackPressed();
+
+                                }
+                                return true;
+                            }
+                            if (DataManager.getInstance().getSettings().isMultitouchReload() && Math.abs(startY - stopY) > TRESHOLD) {
+                                if (stopY > startY) {
+                                    wv.reload();
+                                }
+                                return true;
+                            }
+                        case MotionEvent.ACTION_MOVE:
+                            if (mode == SWIPE) {
+                                stopX = event.getX(0);
+                                stopY = event.getY(0);
+                            }
+                            return false;
+                    }
+                    return false;
+                }
+            });
+
+        }
     }
 
 
@@ -175,7 +182,7 @@ public class WebViewActivity extends AppCompatActivity {
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
         String current_onbackpress_url = wv.getUrl();
 
-        if (quit_on_next_backpress || Utility.URLEqual(current_onbackpress_url, webapp.getBaseUrl()) || Utility.URLEqual(current_onbackpress_url, last_onbackpress_url)) {
+        if (quit_on_next_backpress || Utility.URLEqual(current_onbackpress_url, webapp.getNonNullUrlOnFirstPageload()) || Utility.URLEqual(current_onbackpress_url, last_onbackpress_url)) {
             moveTaskToBack(true);
             quit_on_next_backpress = false;
         } else if (wv.canGoBack())
@@ -183,6 +190,7 @@ public class WebViewActivity extends AppCompatActivity {
         else {
             loadURL(wv, webapp.getBaseUrl());
             quit_on_next_backpress = true;
+            DataManager.getInstance().getWebApp(webappID).saveUrlOnFirstPageLoad(wv.getUrl());
         }
         last_onbackpress_url = wv.getUrl();
 
@@ -193,14 +201,16 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
-        if (webapp.isRestorePage())
-            webapp.saveCurrentUrl(wv.getUrl());
-        if (webapp.isClearCache() || DataManager.getInstance().getSettings().isClearCache())
-            wv.clearCache(true);
+        if (webapp != null) {
+            if (webapp.isRestorePage())
+                webapp.saveCurrentUrl(wv.getUrl());
+            if (webapp.isClearCache() || DataManager.getInstance().getSettings().isClearCache())
+                wv.clearCache(true);
 
-        if (DataManager.getInstance().getSettings().isClearCookies()) {
-            CookieManager.getInstance().removeAllCookies(null);
-            CookieManager.getInstance().flush();
+            if (DataManager.getInstance().getSettings().isClearCookies()) {
+                CookieManager.getInstance().removeAllCookies(null);
+                CookieManager.getInstance().flush();
+            }
         }
 
     }
@@ -224,19 +234,11 @@ public class WebViewActivity extends AppCompatActivity {
             builder.setTitle(getString(R.string.no_https_dialog_title));
             builder.setMessage(getString(R.string.no_https_dialog_msg));
             builder.setIcon(android.R.drawable.ic_dialog_alert);
-            builder.setPositiveButton(getString(R.string.no_https_dialog_accept), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    webApp.allowHTTP();
-                    view.loadUrl(url, CUSTOM_HEADERS);
-                }
+            builder.setPositiveButton(getString(R.string.no_https_dialog_accept), (dialog, id) -> {
+                webApp.allowHTTP();
+                view.loadUrl(url, CUSTOM_HEADERS);
             });
-            builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    onBackPressed();
-                }
-            });
+            builder.setNegativeButton(getString(android.R.string.cancel), (dialog, id) -> onBackPressed());
             final AlertDialog dialog = builder.create();
             dialog.show();
         }
