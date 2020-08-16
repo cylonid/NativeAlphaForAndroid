@@ -112,7 +112,7 @@ public class UITests {
         activityTestRule.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                DataManager.getInstance().addWebsite(new WebApp(base_url));
+                DataManager.getInstance().addWebsite(new WebApp(base_url, DataManager.getInstance().getIncrementedID()));
                 activityTestRule.getActivity().addActiveWebAppsToUI();
             }
         });

@@ -31,10 +31,10 @@ public class WebApp {
     private String url_on_first_pageload;
     private boolean test;
 
-    public WebApp(String base_url) {
+    public WebApp(String base_url, int id) {
         title = base_url.replace("http://", "").replace("https://", "").replace("www.", "");
         this.base_url = base_url;
-        ID = DataManager.getInstance().getIncrementedID();
+        ID = id;
         open_url_external = true;
         active_entry = true;
         timeout_last_used_url = 10;

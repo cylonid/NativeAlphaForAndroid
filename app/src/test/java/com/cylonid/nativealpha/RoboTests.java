@@ -18,8 +18,8 @@ public class RoboTests {
 //                .resume()
 //                .get();
 
-        WebApp webapp = new WebApp(base_url);
-        ShortcutHelper.FaviconFetcher f = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, null)) {
+        WebApp webapp = new WebApp(base_url, Integer.MAX_VALUE);
+        ShortcutHelper.FaviconFetcher f = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, null, 1)) {
 
             @Override
             protected void onPreExecute() {

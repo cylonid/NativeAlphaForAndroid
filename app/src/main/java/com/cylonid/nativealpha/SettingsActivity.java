@@ -39,9 +39,8 @@ public class SettingsActivity extends AppCompatActivity {
         if(requestCode == CODE_WRITE_FILE && resultCode == RESULT_OK) {
             Uri uri = data.getData();
 
-            if (BuildConfig.VERSION_CODE < 830)
-                DataManager.getInstance().saveGlobalSettings(); //Needed to write legacy settings to new XML
-            
+            DataManager.getInstance().saveGlobalSettings(); //Needed to write legacy settings to new XML
+
             if (!DataManager.getInstance().saveSharedPreferencesToFile(uri)) {
                 Utility.showInfoSnackbar(this, getString(R.string.export_failed), Snackbar.LENGTH_LONG);
             } else {

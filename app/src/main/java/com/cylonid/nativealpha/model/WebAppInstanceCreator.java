@@ -9,6 +9,6 @@ public class WebAppInstanceCreator implements InstanceCreator<WebApp>
     @Override
     public WebApp createInstance(Type type)
     {
-        return new WebApp("");
+        return new WebApp("", Integer.MAX_VALUE);
     }
 }

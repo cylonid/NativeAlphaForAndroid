@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                             str_url = "https://" + str_url;
 
                         if (Patterns.WEB_URL.matcher(str_url.toLowerCase()).matches()) {
-                            WebApp new_site = new WebApp(str_url);
+                            WebApp new_site = new WebApp(str_url, DataManager.getInstance().getIncrementedID());
                             DataManager.getInstance().addWebsite(new_site);
 
                             addRow(new_site);
