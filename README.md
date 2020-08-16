@@ -2,7 +2,7 @@
 # <img src="graphics/logo.png" width="50px" alt=""></img> Native Alpha
 
 [![GitHub release](https://img.shields.io/github/v/release/cylonid/NativeAlphaForAndroid?include_prereleases&color=blueviolet)](https://github.com/cylonid/NativeAlphaForAndroid/releases)
-[![Github all releases](https://img.shields.io/github/downloads/cylonid/NativeAlphaForAndroid/total?color=blue)](https://github.com/cylonid/NativeAlphaForAndroid/releases)
+[![Github all releases](https://img.shields.io/github/downloads/cylonid/NativeAlphaForAndroid/total?color=blue)](https://somsubhra.com/github-release-stats/?username=cylonid&repository=NativeAlphaForAndroid)
 [![GitHub license](https://img.shields.io/github/license/cylonid/NativeAlphaForAndroid?color=orange)](https://github.com/cylonid/NativeAlphaForAndroid/blob/master/LICENSE)
 ![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
 
@@ -15,6 +15,8 @@
   * Less memory footprint and no privacy-invading app permissions in comparison to native apps
   * Dark mode for Android 10+
 
+## Download Options
+[![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v0.83/NativeAlpha_0.83.apk)
 
 
 ## FAQ
