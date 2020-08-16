@@ -121,7 +121,7 @@ public class DataManager {
 
 
 
-    private void saveGlobalSettings() {
+    public void saveGlobalSettings() {
         Utility.Assert(App.getAppContext() != null, "App.getAppContext() null before saving appdata to sharedpref");
 
         appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE);
