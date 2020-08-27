@@ -141,6 +141,8 @@ public final class Utility {
     }
 
     public static boolean URLEqual(String left, String right) {
+        if (left == null || right == null)
+            return false;
         String stripped_left = left.replace("/", "").replace("www.", "");
         String stripped_right = right.replace("/", "").replace("www.", "");
         if (stripped_left.equals(stripped_right))

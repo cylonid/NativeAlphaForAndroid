@@ -16,6 +16,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -182,6 +183,9 @@ public class WebViewActivity extends AppCompatActivity {
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
         String current_onbackpress_url = wv.getUrl();
 
+        if (current_onbackpress_url == null)
+            moveTaskToBack(true);
+
         if (quit_on_next_backpress || Utility.URLEqual(current_onbackpress_url, webapp.getNonNullUrlOnFirstPageload()) || Utility.URLEqual(current_onbackpress_url, last_onbackpress_url)) {
             moveTaskToBack(true);
             quit_on_next_backpress = false;
@@ -238,7 +242,7 @@ public class WebViewActivity extends AppCompatActivity {
                 webApp.allowHTTP();
                 view.loadUrl(url, CUSTOM_HEADERS);
             });
-            builder.setNegativeButton(getString(android.R.string.cancel), (dialog, id) -> onBackPressed());
+            builder.setNegativeButton(getString(android.R.string.cancel), (dialog, id) -> finish());
             final AlertDialog dialog = builder.create();
             dialog.show();
         }
@@ -275,18 +279,8 @@ public class WebViewActivity extends AppCompatActivity {
             builder.setTitle(getString(R.string.ssl_error_title));
             builder.setMessage(message);
             builder.setIcon(android.R.drawable.ic_dialog_alert);
-            builder.setPositiveButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    handler.cancel();
-                }
-            });
-            builder.setNegativeButton(getString(R.string.load_anyway), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    handler.proceed();
-                }
-            });
+            builder.setPositiveButton(getString(android.R.string.cancel), (dialog, id) -> handler.cancel());
+            builder.setNegativeButton(getString(R.string.load_anyway), (dialog, id) -> handler.proceed());
             final AlertDialog dialog = builder.create();
             dialog.show();
 //            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setPadding(5, 5, 5, 5);
