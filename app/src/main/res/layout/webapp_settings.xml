@@ -63,6 +63,20 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="Label"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="sans-serif"
+                        android:text="@={webapp.title}"
+                        android:layout_marginBottom="@dimen/settings_bottom"
+                        android:inputType="text" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/webapp_section_security"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
@@ -130,7 +144,6 @@
                         android:checked="@={webapp.blockImages}"
                         android:enabled="true"
                         android:text="@string/do_not_load_images" />
-
 
                     <TextView
                         android:layout_width="match_parent"

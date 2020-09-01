@@ -78,10 +78,13 @@ public class WebAppSettingsActivity extends AppCompatActivity {
 
                 }
                 DataManager.getInstance().replaceWebApp(modified_webapp);
-                onBackPressed();
+                Intent i = new Intent(WebAppSettingsActivity.this, MainActivity.class);
+                i.putExtra(Const.INTENT_WEBAPP_CHANGED, true);
+                finish();
+                startActivity(i);
             });
 
-            btnCancel.setOnClickListener(v -> onBackPressed());
+            btnCancel.setOnClickListener(v -> finish());
         }
     }
     @Override

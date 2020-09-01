@@ -78,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
             buildImportSuccessDialog();
             intent.putExtra(Const.INTENT_BACKUP_RESTORED, false);
         }
+        if (intent.getBooleanExtra(Const.INTENT_WEBAPP_CHANGED, false)) {
+            mainScreen.removeAllViews();
+            addActiveWebAppsToUI();
+            intent.putExtra(Const.INTENT_WEBAPP_CHANGED, false);
+        }
     }
 
     private void buildImportSuccessDialog() {

@@ -31,9 +31,9 @@ public class WebApp {
     private String url_on_first_pageload;
     private boolean test;
 
-    public WebApp(String base_url, int id) {
-        title = base_url.replace("http://", "").replace("https://", "").replace("www.", "");
-        this.base_url = base_url;
+    public WebApp(String url, int id) {
+        title = url.replace("http://", "").replace("https://", "").replace("www.", "");
+        base_url = url.toLowerCase();
         ID = id;
         open_url_external = true;
         active_entry = true;
