@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.CookieManager;
+import android.webkit.GeolocationPermissions;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -79,6 +80,7 @@ public class WebViewActivity extends AppCompatActivity {
 
             wv.setWebViewClient(new CustomBrowser());
             wv.getSettings().setDomStorageEnabled(true);
+//            wv.getSettings().setGeolocationEnabled(true);
             wv.getSettings().setBlockNetworkLoads(false);
 //        wv.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -109,7 +111,7 @@ public class WebViewActivity extends AppCompatActivity {
 
             CUSTOM_HEADERS = initCustomHeaders(webapp.isSendSavedataRequest());
             loadURL(wv, url);
-
+            wv.setWebChromeClient(new GeoWebChromeClient());
             wv.setOnTouchListener(new View.OnTouchListener() {
                 private int mode = NONE;
                 private float startX;
@@ -251,8 +253,31 @@ public class WebViewActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * WebChromeClient subclass handles UI-related calls
+     * Note: think chrome as in decoration, not the Chrome browser
+     */
+    private class GeoWebChromeClient extends android.webkit.WebChromeClient {
+        @Override
+        public void onGeolocationPermissionsShowPrompt(final String origin,
+                                                       final GeolocationPermissions.Callback callback) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(WebViewActivity.this);
+            builder.setTitle("Location Access Request");
+            builder.setMessage("Do you want to grant this Web App access to your location? You can revoke this decision any time in the Web App Settings menu.")
+                    .setPositiveButton(android.R.string.yes, (dialog, id) -> {
+                        callback.invoke(origin, true, false);
+                    }).setNegativeButton(android.R.string.no, (dialog, id) -> {
+                // origin, allow, remember
+                callback.invoke(origin, false, false);
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
 
     private class CustomBrowser extends WebViewClient {
+
 
         @Override
         public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
