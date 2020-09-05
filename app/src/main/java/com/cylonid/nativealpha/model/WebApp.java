@@ -29,7 +29,7 @@ public class WebApp {
     private boolean block_images;
     private boolean allow_http;
     private String url_on_first_pageload;
-    private boolean test;
+    private boolean allow_location_access;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -50,6 +50,7 @@ public class WebApp {
         block_images = false;
         allow_http = false;
         url_on_first_pageload = null;
+        allow_location_access = false;
 
     }
 
@@ -73,6 +74,7 @@ public class WebApp {
         this.block_images = other.block_images;
         this.allow_http = other.allow_http;
         this.url_on_first_pageload = other.url_on_first_pageload;
+        this.allow_location_access = other.allow_location_access;
 
     }
 
@@ -240,6 +242,19 @@ public class WebApp {
 
     public void setUseAdblock(boolean use_adblock) {
         this.use_adblock = use_adblock;
+    }
+
+    public boolean isAllowLocationAccess() {
+        return allow_location_access;
+    }
+
+    public void setAllowLocationAccess(boolean allow_location_access) {
+        this.allow_location_access = allow_location_access;
+    }
+
+    public void enableLocationAccess() {
+        this.allow_location_access = true;
+        DataManager.getInstance().saveWebAppData();
     }
 
     public void setLastUsedUrl(String last_used_url) {

@@ -1,7 +1,7 @@
 package com.cylonid.nativealpha;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -17,7 +17,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,14 +31,18 @@ import org.adblockplus.libadblockplus.android.webview.AdblockWebView;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class WebViewActivity extends AppCompatActivity {
+import pub.devrel.easypermissions.EasyPermissions;
+
+public class WebViewActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
 
     private WebView wv;
     int webappID = -1;
-
+    private GeolocationPermissions.Callback geo_callback = null;
+    private String geo_origin = null;
     //Constants for touchlistener
     private static final int NONE = 0;
     private static final int SWIPE = 1;
@@ -221,6 +224,8 @@ public class WebViewActivity extends AppCompatActivity {
 
     }
 
+
+
     public WebView getWebView() {
         return wv;
     }
@@ -252,27 +257,66 @@ public class WebViewActivity extends AppCompatActivity {
           view.loadUrl(url, CUSTOM_HEADERS);
 
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-    /**
-     * WebChromeClient subclass handles UI-related calls
-     * Note: think chrome as in decoration, not the Chrome browser
-     */
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+        if (requestCode == Const.PERMISSION_RC_LOCATION) {
+            DataManager.getInstance().getWebApp(webappID).enableLocationAccess();
+
+            if (geo_callback != null) {
+                geo_callback.invoke(geo_origin, true, false);
+                geo_callback = null;
+            }
+        }
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> list) {
+        if (requestCode == Const.PERMISSION_RC_LOCATION) {
+            if (geo_callback != null) {
+                geo_callback.invoke(geo_origin, false, false);
+                geo_callback = null;
+            }
+        }
+    }
+
     private class GeoWebChromeClient extends android.webkit.WebChromeClient {
+
         @Override
         public void onGeolocationPermissionsShowPrompt(final String origin,
                                                        final GeolocationPermissions.Callback callback) {
+            WebApp webapp = DataManager.getInstance().getWebApp(webappID);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(WebViewActivity.this);
-            builder.setTitle("Location Access Request");
-            builder.setMessage("Do you want to grant this Web App access to your location? You can revoke this decision any time in the Web App Settings menu.")
-                    .setPositiveButton(android.R.string.yes, (dialog, id) -> {
-                        callback.invoke(origin, true, false);
-                    }).setNegativeButton(android.R.string.no, (dialog, id) -> {
-                // origin, allow, remember
-                callback.invoke(origin, false, false);
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            String[] perms = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+            if (EasyPermissions.hasPermissions(WebViewActivity.this, perms)) {
+                if (webapp.isAllowLocationAccess())
+                    callback.invoke(origin, true, false);
+                else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(WebViewActivity.this);
+                    builder.setTitle(getString(R.string.dialog_permission_location_title));
+                    builder.setMessage(getString(R.string.dialog_permission_location_txt))
+                            .setPositiveButton(android.R.string.yes, (dialog, id) -> {
+                                callback.invoke(origin, true, false);
+                                webapp.enableLocationAccess();
+                            }).setNegativeButton(android.R.string.no, (dialog, id) -> {
+                        callback.invoke(origin, false, false);
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            } else {
+                geo_callback = callback;
+                geo_origin = origin;
+                EasyPermissions.requestPermissions(WebViewActivity.this,getString(R.string.permission_location_rationale), Const.PERMISSION_RC_LOCATION, perms);
+
+            }
         }
     }
 

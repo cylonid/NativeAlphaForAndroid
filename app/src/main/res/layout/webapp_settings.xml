@@ -93,9 +93,17 @@
                         android:id="@+id/switchHTTP"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
+                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
                         android:checked="@={webapp.allowHttp}"
                         android:text="@string/allow_http" />
+
+                    <Switch
+                        android:id="@+id/switchLocationAccess"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/settings_bottom"
+                        android:checked="@={webapp.allowLocationAccess}"
+                        android:text="@string/allow_location_access" />
 
                     <TextView
                         android:layout_width="match_parent"

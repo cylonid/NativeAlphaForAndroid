@@ -9,4 +9,8 @@ public class Const {
     public static final int RESULT_IDX_FAVICON = 0;
     public static final int RESULT_IDX_TITLE = 1;
     public static final int RESULT_IDX_NEW_BASEURL = 2;
+
+    public static final int PERMISSION_RC_LOCATION = 123;
 }
+
+
