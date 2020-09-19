@@ -1,7 +1,6 @@
 package com.cylonid.nativealpha.util;
 
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -27,8 +26,6 @@ import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.WebViewActivity;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.json.JSONArray;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,10 +34,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 public final class Utility {
 

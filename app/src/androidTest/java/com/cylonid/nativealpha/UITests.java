@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.web.webdriver.Locator;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
@@ -54,7 +55,7 @@ import static org.junit.Assert.assertEquals;
 public class UITests {
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
-
+//    public ActivityScenarioRule<MainActivity> scenarioRule = new ActivityScenarioRule<>(MainActivity.class);
     @Test
     public void addWebsite() {
         onView(withId(R.id.websiteUrl)).perform(clearText(), typeText("github.com"));

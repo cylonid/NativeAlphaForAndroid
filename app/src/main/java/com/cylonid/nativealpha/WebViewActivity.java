@@ -2,16 +2,20 @@ package com.cylonid.nativealpha;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.CookieManager;
+import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
 import android.webkit.SslErrorHandler;
+import android.webkit.URLUtil;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -41,8 +45,11 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
     private WebView wv;
     int webappID = -1;
+
     private GeolocationPermissions.Callback geo_callback = null;
     private String geo_origin = null;
+    private DownloadManager.Request dl_request = null;
+
     //Constants for touchlistener
     private static final int NONE = 0;
     private static final int SWIPE = 1;
@@ -58,9 +65,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        webappID = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
         setContentView(R.layout.full_webview);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        webappID = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
+
 
         DataManager.getInstance().loadAppData();
         Utility.applyUITheme();
@@ -115,6 +123,52 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             CUSTOM_HEADERS = initCustomHeaders(webapp.isSendSavedataRequest());
             loadURL(wv, url);
             wv.setWebChromeClient(new GeoWebChromeClient());
+            wv.setDownloadListener(new DownloadListener() {
+                @Override
+                public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+
+                }
+
+            });
+            wv.setDownloadListener((dl_url, userAgent, contentDisposition, mimeType, contentLength) -> {
+
+                if (dl_url.contains(".pdf")) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(dl_url));
+                    startActivity(i);
+                } else {
+                    DownloadManager.Request request = new DownloadManager.Request(
+                            Uri.parse(dl_url));
+                    request.setMimeType(mimeType);
+                    request.addRequestHeader("cookie", CookieManager.getInstance().getCookie(dl_url));
+                    request.addRequestHeader("User-Agent", userAgent);
+                    request.setTitle(URLUtil.guessFileName(dl_url, contentDisposition,
+                            mimeType));
+                    request.allowScanningByMediaScanner();
+                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                    request.setDestinationInExternalPublicDir(
+                            Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(
+                                    dl_url, contentDisposition, mimeType));
+                    DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+                        if (!EasyPermissions.hasPermissions(WebViewActivity.this, perms)) {
+                            dl_request = request;
+                            EasyPermissions.requestPermissions(WebViewActivity.this, getString(R.string.permission_storage_rationale), Const.PERMISSION_RC_STORAGE, perms);
+                        } else {
+                            if (dm != null)
+                                dm.enqueue(request);
+                        }
+                    }
+                    //No storage permission needed for Android 10+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if (dm != null)
+                            dm.enqueue(request);
+                    }
+
+                }
+            });
             wv.setOnTouchListener(new View.OnTouchListener() {
                 private int mode = NONE;
                 private float startX;
@@ -183,6 +237,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     }
 
 
+
     @Override
     public void onBackPressed() {
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
@@ -223,7 +278,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         }
 
     }
-
 
 
     public WebView getWebView() {
@@ -274,6 +328,16 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 geo_callback.invoke(geo_origin, true, false);
                 geo_callback = null;
             }
+        }
+        if (requestCode == Const.PERMISSION_RC_STORAGE) {
+           if (dl_request != null) {
+               DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+               if (dm != null)
+                    dm.enqueue(dl_request);
+
+               dl_request = null;
+
+           }
         }
     }
 
