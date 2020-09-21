@@ -12,10 +12,8 @@ import android.os.Environment;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.CookieManager;
-import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
 import android.webkit.SslErrorHandler;
-import android.webkit.URLUtil;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -123,16 +121,11 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             CUSTOM_HEADERS = initCustomHeaders(webapp.isSendSavedataRequest());
             loadURL(wv, url);
             wv.setWebChromeClient(new GeoWebChromeClient());
-            wv.setDownloadListener(new DownloadListener() {
-                @Override
-                public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-
-                }
-
-            });
             wv.setDownloadListener((dl_url, userAgent, contentDisposition, mimeType, contentLength) -> {
 
-                if (dl_url.contains(".pdf")) {
+                String file_name = Utility.getFileNameFromDownload(url, contentDisposition, mimeType);
+
+                if (mimeType.equals("application/pdf") || file_name.endsWith(".pdf")) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(dl_url));
                     startActivity(i);
@@ -142,13 +135,12 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                     request.setMimeType(mimeType);
                     request.addRequestHeader("cookie", CookieManager.getInstance().getCookie(dl_url));
                     request.addRequestHeader("User-Agent", userAgent);
-                    request.setTitle(URLUtil.guessFileName(dl_url, contentDisposition,
-                            mimeType));
+                    request.setTitle(file_name);
                     request.allowScanningByMediaScanner();
                     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                     request.setDestinationInExternalPublicDir(
-                            Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(
-                                    dl_url, contentDisposition, mimeType));
+                            Environment.DIRECTORY_DOWNLOADS, file_name);
+
                     DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
 
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {

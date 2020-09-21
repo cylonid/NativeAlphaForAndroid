@@ -9,6 +9,7 @@ import android.os.Build;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,6 +35,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Utility {
 
@@ -142,6 +145,20 @@ public final class Utility {
             return true;
         else
             return false;
+    }
+
+    public static String getFileNameFromDownload(String url, String content_disposition, String mime_type) {
+        String file_name = null;
+        if (content_disposition != null && !content_disposition.equals("")) {
+            Pattern pattern = Pattern.compile("attachment; filename=\"(.*)\"; filename\\*=UTF-8''(.*)", Pattern.CASE_INSENSITIVE);
+            Matcher m = pattern.matcher(content_disposition);
+            file_name = m.matches() ? m.group(2) : null;
+        }
+        if (file_name == null) {
+            file_name = URLUtil.guessFileName(url, content_disposition, mime_type);
+        }
+
+        return file_name;
     }
 
     public static String readFromFile(File file) {
