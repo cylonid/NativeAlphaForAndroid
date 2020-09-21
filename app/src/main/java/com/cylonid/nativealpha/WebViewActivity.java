@@ -329,9 +329,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         if (requestCode == Const.PERMISSION_RC_STORAGE) {
            if (dl_request != null) {
                DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-               if (dm != null)
-                    dm.enqueue(dl_request);
-
+               if (dm != null) {
+                   dm.enqueue(dl_request);
+                   Utility.showInfoSnackbar(this, getString(R.string.file_download), Snackbar.LENGTH_SHORT);
+               }
                dl_request = null;
 
            }

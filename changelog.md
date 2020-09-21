@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Version 0.84
+* Web App label on mainscreen can be changed by user
+* File downloads are supported
+* Location access is supported (experimental)
+
 ## Version 0.83
 * Multiple Web Apps will be kept open in background (similar to opened tabs in a mobile browser). This behaviour is limited by system settings and your device's RAM.
 * Backup & Restore of Native Alpha settings + Web Apps
