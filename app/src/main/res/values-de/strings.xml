@@ -80,4 +80,5 @@
     <string name="dialog_permission_location_title">Standortzugriff-Anfrage</string>
     <string name="permission_location_rationale">Wenn Sie möchten, dass Web-Apps auf Ihren Standort zugreifen können, können Sie Native Alpha die Erlaubnis dazu erteilen. Sie können dies für jede Web-App einzeln entscheiden.</string>
     <string name="permission_storage_rationale">Wenn Sie über Native Alpha Dateien herunterladen möchten, müssen Sie dem Zugriff auf den Speicher zustimmen.</string>
+    <string name="file_download">Datei wird heruntergeladen...</string>
 </resources>

@@ -10,7 +10,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 29
         versionCode 840
-        versionName "0.84"
+        versionName "0.84RC6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'

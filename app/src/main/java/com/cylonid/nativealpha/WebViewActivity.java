@@ -28,6 +28,7 @@ import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.adblockplus.libadblockplus.android.webview.AdblockWebView;
 
@@ -123,15 +124,15 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             wv.setWebChromeClient(new GeoWebChromeClient());
             wv.setDownloadListener((dl_url, userAgent, contentDisposition, mimeType, contentLength) -> {
 
-                String file_name = Utility.getFileNameFromDownload(url, contentDisposition, mimeType);
-
-                if (mimeType.equals("application/pdf") || file_name.endsWith(".pdf")) {
+                if (mimeType.equals("application/pdf")) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(dl_url));
                     startActivity(i);
                 } else {
                     DownloadManager.Request request = new DownloadManager.Request(
                             Uri.parse(dl_url));
+                    String file_name = Utility.getFileNameFromDownload(dl_url, contentDisposition, mimeType);
+
                     request.setMimeType(mimeType);
                     request.addRequestHeader("cookie", CookieManager.getInstance().getCookie(dl_url));
                     request.addRequestHeader("User-Agent", userAgent);
@@ -149,14 +150,18 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                             dl_request = request;
                             EasyPermissions.requestPermissions(WebViewActivity.this, getString(R.string.permission_storage_rationale), Const.PERMISSION_RC_STORAGE, perms);
                         } else {
-                            if (dm != null)
+                            if (dm != null) {
                                 dm.enqueue(request);
+                                Utility.showInfoSnackbar(this, getString(R.string.file_download), Snackbar.LENGTH_SHORT);
+                            }
                         }
                     }
                     //No storage permission needed for Android 10+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        if (dm != null)
+                        if (dm != null) {
                             dm.enqueue(request);
+                            Utility.showInfoSnackbar(this, getString(R.string.file_download), Snackbar.LENGTH_SHORT);
+                        }
                     }
 
                 }
