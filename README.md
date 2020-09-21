@@ -16,7 +16,7 @@
   * Dark mode for Android 10+
 
 ## Download Options
-[![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v0.83/NativeAlpha_0.83.apk)
+[![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v0.84/NativeAlpha_0.84.apk)
 
 
 ## FAQ
