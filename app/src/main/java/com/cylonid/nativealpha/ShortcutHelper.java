@@ -2,12 +2,13 @@ package com.cylonid.nativealpha;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
@@ -26,6 +28,7 @@ import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
+import com.google.android.material.snackbar.Snackbar;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +38,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -42,6 +46,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static android.app.Activity.RESULT_OK;
+import static com.cylonid.nativealpha.util.Const.CODE_OPEN_FILE;
 
 
 public class ShortcutHelper {
@@ -54,14 +61,24 @@ public class ShortcutHelper {
     private EditText uiTitle;
     private LinearLayout uiIconLayout;
     private Button uiBtnPositive;
-    private int timeout_factor;
+    private final int timeout_factor;
+    protected FaviconFetcher asyncTask;
+    private boolean suppress_cancel_msg;
 
     public ShortcutHelper(WebApp webapp, Activity c, int timeout_factor) {
         this.webapp = webapp;
         this.activity = c;
         this.bitmap = null;
         this.timeout_factor = timeout_factor;
+        this.asyncTask = new FaviconFetcher(this);
+        this.suppress_cancel_msg = false;
 
+        asyncTask.execute();
+
+    }
+
+    public FaviconFetcher getAsyncTask() {
+        return asyncTask;
     }
 
     private void addShortcutToHomeScreen(Bitmap bitmap) {
@@ -72,6 +89,7 @@ public class ShortcutHelper {
             icon = IconCompat.createWithBitmap(bitmap);
         else
             icon = IconCompat.createWithResource(activity, R.mipmap.native_alpha_shortcut);
+
 
         String final_title = uiTitle.getText().toString();
         if (final_title.equals(""))
@@ -92,7 +110,8 @@ public class ShortcutHelper {
     }
 
     private void prepareFailedUI() {
-        showFailedMessage();
+        if (!suppress_cancel_msg)
+            showFailedMessage();
         uiIconLayout.setVisibility(View.GONE);
         uiBtnPositive.setEnabled(true);
         uiTitle.setText(webapp.getTitle());
@@ -105,6 +124,25 @@ public class ShortcutHelper {
         toast.show();
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CODE_OPEN_FILE && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
+                if (bitmap != null)
+                    applyNewBitmapToDialog(bitmap);
+
+            }
+            catch(IOException e) {
+                Toast toast = Toast.makeText(activity, "Icon could not be loaded.", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.TOP, 0, 100);
+                toast.show();
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     public void buildShortcutDialog() {
         LayoutInflater li = LayoutInflater.from(activity);
         final View inflated_view = li.inflate(R.layout.shortcut_dialog, null);
@@ -112,6 +150,7 @@ public class ShortcutHelper {
         uiTitle = (EditText) inflated_view.findViewById(R.id.websiteTitle);
         uiFavicon = (ImageView) inflated_view.findViewById(R.id.favicon);
         uiProgressBar = (CircularProgressBar) inflated_view.findViewById(R.id.circularProgressBar);
+        Button btnCustomIcon = inflated_view.findViewById(R.id.btnCustomIcon);
 
         final AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setView(inflated_view)
@@ -119,22 +158,26 @@ public class ShortcutHelper {
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
 
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+        dialog.setOnShowListener(dialogInterface -> {
 
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
+            uiBtnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            uiBtnPositive.setEnabled(false);
+            uiBtnPositive.setOnClickListener(view -> {
+                addShortcutToHomeScreen(bitmap);
+                dialog.dismiss();
+            });
+            btnCustomIcon.setOnClickListener(view -> {
+                suppress_cancel_msg = true;
+                asyncTask.cancel(true);
 
-                uiBtnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                uiBtnPositive.setEnabled(false);
-                uiBtnPositive.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        addShortcutToHomeScreen(bitmap);
-                        dialog.dismiss();
-                    }
-                });
-            }
+                Intent intent = new Intent().setType("image/*").setAction(Intent.ACTION_GET_CONTENT);
+                try {
+                    activity.startActivityForResult(Intent.createChooser(intent, "Select an icon"), CODE_OPEN_FILE);
+                } catch (android.content.ActivityNotFoundException e) {
+                    Utility.showInfoSnackbar(activity, activity.getString(R.string.no_filemanager), Snackbar.LENGTH_LONG);
+                    e.printStackTrace();
+                }
+            });
         });
         dialog.show();
     }
@@ -151,6 +194,17 @@ public class ShortcutHelper {
     private void applyNewBaseUrl(String url) {
         if (url != null)
             webapp.setBaseUrl(url);
+
+    }
+
+    private void applyNewBitmapToDialog(Bitmap bitmap) {
+        if (bitmap != null) {
+            uiFavicon.setImageBitmap(bitmap);
+            uiProgressBar.setVisibility(View.GONE);
+            uiFavicon.setVisibility(View.VISIBLE);
+            uiBtnPositive.setEnabled(true);
+            uiTitle.requestFocus();
+        }
     }
 
 
@@ -160,7 +214,7 @@ public class ShortcutHelper {
         final TreeMap<Integer, String> found_icons;
         private String base_url;
         private final ShortcutHelper shortcutHelper;
-        private FaviconFetcher asyncObject;
+        private FaviconFetcher asyncTask;
 
         public FaviconFetcher(ShortcutHelper s) {
             found_icons = new TreeMap<>();
@@ -172,26 +226,28 @@ public class ShortcutHelper {
         protected void onPreExecute() {
             super.onPreExecute();
             shortcutHelper.buildShortcutDialog();
-                asyncObject = this;
-                new CountDownTimer(7000 * shortcutHelper.timeout_factor, 7000 * shortcutHelper.timeout_factor) {
-                    public void onTick(long millisUntilFinished) {
-                        // You can monitor the progress here as well by changing the onTick() time
-                    }
-                    public void onFinish() {
-                        // stop async task if not in progress
-                        if (asyncObject.getStatus() == AsyncTask.Status.RUNNING) {
-                            asyncObject.cancel(true);
+            asyncTask = this;
+            shortcutHelper.asyncTask = this;
+            new CountDownTimer(7000 * shortcutHelper.timeout_factor, 7000 * shortcutHelper.timeout_factor) {
+                public void onTick(long millisUntilFinished) {
+                    // You can monitor the progress here as well by changing the onTick() time
+                }
+                public void onFinish() {
+                    // stop async task if not in progress
+                    if (asyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+                        asyncTask.cancel(true);
 
-                            Log.d("SHORTCUT", "Timeout");
-                        }
+                        Log.d("SHORTCUT", "Timeout");
                     }
-                }.start();
+                }
+            }.start();
         }
 
         @Override
         protected void onCancelled() {
             super.onCancelled();
             shortcutHelper.prepareFailedUI();
+
         }
 
         @Override
@@ -297,11 +353,7 @@ public class ShortcutHelper {
             super.onPostExecute(result);
 
             if (shortcutHelper.bitmap != null) {
-                shortcutHelper.uiFavicon.setImageBitmap(shortcutHelper.bitmap);
-                shortcutHelper.uiProgressBar.setVisibility(View.GONE);
-                shortcutHelper.uiFavicon.setVisibility(View.VISIBLE);
-                shortcutHelper.uiBtnPositive.setEnabled(true);
-                shortcutHelper.uiTitle.requestFocus();
+                shortcutHelper.applyNewBitmapToDialog(shortcutHelper.bitmap);
             }
             else
                 shortcutHelper.prepareFailedUI();

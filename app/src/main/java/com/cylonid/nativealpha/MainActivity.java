@@ -3,10 +3,8 @@ package com.cylonid.nativealpha;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.http.SslError;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,12 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.databinding.DataBindingUtil;
 
-import com.cylonid.nativealpha.databinding.WebappSettingsBinding;
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
@@ -31,15 +26,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import static android.widget.LinearLayout.HORIZONTAL;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.mikepenz.aboutlibraries.Libs;
-import com.mikepenz.aboutlibraries.LibsBuilder;
-
-
 
 public class MainActivity extends AppCompatActivity {
     private LinearLayout mainScreen;
-    private ShortcutHelper.FaviconFetcher faviconFetcher = null;
+    private ShortcutHelper shortcutHelper = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +75,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (shortcutHelper != null) {
+            shortcutHelper.onActivityResult(requestCode, resultCode, data);
+        }
+
+    }
+
     private void buildImportSuccessDialog() {
         final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
 
@@ -96,9 +95,7 @@ public class MainActivity extends AppCompatActivity {
             int timeout_factor = 1;
             for (WebApp webapp : DataManager.getInstance().getWebsites()) {
                 if (webapp.isActiveEntry()) {
-                    faviconFetcher = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(webapp, MainActivity.this, timeout_factor));
-                    faviconFetcher.execute();
-                    faviconFetcher = null;
+                    shortcutHelper = new ShortcutHelper(webapp, MainActivity.this, timeout_factor);
                     timeout_factor +=1;
                 }
             }
@@ -150,8 +147,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (faviconFetcher != null)
-            faviconFetcher.cancel(true);
+        if (shortcutHelper != null) {
+            if (shortcutHelper.getAsyncTask() != null)
+                shortcutHelper.getAsyncTask().cancel(true);
+        }
     }
 
     private ImageButton generateImageButton(String name, int resourceID, int webappID, LinearLayout ll_row) {

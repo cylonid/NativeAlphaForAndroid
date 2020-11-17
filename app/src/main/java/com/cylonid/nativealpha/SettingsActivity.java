@@ -26,13 +26,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
+import static com.cylonid.nativealpha.util.Const.CODE_OPEN_FILE;
+import static com.cylonid.nativealpha.util.Const.CODE_WRITE_FILE;
 
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private static final int CODE_OPEN_FILE = 512;
-    private static final int CODE_WRITE_FILE = 4096;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -90,35 +90,25 @@ public class SettingsActivity extends AppCompatActivity {
 
         });
 
-        btnImport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT);
-                try {
-                    startActivityForResult(Intent.createChooser(intent, "Select a file"), CODE_OPEN_FILE);
-                } catch (android.content.ActivityNotFoundException e) {
-                    Utility.showInfoSnackbar(SettingsActivity.this, getString(R.string.no_filemanager), Snackbar.LENGTH_LONG);
-                    e.printStackTrace();
-                }
-
+        btnImport.setOnClickListener(v -> {
+            Intent intent = new Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT);
+            try {
+                startActivityForResult(Intent.createChooser(intent, "Select a file"), CODE_OPEN_FILE);
+            } catch (android.content.ActivityNotFoundException e) {
+                Utility.showInfoSnackbar(SettingsActivity.this, getString(R.string.no_filemanager), Snackbar.LENGTH_LONG);
+                e.printStackTrace();
             }
 
         });
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataManager.getInstance().setSettings(modified_settings);
-                onBackPressed();
-            }
+        btnSave.setOnClickListener(v -> {
+            DataManager.getInstance().setSettings(modified_settings);
+            onBackPressed();
         });
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utility.applyUITheme();
-                onBackPressed();
-            }
+        btnCancel.setOnClickListener(v -> {
+            Utility.applyUITheme();
+            onBackPressed();
         });
 
     }
