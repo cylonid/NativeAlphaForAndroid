@@ -110,12 +110,15 @@ public class ShortcutHelper {
     }
 
     private void prepareFailedUI() {
-        if (!suppress_cancel_msg)
+        if (!suppress_cancel_msg) {
             showFailedMessage();
-        uiIconLayout.setVisibility(View.GONE);
+            uiTitle.setText(webapp.getTitle());
+            uiTitle.requestFocus();
+        }
+        uiProgressBar.setVisibility(View.GONE);
+        uiFavicon.setVisibility(View.VISIBLE);
         uiBtnPositive.setEnabled(true);
-        uiTitle.setText(webapp.getTitle());
-        uiTitle.requestFocus();
+
     }
 
     private void showFailedMessage() {
@@ -169,6 +172,7 @@ public class ShortcutHelper {
             btnCustomIcon.setOnClickListener(view -> {
                 suppress_cancel_msg = true;
                 asyncTask.cancel(true);
+                setShortcutTitle(webapp.getTitle());
 
                 Intent intent = new Intent().setType("image/*").setAction(Intent.ACTION_GET_CONTENT);
                 try {
@@ -188,7 +192,9 @@ public class ShortcutHelper {
                 uiTitle.setText(shortcut_title);
             else
                 uiTitle.setText(webapp.getTitle());
+
         }
+        uiTitle.requestFocus();
     }
 
     private void applyNewBaseUrl(String url) {
@@ -199,11 +205,13 @@ public class ShortcutHelper {
 
     private void applyNewBitmapToDialog(Bitmap bitmap) {
         if (bitmap != null) {
+            this.bitmap = bitmap;
             uiFavicon.setImageBitmap(bitmap);
+
             uiProgressBar.setVisibility(View.GONE);
             uiFavicon.setVisibility(View.VISIBLE);
             uiBtnPositive.setEnabled(true);
-            uiTitle.requestFocus();
+
         }
     }
 

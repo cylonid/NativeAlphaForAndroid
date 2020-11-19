@@ -20,7 +20,7 @@
         <com.mikhaellopez.circularprogressbar.CircularProgressBar
             android:id="@+id/circularProgressBar"
             android:layout_width="80dp"
-            android:layout_height="match_parent"
+            android:layout_height="80dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
@@ -36,11 +36,13 @@
         <ImageView
             android:id="@+id/favicon"
             android:layout_width="80dp"
-            android:layout_height="match_parent"
+            android:layout_height="80dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/native_alpha_shortcut"
             android:visibility="gone"
             />
 
