@@ -17,6 +17,7 @@ import android.widget.Switch;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.FragmentManager;
 
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
@@ -24,12 +25,13 @@ import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
 import static android.widget.LinearLayout.HORIZONTAL;
 
 
 public class MainActivity extends AppCompatActivity {
     private LinearLayout mainScreen;
-    private ShortcutHelper shortcutHelper = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         Utility.personalizeToolbar(this);
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buildAddWebsiteDialog(getString(R.string.add_webapp));
-            }
-        });
+        fab.setOnClickListener(view -> buildAddWebsiteDialog(getString(R.string.add_webapp)));
 
 
     }
@@ -75,14 +72,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (shortcutHelper != null) {
-            shortcutHelper.onActivityResult(requestCode, resultCode, data);
-        }
-
-    }
 
     private void buildImportSuccessDialog() {
         final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
@@ -92,11 +81,11 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(message);
         builder.setTitle(getString(R.string.import_success, DataManager.getInstance().getActiveWebsitesCount()));
         builder.setPositiveButton(getString(android.R.string.yes), (dialog, id) -> {
-            int timeout_factor = 1;
+
             for (WebApp webapp : DataManager.getInstance().getWebsites()) {
                 if (webapp.isActiveEntry()) {
-                    shortcutHelper = new ShortcutHelper(webapp, MainActivity.this, timeout_factor);
-                    timeout_factor +=1;
+                    ShortcutDialogFragment frag = ShortcutDialogFragment.newInstance(webapp);
+                    frag.show(getSupportFragmentManager(), "SCFetcher-" + webapp.getID());
                 }
             }
         });
@@ -144,15 +133,6 @@ public class MainActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (shortcutHelper != null) {
-            if (shortcutHelper.getAsyncTask() != null)
-                shortcutHelper.getAsyncTask().cancel(true);
-        }
-    }
-
     private ImageButton generateImageButton(String name, int resourceID, int webappID, LinearLayout ll_row) {
         int row_height = (int) getResources().getDimension(R.dimen.line_height);
         int transparent_color = ResourcesCompat.getColor(getResources(), R.color.transparent, null);
@@ -184,32 +164,19 @@ public class MainActivity extends AppCompatActivity {
         ll_row.addView(btn_title);
 
         ImageButton btn_open_webview = generateImageButton("btnOpenWebview", R.drawable.ic_baseline_open_in_browser_24, webapp.getID(), ll_row);
-        btn_open_webview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openWebView(webapp);
-            }
-
-        });
+        btn_open_webview.setOnClickListener(v -> openWebView(webapp));
 
         ImageButton btn_settings = generateImageButton("btnSettings", R.drawable.ic_settings_black_24dp, webapp.getID(), ll_row);
-        btn_settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, WebAppSettingsActivity.class);
-                intent.putExtra(Const.INTENT_WEBAPPID, webapp.getID());
-                intent.setAction(Intent.ACTION_VIEW);
-                startActivity(intent);
+        btn_settings.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, WebAppSettingsActivity.class);
+            intent.putExtra(Const.INTENT_WEBAPPID, webapp.getID());
+            intent.setAction(Intent.ACTION_VIEW);
+            startActivity(intent);
 
-            }
         });
 
         ImageButton btn_delete = generateImageButton("btnDelete", R.drawable.ic_delete_black_24dp, webapp.getID(), ll_row);
-        btn_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { buildDeleteItemDialog(webapp.getID());
-            }
-        });
+        btn_delete.setOnClickListener(v -> buildDeleteItemDialog(webapp.getID()));
 
         mainScreen.addView(ll_row);
 
@@ -228,37 +195,31 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
 
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+        dialog.setOnShowListener(dialogInterface -> {
 
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
+            Button positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            url.requestFocus();
+            positive.setOnClickListener(view -> {
+                String str_url = url.getText().toString().trim();
 
-                Button positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                url.requestFocus();
-                positive.setOnClickListener(new View.OnClickListener() {
+                if (!(str_url.startsWith("https://")) && !(str_url.startsWith("http://")))
+                    str_url = "https://" + str_url;
 
-                    @Override
-                    public void onClick(View view) {
-                        String str_url = url.getText().toString().trim();
+                if (Patterns.WEB_URL.matcher(str_url.toLowerCase()).matches()) {
+                    WebApp new_site = new WebApp(str_url, DataManager.getInstance().getIncrementedID());
+                    DataManager.getInstance().addWebsite(new_site);
 
-                        if (!(str_url.startsWith("https://")) && !(str_url.startsWith("http://")))
-                            str_url = "https://" + str_url;
+                    addRow(new_site);
+                    dialog.dismiss();
+                    if (create_shortcut.isChecked()) {
+                        ShortcutDialogFragment frag = ShortcutDialogFragment.newInstance(new_site);
+                        frag.show(getSupportFragmentManager(), "SCFetcher-" + new_site.getID());
 
-                        if (Patterns.WEB_URL.matcher(str_url.toLowerCase()).matches()) {
-                            WebApp new_site = new WebApp(str_url, DataManager.getInstance().getIncrementedID());
-                            DataManager.getInstance().addWebsite(new_site);
 
-                            addRow(new_site);
-                            dialog.dismiss();
-                            if (create_shortcut.isChecked()) {
-                                ShortcutHelper.FaviconFetcher f = new ShortcutHelper.FaviconFetcher(new ShortcutHelper(new_site, MainActivity.this, 1));
-                                f.execute();
-                            }
-                        } else
-                            url.setError(getString(R.string.enter_valid_url));
                     }
-                });
-            }
+                } else
+                    url.setError(getString(R.string.enter_valid_url));
+            });
         });
         dialog.show();
     }
@@ -267,23 +228,17 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setMessage(getString(R.string.delete_question));
-        builder.setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                WebApp webapp = DataManager.getInstance().getWebApp(ID);
-                if (webapp != null) {
-                    webapp.markInactive();
-                }
-                mainScreen.removeAllViews();
-                addActiveWebAppsToUI();
+        builder.setPositiveButton(getString(android.R.string.yes), (dialog, id) -> {
+            WebApp webapp = DataManager.getInstance().getWebApp(ID);
+            if (webapp != null) {
+                webapp.markInactive();
+            }
+            mainScreen.removeAllViews();
+            addActiveWebAppsToUI();
 
 
-            }
         });
-        builder.setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
+        builder.setNegativeButton(getString(android.R.string.no), (dialog, id) -> dialog.cancel());
         AlertDialog dialog = builder.create();
         dialog.show();
     }

@@ -22,7 +22,7 @@ import com.cylonid.nativealpha.util.Utility;
 public class WebAppSettingsActivity extends AppCompatActivity {
 
     int webappID = -1;
-    private ShortcutHelper shortcutHelper = null;
+    private ShortcutDialogFragment shortcutDialogFragment = null;
 
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     @Override
@@ -45,7 +45,9 @@ public class WebAppSettingsActivity extends AppCompatActivity {
             final Button btnCreateShortcut = inflated_view.findViewById(R.id.btnRecreateShortcut);
 
             btnCreateShortcut.setOnClickListener(view -> {
-                shortcutHelper = new ShortcutHelper(webapp, WebAppSettingsActivity.this, 1);
+                ShortcutDialogFragment frag = ShortcutDialogFragment.newInstance(webapp);
+                frag.show(getSupportFragmentManager(), "SCFetcher-" + webapp.getID());
+
             });
             Button btnSave = findViewById(R.id.btnSave);
             Button btnCancel = findViewById(R.id.btnCancel);
@@ -69,22 +71,6 @@ public class WebAppSettingsActivity extends AppCompatActivity {
 
             btnCancel.setOnClickListener(v -> finish());
         }
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (shortcutHelper != null) {
-            if (shortcutHelper.getAsyncTask() != null)
-                shortcutHelper.getAsyncTask().cancel(true);
-        }
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (shortcutHelper != null) {
-            shortcutHelper.onActivityResult(requestCode, resultCode, data);
-        }
-
     }
 }
 
