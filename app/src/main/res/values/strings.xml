@@ -87,6 +87,9 @@
     <string name="permission_storage_rationale">If you want Native Alpha Web Apps to be able to download files, you have to accept the storage permission request.</string>
     <string name="file_download">File is being downloaded...</string>
     <string name="custom_icon">Select custom icon</string>
+    <string name="webapp_autoreload">Auto-reload page</string>
+    <string name="webapp_interval_for_reload">Interval in seconds</string>
+    <string name="webapp_autoreload_switch">Refresh page regularly</string>
 
 
 </resources>

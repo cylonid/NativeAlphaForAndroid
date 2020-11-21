@@ -82,4 +82,7 @@
     <string name="permission_storage_rationale">Wenn Sie über Native Alpha Dateien herunterladen möchten, müssen Sie dem Zugriff auf den Speicher zustimmen.</string>
     <string name="file_download">Datei wird heruntergeladen...</string>
     <string name="custom_icon">Eigenes Symbol verwenden</string>
+    <string name="webapp_autoreload">Auto-reload page</string>
+    <string name="webapp_interval_for_reload">Intervall in Sekunden</string>
+    <string name="webapp_autoreload_switch">Seite regelmäßig neu laden</string>
 </resources>
