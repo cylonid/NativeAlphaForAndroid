@@ -82,4 +82,5 @@
     <string name="permission_storage_rationale">Wenn Sie über Native Alpha Dateien herunterladen möchten, müssen Sie dem Zugriff auf den Speicher zustimmen.</string>
     <string name="file_download">Datei wird heruntergeladen...</string>
     <string name="custom_icon">Eigenes Symbol verwenden</string>
+    <string name="show_progress_bar_during_page_load">Ladebalken anzeigen</string>
 </resources>

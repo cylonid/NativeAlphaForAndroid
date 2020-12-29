@@ -6,8 +6,7 @@ public class GlobalSettings {
     private boolean clear_cookies;
     private boolean two_finger_multitouch;
     private boolean three_finger_multitouch;
-
-
+    private boolean show_progressbar;
     private boolean multitouch_reload;
     private int theme_id;
 
@@ -18,15 +17,7 @@ public class GlobalSettings {
         this.three_finger_multitouch = other.three_finger_multitouch;
         this.theme_id = other.theme_id;
         this.multitouch_reload = other.multitouch_reload;
-    }
-
-    public GlobalSettings(boolean clear_cache, boolean clear_cookies, boolean two_finger_multitouch, boolean three_finger_multitouch, boolean multitouch_reload, int theme_id) {
-        this.clear_cache = clear_cache;
-        this.clear_cookies = clear_cookies;
-        this.two_finger_multitouch = two_finger_multitouch;
-        this.three_finger_multitouch = three_finger_multitouch;
-        this.theme_id = theme_id;
-        this.multitouch_reload = multitouch_reload;
+        this.show_progressbar = other.show_progressbar;
     }
 
     public GlobalSettings() {
@@ -36,6 +27,7 @@ public class GlobalSettings {
         three_finger_multitouch = false;
         multitouch_reload = true;
         theme_id = 0;
+        show_progressbar = false;
     }
 
     public boolean isTwoFingerMultitouch() {
@@ -82,6 +74,13 @@ public class GlobalSettings {
 
     public void setMultitouchReload(boolean multitouch_reload) {
         this.multitouch_reload = multitouch_reload;
+    }
+    public boolean isShowProgressbar() {
+        return show_progressbar;
+    }
+
+    public void setShowProgressbar(boolean show_progressbar) {
+        this.show_progressbar = show_progressbar;
     }
 
 

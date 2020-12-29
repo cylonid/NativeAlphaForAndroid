@@ -87,6 +87,7 @@
     <string name="permission_storage_rationale">If you want Native Alpha Web Apps to be able to download files, you have to accept the storage permission request.</string>
     <string name="file_download">File is being downloaded...</string>
     <string name="custom_icon">Select custom icon</string>
+    <string name="show_progress_bar_during_page_load">Show progress bar during page load</string>
 
 
 </resources>

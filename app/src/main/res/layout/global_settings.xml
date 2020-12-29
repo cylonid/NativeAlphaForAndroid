@@ -96,6 +96,13 @@
                         android:checked="@={settings.threeFingerMultitouch}"
                         android:text="@string/use_three_finger_swipes_to_switch_between_web_apps_experimental" />
 
+                    <Switch
+                        android:id="@+id/switchShowProgressbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="@={settings.showProgressbar}"
+                        android:text="@string/show_progress_bar_during_page_load" />
+
                     <LinearLayout
                         android:id="@+id/layoutUIModeSelection"
                         android:layout_width="match_parent"

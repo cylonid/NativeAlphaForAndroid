@@ -18,6 +18,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -43,6 +44,8 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
 
     private WebView wv;
+    private ProgressBar progressBar;
+    private boolean user_indicated_reload = false;
     int webappID = -1;
 
     private GeolocationPermissions.Callback geo_callback = null;
@@ -80,6 +83,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             String url = webapp.getLoadableUrl();
 
             wv = findViewById(R.id.webview);
+            progressBar = findViewById(R.id.progressBar);
 
             if (webapp.isUseAdblock()) {
                 wv.setVisibility(View.GONE);
@@ -121,7 +125,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
             CUSTOM_HEADERS = initCustomHeaders(webapp.isSendSavedataRequest());
             loadURL(wv, url);
-            wv.setWebChromeClient(new GeoWebChromeClient());
+            wv.setWebChromeClient(new CustomWebChromeClient());
             wv.setDownloadListener((dl_url, userAgent, contentDisposition, mimeType, contentLength) -> {
 
                 if (mimeType.equals("application/pdf")) {
@@ -215,6 +219,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                             }
                             if (DataManager.getInstance().getSettings().isMultitouchReload() && Math.abs(startY - stopY) > TRESHOLD) {
                                 if (stopY > startY) {
+                                    user_indicated_reload = true;
                                     wv.reload();
                                 }
                                 return true;
@@ -349,7 +354,23 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         }
     }
 
-    private class GeoWebChromeClient extends android.webkit.WebChromeClient {
+    private class CustomWebChromeClient extends android.webkit.WebChromeClient {
+
+        public void onProgressChanged(WebView view, int progress) {
+
+            if (DataManager.getInstance().getSettings().isShowProgressbar() || user_indicated_reload) {
+                if (progressBar.getVisibility() == ProgressBar.GONE && progress < 100) {
+                    progressBar.setVisibility(ProgressBar.VISIBLE);
+                }
+
+                progressBar.setProgress(progress);
+
+                if (progress == 100) {
+                    progressBar.setVisibility(ProgressBar.GONE);
+                    user_indicated_reload = false;
+                }
+            }
+        }
 
         @Override
         public void onGeolocationPermissionsShowPrompt(final String origin,
@@ -383,7 +404,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     }
 
     private class CustomBrowser extends WebViewClient {
-
 
         @Override
         public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {

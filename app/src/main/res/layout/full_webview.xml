@@ -6,18 +6,32 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <WebView
-        android:id="@+id/webview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        tools:ignore="MissingConstraints" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="MissingConstraints" />
 
-    <org.adblockplus.libadblockplus.android.webview.AdblockWebView
-        android:id="@+id/adblockwebview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone"
-        tools:ignore="MissingConstraints" />
+        <org.adblockplus.libadblockplus.android.webview.AdblockWebView
+            android:id="@+id/adblockwebview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:ignore="MissingConstraints" />
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_gravity="bottom"
+            android:indeterminate="false"
+            android:forceDarkAllowed="false"
+            android:id="@+id/progressBar"
+            tools:ignore="UnusedAttribute" />
+
+    </FrameLayout>
 
 <!--    <fragment-->
 <!--        android:id="@+id/nav_host_fragment"-->
