@@ -30,6 +30,8 @@ public class WebApp {
     private boolean allow_http;
     private String url_on_first_pageload;
     private boolean allow_location_access;
+    private String user_agent;
+    private boolean use_custom_user_agent;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -51,6 +53,8 @@ public class WebApp {
         allow_http = false;
         url_on_first_pageload = null;
         allow_location_access = false;
+        user_agent = null;
+        use_custom_user_agent = false;
 
     }
 
@@ -75,6 +79,8 @@ public class WebApp {
         this.allow_http = other.allow_http;
         this.url_on_first_pageload = other.url_on_first_pageload;
         this.allow_location_access = other.allow_location_access;
+        this.user_agent = other.user_agent;
+        this.use_custom_user_agent = other.use_custom_user_agent;
 
     }
 
@@ -252,6 +258,22 @@ public class WebApp {
         this.allow_location_access = allow_location_access;
     }
 
+    public String getUserAgent() {
+        return user_agent;
+    }
+
+    public void setUserAgent(String user_agent) {
+        this.user_agent = user_agent;
+    }
+
+    public boolean isUseCustomUserAgent() {
+        return use_custom_user_agent;
+    }
+
+    public void setUseCustomUserAgent(boolean use_custom_user_agent) {
+        this.use_custom_user_agent = use_custom_user_agent;
+    }
+
     public void enableLocationAccess() {
         this.allow_location_access = true;
         DataManager.getInstance().saveWebAppData();
@@ -314,4 +336,14 @@ public class WebApp {
         else
             textTimeout.setEnabled(false);
      }
+    public void onSwitchUserAgentChanged(CompoundButton mSwitch, boolean isChecked) {
+        EditText txt = mSwitch.getRootView().findViewById(R.id.textUserAgent);
+        if (isChecked) {
+            txt.setEnabled(true);
+        }
+        else
+            txt.setEnabled(false);
+    }
+
+
 }

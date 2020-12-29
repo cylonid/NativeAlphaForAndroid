@@ -92,9 +92,12 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 ((AdblockWebView) wv).setAdblockEnabled(webapp.isUseAdblock());
             }
 
+            if (webapp.isUseCustomUserAgent()) {
+                wv.getSettings().setUserAgentString(webapp.getUserAgent());
+            }
+
             wv.setWebViewClient(new CustomBrowser());
             wv.getSettings().setDomStorageEnabled(true);
-//            wv.getSettings().setGeolocationEnabled(true);
             wv.getSettings().setBlockNetworkLoads(false);
 //        wv.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

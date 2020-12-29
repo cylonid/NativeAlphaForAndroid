@@ -83,4 +83,7 @@
     <string name="file_download">Datei wird heruntergeladen...</string>
     <string name="custom_icon">Eigenes Symbol verwenden</string>
     <string name="show_progress_bar_during_page_load">Ladebalken anzeigen</string>
+    <string name="user_agent">User Agent</string>
+    <string name="use_custom_user_agent">Eigenen User-Agent verwenden</string>
+    <string name="insert_custom_user_agent">User-Agent-String hier einfügen...</string>
 </resources>

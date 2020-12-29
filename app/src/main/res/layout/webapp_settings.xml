@@ -220,25 +220,35 @@
                             android:text="@={`` + webapp.timeoutLastUsedUrl}" />
 
                     </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_agent"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                    <Switch
+                        android:id="@+id/switchUserAgent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
+                        android:checked="@={webapp.useCustomUserAgent}"
+                        android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchUserAgentChanged(switch, checked)}"
+                        android:text="@string/use_custom_user_agent" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginTop="4dp"
-                            android:text="Custom user agent" />
+                        android:visibility="visible">
 
                         <EditText
+                            android:id="@+id/textUserAgent"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:fontFamily="sans-serif"
-                            android:inputType="text" />
+                            android:hint="@string/insert_custom_user_agent"
+                            android:inputType="text"
+                            android:text="@={webapp.userAgent}"
+                            tools:ignore="UnusedAttribute" />
 
                     </LinearLayout>
 
