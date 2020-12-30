@@ -9,6 +9,8 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -60,7 +62,8 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
     private boolean quit_on_next_backpress = false;
     private String last_onbackpress_url = "";
-
+    private Handler reload_handler = null;
+    private WebApp webapp = null;
 
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     @Override
@@ -75,7 +78,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         DataManager.getInstance().loadAppData();
         Utility.applyUITheme();
         Utility.Assert(webappID != -1, "WebApp ID could not be retrieved.");
-        WebApp webapp = DataManager.getInstance().getWebApp(webappID);
+        webapp = DataManager.getInstance().getWebApp(webappID);
         if (webapp == null) {
             finish();
         }
@@ -265,6 +268,14 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (webapp.isAutoreload()) {
+            reload_handler = new Handler();
+            reload();
+        }
+    }
 
     @Override
     protected void onPause() {
@@ -281,10 +292,19 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 CookieManager.getInstance().flush();
             }
         }
-
+        if (reload_handler != null) {
+            reload_handler.removeCallbacksAndMessages(null);
+            Log.d("CLEANUP", "Stopped reload handler");
+        }
     }
 
-
+    private void reload() {
+        reload_handler.postDelayed(() -> {
+            currently_reloading = true;
+            wv.reload();
+            reload();
+        }, webapp.getTimeAutoreload() * 1000);
+    }
     public WebView getWebView() {
         return wv;
     }

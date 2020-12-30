@@ -152,6 +152,43 @@
                         android:checked="@={webapp.blockImages}"
                         android:enabled="true"
                         android:text="@string/do_not_load_images" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/webapp_autoreload"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                    <Switch
+                        android:id="@+id/switchAutoreload"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
+                        android:checked="@={webapp.autoreload}"
+                        android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchAutoreloadChanged(switch, checked)}"
+                        android:text="@string/webapp_autoreload_switch" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="@dimen/settings_bottom"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:text="@string/webapp_interval_for_reload" />
+
+                        <EditText
+                            android:id="@+id/textReloadInterval"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:enabled="@{webapp.autoreload}"
+                            android:inputType="number"
+                            android:text="@={`` + webapp.timeAutoreload}" />
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -184,6 +221,7 @@
                         android:layout_marginBottom="@dimen/settings_bottom"
                         android:checked="@={webapp.openUrlExternal}"
                         android:text="@string/open_external_links_in_browser_app" />
+
 
                     <TextView
                         android:layout_width="match_parent"

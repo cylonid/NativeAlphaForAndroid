@@ -32,6 +32,8 @@ public class WebApp {
     private boolean allow_location_access;
     private String user_agent;
     private boolean use_custom_user_agent;
+    private boolean autoreload;
+    private int time_autoreload;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -55,6 +57,8 @@ public class WebApp {
         allow_location_access = false;
         user_agent = null;
         use_custom_user_agent = false;
+        autoreload = false;
+        time_autoreload = 60;
 
     }
 
@@ -81,6 +85,8 @@ public class WebApp {
         this.allow_location_access = other.allow_location_access;
         this.user_agent = other.user_agent;
         this.use_custom_user_agent = other.use_custom_user_agent;
+        this.autoreload = other.autoreload;
+        this.time_autoreload = other.time_autoreload;
 
     }
 
@@ -250,6 +256,22 @@ public class WebApp {
         this.use_adblock = use_adblock;
     }
 
+    public boolean isAutoreload() {
+        return autoreload;
+    }
+
+    public void setAutoreload(boolean autoreload) {
+        this.autoreload = autoreload;
+    }
+
+    public int getTimeAutoreload() {
+        return time_autoreload;
+    }
+
+    public void setTimeAutoreload(int time_autoreload) {
+        this.time_autoreload = time_autoreload;
+    }
+
     public boolean isAllowLocationAccess() {
         return allow_location_access;
     }
@@ -352,5 +374,12 @@ public class WebApp {
 
     }
 
-
+    public void onSwitchAutoreloadChanged(CompoundButton mSwitch, boolean isChecked) {
+        EditText text = mSwitch.getRootView().findViewById(R.id.textReloadInterval);
+        if (isChecked) {
+            text.setEnabled(true);
+        }
+        else
+            text.setEnabled(false);
+    }
 }

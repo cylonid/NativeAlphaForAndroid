@@ -46,6 +46,7 @@ public class DataManager {
     private static final String shared_pref_glob_2fmultitouch = "TwoFingerMultiTouch";
     private static final String shared_pref_glob_multitouch_reload = "ReloadMultiTouch";
     private static final String shared_pref_glob_3fmultitouch = "ThreeFingerMultiTouch";
+    private static final String shared_pref_glob_progressbar = "LoadProgressBarAlwaysShown";
     private static final String shared_pref_glob_ui_theme = "UITheme";
     private static final String shared_pref_ignore_legacy_settings = "ignoreLegacySettings";
 
@@ -114,6 +115,7 @@ public class DataManager {
             settings.setTwoFingerMultitouch(appdata.getBoolean(shared_pref_glob_2fmultitouch, true));
             settings.setMultitouchReload(appdata.getBoolean(shared_pref_glob_multitouch_reload, true));
             settings.setThreeFingerMultitouch(appdata.getBoolean(shared_pref_glob_3fmultitouch, false));
+            settings.setShowProgressbar(appdata.getBoolean(shared_pref_glob_progressbar, false));
             settings.setThemeId(appdata.getInt(shared_pref_glob_ui_theme, 0));
         }
 
@@ -131,6 +133,7 @@ public class DataManager {
         editor.putBoolean(shared_pref_glob_2fmultitouch, settings.isTwoFingerMultitouch());
         editor.putBoolean(shared_pref_glob_multitouch_reload, settings.isMultitouchReload());
         editor.putBoolean(shared_pref_glob_3fmultitouch, settings.isThreeFingerMultitouch());
+        editor.putBoolean(shared_pref_glob_progressbar, settings.isShowProgressbar());
         editor.putInt(shared_pref_glob_ui_theme, settings.getThemeId());
         editor.putBoolean(shared_pref_ignore_legacy_settings, true);
         editor.apply();
