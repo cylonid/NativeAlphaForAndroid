@@ -86,9 +86,9 @@
     <string name="user_agent">User Agent</string>
     <string name="use_custom_user_agent">Eigenen User-Agent verwenden</string>
     <string name="insert_custom_user_agent">User-Agent-String hier einfügen...</string>
-    <string name="webapp_autoreload">Auto-reload page</string>
+    <string name="webapp_autoreload">Seite regelmäßig neu laden</string>
     <string name="webapp_interval_for_reload">Intervall in Sekunden</string>
-    <string name="webapp_autoreload_switch">Seite regelmäßig neu laden</string>
+    <string name="webapp_autoreload_switch">Neu laden aktivieren</string>
     <string name="hint_user_agent"><![CDATA[<a href="https://www.whatismybrowser.com/guides/the-latest-user-agent/">WhatIsMyBrowser.com</a>]]>  bietet eine Liste an aktuellen User Agents.</string>
     <string name="label">Label</string>
 </resources>

@@ -273,7 +273,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
                 Elements icons = doc.select("link[rel=icon]");
                 icons.addAll(doc.select("link[rel=shortcut icon]"));
                 //If necessary, use apple icons
-                if (icons.size() < 2) {
+                if (icons.size() < 3) {
                     Elements apple_icons = doc.select("link[rel=apple-touch-icon]");
                     Elements apple_icons_prec = doc.select("link[rel=apple-touch-icon-precomposed]");
                     icons.addAll(apple_icons);
