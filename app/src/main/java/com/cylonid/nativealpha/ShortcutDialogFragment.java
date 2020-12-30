@@ -166,22 +166,44 @@ public class ShortcutDialogFragment extends DialogFragment  {
     }
     private TreeMap<Integer, String> buildIconMap() {
         TreeMap<Integer, String> found_icons = new TreeMap<>();
+        String host_part = base_url.replace("http://", "").replace("https://", "").replace("www.", "");
 
-        //Amazon has no icon other than low-res favicon.ico
-        if (base_url.contains("amazon"))
+        //No suitable icon
+        if (host_part.startsWith("facebook."))
+            found_icons.put(325, "https://static.xx.fbcdn.net/rsrc.php/v3/y3/r/UrYT8B96uSq.png");
+
+        if (host_part.startsWith("amazon."))
             found_icons.put(300, "https://s3.amazonaws.com/prod-widgetSource/in-shop/pub/images/amzn_favicon_blk.png");
 
-        //Google has no icon other than low-res favicon.ico
-        if (base_url.contains("https://google."))
+        if (host_part.startsWith("ebay."))
+            found_icons.put(360, "https://play-lh.googleusercontent.com/31-mJUIynIfQBizOn-w1yWLKHBxVeRKA3gz348_E3K-TnuEaqCjn_-Fr9j0yQ6i0y5E=s360");
+
+        if (host_part.startsWith("ebay-kleinanzeigen."))
+            found_icons.put(360, "https://play-lh.googleusercontent.com/3vS4GdhvzXeQuSkwhXZnDElNIE3jQ4hZPEnnLX9BywdsBqUrfc8OBoa9aNRl-Bh84B4=s360");
+
+        if (host_part.startsWith("onedrive.com"))
+            found_icons.put(360, "https://play-lh.googleusercontent.com/4iLRlu-E5hbgoHCb5dkR8wUbjEHFWHfXHkYKexE9hGVaISUGuYzwnFsSvKLgQWTi3cg=s360");
+
+        if (host_part.startsWith("onenote.com"))
+            found_icons.put(360, "https://play-lh.googleusercontent.com/3Wr_nlhRHjIGfPd-BNUbgffLfxPPqNW8GFPscqnQ4t2aPRyKlFMuXT4yhb-PSMsHgss=s360");
+
+        if (host_part.startsWith("office.com"))
+            found_icons.put(360, "https://play-lh.googleusercontent.com/D6XDCje7pB0nNP1sOZkwD-tXkV0_As3ni21us5yZ71_sy0FTWv1s_MQBe1JUnHlgE94=s360");
+
+        if (host_part.startsWith("paypal."))
+            found_icons.put(196, "https://www.paypalobjects.com/webstatic/icon/pp196.png");
+
+        if (host_part.startsWith("google."))
             found_icons.put(240, "https://www.gstatic.com/images/branding/googleg/2x/googleg_standard_color_120dp.png");
 
         //OEBB has a typo in its web manifest
-        if (base_url.contains("oebb.at"))
+        if (host_part.startsWith("oebb.at"))
             found_icons.put(Integer.MAX_VALUE, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
 
-        //XDA has a wrong relative path in its web manifest
-        if (base_url.contains("xda-developers.com"))
-            found_icons.put(Integer.MAX_VALUE, "https://www.xda-developers.com/wp-content/themes/trendyblog-theme/images/android-chrome-512x512.png");
+        //Wrong path in PWA manifest
+        if (host_part.startsWith("explosm.net"))
+            found_icons.put(Integer.MAX_VALUE, "https://files.explosm.net/img/favicons/site/android-chrome-192x192.png");
+
 
         return found_icons;
     }
@@ -189,6 +211,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
     public String[] fetchWebappData() {
         String[] result = new String[] {null, null, null};
         TreeMap<Integer, String> found_icons = buildIconMap();
+
 
         try {
             //Connect to the website
@@ -269,13 +292,14 @@ public class ShortcutDialogFragment extends DialogFragment  {
                 }
             }
 
-            if (!found_icons.isEmpty()) {
-                Map.Entry<Integer, String> best_fit = found_icons.lastEntry();
-                result[Const.RESULT_IDX_FAVICON] = best_fit.getValue();
-
-            }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if (!found_icons.isEmpty()) {
+            Map.Entry<Integer, String> best_fit = found_icons.lastEntry();
+            result[Const.RESULT_IDX_FAVICON] = best_fit.getValue();
+
         }
 
         return result;
@@ -352,9 +376,10 @@ public class ShortcutDialogFragment extends DialogFragment  {
         if (shortcut_title != null) {
             if (!shortcut_title.equals(""))
                 uiTitle.setText(shortcut_title);
-            else
-                uiTitle.setText(webapp.getTitle());
 
+        }
+        else {
+            uiTitle.setText(webapp.getTitle());
         }
         uiTitle.requestFocus();
     }
