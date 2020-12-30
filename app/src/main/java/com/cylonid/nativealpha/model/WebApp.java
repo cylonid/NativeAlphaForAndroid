@@ -338,11 +338,18 @@ public class WebApp {
      }
     public void onSwitchUserAgentChanged(CompoundButton mSwitch, boolean isChecked) {
         EditText txt = mSwitch.getRootView().findViewById(R.id.textUserAgent);
+        Switch switchDesktopVersion = mSwitch.getRootView().findViewById(R.id.switchDesktopSite);
         if (isChecked) {
+            switchDesktopVersion.setChecked(false);
+            switchDesktopVersion.setEnabled(false);
             txt.setEnabled(true);
+
         }
-        else
+        else {
             txt.setEnabled(false);
+            switchDesktopVersion.setEnabled(true);
+        }
+
     }
 
 

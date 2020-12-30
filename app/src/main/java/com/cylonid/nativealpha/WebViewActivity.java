@@ -45,7 +45,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
     private WebView wv;
     private ProgressBar progressBar;
-    private boolean user_indicated_reload = false;
+    private boolean currently_reloading = true;
     int webappID = -1;
 
     private GeolocationPermissions.Callback geo_callback = null;
@@ -222,7 +222,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                             }
                             if (DataManager.getInstance().getSettings().isMultitouchReload() && Math.abs(startY - stopY) > TRESHOLD) {
                                 if (stopY > startY) {
-                                    user_indicated_reload = true;
+                                    currently_reloading = true;
                                     wv.reload();
                                 }
                                 return true;
@@ -361,7 +361,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
         public void onProgressChanged(WebView view, int progress) {
 
-            if (DataManager.getInstance().getSettings().isShowProgressbar() || user_indicated_reload) {
+            if (DataManager.getInstance().getSettings().isShowProgressbar() || currently_reloading) {
                 if (progressBar.getVisibility() == ProgressBar.GONE && progress < 100) {
                     progressBar.setVisibility(ProgressBar.VISIBLE);
                 }
@@ -370,7 +370,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
                 if (progress == 100) {
                     progressBar.setVisibility(ProgressBar.GONE);
-                    user_indicated_reload = false;
+                    currently_reloading = false;
                 }
             }
         }
