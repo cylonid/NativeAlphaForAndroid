@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 
 import com.cylonid.nativealpha.R;
+import com.cylonid.nativealpha.util.Const;
 
 public class WebApp {
 
@@ -60,6 +61,7 @@ public class WebApp {
         autoreload = false;
         time_autoreload = 60;
 
+        initDefaultSettings();
     }
 
     public WebApp(WebApp other) {
@@ -88,6 +90,13 @@ public class WebApp {
         this.autoreload = other.autoreload;
         this.time_autoreload = other.time_autoreload;
 
+    }
+
+    private void initDefaultSettings() {
+        if (base_url.contains("facebook.com")) {
+            this.user_agent = Const.DESKTOP_USER_AGENT;
+            this.use_custom_user_agent = true;
+        }
     }
 
     public boolean isAllowHttp() {
