@@ -5,8 +5,11 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +32,9 @@ public class WebAppSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WebappSettingsBinding binding = DataBindingUtil.setContentView(this, R.layout.webapp_settings);
+        TextView txt = findViewById(R.id.txthintUserAgent);
+        txt.setText(Html.fromHtml(getString(R.string.hint_user_agent), Html.FROM_HTML_MODE_LEGACY));
+        txt.setMovementMethod(LinkMovementMethod.getInstance());
 
         webappID = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
         Utility.Assert(webappID != -1, "WebApp ID could not be retrieved.");

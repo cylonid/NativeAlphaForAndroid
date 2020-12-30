@@ -63,7 +63,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Label"
+                        android:text="@string/label"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                     <EditText
@@ -72,7 +72,8 @@
                         android:fontFamily="sans-serif"
                         android:text="@={webapp.title}"
                         android:layout_marginBottom="@dimen/settings_bottom"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        android:autofillHints="" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -267,10 +268,14 @@
                         android:id="@+id/switchUserAgent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
                         android:checked="@={webapp.useCustomUserAgent}"
                         android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchUserAgentChanged(switch, checked)}"
                         android:text="@string/use_custom_user_agent" />
+
+                    <TextView
+                        android:id="@+id/txthintUserAgent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
