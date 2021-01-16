@@ -33,8 +33,6 @@ import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.adblockplus.libadblockplus.android.webview.AdblockWebView;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +41,6 @@ import java.util.Map;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class WebViewActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
-
 
     private WebView wv;
     private ProgressBar progressBar;
@@ -64,6 +61,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     private String last_onbackpress_url = "";
     private Handler reload_handler = null;
     private WebApp webapp = null;
+
 
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     @Override
@@ -92,7 +90,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 wv.setVisibility(View.GONE);
                 wv = findViewById(R.id.adblockwebview);
                 wv.setVisibility(View.VISIBLE);
-                ((AdblockWebView) wv).setAdblockEnabled(webapp.isUseAdblock());
             }
 
             if (webapp.isUseCustomUserAgent()) {

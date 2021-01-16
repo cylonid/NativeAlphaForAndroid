@@ -1,4 +1,10 @@
 # CHANGELOG
+## Version 0.85
+* Custom icons supported
+* Progress bar indicating reload added
+* Custom user-agent option added
+* Periodical page refresh option added
+* Several minor fixes
 
 ## Version 0.84
 * Web App label on mainscreen can be changed by user

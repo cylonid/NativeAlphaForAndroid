@@ -335,6 +335,10 @@ public class WebApp {
         DataManager.getInstance().saveWebAppData();
     }
 
+    public String getDomain() {
+        return base_url.replace("http://", "").replace("https://", "").replace("www.", "");
+    }
+
 
     public void onSwitchCookiesChanged(CompoundButton mSwitch, boolean isChecked) {
         Switch third_party_cookies = mSwitch.getRootView().findViewById(R.id.switch3PCookies);

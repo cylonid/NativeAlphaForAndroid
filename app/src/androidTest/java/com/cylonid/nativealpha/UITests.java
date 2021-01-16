@@ -12,6 +12,7 @@ import androidx.test.rule.ActivityTestRule;
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
 
+import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +28,9 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -88,7 +91,7 @@ public class UITests {
         onView(withId(R.id.switchCookies)).perform(click());
         onView(withId(R.id.btnSave)).perform(click());
         onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
-        onWebView().withNoTimeout().withElement(findElement(Locator.ID, "detected_value")).check(webMatches(getText(), containsString("No")));
+        onWebView(Matchers.allOf(withId(R.id.webview))).withNoTimeout().withElement(findElement(Locator.ID, "detected_value")).check(webMatches(getText(), containsString("No")));
 
     }
     @Test
@@ -97,7 +100,7 @@ public class UITests {
         onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
         TestUtils.waitForElementWithText(R.string.load_anyway);
         onView(withText(R.string.load_anyway)).perform(click());
-        onWebView().withNoTimeout().withElement(findElement(Locator.ID, "content")).check(webMatches(getText(), containsString("untrusted-root")));
+        onWebView(Matchers.allOf(withId(R.id.webview))).withNoTimeout().withElement(findElement(Locator.ID, "content")).check(webMatches(getText(), containsString("untrusted-root")));
     }
 
     @Test(expected = java.lang.RuntimeException.class)
@@ -106,7 +109,7 @@ public class UITests {
         onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
         TestUtils.waitForElementWithText(android.R.string.cancel);
         onView(withText(android.R.string.cancel)).perform(click());
-        onWebView().withTimeout(3, TimeUnit.SECONDS).withElement(findElement(Locator.ID, "content")).check(webMatches(getText(), containsString("untrusted-root")));
+        onWebView(Matchers.allOf(withId(R.id.webview))).withTimeout(3, TimeUnit.SECONDS).withElement(findElement(Locator.ID, "content")).check(webMatches(getText(), containsString("untrusted-root")));
 
     }
 
@@ -121,7 +124,7 @@ public class UITests {
         onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
         TestUtils.waitForElementWithText(android.R.string.cancel);
         onView(withId(android.R.id.button1)).perform(scrollTo()).perform(click());
-        onWebView().withTimeout(6, TimeUnit.SECONDS).check(webMatches(getCurrentUrl(), containsString("annozone")));
+        onWebView(Matchers.allOf(withId(R.id.webview))).withTimeout(6, TimeUnit.SECONDS).check(webMatches(getCurrentUrl(), containsString("annozone")));
     }
 
 
