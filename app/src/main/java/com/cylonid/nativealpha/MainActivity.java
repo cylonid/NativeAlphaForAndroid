@@ -1,7 +1,6 @@
 package com.cylonid.nativealpha;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -14,18 +13,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.FragmentManager;
 
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
 
 import static android.widget.LinearLayout.HORIZONTAL;
 
@@ -91,9 +86,7 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.setNegativeButton(getString(android.R.string.no), null);
         final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        dialog.setOnDismissListener(dialogInterface -> {
-            Utility.applyUITheme();
-        });
+        dialog.setOnDismissListener(dialogInterface -> Utility.applyUITheme());
         dialog.show();
     }
 
@@ -112,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);

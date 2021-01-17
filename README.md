@@ -18,6 +18,12 @@
 ## Download Options
 [![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v0.85/NativeAlpha_0.85.apk)
 
+## Latest Changes (v0.85)
+* Custom icons supported
+* Progress bar indicating reload added
+* Custom user-agent option added
+* Periodical page refresh option added
+* Several minor fixes, e.g., new LibAdblockWebView version (causing a larger APK size)
 
 ## FAQ
 *Q: Why is it not possible to find an icon for a certain website?*

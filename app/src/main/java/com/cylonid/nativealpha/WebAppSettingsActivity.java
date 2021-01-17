@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
@@ -25,7 +24,6 @@ import com.cylonid.nativealpha.util.Utility;
 public class WebAppSettingsActivity extends AppCompatActivity {
 
     int webappID = -1;
-    private ShortcutDialogFragment shortcutDialogFragment = null;
 
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     @Override

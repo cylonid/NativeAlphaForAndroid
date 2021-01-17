@@ -49,14 +49,11 @@ public class AboutActivity extends AppCompatActivity {
         Element license = new Element();
 
         license.setTitle(getString(R.string.gnu_license));
-        license.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = "https://www.gnu.org/licenses/gpl-3.0.txt";
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
-            }
+        license.setOnClickListener(v -> {
+            String url = "https://www.gnu.org/licenses/gpl-3.0.txt";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
         });
         return license;
 
@@ -65,14 +62,11 @@ public class AboutActivity extends AppCompatActivity {
         Element license = new Element();
 
         license.setTitle(getString(R.string.paypal));
-        license.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = "https://paypal.me/cylonid";
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
-            }
+        license.setOnClickListener(v -> {
+            String url = "https://paypal.me/cylonid";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
         });
         return license;
 
@@ -81,19 +75,16 @@ public class AboutActivity extends AppCompatActivity {
     Element showOpenSourcelibs() {
         Element os = new Element();
         os.setTitle(getString(R.string.open_source_libs));
-        os.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        os.setOnClickListener(v -> {
 //                OssLicensesMenuActivity.setActivityTitle("Open source libraries");
 //                Intent intent = new Intent(AboutActivity.this, OssLicensesMenuActivity.class);
 //                String title = getString(R.string.os_libraries_title);
 //                intent.putExtra("title", title);
 //                startActivity(intent);
-                new LibsBuilder()
-                        .withFields(R.string.class.getFields())
-                        .start(AboutActivity.this);
+            new LibsBuilder()
+                    .withFields(R.string.class.getFields())
+                    .start(AboutActivity.this);
 
-            }
         });
         return os;
     }

@@ -141,10 +141,7 @@ public final class Utility {
             return false;
         String stripped_left = left.replace("/", "").replace("www.", "");
         String stripped_right = right.replace("/", "").replace("www.", "");
-        if (stripped_left.equals(stripped_right))
-            return true;
-        else
-            return false;
+        return stripped_left.equals(stripped_right);
     }
 
     public static String getFileNameFromDownload(String url, String content_disposition, String mime_type) {
@@ -159,36 +156,6 @@ public final class Utility {
         }
 
         return file_name;
-    }
-
-    public static String readFromFile(File file) {
-
-        String ret = "";
-
-        try {
-            InputStream inputStream = new FileInputStream(file);
-
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append("\n").append(receiveString);
-                }
-
-                inputStream.close();
-                ret = stringBuilder.toString();
-            }
-        }
-        catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException  e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        }
-
-        return ret;
     }
 
     @ColorInt

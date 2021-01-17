@@ -1,32 +1,23 @@
 package com.cylonid.nativealpha;
 
 import android.app.Activity;
-import android.view.View;
 
 import androidx.annotation.CheckResult;
 import androidx.annotation.IdRes;
 import androidx.test.espresso.AmbiguousViewMatcherException;
 import androidx.test.espresso.FailureHandler;
 import androidx.test.espresso.NoMatchingRootException;
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.matcher.ViewMatchers;
 
 import android.view.View;
 
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.hamcrest.Matcher;
 import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -54,14 +45,7 @@ public class TestUtils {
     public static boolean viewIsDisplayed(int viewId)
     {
         final boolean[] isDisplayed = {true};
-        onView(withId(viewId)).withFailureHandler(new FailureHandler()
-        {
-            @Override
-            public void handle(Throwable error, Matcher<View> viewMatcher)
-            {
-                isDisplayed[0] = false;
-            }
-        }).check(matches(isDisplayed()));
+        onView(withId(viewId)).withFailureHandler((error, viewMatcher) -> isDisplayed[0] = false).check(matches(isDisplayed()));
         return isDisplayed[0];
     }
 
@@ -91,12 +75,7 @@ public class TestUtils {
 
     public static Activity getCurrentActivity() {
         final Activity[] activity = new Activity[1];
-        onView(isRoot()).check(new ViewAssertion() {
-            @Override
-            public void check(View view, NoMatchingViewException noViewFoundException) {
-                activity[0] = (Activity) view.getContext();
-            }
-        });
+        onView(isRoot()).check((view, noViewFoundException) -> activity[0] = (Activity) view.getContext());
         return activity[0];
     }
     private static class MatcherExtension {
@@ -123,12 +102,10 @@ public class TestUtils {
             } catch (AmbiguousViewMatcherException ex) {
                 // if there's any interaction later with the same matcher, that'll fail anyway
                 return true; // we found more than one
-            } catch (NoMatchingViewException ex) {
+            } catch (NoMatchingViewException | NoMatchingRootException ex) {
                 return false;
-            } catch (NoMatchingRootException ex) {
-                // optional depending on what you think "exists" means
-                return false;
-            }
+            } // optional depending on what you think "exists" means
+
         }
 
     }

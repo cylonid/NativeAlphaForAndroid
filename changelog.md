@@ -4,7 +4,7 @@
 * Progress bar indicating reload added
 * Custom user-agent option added
 * Periodical page refresh option added
-* Several minor fixes
+* Several minor fixes, e.g., new LibAdblockWebView version (causing a larger APK size)
 
 ## Version 0.84
 * Web App label on mainscreen can be changed by user

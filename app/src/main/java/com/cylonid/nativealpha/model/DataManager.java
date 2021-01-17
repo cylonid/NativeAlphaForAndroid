@@ -1,6 +1,5 @@
 package com.cylonid.nativealpha.model;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Base64;
@@ -13,16 +12,12 @@ import com.cylonid.nativealpha.R;
 import com.cylonid.nativealpha.util.App;
 import com.cylonid.nativealpha.util.InvalidChecksumException;
 import com.cylonid.nativealpha.util.Utility;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.himanshurawat.hasher.HashType;
 import com.himanshurawat.hasher.Hasher;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -212,7 +207,8 @@ public class DataManager {
     public boolean saveSharedPreferencesToFile(Uri uri) {
         boolean result = false;
         try(FileOutputStream fos = (FileOutputStream) App.getAppContext().getContentResolver().openOutputStream(uri);
-            Base64OutputStream b64os = new Base64OutputStream(fos, Base64.DEFAULT);  ObjectOutputStream oos = new ObjectOutputStream(b64os);) {
+            Base64OutputStream b64os = new Base64OutputStream(fos, Base64.DEFAULT);
+            ObjectOutputStream oos = new ObjectOutputStream(b64os)) {
             appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE);
             TreeMap<String, ?> shared_pref_map = new TreeMap<>(appdata.getAll());
 
@@ -231,7 +227,7 @@ public class DataManager {
         boolean result = false;
         try (FileInputStream fis = (FileInputStream) App.getAppContext().getContentResolver().openInputStream(uri);
              Base64InputStream b64is = new Base64InputStream(fis, Base64.DEFAULT);
-             ObjectInputStream ois = new ObjectInputStream(b64is);) {
+             ObjectInputStream ois = new ObjectInputStream(b64is)) {
 
             SharedPreferences.Editor prefEdit = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE).edit();
             prefEdit.clear();
@@ -259,9 +255,7 @@ public class DataManager {
             prefEdit.apply();
             result = true;
 
-        } catch (InvalidChecksumException | IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (InvalidChecksumException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 

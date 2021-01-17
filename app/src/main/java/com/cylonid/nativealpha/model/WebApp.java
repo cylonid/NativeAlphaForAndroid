@@ -1,7 +1,6 @@
 package com.cylonid.nativealpha.model;
 
 
-import android.provider.ContactsContract;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -365,11 +364,7 @@ public class WebApp {
 
     public void onSwitchRestorePageChanged(CompoundButton mSwitch, boolean isChecked) {
         EditText textTimeout = mSwitch.getRootView().findViewById(R.id.textTimeout);
-        if (isChecked) {
-            textTimeout.setEnabled(true);
-        }
-        else
-            textTimeout.setEnabled(false);
+        textTimeout.setEnabled(isChecked);
      }
     public void onSwitchUserAgentChanged(CompoundButton mSwitch, boolean isChecked) {
         EditText txt = mSwitch.getRootView().findViewById(R.id.textUserAgent);
@@ -389,10 +384,6 @@ public class WebApp {
 
     public void onSwitchAutoreloadChanged(CompoundButton mSwitch, boolean isChecked) {
         EditText text = mSwitch.getRootView().findViewById(R.id.textReloadInterval);
-        if (isChecked) {
-            text.setEnabled(true);
-        }
-        else
-            text.setEnabled(false);
+        text.setEnabled(isChecked);
     }
 }

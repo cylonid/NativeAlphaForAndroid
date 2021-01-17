@@ -408,9 +408,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                             .setPositiveButton(android.R.string.yes, (dialog, id) -> {
                                 callback.invoke(origin, true, false);
                                 webapp.enableLocationAccess();
-                            }).setNegativeButton(android.R.string.no, (dialog, id) -> {
-                        callback.invoke(origin, false, false);
-                    });
+                            }).setNegativeButton(android.R.string.no, (dialog, id) -> callback.invoke(origin, false, false));
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }

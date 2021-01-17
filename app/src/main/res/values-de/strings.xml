@@ -80,12 +80,12 @@
     <string name="dialog_permission_location_title">Standortzugriff-Anfrage</string>
     <string name="permission_location_rationale">Wenn Sie möchten, dass Web-Apps auf Ihren Standort zugreifen können, können Sie Native Alpha die Erlaubnis dazu erteilen. Sie können dies für jede Web-App einzeln entscheiden.</string>
     <string name="permission_storage_rationale">Wenn Sie über Native Alpha Dateien herunterladen möchten, müssen Sie dem Zugriff auf den Speicher zustimmen.</string>
-    <string name="file_download">Datei wird heruntergeladen...</string>
+    <string name="file_download">Datei wird heruntergeladen…</string>
     <string name="custom_icon">Eigenes Symbol verwenden</string>
     <string name="show_progress_bar_during_page_load">Ladebalken anzeigen</string>
     <string name="user_agent">User Agent</string>
     <string name="use_custom_user_agent">Eigenen User-Agent verwenden</string>
-    <string name="insert_custom_user_agent">User-Agent-String hier einfügen...</string>
+    <string name="insert_custom_user_agent">User-Agent-String hier einfügen…</string>
     <string name="webapp_autoreload">Seite regelmäßig neu laden</string>
     <string name="webapp_interval_for_reload">Intervall in Sekunden</string>
     <string name="webapp_autoreload_switch">Neu laden aktivieren</string>
