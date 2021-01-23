@@ -1,8 +1,12 @@
 package com.cylonid.nativealpha;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.provider.ContactsContract;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,12 +19,15 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.FragmentManager;
 
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 import static android.widget.LinearLayout.HORIZONTAL;
 
@@ -54,11 +61,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.getBooleanExtra(Const.INTENT_BACKUP_RESTORED, false)) {
-            DataManager.getInstance().loadAppData();
+
             mainScreen.removeAllViews();
             addActiveWebAppsToUI();
-            buildImportSuccessDialog();
+
+            boolean refresh_ui_mode = intent.getBooleanExtra(Const.INTENT_REFRESH_NEW_THEME, false);
+            buildImportSuccessDialog(refresh_ui_mode);
             intent.putExtra(Const.INTENT_BACKUP_RESTORED, false);
+            intent.putExtra(Const.INTENT_REFRESH_NEW_THEME, false);
         }
         if (intent.getBooleanExtra(Const.INTENT_WEBAPP_CHANGED, false)) {
             mainScreen.removeAllViews();
@@ -68,26 +78,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void buildImportSuccessDialog() {
-        final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+    private void buildImportSuccessDialog(boolean refresh_ui_mode) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         String message =  getString(R.string.import_success_dialog_txt2) + "\n\n" + getString(R.string.import_success_dialog_txt3);
 
         builder.setMessage(message);
+        builder.setCancelable(false);
         builder.setTitle(getString(R.string.import_success, DataManager.getInstance().getActiveWebsitesCount()));
         builder.setPositiveButton(getString(android.R.string.yes), (dialog, id) -> {
 
-            for (WebApp webapp : DataManager.getInstance().getWebsites()) {
+            ArrayList<WebApp> webapps = DataManager.getInstance().getWebsites();
+            int last_idx = webapps.size() - 1;
+
+            for (int i = 0; i < webapps.size(); i++) {
+                WebApp webapp = webapps.get(i);
                 if (webapp.isActiveEntry()) {
                     ShortcutDialogFragment frag = ShortcutDialogFragment.newInstance(webapp);
                     frag.show(getSupportFragmentManager(), "SCFetcher-" + webapp.getID());
                 }
+                if (refresh_ui_mode && i == last_idx && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    final AlertDialog addition_dialog = new AlertDialog.Builder(this)
+                            .setTitle(getString(R.string.backup_import_done))
+                            .setMessage(getString(R.string.backup_imported_done_txt))
+                            .setPositiveButton(android.R.string.ok, (dialog1, which) -> {
+                               Utility.applyUITheme();
+                            })
+                            .setOnDismissListener(dialog1 -> {
+                                Utility.applyUITheme();
+                            })
+                            .create();
+
+                    addition_dialog.show();
+
+                }
             }
+
         });
-        builder.setNegativeButton(getString(android.R.string.no), null);
-        final androidx.appcompat.app.AlertDialog dialog = builder.create();
-        dialog.setOnDismissListener(dialogInterface -> Utility.applyUITheme());
-        dialog.show();
+        builder.setNegativeButton(getString(android.R.string.no),  (dialog, id) -> { Utility.applyUITheme();});
+        builder.create().show();
     }
 
 

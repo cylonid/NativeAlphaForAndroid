@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -54,6 +55,12 @@ public class SettingsActivity extends AppCompatActivity {
                 Utility.showInfoSnackbar(this, getString(R.string.import_failed), Snackbar.LENGTH_LONG);
             } else {
                 Intent i = new Intent(SettingsActivity.this, MainActivity.class);
+                int old_ui_mode = DataManager.getInstance().getSettings().getThemeId();
+                DataManager.getInstance().loadAppData();
+                int new_ui_mode = DataManager.getInstance().getSettings().getThemeId();
+                if (old_ui_mode != new_ui_mode) {
+                    i.putExtra(Const.INTENT_REFRESH_NEW_THEME, true);
+                }
                 i.putExtra(Const.INTENT_BACKUP_RESTORED, true);
                 finish();
                 startActivity(i);

@@ -6,6 +6,8 @@ public class Const {
     public static final String INTENT_WEBAPPID = "webappID";
     public static final String INTENT_BACKUP_RESTORED = "backup_restored";
     public static final String INTENT_WEBAPP_CHANGED = "webapp_changed";
+    public static final String INTENT_REFRESH_NEW_THEME = "theme_changed";
+
     public static final int RESULT_IDX_FAVICON = 0;
     public static final int RESULT_IDX_TITLE = 1;
     public static final int RESULT_IDX_NEW_BASEURL = 2;

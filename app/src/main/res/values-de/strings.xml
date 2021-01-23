@@ -91,4 +91,6 @@
     <string name="webapp_autoreload_switch">Neu laden aktivieren</string>
     <string name="hint_user_agent"><![CDATA[<a href="https://www.whatismybrowser.com/guides/the-latest-user-agent/">WhatIsMyBrowser.com</a>]]>  bietet eine Liste an aktuellen User Agents.</string>
     <string name="label">Label</string>
+    <string name="backup_import_done">Sicherung erfolgreich wiederhergestellt</string>
+    <string name="backup_imported_done_txt">Die Anwendung muss neu geladen werden, um das Farbschema aus der Sicherung wiederherzustellen.</string>
 </resources>

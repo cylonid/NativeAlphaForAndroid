@@ -97,6 +97,8 @@
     <string name="hint_user_agent">Consult <![CDATA[<a href="https://www.whatismybrowser.com/guides/the-latest-user-agent/">WhatIsMyBrowser.com</a>]]> for a list of recent user agents.</string>
 
     <string name="label">Label</string>
+    <string name="backup_import_done">Backup import finished</string>
+    <string name="backup_imported_done_txt">The screen needs to be reloaded to apply the restored UI theme.</string>
 
 
 </resources>
