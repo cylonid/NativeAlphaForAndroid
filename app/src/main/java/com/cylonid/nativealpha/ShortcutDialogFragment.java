@@ -146,8 +146,8 @@ public class ShortcutDialogFragment extends DialogFragment  {
         try {
             inputStream = new java.net.URL(url).openStream();
             bitmap = BitmapFactory.decodeStream(inputStream);
-            if (bitmap.getWidth() < 96)
-                bitmap = null;
+            if (bitmap == null || bitmap.getWidth() < Const.FAVICON_MIN_WIDTH)
+                return null;
 
         } catch (IOException e) {
             bitmap = null;
@@ -206,7 +206,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
 
         try {
             //Connect to the website
-            Document doc = Jsoup.connect(base_url).userAgent(Const.DESKTOP_USER_AGENT).followRedirects(true).get();
+            Document doc = Jsoup.connect(base_url).ignoreHttpErrors(true).userAgent(Const.DESKTOP_USER_AGENT).followRedirects(true).get();
 
             //Step 1: Check for META Redirect
             Elements metaTags = doc.select("meta[http-equiv=refresh]");
