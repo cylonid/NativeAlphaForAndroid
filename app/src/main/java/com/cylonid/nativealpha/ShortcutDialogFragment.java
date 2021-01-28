@@ -59,6 +59,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
     private CircularProgressBar uiProgressBar;
     private EditText uiTitle;
     private Thread faviconFetcherThread;
+    private boolean last_webapp_inside_backup = false;
 
     public ShortcutDialogFragment() {}
 
@@ -67,6 +68,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
         frag.webapp = webapp;
         frag.base_url = webapp.getBaseUrl();
         frag.bitmap = null;
+
         return frag;
     }
 
@@ -105,13 +107,23 @@ public class ShortcutDialogFragment extends DialogFragment  {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         final View view = getLayoutInflater().inflate(R.layout.shortcut_dialog, null);
+
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setView(view)
+                .setCancelable(false)
                 .setPositiveButton(android.R.string.ok, (dialog1, which) -> {
                     addShortcutToHomeScreen(bitmap);
                     dismiss();
+                    if (last_webapp_inside_backup) {
+                        Utility.applyUITheme();
+                    }
                 })
-                .setNegativeButton(android.R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel,  (dialog1, which) -> {
+                    dismiss();
+                    if (last_webapp_inside_backup) {
+                        Utility.applyUITheme();
+                    }
+                })
                 .create();
 
         uiTitle = (EditText) view.findViewById(R.id.websiteTitle);
@@ -138,6 +150,10 @@ public class ShortcutDialogFragment extends DialogFragment  {
         dialog.setOnShowListener(dialog12 -> startFaviconFetching());
 
         return dialog;
+    }
+
+    public void refreshUIMode() {
+        last_webapp_inside_backup = true;
     }
 
     private Bitmap loadBitmap(String url)  {

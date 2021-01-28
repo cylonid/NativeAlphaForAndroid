@@ -5,8 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -88,30 +91,30 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle(getString(R.string.import_success, DataManager.getInstance().getActiveWebsitesCount()));
         builder.setPositiveButton(getString(android.R.string.yes), (dialog, id) -> {
 
-            ArrayList<WebApp> webapps = DataManager.getInstance().getWebsites();
-            int last_idx = webapps.size() - 1;
+            ArrayList<WebApp> webapps = DataManager.getInstance().getActiveWebsites();
 
-            for (int i = 0; i < webapps.size(); i++) {
+            for (int i = webapps.size() - 1; i >= 0; i--) {
                 WebApp webapp = webapps.get(i);
-                if (webapp.isActiveEntry()) {
-                    ShortcutDialogFragment frag = ShortcutDialogFragment.newInstance(webapp);
-                    frag.show(getSupportFragmentManager(), "SCFetcher-" + webapp.getID());
-                }
-                if (refresh_ui_mode && i == last_idx && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    final AlertDialog addition_dialog = new AlertDialog.Builder(this)
-                            .setTitle(getString(R.string.backup_import_done))
-                            .setMessage(getString(R.string.backup_imported_done_txt))
-                            .setPositiveButton(android.R.string.ok, (dialog1, which) -> {
-                               Utility.applyUITheme();
-                            })
-                            .setOnDismissListener(dialog1 -> {
+                boolean last_webapp = i == webapps.size() - 1;
+                Spanned msg = Html.fromHtml(getString(R.string.restore_shortcut, webapp.getTitle()), Html.FROM_HTML_MODE_COMPACT);
+                final AlertDialog addition_dialog = new AlertDialog.Builder(this)
+                        .setMessage(msg)
+                        .setPositiveButton(android.R.string.yes, (dialog1, which) -> {
+                            ShortcutDialogFragment frag = ShortcutDialogFragment.newInstance(webapp);
+                            if (refresh_ui_mode && last_webapp && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                frag.refreshUIMode();
+                            }
+                            frag.show(getSupportFragmentManager(), "SCFetcher-" + webapp.getID());
+                        })
+                        .setNegativeButton(android.R.string.no, (dialog1, which) -> {
+                            if (refresh_ui_mode && last_webapp && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                                 Utility.applyUITheme();
-                            })
-                            .create();
+                            }
+                        })
+                        .create();
 
-                    addition_dialog.show();
+                addition_dialog.show();
 
-                }
             }
 
         });

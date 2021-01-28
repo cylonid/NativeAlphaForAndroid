@@ -175,6 +175,16 @@ public class DataManager {
         return websites;
     }
 
+    public ArrayList<WebApp> getActiveWebsites() {
+        ArrayList<WebApp> active_webapps = new ArrayList<>();
+        for (WebApp webapp : websites) {
+            if (webapp.isActiveEntry())
+                active_webapps.add(webapp);
+        }
+        return active_webapps;
+    }
+
+
     public WebApp getWebApp(int i) {
 
         try {

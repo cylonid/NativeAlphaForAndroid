@@ -28,7 +28,7 @@ public class UtilUnitTests {
 
     @Test
     public void faviconFromWebManifest() {
-        testShortcutHelper("https://twitter.com", "https://abs.twimg.com/responsive-web/web/icon-default-maskable-large.433070b4.png", Const.RESULT_IDX_FAVICON);
+        testShortcutHelper("https://xda-developers.com", "https://www.xda-developers.com/android-chrome-512x512.png", Const.RESULT_IDX_FAVICON);
     }
 
     @Test
@@ -40,6 +40,12 @@ public class UtilUnitTests {
     public void faviconNull() {
         testShortcutHelper("https://tugraz.at", null, Const.RESULT_IDX_FAVICON);
     }
+
+    @Test
+    public void faviconNonExistingSite() {
+        testShortcutHelper("https://asdfasdfasdfasdf.asdfsdaf", null, Const.RESULT_IDX_FAVICON);
+    }
+
 
     @Test
     public void getStartUrlFromWebManifest() {
