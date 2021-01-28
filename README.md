@@ -16,7 +16,7 @@
   * Dark mode for Android 10+
 
 ## Download Options
-[![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v0.85/NativeAlpha_0.85.apk)
+[![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v0.85.1/NativeAlpha_0.85.1.apk)
 
 ## Latest Changes (v0.85)
 * Custom icons supported
@@ -24,6 +24,10 @@
 * Custom user-agent option added
 * Periodical page refresh option added
 * Several minor fixes, e.g., new LibAdblockWebView version (causing a larger APK size)
+  
+**Bugfix release (v0.85.1)**
+* Fixed an issue where the app could not restore a backup properly
+* Fixed an issue where an unavailable favicon led to a crash during favicon retrieval 
 
 ## FAQ
 *Q: Why is it not possible to find an icon for a certain website?*

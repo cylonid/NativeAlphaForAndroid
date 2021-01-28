@@ -1,4 +1,8 @@
 # CHANGELOG
+
+## Version 0.85.1
+* Fixed an issue where the app could not restore a backup properly
+* Fixed an issue where an unavailable favicon led to a crash during favicon retrieval 
 ## Version 0.85
 * Custom icons supported
 * Progress bar indicating reload added
