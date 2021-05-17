@@ -1,5 +1,6 @@
 package com.cylonid.nativealpha.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +36,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,6 +58,51 @@ public final class Utility {
     {
         return System.currentTimeMillis() / 1000;
     }
+
+    @SuppressLint("SimpleDateFormat")
+    public static SimpleDateFormat getHourMinFormat() {
+        return new SimpleDateFormat("HH:mm");
+    }
+    @SuppressLint("SimpleDateFormat")
+    public static SimpleDateFormat getDayHourMinuteSecondsFormat() {
+        return new SimpleDateFormat(    "EEE, d MMM yyyy HH:mm:ss Z");
+    }
+
+
+
+    public static Calendar convertStringToCalendar(String str) {
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(Objects.requireNonNull(getHourMinFormat().parse(str)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return c;
+    }
+
+    public static boolean isInInterval(Calendar low, Calendar time, Calendar high) {
+        //Bring timestamp with day_current + HH:mm => day_unixZero + HH:mm by parsing it again...
+        Calendar middle = Calendar.getInstance();
+        try {
+            middle.setTime(Objects.requireNonNull(getHourMinFormat().parse(Utility.getHourMinFormat().format(time.getTime()))));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        //CASE: If the end of our timespan is after midnight, add one day to the end date to get a proper span.
+        if (high.before(low)) {
+            high.add(Calendar.DATE, 1);
+        }
+//        System.out.println("Low: " + Utility.getDayHourMinuteSecondsFormat().format(low.getTime()));
+//        System.out.println("Middle: " + Utility.getDayHourMinuteSecondsFormat().format(middle.getTime()) + middle.toString());
+//        System.out.println("High: " + Utility.getDayHourMinuteSecondsFormat().format(high.getTime()) + high.toString());
+//        System.out.println("Is Before high: " + (middle.getTimeInMillis() < high.getTimeInMillis()));
+//        System.out.println("Is after low: " + (middle.getTimeInMillis() > low.getTimeInMillis()));
+
+        return middle.getTimeInMillis() > low.getTimeInMillis() && middle.getTimeInMillis() < high.getTimeInMillis();
+    }
+
+
 
     public static void Assert(boolean condition, String message) {
         if (!condition) {

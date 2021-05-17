@@ -34,6 +34,7 @@ import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -102,9 +103,11 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             wv.getSettings().setBlockNetworkLoads(false);
 //        wv.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                if (webapp.isForceDarkMode()) {
-                    wv.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
-                    wv.setBackgroundColor(Color.BLACK);
+                if (webapp.isUseTimespanDarkMode() &&
+                        Utility.isInInterval(Utility.convertStringToCalendar(webapp.getTimespanDarkModeBegin()), Calendar.getInstance(), Utility.convertStringToCalendar(webapp.getTimespanDarkModeEnd()))
+                        || (!webapp.isUseTimespanDarkMode() && webapp.isForceDarkMode())) {
+                        wv.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
+                        wv.setBackgroundColor(Color.BLACK);
                 }
             }
 

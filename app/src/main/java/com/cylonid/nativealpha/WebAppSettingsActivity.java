@@ -2,6 +2,7 @@ package com.cylonid.nativealpha;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +10,9 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -20,6 +23,10 @@ import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.App;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class WebAppSettingsActivity extends AppCompatActivity {
 
@@ -74,7 +81,29 @@ public class WebAppSettingsActivity extends AppCompatActivity {
             });
 
             btnCancel.setOnClickListener(v -> finish());
+            EditText txtBeginDarkMode = inflated_view.findViewById(R.id.textDarkModeBegin);
+            EditText txtEndDarkMode = inflated_view.findViewById(R.id.textDarkModeEnd);
+            txtBeginDarkMode.setOnClickListener(view -> showTimePicker(txtBeginDarkMode));
+            txtEndDarkMode.setOnClickListener(view -> showTimePicker(txtEndDarkMode));
         }
+    }
+
+    private void showTimePicker(EditText txtField){
+        Calendar c = Utility.convertStringToCalendar(txtField.getText().toString());
+        TimePickerDialog timePickerDialog = new TimePickerDialog(WebAppSettingsActivity.this, new TimePickerDialog.OnTimeSetListener() {
+
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                Calendar datetime = Calendar.getInstance();
+                datetime.set(Calendar.HOUR_OF_DAY, selectedHour);
+                datetime.set(Calendar.MINUTE, selectedMinute);
+
+
+                txtField.setText(Utility.getHourMinFormat().format(datetime.getTime()));
+            }
+        }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+        timePickerDialog.show();
+
     }
 }
 

@@ -36,6 +36,8 @@ public class WebApp {
     private int time_autoreload;
     private boolean force_dark_mode;
     private boolean use_timespan_dark_mode;
+    private String timespan_dark_mode_begin;
+    private String timespan_dark_mode_end;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -63,6 +65,9 @@ public class WebApp {
         time_autoreload = 60;
         force_dark_mode = false;
         use_timespan_dark_mode = false;
+        timespan_dark_mode_begin = "22:00";
+        timespan_dark_mode_end = "06:00";
+
 
         initDefaultSettings();
     }
@@ -94,6 +99,8 @@ public class WebApp {
         this.time_autoreload = other.time_autoreload;
         this.force_dark_mode = other.force_dark_mode;
         this.use_timespan_dark_mode = other.use_timespan_dark_mode;
+        this.timespan_dark_mode_begin = other.timespan_dark_mode_begin;
+        this.timespan_dark_mode_end = other.timespan_dark_mode_end;
 
     }
 
@@ -110,6 +117,22 @@ public class WebApp {
 
     public void setUseTimespanDarkMode(boolean useTimespanDarkMode) {
         this.use_timespan_dark_mode = useTimespanDarkMode;
+    }
+
+    public String getTimespanDarkModeBegin() {
+        return timespan_dark_mode_begin;
+    }
+
+    public void setTimespanDarkModeBegin(String timespanDarkModeBegin) {
+        this.timespan_dark_mode_begin = timespanDarkModeBegin;
+    }
+
+    public String getTimespanDarkModeEnd() {
+        return timespan_dark_mode_end;
+    }
+
+    public void setTimespanDarkModeEnd(String timespanDarkModeEnd) {
+        this.timespan_dark_mode_end = timespanDarkModeEnd;
     }
 
     public boolean isAllowHttp() {

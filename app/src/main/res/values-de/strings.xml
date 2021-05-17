@@ -95,4 +95,8 @@
     <string name="backup_imported_done_txt">Die Anwendung muss neu geladen werden, um das Farbschema aus der Sicherung wiederherzustellen.</string>
     <string name="restore_shortcut">Wollen Sie die Verknüpfung für <![CDATA[<b>%1$s</b>]]> wiederherstellen?</string>
     <string name="force_dark_mode">Dunklen Modus erzwingen</string>
+    <string name="end">Ende</string>
+    <string name="begin">Beginn</string>
+    <string name="limit_dark_mode_to_time_span">Nur während dieser Zeitspanne anwenden</string>
+    <string name="dark_mode">Dunkler Modus</string>
 </resources>

@@ -191,7 +191,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Dark Mode"
+                        android:text="@string/dark_mode"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                     <Switch
@@ -209,7 +209,7 @@
                         android:layout_marginBottom="@dimen/settings_bottom_innersection"
                         android:checked="@={webapp.useTimespanDarkMode}"
                         android:enabled="@{webapp.forceDarkMode}"
-                        android:text="Limit dark mode to time span" />
+                        android:text="@string/limit_dark_mode_to_time_span" />
 
                     <LinearLayout
                         android:id="@+id/layoutTimeSpanDarkMode"
@@ -230,7 +230,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="?android:attr/textColorPrimary"
-                                android:text="Begin" />
+                                android:text="@string/begin" />
 
                             <EditText
                                 android:id="@+id/textDarkModeBegin"
@@ -239,7 +239,7 @@
                                 android:fontFamily="sans-serif"
                                 android:background="@null"
                                 android:enabled="@{webapp.forceDarkMode}"
-                                android:text="20:00"
+                                android:text="@={webapp.timespanDarkModeBegin}"
                                 android:focusable="false"
                                 android:inputType="none" />
                         </LinearLayout>
@@ -255,7 +255,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="?android:attr/textColorPrimary"
-                                android:text="End" />
+                                android:text="@string/end" />
 
                             <EditText
                                 android:id="@+id/textDarkModeEnd"
@@ -264,7 +264,7 @@
                                 android:fontFamily="sans-serif"
                                 android:background="@null"
                                 android:enabled="@{webapp.forceDarkMode}"
-                                android:text="06:00"
+                                android:text="@={webapp.timespanDarkModeEnd}"
                                 android:focusable="false"
                                 android:inputType="none" />
                         </LinearLayout>
