@@ -165,7 +165,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
             if (bitmap == null || bitmap.getWidth() < Const.FAVICON_MIN_WIDTH)
                 return null;
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             bitmap = null;
             e.printStackTrace();
         }
@@ -203,6 +203,10 @@ public class ShortcutDialogFragment extends DialogFragment  {
         if (host_part.startsWith("google."))
             found_icons.put(240, "https://www.gstatic.com/images/branding/googleg/2x/googleg_standard_color_120dp.png");
 
+        // Size doesn't fit
+        if (host_part.startsWith("anchor.fm"))
+            found_icons.put(Integer.MAX_VALUE, "https://d12xoj7p9moygp.cloudfront.net/favicon/apple-touch-icon-wave-152x152.png");
+
         //OEBB has a typo in its web manifest
         if (host_part.startsWith("oebb.at"))
             found_icons.put(Integer.MAX_VALUE, "https://www.oebb.at/.resources/pv-2017/themes/images/favicons/android-chrome-192x192.png");
@@ -218,7 +222,6 @@ public class ShortcutDialogFragment extends DialogFragment  {
     public String[] fetchWebappData() {
         String[] result = new String[] {null, null, null};
         TreeMap<Integer, String> found_icons = buildIconMap();
-
 
         try {
             //Connect to the website
