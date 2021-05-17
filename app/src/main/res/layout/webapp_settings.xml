@@ -188,6 +188,88 @@
                             android:text="@={`` + webapp.timeAutoreload}" />
 
                     </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dark Mode"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <Switch
+                        android:id="@+id/switchDarkMode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
+                        android:checked="@={webapp.forceDarkMode}"
+                        android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchForceDarkChanged(switch, checked)}"
+                        android:text="@string/force_dark_mode" />
+                    <Switch
+                        android:id="@+id/switchTimeSpanDarkMode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
+                        android:checked="@={webapp.useTimespanDarkMode}"
+                        android:enabled="@{webapp.forceDarkMode}"
+                        android:text="Limit dark mode to time span" />
+
+                    <LinearLayout
+                        android:id="@+id/layoutTimeSpanDarkMode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="@dimen/settings_bottom"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="start"
+                            android:layout_weight="1"
+                            android:visibility="visible">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="?android:attr/textColorPrimary"
+                                android:text="Begin" />
+
+                            <EditText
+                                android:id="@+id/textDarkModeBegin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:background="@null"
+                                android:enabled="@{webapp.forceDarkMode}"
+                                android:text="20:00"
+                                android:focusable="false"
+                                android:inputType="none" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="end"
+                            android:layout_weight="1"
+                            android:visibility="visible">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="?android:attr/textColorPrimary"
+                                android:text="End" />
+
+                            <EditText
+                                android:id="@+id/textDarkModeEnd"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:background="@null"
+                                android:enabled="@{webapp.forceDarkMode}"
+                                android:text="06:00"
+                                android:focusable="false"
+                                android:inputType="none" />
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -203,13 +285,8 @@
                         android:checked="@={webapp.useAdblock}"
                         android:enabled="@{webapp.allowJs}"
                         android:text="@string/enable_adblock_experimental" />
-                    <Switch
-                        android:id="@+id/switchDarkMode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
-                        android:checked="@={webapp.forceDarkMode}"
-                        android:text="@string/force_dark_mode" />
+
+
                     <Switch
                         android:id="@+id/switchDesktopSite"
                         android:layout_width="match_parent"

@@ -35,6 +35,7 @@ public class WebApp {
     private boolean autoreload;
     private int time_autoreload;
     private boolean force_dark_mode;
+    private boolean use_timespan_dark_mode;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -61,6 +62,7 @@ public class WebApp {
         autoreload = false;
         time_autoreload = 60;
         force_dark_mode = false;
+        use_timespan_dark_mode = false;
 
         initDefaultSettings();
     }
@@ -91,6 +93,7 @@ public class WebApp {
         this.autoreload = other.autoreload;
         this.time_autoreload = other.time_autoreload;
         this.force_dark_mode = other.force_dark_mode;
+        this.use_timespan_dark_mode = other.use_timespan_dark_mode;
 
     }
 
@@ -99,6 +102,14 @@ public class WebApp {
             this.user_agent = Const.DESKTOP_USER_AGENT;
             this.use_custom_user_agent = true;
         }
+    }
+
+    public boolean isUseTimespanDarkMode() {
+        return use_timespan_dark_mode;
+    }
+
+    public void setUseTimespanDarkMode(boolean useTimespanDarkMode) {
+        this.use_timespan_dark_mode = useTimespanDarkMode;
     }
 
     public boolean isAllowHttp() {
@@ -369,6 +380,21 @@ public class WebApp {
             switchDesktopVersion.setEnabled(false);
             switchAdblock.setChecked(false);
             switchAdblock.setEnabled(false);
+        }
+    }
+    public void onSwitchForceDarkChanged(CompoundButton mSwitch, boolean isChecked) {
+        Switch switchLimit = mSwitch.getRootView().findViewById(R.id.switchTimeSpanDarkMode);
+        EditText txtBegin = mSwitch.getRootView().findViewById(R.id.textDarkModeBegin);
+        EditText txtEnd = mSwitch.getRootView().findViewById(R.id.textDarkModeEnd);
+        if (isChecked) {
+            switchLimit.setEnabled(true);
+            txtBegin.setEnabled(true);
+            txtEnd.setEnabled(true);
+        } else {
+            switchLimit.setChecked(false);
+            switchLimit.setEnabled(false);
+            txtBegin.setEnabled(false);
+            txtEnd.setEnabled(false);
         }
     }
 
