@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -101,7 +102,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             wv.getSettings().setBlockNetworkLoads(false);
 //        wv.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                wv.getSettings().setForceDark(WebSettings.FORCE_DARK_OFF);
+                if (webapp.isForceDarkMode()) {
+                    wv.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
+                    wv.setBackgroundColor(Color.BLACK);
+                }
             }
 
             wv.getSettings().setJavaScriptEnabled(webapp.isAllowJs());

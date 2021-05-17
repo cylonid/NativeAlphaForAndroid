@@ -34,6 +34,7 @@ public class WebApp {
     private boolean use_custom_user_agent;
     private boolean autoreload;
     private int time_autoreload;
+    private boolean force_dark_mode;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -59,6 +60,7 @@ public class WebApp {
         use_custom_user_agent = false;
         autoreload = false;
         time_autoreload = 60;
+        force_dark_mode = false;
 
         initDefaultSettings();
     }
@@ -88,6 +90,7 @@ public class WebApp {
         this.use_custom_user_agent = other.use_custom_user_agent;
         this.autoreload = other.autoreload;
         this.time_autoreload = other.time_autoreload;
+        this.force_dark_mode = other.force_dark_mode;
 
     }
 
@@ -287,6 +290,13 @@ public class WebApp {
     public void setAllowLocationAccess(boolean allow_location_access) {
         this.allow_location_access = allow_location_access;
     }
+    public boolean isForceDarkMode() {
+        return force_dark_mode;
+    }
+
+    public void setForceDarkMode(boolean forceDarkMode) {
+        this.force_dark_mode = forceDarkMode;
+    }
 
     public String getUserAgent() {
         return user_agent;
@@ -386,4 +396,5 @@ public class WebApp {
         EditText text = mSwitch.getRootView().findViewById(R.id.textReloadInterval);
         text.setEnabled(isChecked);
     }
+
 }

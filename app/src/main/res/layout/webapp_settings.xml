@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="webapp"
             type="com.cylonid.nativealpha.model.WebApp" />
@@ -204,7 +203,13 @@
                         android:checked="@={webapp.useAdblock}"
                         android:enabled="@{webapp.allowJs}"
                         android:text="@string/enable_adblock_experimental" />
-
+                    <Switch
+                        android:id="@+id/switchDarkMode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
+                        android:checked="@={webapp.forceDarkMode}"
+                        android:text="@string/force_dark_mode" />
                     <Switch
                         android:id="@+id/switchDesktopSite"
                         android:layout_width="match_parent"

@@ -100,6 +100,7 @@
     <string name="backup_import_done">Backup import finished</string>
     <string name="backup_imported_done_txt">The screen needs to be reloaded to apply the restored UI theme.</string>
     <string name="restore_shortcut">Do you want to restore the shortcut for <![CDATA[<b>%1$s</b>]]>?</string>
+    <string name="force_dark_mode">Force Dark Mode</string>
 
 
 </resources>

@@ -94,4 +94,5 @@
     <string name="backup_import_done">Sicherung erfolgreich wiederhergestellt</string>
     <string name="backup_imported_done_txt">Die Anwendung muss neu geladen werden, um das Farbschema aus der Sicherung wiederherzustellen.</string>
     <string name="restore_shortcut">Wollen Sie die Verknüpfung für <![CDATA[<b>%1$s</b>]]> wiederherstellen?</string>
+    <string name="force_dark_mode">Dunklen Modus erzwingen</string>
 </resources>
