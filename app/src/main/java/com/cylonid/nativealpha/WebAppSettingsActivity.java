@@ -88,19 +88,13 @@ public class WebAppSettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void showTimePicker(EditText txtField){
+    private void showTimePicker(EditText txtField) {
         Calendar c = Utility.convertStringToCalendar(txtField.getText().toString());
-        TimePickerDialog timePickerDialog = new TimePickerDialog(WebAppSettingsActivity.this, new TimePickerDialog.OnTimeSetListener() {
-
-            @Override
-            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                Calendar datetime = Calendar.getInstance();
-                datetime.set(Calendar.HOUR_OF_DAY, selectedHour);
-                datetime.set(Calendar.MINUTE, selectedMinute);
-
-
-                txtField.setText(Utility.getHourMinFormat().format(datetime.getTime()));
-            }
+        TimePickerDialog timePickerDialog = new TimePickerDialog(WebAppSettingsActivity.this, (timePicker, selectedHour, selectedMinute) -> {
+            Calendar datetime = Calendar.getInstance();
+            datetime.set(Calendar.HOUR_OF_DAY, selectedHour);
+            datetime.set(Calendar.MINUTE, selectedMinute);
+            txtField.setText(Utility.getHourMinFormat().format(datetime.getTime()));
         }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
         timePickerDialog.show();
 

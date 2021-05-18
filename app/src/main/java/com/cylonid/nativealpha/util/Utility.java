@@ -92,15 +92,17 @@ public final class Utility {
         //CASE: If the end of our timespan is after midnight, add one day to the end date to get a proper span.
         if (high.before(low)) {
             high.add(Calendar.DATE, 1);
+            if (middle.before(low)) {
+                middle.add(Calendar.DATE, 1);
+            }
         }
-//        System.out.println("Low: " + Utility.getDayHourMinuteSecondsFormat().format(low.getTime()));
-//        System.out.println("Middle: " + Utility.getDayHourMinuteSecondsFormat().format(middle.getTime()) + middle.toString());
-//        System.out.println("High: " + Utility.getDayHourMinuteSecondsFormat().format(high.getTime()) + high.toString());
-//        System.out.println("Is Before high: " + (middle.getTimeInMillis() < high.getTimeInMillis()));
-//        System.out.println("Is after low: " + (middle.getTimeInMillis() > low.getTimeInMillis()));
-
-        return middle.getTimeInMillis() > low.getTimeInMillis() && middle.getTimeInMillis() < high.getTimeInMillis();
+        return middle.after(low) && middle.before(high);
     }
+//        System.out.println("Low: " + Utility.getDayHourMinuteSecondsFormat().format(low.getTime()));
+//        System.out.println("Middle: " + Utility.getDayHourMinuteSecondsFormat().format(middle.getTime()));
+//        System.out.println("High: " + Utility.getDayHourMinuteSecondsFormat().format(high.getTime()));
+//        System.out.println("Is Before high: " + (middle.before(high)));
+//        System.out.println("Is after low: " + (middle.after(low)));
 
 
 
