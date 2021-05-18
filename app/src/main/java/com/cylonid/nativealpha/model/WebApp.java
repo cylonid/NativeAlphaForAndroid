@@ -4,6 +4,7 @@ package com.cylonid.nativealpha.model;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.cylonid.nativealpha.R;
 import com.cylonid.nativealpha.util.Const;
@@ -411,11 +412,26 @@ public class WebApp {
         EditText txtEnd = mSwitch.getRootView().findViewById(R.id.textDarkModeEnd);
         if (isChecked) {
             switchLimit.setEnabled(true);
-            txtBegin.setEnabled(true);
-            txtEnd.setEnabled(true);
+
         } else {
             switchLimit.setChecked(false);
             switchLimit.setEnabled(false);
+        }
+    }
+
+    public void onSwitchTimeSpanDarkChanged(CompoundButton mSwitch, boolean isChecked) {
+        TextView lblBegin = mSwitch.getRootView().findViewById(R.id.lblDarkModeBegin);
+        TextView lblEnd = mSwitch.getRootView().findViewById(R.id.lblDarkModeEnd);
+        EditText txtBegin = mSwitch.getRootView().findViewById(R.id.textDarkModeBegin);
+        EditText txtEnd = mSwitch.getRootView().findViewById(R.id.textDarkModeEnd);
+        if (isChecked) {
+            lblBegin.setEnabled(true);
+            lblEnd.setEnabled(true);
+            txtBegin.setEnabled(true);
+            txtEnd.setEnabled(true);
+        } else {
+            lblBegin.setEnabled(false);
+            lblEnd.setEnabled(false);
             txtBegin.setEnabled(false);
             txtEnd.setEnabled(false);
         }

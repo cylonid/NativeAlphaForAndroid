@@ -209,6 +209,7 @@
                         android:layout_marginBottom="@dimen/settings_bottom_innersection"
                         android:checked="@={webapp.useTimespanDarkMode}"
                         android:enabled="@{webapp.forceDarkMode}"
+                        android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchTimeSpanDarkChanged(switch, checked)}"
                         android:text="@string/limit_dark_mode_to_time_span" />
 
                     <LinearLayout
@@ -227,6 +228,8 @@
                             android:layout_weight="1"
                             android:visibility="visible">
                             <TextView
+                                android:id="@+id/lblDarkModeBegin"
+                                android:enabled="@{webapp.useTimespanDarkMode}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="?android:attr/textColorPrimary"
@@ -238,7 +241,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif"
                                 android:background="@null"
-                                android:enabled="@{webapp.forceDarkMode}"
+                                android:enabled="@{webapp.useTimespanDarkMode}"
                                 android:text="@={webapp.timespanDarkModeBegin}"
                                 android:focusable="false"
                                 android:inputType="none" />
@@ -252,6 +255,8 @@
                             android:layout_weight="1"
                             android:visibility="visible">
                             <TextView
+                                android:id="@+id/lblDarkModeEnd"
+                                android:enabled="@{webapp.useTimespanDarkMode}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="?android:attr/textColorPrimary"
@@ -263,7 +268,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif"
                                 android:background="@null"
-                                android:enabled="@{webapp.forceDarkMode}"
+                                android:enabled="@{webapp.useTimespanDarkMode}"
                                 android:text="@={webapp.timespanDarkModeEnd}"
                                 android:focusable="false"
                                 android:inputType="none" />
