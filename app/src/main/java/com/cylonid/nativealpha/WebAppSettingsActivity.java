@@ -11,6 +11,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -85,6 +86,14 @@ public class WebAppSettingsActivity extends AppCompatActivity {
             EditText txtEndDarkMode = inflated_view.findViewById(R.id.textDarkModeEnd);
             txtBeginDarkMode.setOnClickListener(view -> showTimePicker(txtBeginDarkMode));
             txtEndDarkMode.setOnClickListener(view -> showTimePicker(txtEndDarkMode));
+
+            LinearLayout sectionExpertSettings = inflated_view.findViewById(R.id.sectionExpertSettings);
+            if (webapp.isShowExpertSettings()) {
+                sectionExpertSettings.setVisibility(View.VISIBLE);
+            }
+            else {
+                sectionExpertSettings.setVisibility(View.GONE);
+            }
         }
     }
 

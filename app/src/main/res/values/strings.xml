@@ -105,6 +105,11 @@
     <string name="begin">Begin</string>
     <string name="limit_dark_mode_to_time_span">Limit Dark Mode to time span</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="expert_settings">Expert Settings</string>
+    <string name="show_expert_settings">Show expert settings</string>
+    <string name="ssl_errors">SSL Errors</string>
+    <string name="ssl_permanent_warning">Only use this option for self-hosted non-production websites</string>
+    <string name="ignore_ssl_errors">Ignore SSL errors</string>
 
 
 </resources>

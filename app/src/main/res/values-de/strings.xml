@@ -99,4 +99,9 @@
     <string name="begin">Beginn</string>
     <string name="limit_dark_mode_to_time_span">Nur während dieser Zeitspanne anwenden</string>
     <string name="dark_mode">Dunkler Modus</string>
+    <string name="expert_settings">Experten-Einstellungen</string>
+    <string name="show_expert_settings">Experten-Einstellungen anzeigen</string>
+    <string name="ssl_errors">SSL-Fehler</string>
+    <string name="ssl_permanent_warning">Verwenden Sie diese Option nur für selbst gehostete Test-Webseiten</string>
+    <string name="ignore_ssl_errors">SSL-Fehler ignorieren</string>
 </resources>

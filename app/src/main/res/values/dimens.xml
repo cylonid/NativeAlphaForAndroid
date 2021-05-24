@@ -5,4 +5,5 @@
     <dimen name="margin_activity">25dp</dimen>
     <dimen name="settings_bottom">20dp</dimen>
     <dimen name="settings_bottom_innersection">10dp</dimen>
+    <dimen name="remove_divider">-10dp</dimen>
 </resources>

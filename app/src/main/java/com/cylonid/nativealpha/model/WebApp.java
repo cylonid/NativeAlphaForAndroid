@@ -1,8 +1,10 @@
 package com.cylonid.nativealpha.model;
 
 
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -39,6 +41,8 @@ public class WebApp {
     private boolean use_timespan_dark_mode;
     private String timespan_dark_mode_begin;
     private String timespan_dark_mode_end;
+    private boolean ignore_ssl_errors;
+    private boolean show_expert_settings;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -68,6 +72,8 @@ public class WebApp {
         use_timespan_dark_mode = false;
         timespan_dark_mode_begin = "22:00";
         timespan_dark_mode_end = "06:00";
+        ignore_ssl_errors = false;
+        show_expert_settings = false;
 
 
         initDefaultSettings();
@@ -102,6 +108,8 @@ public class WebApp {
         this.use_timespan_dark_mode = other.use_timespan_dark_mode;
         this.timespan_dark_mode_begin = other.timespan_dark_mode_begin;
         this.timespan_dark_mode_end = other.timespan_dark_mode_end;
+        this.ignore_ssl_errors = other.ignore_ssl_errors;
+        this.show_expert_settings = other.show_expert_settings;
 
     }
 
@@ -110,6 +118,23 @@ public class WebApp {
             this.user_agent = Const.DESKTOP_USER_AGENT;
             this.use_custom_user_agent = true;
         }
+    }
+
+    public boolean isShowExpertSettings() {
+        return show_expert_settings;
+    }
+
+    public void setShowExpertSettings(boolean showExpertSettings) {
+        this.show_expert_settings = showExpertSettings;
+    }
+
+
+    public boolean isIgnoreSslErrors() {
+        return ignore_ssl_errors;
+    }
+
+    public void setIgnoreSslErrors(boolean ignoreSslErrors) {
+        this.ignore_ssl_errors = ignoreSslErrors;
     }
 
     public boolean isUseTimespanDarkMode() {
@@ -461,5 +486,16 @@ public class WebApp {
         EditText text = mSwitch.getRootView().findViewById(R.id.textReloadInterval);
         text.setEnabled(isChecked);
     }
+
+    public void onSwitchExpertSettingsChanged(CompoundButton mSwitch, boolean isChecked) {
+        LinearLayout expertSettings = mSwitch.getRootView().findViewById(R.id.sectionExpertSettings);
+
+        if (isChecked)
+            expertSettings.setVisibility(View.VISIBLE);
+        else
+            expertSettings.setVisibility(View.GONE);
+    }
+
+
 
 }

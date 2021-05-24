@@ -77,7 +77,7 @@
 
                     <LinearLayout
                         android:id="@+id/sectionSecurity"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/settings_bottom"
                         android:divider="@drawable/empty_10dp_vertical"
@@ -88,6 +88,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/webapp_section_security"
+                            android:layout_marginBottom="@dimen/remove_divider"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                         <Switch
@@ -115,7 +116,7 @@
 
                     <LinearLayout
                         android:id="@+id/sectionCookies"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/settings_bottom"
                         android:divider="@drawable/empty_10dp_vertical"
@@ -126,6 +127,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/webapp_section_cookies"
+                            android:layout_marginBottom="@dimen/remove_divider"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                         <Switch
@@ -147,7 +149,7 @@
 
                     <LinearLayout
                         android:id="@+id/sectionDarkmode"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/settings_bottom"
                         android:divider="@drawable/empty_10dp_vertical"
@@ -158,6 +160,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/dark_mode"
+                            android:layout_marginBottom="@dimen/remove_divider"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                         <Switch
@@ -244,7 +247,7 @@
 
                     <LinearLayout
                         android:id="@+id/sectionDatasaving"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/settings_bottom"
                         android:divider="@drawable/empty_10dp_vertical"
@@ -255,6 +258,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/webapp_section_datasaving"
+                            android:layout_marginBottom="@dimen/remove_divider"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                         <Switch
@@ -276,7 +280,7 @@
 
                     <LinearLayout
                         android:id="@+id/sectionAutoreload"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/settings_bottom"
                         android:divider="@drawable/empty_10dp_vertical"
@@ -286,6 +290,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/remove_divider"
                             android:text="@string/webapp_autoreload" />
 
                         <Switch
@@ -322,7 +327,7 @@
 
                     <LinearLayout
                         android:id="@+id/sectionMisc"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/settings_bottom"
                         android:divider="@drawable/empty_10dp_vertical"
@@ -333,6 +338,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/webapp_section_misc"
+                            android:layout_marginBottom="@dimen/remove_divider"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                         <Switch
@@ -363,7 +369,7 @@
 
                     <LinearLayout
                         android:id="@+id/sectionRestoreOpenedPage"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/settings_bottom"
                         android:divider="@drawable/empty_10dp_vertical"
@@ -374,6 +380,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/webapp_section_restorepage"
+                            android:layout_marginBottom="@dimen/remove_divider"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                         <Switch
@@ -406,6 +413,19 @@
 
                         </LinearLayout>
                     </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/expert_settings"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                    <Switch
+                        android:id="@+id/switchExpertSettings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/settings_bottom_innersection"
+                        android:checked="@={webapp.showExpertSettings}"
+                        android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchExpertSettingsChanged(switch, checked)}"
+                        android:text="@string/show_expert_settings" />
 
                     <LinearLayout
                         android:id="@+id/sectionExpertSettings"
@@ -414,12 +434,14 @@
                         android:layout_marginBottom="@dimen/settings_bottom"
                         android:divider="@drawable/empty_10dp_vertical"
                         android:orientation="vertical"
+                        android:visibility="gone"
                         android:showDividers="middle">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/user_agent"
+                            android:layout_marginBottom="@dimen/remove_divider"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                         <Switch
@@ -452,6 +474,36 @@
                                 tools:ignore="UnusedAttribute" />
 
                         </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ssl_errors"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginEnd="@dimen/settings_bottom_innersection"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:background="@android:drawable/ic_dialog_alert"
+                            />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/ssl_permanent_warning"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                        </LinearLayout>
+                        <Switch
+                            android:id="@+id/switchIgnoreSSLErrors"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="@={webapp.ignoreSslErrors}"
+                            android:text="@string/ignore_ssl_errors" />
+
                     </LinearLayout>
 
                     <Space

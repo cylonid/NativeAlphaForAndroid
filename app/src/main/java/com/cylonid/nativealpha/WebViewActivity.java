@@ -433,6 +433,12 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         @Override
         public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
 
+            //This option is hidden in "expert settings"
+            if (webapp.isIgnoreSslErrors()) {
+                handler.proceed();
+                return;
+            }
+
             final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewActivity.this);
 
             String message = getString(R.string.ssl_error_msg_line1) + " ";
