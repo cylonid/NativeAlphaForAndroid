@@ -9,8 +9,8 @@ android {
         applicationId "com.cylonid.nativealpha"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 851
-        versionName "0.85.1"
+        versionCode 860
+        versionName "0.86A"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -46,7 +46,7 @@ repositories {
 
     implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
     implementation 'org.jsoup:jsoup:1.13.1'
-    implementation 'org.adblockplus:adblock-android-webview:4.2.0'
+    implementation 'org.adblockplus:adblock-android-webview:4.4.0'
     implementation 'com.github.ihimanshurawat:Hasher:1.2'
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'

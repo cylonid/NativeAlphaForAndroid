@@ -145,6 +145,13 @@
                             android:checked="@={webapp.allowThirdPartyCookies}"
                             android:enabled="@{webapp.allowCookies}"
                             android:text="@string/accept_third_party_cookies" />
+                        <Switch
+                            android:id="@+id/switchAdblock"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="@={webapp.useAdblock}"
+                            android:enabled="@{webapp.allowJs}"
+                            android:text="@string/enable_adblock_experimental" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -342,15 +349,6 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                         <Switch
-                            android:id="@+id/switchAdblock"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.useAdblock}"
-                            android:enabled="@{webapp.allowJs}"
-                            android:text="@string/enable_adblock_experimental" />
-
-
-                        <Switch
                             android:id="@+id/switchDesktopSite"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -369,6 +367,7 @@
 
                     <LinearLayout
                         android:id="@+id/sectionRestoreOpenedPage"
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/settings_bottom"

@@ -217,13 +217,15 @@ public class WebApp {
 
         if (last_used_url == null)
             return base_url;
-        else if (restore_page) {
 
-            long current_time_sec = System.currentTimeMillis() / 1000;
-            long diff = Math.abs(timestamp_last_used_url - current_time_sec);
-            if (diff <= timeout_last_used_url * 60)
-                return last_used_url;
-        }
+//        LEGACY SETTING: Removed with release 0.86/1.0.0
+//        else if (restore_page) {
+//
+//            long current_time_sec = System.currentTimeMillis() / 1000;
+//            long diff = Math.abs(timestamp_last_used_url - current_time_sec);
+//            if (diff <= timeout_last_used_url * 60)
+//                return last_used_url;
+//        }
 
         return base_url;
     }

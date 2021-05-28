@@ -20,7 +20,7 @@
     <string name="allow_javascript">Javascript zulassen</string>
     <string name="accept_cookies">Cookies akzeptieren</string>
     <string name="accept_third_party_cookies">Third-Party-Cookies akzeptieren</string>
-    <string name="enable_adblock_experimental">Adblock aktivieren (experimentell)</string>
+    <string name="enable_adblock_experimental">Werbeblocker aktivieren</string>
     <string name="timeout_for_page_restore_in_minutes">Timeout in min</string>
     <string name="re_create_shortcut">Startseitenverknüpfung erstellen</string>
     <string name="create_shortcut_on_home_screen">Startseitenverknüpfung erstellen</string>
@@ -59,7 +59,7 @@
     <string name="no_https_dialog_msg">Diese Seite verwendet HTTP (unverschlüsselt). Geben Sie keine sensiblen Daten ein.</string>
     <string name="allow_http">HTTP zulassen</string>
     <string name="webapp_section_security">Sicherheit</string>
-    <string name="webapp_section_cookies">Cookies</string>
+    <string name="webapp_section_cookies">Cookies &amp; Werbung</string>
     <string name="webapp_section_datasaving">Daten sparen</string>
     <string name="webapp_section_misc">Sonstiges</string>
     <string name="webapp_section_restorepage">Seitenwiederherstellung</string>

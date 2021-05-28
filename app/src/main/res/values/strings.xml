@@ -16,7 +16,7 @@
     <string name="accept_cookies">Accept cookies</string>
     <string name="accept_third_party_cookies">Accept third-party cookies</string>
     <string name="clear_cache_after_usage">Clear cache after usage</string>
-    <string name="enable_adblock_experimental">Enable adblock (experimental)</string>
+    <string name="enable_adblock_experimental">Enable adblock</string>
     <string name="timeout_for_page_restore_in_minutes">Timeout in min</string>
     <string name="re_create_shortcut">Re-Create shortcut</string>
     <string name="create_shortcut_on_home_screen">Create shortcut on home screen</string>
@@ -63,7 +63,7 @@
     <string name="no_https_dialog_msg">This page uses an unencrypted HTTP connection. Do not enter any sensible data.</string>
     <string name="allow_http">Allow HTTP</string>
     <string name="webapp_section_security">Security</string>
-    <string name="webapp_section_cookies">Cookies</string>
+    <string name="webapp_section_cookies">Cookies &amp; Ads</string>
     <string name="webapp_section_datasaving">Data saving</string>
     <string name="webapp_section_misc">Miscellaneous</string>
     <string name="paypal" translatable="false">" ☕ Buy me a coffee on PayPal"</string>
