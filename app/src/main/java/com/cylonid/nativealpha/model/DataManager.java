@@ -107,14 +107,11 @@ public class DataManager {
             }
         }
 
-        ShortcutManager manager = App.getAppContext().getSystemService(ShortcutManager.class);
-        for (ShortcutInfo info : manager.getPinnedShortcuts()) {
-            int id = info.getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
-            if (shortcuts_to_be_removed.contains(id)) {
-                manager.disableShortcuts(Arrays.asList(info.getId()), App.getAppContext().getString(R.string.webapp_already_deleted));
-            }
-        }
+        Utility.deleteShortcuts(shortcuts_to_be_removed);
+
     }
+
+
 
     public void loadAppData() {
         Utility.Assert(App.getAppContext() != null, "App.getAppContext() null before loading sharedpref");

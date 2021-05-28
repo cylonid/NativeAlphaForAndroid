@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="webapp"
             type="com.cylonid.nativealpha.model.WebApp" />
@@ -29,9 +28,10 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
             <TextView
+                android:id="@+id/labelTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{webapp.title}"
+                android:text="@{webapp.baseUrl}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <Space
@@ -61,12 +61,14 @@
                         android:text="@string/re_create_shortcut" />
 
                     <TextView
+                        android:id="@+id/labelWebAppName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/label"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                     <EditText
+                        android:id="@+id/txtWebAppName"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="@dimen/settings_bottom"

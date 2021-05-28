@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import com.cylonid.nativealpha.R;
 import com.cylonid.nativealpha.util.Const;
+import com.cylonid.nativealpha.util.Utility;
+
+import java.util.Arrays;
 
 public class WebApp {
 
@@ -187,6 +190,7 @@ public class WebApp {
 
     public void markInactive() {
         active_entry = false;
+        Utility.deleteShortcuts(Arrays.asList(this.getID()));
         DataManager.getInstance().saveWebAppData();
     }
 
@@ -215,10 +219,9 @@ public class WebApp {
 
     public String getLoadableUrl() {
 
-        if (last_used_url == null)
-            return base_url;
-
 //        LEGACY SETTING: Removed with release 0.86/1.0.0
+//        if (last_used_url == null)
+//            return base_url;
 //        else if (restore_page) {
 //
 //            long current_time_sec = System.currentTimeMillis() / 1000;

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -38,7 +40,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,6 +56,15 @@ public final class Utility {
         intent.setAction(Intent.ACTION_VIEW);
 
         return intent;
+    }
+    public static void deleteShortcuts(List<Integer> removableWebAppIds) {
+        ShortcutManager manager = App.getAppContext().getSystemService(ShortcutManager.class);
+        for (ShortcutInfo info : manager.getPinnedShortcuts()) {
+            int id = info.getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
+            if (removableWebAppIds.contains(id)) {
+                manager.disableShortcuts(Arrays.asList(info.getId()), App.getAppContext().getString(R.string.webapp_already_deleted));
+            }
+        }
     }
 
     public static Long getTimeInSeconds()
