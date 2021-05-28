@@ -110,6 +110,7 @@
     <string name="ssl_errors">SSL Errors</string>
     <string name="ssl_permanent_warning">Only use this option for self-hosted non-production websites</string>
     <string name="ignore_ssl_errors">Ignore SSL errors</string>
+    <string name="webapp_already_deleted">This Web App is no longer available. You can delete this shortcut.</string>
 
 
 </resources>

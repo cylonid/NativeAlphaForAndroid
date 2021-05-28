@@ -104,4 +104,5 @@
     <string name="ssl_errors">SSL-Fehler</string>
     <string name="ssl_permanent_warning">Verwenden Sie diese Option nur für selbst gehostete Test-Webseiten</string>
     <string name="ignore_ssl_errors">SSL-Fehler ignorieren</string>
+    <string name="webapp_already_deleted">Diese Web-App wurde gelöscht. Sie können diese Verknüpfung löschen.</string>
 </resources>

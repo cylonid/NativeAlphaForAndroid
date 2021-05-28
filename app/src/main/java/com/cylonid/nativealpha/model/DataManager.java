@@ -1,6 +1,8 @@
 package com.cylonid.nativealpha.model;
 
 import android.content.SharedPreferences;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Base64InputStream;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 
 import com.cylonid.nativealpha.R;
 import com.cylonid.nativealpha.util.App;
+import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.InvalidChecksumException;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.gson.Gson;
@@ -24,6 +27,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -90,6 +95,27 @@ public class DataManager {
         editor.apply();
     }
 
+    private void checkIfWebAppIdsCollide(ArrayList<WebApp> oldWebApps, ArrayList<WebApp> newWebApps) {
+        int end = Math.min(oldWebApps.size(), newWebApps.size());
+        ArrayList<Integer> shortcuts_to_be_removed = new ArrayList<>();
+
+        for (int i = 0; i < end; i++) {
+            if (oldWebApps.get(i) != null && newWebApps.get(i) != null) {
+                if (!oldWebApps.get(i).getBaseUrl().equals(newWebApps.get(i).getBaseUrl())) {
+                    shortcuts_to_be_removed.add(newWebApps.get(i).getID());
+                }
+            }
+        }
+
+        ShortcutManager manager = App.getAppContext().getSystemService(ShortcutManager.class);
+        for (ShortcutInfo info : manager.getPinnedShortcuts()) {
+            int id = info.getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
+            if (shortcuts_to_be_removed.contains(id)) {
+                manager.disableShortcuts(Arrays.asList(info.getId()), App.getAppContext().getString(R.string.webapp_already_deleted));
+            }
+        }
+    }
+
     public void loadAppData() {
         Utility.Assert(App.getAppContext() != null, "App.getAppContext() null before loading sharedpref");
 
@@ -101,7 +127,9 @@ public class DataManager {
             gsonBuilder.registerTypeAdapter(WebApp.class, new WebAppInstanceCreator());
             Gson gson = gsonBuilder.create();
             String json = appdata.getString(shared_pref_webappdata, "");
-            websites = gson.fromJson(json, new TypeToken<ArrayList<WebApp>>() {}.getType());
+            ArrayList<WebApp> new_websites = gson.fromJson(json, new TypeToken<ArrayList<WebApp>>() {}.getType());
+            checkIfWebAppIdsCollide(websites, new_websites);
+            websites = new_websites;
         }
 
         max_assigned_ID = appdata.getInt(shared_pref_max_id, max_assigned_ID);
