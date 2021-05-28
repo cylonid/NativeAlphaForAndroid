@@ -35,15 +35,21 @@ public class DataManager {
     private static final String SHARED_PREF_KEY = "WEBSITEDATA";
     private static final String SHARED_PREF_LEGACY_KEY = "GLOBALSETTINGS";
     private static final String shared_pref_max_id  = "MAX_ID";
-    private static final String shared_pref_glob_cache = "Cache";
+
+
     private static final String shared_pref_webappdata = "WEBSITEDATA";
+    private static final String shared_pref_globalsettings = "GLOBALSETTINGS";
+
+    //<Legacy strings to be deleted in future>
+    private static final String shared_pref_glob_cache = "Cache";
     private static final String shared_pref_glob_cookie = "Cookies";
     private static final String shared_pref_glob_2fmultitouch = "TwoFingerMultiTouch";
     private static final String shared_pref_glob_multitouch_reload = "ReloadMultiTouch";
     private static final String shared_pref_glob_3fmultitouch = "ThreeFingerMultiTouch";
     private static final String shared_pref_glob_progressbar = "LoadProgressBarAlwaysShown";
     private static final String shared_pref_glob_ui_theme = "UITheme";
-    private static final String shared_pref_ignore_legacy_settings = "ignoreLegacySettings";
+    private static final String shared_pref_global_settings_json = "globalSettingsStoredAsJson";
+    //</>
 
     private static final DataManager instance = new DataManager();
     private ArrayList<WebApp> websites;
@@ -100,52 +106,44 @@ public class DataManager {
 
         max_assigned_ID = appdata.getInt(shared_pref_max_id, max_assigned_ID);
 
-        //Check legacy app data
-        if (!appdata.getBoolean(shared_pref_ignore_legacy_settings, false))
-            applyLegacyGlobalSettings();
-        else {
-            //Global app data
-            settings.setClearCache(appdata.getBoolean(shared_pref_glob_cache, false));
-            settings.setClearCookies(appdata.getBoolean(shared_pref_glob_cookie, false));
-            settings.setTwoFingerMultitouch(appdata.getBoolean(shared_pref_glob_2fmultitouch, true));
-            settings.setMultitouchReload(appdata.getBoolean(shared_pref_glob_multitouch_reload, true));
-            settings.setThreeFingerMultitouch(appdata.getBoolean(shared_pref_glob_3fmultitouch, false));
-            settings.setShowProgressbar(appdata.getBoolean(shared_pref_glob_progressbar, false));
-            settings.setThemeId(appdata.getInt(shared_pref_glob_ui_theme, 0));
+        //Check legacy global settings
+        if (appdata.getBoolean(shared_pref_global_settings_json, false)) {
+            //Global settings
+            if (appdata.contains(shared_pref_globalsettings)) {
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.registerTypeAdapter(GlobalSettings.class, new GlobalSettingsInstanceCreator());
+                Gson gson = gsonBuilder.create();
+                String json = appdata.getString(shared_pref_globalsettings, "");
+                settings = gson.fromJson(json, new TypeToken<GlobalSettings>() {}.getType());
+            }
         }
-
+        else
+            loadGlobalSettingsLegacy();
     }
 
-
+    public void loadGlobalSettingsLegacy() {
+        settings.setClearCache(appdata.getBoolean(shared_pref_glob_cache, false));
+        settings.setClearCookies(appdata.getBoolean(shared_pref_glob_cookie, false));
+        settings.setTwoFingerMultitouch(appdata.getBoolean(shared_pref_glob_2fmultitouch, true));
+        settings.setMultitouchReload(appdata.getBoolean(shared_pref_glob_multitouch_reload, true));
+        settings.setThreeFingerMultitouch(appdata.getBoolean(shared_pref_glob_3fmultitouch, false));
+        settings.setShowProgressbar(appdata.getBoolean(shared_pref_glob_progressbar, false));
+        settings.setThemeId(appdata.getInt(shared_pref_glob_ui_theme, 0));
+    }
 
     public void saveGlobalSettings() {
         Utility.Assert(App.getAppContext() != null, "App.getAppContext() null before saving appdata to sharedpref");
 
         appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE);
         SharedPreferences.Editor editor = appdata.edit();
-        editor.putBoolean(shared_pref_glob_cache, settings.isClearCache());
-        editor.putBoolean(shared_pref_glob_cookie, settings.isClearCookies());
-        editor.putBoolean(shared_pref_glob_2fmultitouch, settings.isTwoFingerMultitouch());
-        editor.putBoolean(shared_pref_glob_multitouch_reload, settings.isMultitouchReload());
-        editor.putBoolean(shared_pref_glob_3fmultitouch, settings.isThreeFingerMultitouch());
-        editor.putBoolean(shared_pref_glob_progressbar, settings.isShowProgressbar());
-        editor.putInt(shared_pref_glob_ui_theme, settings.getThemeId());
-        editor.putBoolean(shared_pref_ignore_legacy_settings, true);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(settings);
+        editor.putString(shared_pref_globalsettings, json);
+        editor.putBoolean(shared_pref_global_settings_json, true);
         editor.apply();
     }
 
-    private void applyLegacyGlobalSettings() {
-        appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_LEGACY_KEY, MODE_PRIVATE);
-
-        settings.setClearCache(appdata.getBoolean(shared_pref_glob_cache, false));
-        settings.setClearCookies(appdata.getBoolean(shared_pref_glob_cookie, false));
-        settings.setTwoFingerMultitouch(appdata.getBoolean(shared_pref_glob_2fmultitouch, true));
-        settings.setThreeFingerMultitouch(appdata.getBoolean(shared_pref_glob_3fmultitouch, false));
-        settings.setThemeId(appdata.getInt(shared_pref_glob_ui_theme, 0));
-
-        appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE);
-
-    }
 
 //    public void initDummyData()
 //    {
