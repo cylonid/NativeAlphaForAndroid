@@ -32,6 +32,7 @@
                     android:visibility="visible">
 
                     <TextView
+                        android:id="@+id/labelPageTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/global_settings"
@@ -59,6 +60,12 @@
                         android:layout_height="wrap_content"
                         android:text="@string/import_settings_web_apps"
                         android:id="@+id/btnImportSettings" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/global_web_app_settings"
+                        android:id="@+id/btnGlobalWebApp" />
                     <Switch
                         android:id="@+id/switchGlobalCache"
                         android:layout_width="match_parent"

@@ -22,6 +22,8 @@ public class WebApp {
     private Long timestamp_last_used_url;
     private int timeout_last_used_url;
     private int ID;
+    private boolean override_global_settings;
+
     private boolean open_url_external;
     private boolean allow_cookies;
     private boolean allow_third_p_cookies;
@@ -51,6 +53,7 @@ public class WebApp {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
         base_url = url.toLowerCase();
         ID = id;
+        override_global_settings = true;
         open_url_external = true;
         active_entry = true;
         timeout_last_used_url = 10;
@@ -82,13 +85,8 @@ public class WebApp {
         initDefaultSettings();
     }
 
-    public WebApp(WebApp other) {
-        this.title = other.title;
-        this.base_url = other.base_url;
-        this.last_used_url = other.last_used_url;
-        this.timestamp_last_used_url = other.timestamp_last_used_url;
-        this.timeout_last_used_url = other.timeout_last_used_url;
-        this.ID = other.ID;
+    //This part of the copy ctor should be callable independently from actual object construction to copy values of the global web app template
+    public void copySettings(WebApp other) {
         this.open_url_external = other.open_url_external;
         this.allow_cookies = other.allow_cookies;
         this.allow_third_p_cookies = other.allow_third_p_cookies;
@@ -101,7 +99,6 @@ public class WebApp {
         this.send_savedata_request = other.send_savedata_request;
         this.block_images = other.block_images;
         this.allow_http = other.allow_http;
-        this.url_on_first_pageload = other.url_on_first_pageload;
         this.allow_location_access = other.allow_location_access;
         this.user_agent = other.user_agent;
         this.use_custom_user_agent = other.use_custom_user_agent;
@@ -113,7 +110,19 @@ public class WebApp {
         this.timespan_dark_mode_end = other.timespan_dark_mode_end;
         this.ignore_ssl_errors = other.ignore_ssl_errors;
         this.show_expert_settings = other.show_expert_settings;
+    }
 
+    public WebApp(WebApp other) {
+        this.title = other.title;
+        this.base_url = other.base_url;
+        this.ID = other.ID;
+        this.last_used_url = other.last_used_url;
+        this.url_on_first_pageload = other.url_on_first_pageload;
+        this.timestamp_last_used_url = other.timestamp_last_used_url;
+        this.timeout_last_used_url = other.timeout_last_used_url;
+        this.override_global_settings = other.override_global_settings;
+
+        copySettings(other);
     }
 
     private void initDefaultSettings() {
@@ -121,6 +130,13 @@ public class WebApp {
             this.user_agent = Const.DESKTOP_USER_AGENT;
             this.use_custom_user_agent = true;
         }
+    }
+    public boolean isOverrideGlobalSettings() {
+        return override_global_settings;
+    }
+
+    public void setOverrideGlobalSettings(boolean overrideGlobalSettings) {
+        this.override_global_settings = overrideGlobalSettings;
     }
 
     public boolean isShowExpertSettings() {
@@ -130,7 +146,6 @@ public class WebApp {
     public void setShowExpertSettings(boolean showExpertSettings) {
         this.show_expert_settings = showExpertSettings;
     }
-
 
     public boolean isIgnoreSslErrors() {
         return ignore_ssl_errors;
@@ -489,7 +504,9 @@ public class WebApp {
 
     public void onSwitchAutoreloadChanged(CompoundButton mSwitch, boolean isChecked) {
         EditText text = mSwitch.getRootView().findViewById(R.id.textReloadInterval);
+        TextView label = mSwitch.getRootView().findViewById(R.id.labelReloadInterval);
         text.setEnabled(isChecked);
+        label.setEnabled(isChecked);
     }
 
     public void onSwitchExpertSettingsChanged(CompoundButton mSwitch, boolean isChecked) {
@@ -500,7 +517,14 @@ public class WebApp {
         else
             expertSettings.setVisibility(View.GONE);
     }
-
-
-
+    public void onSwitchOverrideGlobalSettingsChanged(CompoundButton mSwitch, boolean isChecked) {
+        LinearLayout sectionDetailedWebAppSettings = mSwitch.getRootView().findViewById(R.id.sectionWebAppDetailSettings);
+//        if (isChecked) {
+            Utility.setViewAndChildrenEnabled(sectionDetailedWebAppSettings, isChecked);
+//            sectionDetailedWebAppSettings.setEnabled(isChecked);
+//        }
+//        else {
+////            Utility.setViewAndChildrenEnabled(sectionDetailedWebAppSettings, false);
+//        }
+    }
 }

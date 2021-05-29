@@ -12,6 +12,7 @@ import android.os.Build;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -63,6 +64,25 @@ public final class Utility {
             int id = info.getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
             if (removableWebAppIds.contains(id)) {
                 manager.disableShortcuts(Arrays.asList(info.getId()), App.getAppContext().getString(R.string.webapp_already_deleted));
+            }
+        }
+    }
+
+    public static void setViewAndChildrenEnabled(View view, boolean enabled) {
+
+        view.setClickable(enabled);
+        if (enabled) {
+            view.setAlpha(1.0f);
+        }
+        else {
+            view.setAlpha(0.75f);
+        }
+
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View child = viewGroup.getChildAt(i);
+                setViewAndChildrenEnabled(child, enabled);
             }
         }
     }

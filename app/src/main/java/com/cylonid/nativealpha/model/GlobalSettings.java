@@ -9,6 +9,7 @@ public class GlobalSettings {
     private boolean show_progressbar;
     private boolean multitouch_reload;
     private int theme_id;
+    private WebApp global_web_app;
 
     public GlobalSettings(GlobalSettings other) {
         this.clear_cache = other.clear_cache;
@@ -18,6 +19,7 @@ public class GlobalSettings {
         this.theme_id = other.theme_id;
         this.multitouch_reload = other.multitouch_reload;
         this.show_progressbar = other.show_progressbar;
+        this.global_web_app = other.global_web_app;
     }
 
     public GlobalSettings() {
@@ -28,6 +30,7 @@ public class GlobalSettings {
         multitouch_reload = true;
         theme_id = 0;
         show_progressbar = false;
+        global_web_app = new WebApp("about:blank", Integer.MAX_VALUE);
     }
 
     public boolean isTwoFingerMultitouch() {
@@ -82,6 +85,15 @@ public class GlobalSettings {
     public void setShowProgressbar(boolean show_progressbar) {
         this.show_progressbar = show_progressbar;
     }
+
+    public WebApp getGlobalWebApp() {
+        return global_web_app;
+    }
+
+    public void setGlobalWebApp(WebApp globalWebApp) {
+        this.global_web_app = globalWebApp;
+    }
+
 
 
 

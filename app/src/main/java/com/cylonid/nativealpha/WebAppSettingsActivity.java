@@ -32,6 +32,8 @@ import java.util.Date;
 public class WebAppSettingsActivity extends AppCompatActivity {
 
     int webappID = -1;
+    WebApp webapp;
+    boolean isGlobalWebApp;
 
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     @Override
@@ -44,9 +46,17 @@ public class WebAppSettingsActivity extends AppCompatActivity {
 
         webappID = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
         Utility.Assert(webappID != -1, "WebApp ID could not be retrieved.");
+        isGlobalWebApp = webappID == Integer.MAX_VALUE;
 
         final View inflated_view = binding.getRoot();
-        final WebApp webapp = DataManager.getInstance().getWebApp(webappID);
+
+        if (isGlobalWebApp) {
+            webapp = DataManager.getInstance().getSettings().getGlobalWebApp();
+            prepareGlobalWebAppScreen();
+        }
+        else
+            webapp = DataManager.getInstance().getWebApp(webappID);
+
         if (webapp == null) {
             finish();
         }
@@ -68,13 +78,27 @@ public class WebAppSettingsActivity extends AppCompatActivity {
                 ActivityManager activityManager =
                         (ActivityManager) App.getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
 
-                for (ActivityManager.AppTask task : activityManager.getAppTasks()) {
-                    int id = task.getTaskInfo().baseIntent.getIntExtra(Const.INTENT_WEBAPPID, -1);
-                    if (id == webappID)
-                        task.finishAndRemoveTask();
+                //Global web app => close all webview activities, save to global settings
+                if (isGlobalWebApp) {
+                    for (ActivityManager.AppTask task : activityManager.getAppTasks()) {
+                        int id = task.getTaskInfo().baseIntent.getIntExtra(Const.INTENT_WEBAPPID, -1);
+                        if (id != -1)
+                            task.finishAndRemoveTask();
 
+                    }
+                    DataManager.getInstance().getSettings().setGlobalWebApp(modified_webapp);
+                    DataManager.getInstance().saveGlobalSettings();
                 }
-                DataManager.getInstance().replaceWebApp(modified_webapp);
+                //Normal web app => only close that specific web app, save to webapp arraylist
+                else {
+                    for (ActivityManager.AppTask task : activityManager.getAppTasks()) {
+                        int id = task.getTaskInfo().baseIntent.getIntExtra(Const.INTENT_WEBAPPID, -1);
+                        if (id == webappID)
+                            task.finishAndRemoveTask();
+                    }
+                    DataManager.getInstance().replaceWebApp(modified_webapp);
+                }
+
                 Intent i = new Intent(WebAppSettingsActivity.this, MainActivity.class);
                 i.putExtra(Const.INTENT_WEBAPP_CHANGED, true);
                 finish();
@@ -87,15 +111,12 @@ public class WebAppSettingsActivity extends AppCompatActivity {
             txtBeginDarkMode.setOnClickListener(view -> showTimePicker(txtBeginDarkMode));
             txtEndDarkMode.setOnClickListener(view -> showTimePicker(txtEndDarkMode));
 
-            LinearLayout sectionExpertSettings = inflated_view.findViewById(R.id.sectionExpertSettings);
-            if (webapp.isShowExpertSettings()) {
-                sectionExpertSettings.setVisibility(View.VISIBLE);
-            }
-            else {
-                sectionExpertSettings.setVisibility(View.GONE);
-            }
+            webapp.onSwitchExpertSettingsChanged(inflated_view.findViewById(R.id.switchExpertSettings), webapp.isShowExpertSettings());
+            webapp.onSwitchOverrideGlobalSettingsChanged(findViewById(R.id.switchOverrideGlobal), webapp.isOverrideGlobalSettings());
+
         }
     }
+
 
     private void showTimePicker(EditText txtField) {
         Calendar c = Utility.convertStringToCalendar(txtField.getText().toString());
@@ -107,6 +128,13 @@ public class WebAppSettingsActivity extends AppCompatActivity {
         }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
         timePickerDialog.show();
 
+    }
+
+    private void prepareGlobalWebAppScreen() {
+        findViewById(R.id.btnRecreateShortcut).setVisibility(View.GONE);
+        findViewById(R.id.labelWebAppName).setVisibility(View.GONE);
+        findViewById(R.id.txtWebAppName).setVisibility(View.GONE);
+        findViewById(R.id.switchOverrideGlobal).setVisibility(View.GONE);
     }
 }
 

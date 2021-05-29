@@ -82,6 +82,16 @@ public class SettingsActivity extends AppCompatActivity {
         Button btnCancel = findViewById(R.id.btnCancel);
         Button btnExport = findViewById(R.id.btnExportSettings);
         Button btnImport = findViewById(R.id.btnImportSettings);
+        Button btnGlobalWebApp = findViewById(R.id.btnGlobalWebApp);
+
+        btnGlobalWebApp.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, WebAppSettingsActivity.class);
+            intent.putExtra(Const.INTENT_WEBAPPID, Integer.MAX_VALUE);
+            intent.setAction(Intent.ACTION_VIEW);
+            startActivity(intent);
+        });
+
+
         btnExport.setOnClickListener(v -> {
 
             Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*");
@@ -117,6 +127,7 @@ public class SettingsActivity extends AppCompatActivity {
             Utility.applyUITheme();
             onBackPressed();
         });
+
 
     }
 

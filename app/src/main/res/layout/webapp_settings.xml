@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="webapp"
             type="com.cylonid.nativealpha.model.WebApp" />
@@ -76,441 +77,476 @@
                         android:fontFamily="sans-serif"
                         android:inputType="text"
                         android:text="@={webapp.title}" />
-
-                    <LinearLayout
-                        android:id="@+id/sectionSecurity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
-                        android:divider="@drawable/empty_10dp_vertical"
-                        android:orientation="vertical"
-                        android:showDividers="middle">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/webapp_section_security"
-                            android:layout_marginBottom="@dimen/remove_divider"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-                        <Switch
-                            android:id="@+id/switchJavascript"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.allowJs}"
-                            android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchJsChanged(switch, checked)}"
-                            android:text="@string/allow_javascript" />
-
-                        <Switch
-                            android:id="@+id/switchHTTP"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.allowHttp}"
-                            android:text="@string/allow_http" />
-
-                        <Switch
-                            android:id="@+id/switchLocationAccess"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.allowLocationAccess}"
-                            android:text="@string/allow_location_access" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/sectionCookies"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
-                        android:divider="@drawable/empty_10dp_vertical"
-                        android:orientation="vertical"
-                        android:showDividers="middle">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/webapp_section_cookies"
-                            android:layout_marginBottom="@dimen/remove_divider"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-                        <Switch
-                            android:id="@+id/switchCookies"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.allowCookies}"
-                            android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchCookiesChanged(switch, checked)}"
-                            android:text="@string/accept_cookies" />
-
-                        <Switch
-                            android:id="@+id/switch3PCookies"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.allowThirdPartyCookies}"
-                            android:enabled="@{webapp.allowCookies}"
-                            android:text="@string/accept_third_party_cookies" />
-                        <Switch
-                            android:id="@+id/switchAdblock"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.useAdblock}"
-                            android:enabled="@{webapp.allowJs}"
-                            android:text="@string/enable_adblock_experimental" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/sectionDarkmode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
-                        android:divider="@drawable/empty_10dp_vertical"
-                        android:orientation="vertical"
-                        android:showDividers="middle">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/dark_mode"
-                            android:layout_marginBottom="@dimen/remove_divider"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-                        <Switch
-                            android:id="@+id/switchDarkMode"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.forceDarkMode}"
-                            android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchForceDarkChanged(switch, checked)}"
-                            android:text="@string/force_dark_mode" />
-
-                        <Switch
-                            android:id="@+id/switchTimeSpanDarkMode"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.useTimespanDarkMode}"
-                            android:enabled="@{webapp.forceDarkMode}"
-                            android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchTimeSpanDarkChanged(switch, checked)}"
-                            android:text="@string/limit_dark_mode_to_time_span" />
-
-                        <LinearLayout
-                            android:id="@+id/layoutTimeSpanDarkMode"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:visibility="visible">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="start"
-                                android:orientation="vertical"
-                                android:visibility="visible">
-
-                                <TextView
-                                    android:id="@+id/lblDarkModeBegin"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:enabled="@{webapp.useTimespanDarkMode}"
-                                    android:text="@string/begin"
-                                    android:textColor="?android:attr/textColorPrimary" />
-
-                                <EditText
-                                    android:id="@+id/textDarkModeBegin"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@null"
-                                    android:enabled="@{webapp.useTimespanDarkMode}"
-                                    android:focusable="false"
-                                    android:fontFamily="sans-serif"
-                                    android:inputType="none"
-                                    android:text="@={webapp.timespanDarkModeBegin}" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="end"
-                                android:orientation="vertical"
-                                android:visibility="visible">
-
-                                <TextView
-                                    android:id="@+id/lblDarkModeEnd"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:enabled="@{webapp.useTimespanDarkMode}"
-                                    android:text="@string/end"
-                                    android:textColor="?android:attr/textColorPrimary" />
-
-                                <EditText
-                                    android:id="@+id/textDarkModeEnd"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@null"
-                                    android:enabled="@{webapp.useTimespanDarkMode}"
-                                    android:focusable="false"
-                                    android:fontFamily="sans-serif"
-                                    android:inputType="none"
-                                    android:text="@={webapp.timespanDarkModeEnd}" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/sectionDatasaving"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
-                        android:divider="@drawable/empty_10dp_vertical"
-                        android:orientation="vertical"
-                        android:showDividers="middle">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/webapp_section_datasaving"
-                            android:layout_marginBottom="@dimen/remove_divider"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-                        <Switch
-                            android:id="@+id/switchSaveDataRequest"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.sendSavedataRequest}"
-                            android:enabled="true"
-                            android:text="@string/request_data_saving_page" />
-
-                        <Switch
-                            android:id="@+id/switchBlockImages"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.blockImages}"
-                            android:enabled="true"
-                            android:text="@string/do_not_load_images" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/sectionAutoreload"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
-                        android:divider="@drawable/empty_10dp_vertical"
-                        android:orientation="vertical"
-                        android:showDividers="middle">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/remove_divider"
-                            android:text="@string/webapp_autoreload" />
-
-                        <Switch
-                            android:id="@+id/switchAutoreload"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.autoreload}"
-                            android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchAutoreloadChanged(switch, checked)}"
-                            android:text="@string/webapp_autoreload_switch" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="visible">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/webapp_interval_for_reload"
-                                android:textColor="?android:attr/textColorPrimary" />
-
-                            <EditText
-                                android:id="@+id/textReloadInterval"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:enabled="@{webapp.autoreload}"
-                                android:fontFamily="sans-serif"
-                                android:inputType="number"
-                                android:text="@={`` + webapp.timeAutoreload}" />
-
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/sectionMisc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
-                        android:divider="@drawable/empty_10dp_vertical"
-                        android:orientation="vertical"
-                        android:showDividers="middle">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/webapp_section_misc"
-                            android:layout_marginBottom="@dimen/remove_divider"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-                        <Switch
-                            android:id="@+id/switchDesktopSite"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.requestDesktop}"
-                            android:enabled="@{webapp.allowJs}"
-                            android:text="@string/request_website_in_desktop_version" />
-
-                        <Switch
-                            android:id="@+id/switchOpenUrlExternal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.openUrlExternal}"
-                            android:text="@string/open_external_links_in_browser_app" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/sectionRestoreOpenedPage"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
-                        android:divider="@drawable/empty_10dp_vertical"
-                        android:orientation="vertical"
-                        android:showDividers="middle">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/webapp_section_restorepage"
-                            android:layout_marginBottom="@dimen/remove_divider"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-                        <Switch
-                            android:id="@+id/switchRestorePage"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.restorePage}"
-                            android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchRestorePageChanged(switch, checked)}"
-                            android:text="@string/restore_last_opened_page" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="visible">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/timeout_for_page_restore_in_minutes"
-                                android:textColor="?android:attr/textColorPrimary" />
-
-                            <EditText
-                                android:id="@+id/textTimeout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif"
-                                android:inputType="number"
-                                android:text="@={`` + webapp.timeoutLastUsedUrl}" />
-
-                        </LinearLayout>
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/expert_settings"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                     <Switch
-                        android:id="@+id/switchExpertSettings"
+                        android:id="@+id/switchOverrideGlobal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textStyle="bold"
                         android:layout_marginBottom="@dimen/settings_bottom_innersection"
-                        android:checked="@={webapp.showExpertSettings}"
-                        android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchExpertSettingsChanged(switch, checked)}"
-                        android:text="@string/show_expert_settings" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:checked="@={webapp.overrideGlobalSettings}"
+                        android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchOverrideGlobalSettingsChanged(switch, checked)}"
+                        android:text="@string/override_global_settings" />
 
                     <LinearLayout
-                        android:id="@+id/sectionExpertSettings"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/sectionWebAppDetailSettings"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/settings_bottom"
-                        android:divider="@drawable/empty_10dp_vertical"
-                        android:orientation="vertical"
-                        android:visibility="gone"
-                        android:showDividers="middle">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/user_agent"
-                            android:layout_marginBottom="@dimen/remove_divider"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-                        <Switch
-                            android:id="@+id/switchUserAgent"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.useCustomUserAgent}"
-                            android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchUserAgentChanged(switch, checked)}"
-                            android:text="@string/use_custom_user_agent" />
-
-                        <TextView
-                            android:id="@+id/txthintUserAgent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                        android:orientation="vertical">
 
                         <LinearLayout
+                            android:id="@+id/sectionSecurity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:divider="@drawable/empty_10dp_vertical"
                             android:orientation="vertical"
-                            android:visibility="visible">
+                            android:showDividers="middle">
 
-                            <EditText
-                                android:id="@+id/textUserAgent"
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif"
-                                android:hint="@string/insert_custom_user_agent"
-                                android:inputType="text"
-                                android:text="@={webapp.userAgent}"
-                                tools:ignore="UnusedAttribute" />
+                                android:layout_marginBottom="@dimen/remove_divider"
+                                android:textStyle="bold"
+                                android:text="@string/webapp_section_security"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                            <Switch
+                                android:id="@+id/switchJavascript"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.allowJs}"
+                                android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchJsChanged(switch, checked)}"
+                                android:text="@string/allow_javascript" />
+
+                            <Switch
+                                android:id="@+id/switchHTTP"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.allowHttp}"
+                                android:text="@string/allow_http" />
+
+                            <Switch
+                                android:id="@+id/switchLocationAccess"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.allowLocationAccess}"
+                                android:text="@string/allow_location_access" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/sectionCookies"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:divider="@drawable/empty_10dp_vertical"
+                            android:orientation="vertical"
+                            android:showDividers="middle">
+
+                            <TextView
+                                android:textStyle="bold"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/remove_divider"
+                                android:text="@string/webapp_section_cookies"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                            <Switch
+                                android:id="@+id/switchCookies"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.allowCookies}"
+                                android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchCookiesChanged(switch, checked)}"
+                                android:text="@string/accept_cookies" />
+
+                            <Switch
+                                android:id="@+id/switch3PCookies"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.allowThirdPartyCookies}"
+                                android:enabled="@{webapp.allowCookies}"
+                                android:text="@string/accept_third_party_cookies" />
+
+                            <Switch
+                                android:id="@+id/switchAdblock"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.useAdblock}"
+                                android:enabled="@{webapp.allowJs}"
+                                android:text="@string/enable_adblock_experimental" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/sectionDarkmode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:divider="@drawable/empty_10dp_vertical"
+                            android:orientation="vertical"
+                            android:showDividers="middle">
+
+                            <TextView
+                                android:textStyle="bold"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/remove_divider"
+                                android:text="@string/dark_mode"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                            <Switch
+                                android:id="@+id/switchDarkMode"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.forceDarkMode}"
+                                android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchForceDarkChanged(switch, checked)}"
+                                android:text="@string/force_dark_mode" />
+
+                            <Switch
+                                android:id="@+id/switchTimeSpanDarkMode"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.useTimespanDarkMode}"
+                                android:enabled="@{webapp.forceDarkMode}"
+                                android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchTimeSpanDarkChanged(switch, checked)}"
+                                android:text="@string/limit_dark_mode_to_time_span" />
+
+                            <LinearLayout
+                                android:id="@+id/layoutTimeSpanDarkMode"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:visibility="visible">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="start"
+                                    android:orientation="vertical"
+                                    android:visibility="visible">
+
+                                    <TextView
+                                        android:id="@+id/lblDarkModeBegin"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:enabled="@{webapp.useTimespanDarkMode}"
+                                        android:text="@string/begin"
+                                        android:textColor="?android:attr/textColorPrimary" />
+
+                                    <EditText
+                                        android:id="@+id/textDarkModeBegin"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@null"
+                                        android:enabled="@{webapp.useTimespanDarkMode}"
+                                        android:focusable="false"
+                                        android:fontFamily="sans-serif"
+                                        android:inputType="none"
+                                        android:text="@={webapp.timespanDarkModeBegin}" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:orientation="vertical"
+                                    android:visibility="visible">
+
+                                    <TextView
+                                        android:id="@+id/lblDarkModeEnd"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:enabled="@{webapp.useTimespanDarkMode}"
+                                        android:text="@string/end"
+                                        android:textColor="?android:attr/textColorPrimary" />
+
+                                    <EditText
+                                        android:id="@+id/textDarkModeEnd"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@null"
+                                        android:enabled="@{webapp.useTimespanDarkMode}"
+                                        android:focusable="false"
+                                        android:fontFamily="sans-serif"
+                                        android:inputType="none"
+                                        android:text="@={webapp.timespanDarkModeEnd}" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/sectionDatasaving"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:divider="@drawable/empty_10dp_vertical"
+                            android:orientation="vertical"
+                            android:showDividers="middle">
+
+                            <TextView
+                                android:textStyle="bold"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/remove_divider"
+                                android:text="@string/webapp_section_datasaving"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                            <Switch
+                                android:id="@+id/switchSaveDataRequest"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.sendSavedataRequest}"
+                                android:enabled="true"
+                                android:text="@string/request_data_saving_page" />
+
+                            <Switch
+                                android:id="@+id/switchBlockImages"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.blockImages}"
+                                android:enabled="true"
+                                android:text="@string/do_not_load_images" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/sectionAutoreload"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:divider="@drawable/empty_10dp_vertical"
+                            android:orientation="vertical"
+                            android:showDividers="middle">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:textStyle="bold"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/remove_divider"
+                                android:text="@string/webapp_autoreload" />
+
+                            <Switch
+                                android:id="@+id/switchAutoreload"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.autoreload}"
+                                android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchAutoreloadChanged(switch, checked)}"
+                                android:text="@string/webapp_autoreload_switch" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="visible">
+
+                                <TextView
+                                    android:id="@+id/labelReloadInterval"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:enabled="@{webapp.autoreload}"
+                                    android:text="@string/webapp_interval_for_reload"
+                                    android:textColor="@android:color/primary_text_light" />
+
+                                <EditText
+                                    android:id="@+id/textReloadInterval"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:enabled="@{webapp.autoreload}"
+                                    android:fontFamily="sans-serif"
+                                    android:inputType="number"
+                                    android:text="@={`` + webapp.timeAutoreload}" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/sectionMisc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:divider="@drawable/empty_10dp_vertical"
+                            android:orientation="vertical"
+                            android:showDividers="middle">
+
+                            <TextView
+                                android:textStyle="bold"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/remove_divider"
+                                android:text="@string/webapp_section_misc"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                            <Switch
+                                android:id="@+id/switchDesktopSite"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.requestDesktop}"
+                                android:enabled="@{webapp.allowJs}"
+                                android:text="@string/request_website_in_desktop_version" />
+
+                            <Switch
+                                android:id="@+id/switchOpenUrlExternal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.openUrlExternal}"
+                                android:text="@string/open_external_links_in_browser_app" />
 
                         </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/sectionRestoreOpenedPage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:divider="@drawable/empty_10dp_vertical"
+                            android:orientation="vertical"
+                            android:showDividers="middle"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:textStyle="bold"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/remove_divider"
+                                android:text="@string/webapp_section_restorepage"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                            <Switch
+                                android:id="@+id/switchRestorePage"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.restorePage}"
+                                android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchRestorePageChanged(switch, checked)}"
+                                android:text="@string/restore_last_opened_page" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="visible">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/timeout_for_page_restore_in_minutes"
+                                    android:textColor="?android:attr/textColorPrimary" />
+
+                                <EditText
+                                    android:id="@+id/textTimeout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif"
+                                    android:inputType="number"
+                                    android:text="@={`` + webapp.timeoutLastUsedUrl}" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
                         <TextView
                             android:layout_width="match_parent"
+                            android:textStyle="bold"
                             android:layout_height="wrap_content"
-                            android:text="@string/ssl_errors"
+                            android:text="@string/expert_settings"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-                        <LinearLayout
+
+                        <Switch
+                            android:id="@+id/switchExpertSettings"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                        <ImageView
+                            android:layout_marginBottom="@dimen/settings_bottom_innersection"
+                            android:checked="@={webapp.showExpertSettings}"
+                            android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchExpertSettingsChanged(switch, checked)}"
+                            android:text="@string/show_expert_settings" />
+
+                        <LinearLayout
+                            android:id="@+id/sectionExpertSettings"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:divider="@drawable/empty_10dp_vertical"
+                            android:orientation="vertical"
+                            android:showDividers="middle"
+                            android:visibility="gone">
 
-                            android:layout_marginEnd="@dimen/settings_bottom_innersection"
-                            android:backgroundTint="@color/colorPrimary"
-                            android:background="@android:drawable/ic_dialog_alert"
-                            />
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/ssl_permanent_warning"
+                                android:layout_marginBottom="@dimen/remove_divider"
+                                android:textStyle="bold"
+                                android:text="@string/user_agent"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                            <Switch
+                                android:id="@+id/switchUserAgent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.useCustomUserAgent}"
+                                android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchUserAgentChanged(switch, checked)}"
+                                android:text="@string/use_custom_user_agent" />
+
+                            <TextView
+                                android:id="@+id/txthintUserAgent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="visible">
+
+                                <EditText
+                                    android:id="@+id/textUserAgent"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif"
+                                    android:hint="@string/insert_custom_user_agent"
+                                    android:inputType="text"
+                                    android:text="@={webapp.userAgent}"
+                                    tools:ignore="UnusedAttribute" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:textStyle="bold"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/ssl_errors"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:layout_marginEnd="@dimen/settings_bottom_innersection"
+                                    android:background="@android:drawable/ic_dialog_alert"
+                                    android:backgroundTint="@color/colorPrimary" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/ssl_permanent_warning"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                            </LinearLayout>
+
+                            <Switch
+                                android:id="@+id/switchIgnoreSSLErrors"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.ignoreSslErrors}"
+                                android:text="@string/ignore_ssl_errors" />
+
                         </LinearLayout>
-                        <Switch
-                            android:id="@+id/switchIgnoreSSLErrors"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="@={webapp.ignoreSslErrors}"
-                            android:text="@string/ignore_ssl_errors" />
 
+                        <Space
+                            android:layout_width="1dp"
+                            android:layout_height="15dp" />
                     </LinearLayout>
-
-                    <Space
-                        android:layout_width="1dp"
-                        android:layout_height="15dp" />
-
                 </LinearLayout>
             </ScrollView>
 

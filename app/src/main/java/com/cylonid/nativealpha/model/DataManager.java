@@ -211,6 +211,11 @@ public class DataManager {
     public WebApp getWebApp(int i) {
 
         try {
+            WebApp webApp = websites.get(i);
+            if (!webApp.isOverrideGlobalSettings()) {
+                webApp.copySettings(settings.getGlobalWebApp());
+                return webApp;
+            }
             return websites.get(i);
         }
         catch (IndexOutOfBoundsException e) {
