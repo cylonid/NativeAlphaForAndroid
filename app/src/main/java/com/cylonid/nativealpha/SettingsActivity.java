@@ -86,7 +86,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         btnGlobalWebApp.setOnClickListener(v -> {
             Intent intent = new Intent(SettingsActivity.this, WebAppSettingsActivity.class);
-            intent.putExtra(Const.INTENT_WEBAPPID, Integer.MAX_VALUE);
+            intent.putExtra(Const.INTENT_WEBAPPID, settings.getGlobalWebApp().getID());
             intent.setAction(Intent.ACTION_VIEW);
             startActivity(intent);
         });

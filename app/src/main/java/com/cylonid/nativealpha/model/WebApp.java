@@ -131,6 +131,16 @@ public class WebApp {
             this.use_custom_user_agent = true;
         }
     }
+
+/*
+    This function is used for settings where the ctor needs to have a different setting because
+    we want different behaviour for already existing and newly created Web Apps.
+        */
+
+    public void applySettingsForNewWebApp() {
+        this.override_global_settings = false;
+    }
+
     public boolean isOverrideGlobalSettings() {
         return override_global_settings;
     }

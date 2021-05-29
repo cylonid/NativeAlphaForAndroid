@@ -1,13 +1,9 @@
 package com.cylonid.nativealpha;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.SystemClock;
-import android.provider.ContactsContract;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Patterns;
@@ -22,7 +18,6 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.FragmentManager;
 
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
@@ -231,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (Patterns.WEB_URL.matcher(str_url.toLowerCase()).matches()) {
                     WebApp new_site = new WebApp(str_url, DataManager.getInstance().getIncrementedID());
+                    new_site.applySettingsForNewWebApp();
                     DataManager.getInstance().addWebsite(new_site);
 
                     addRow(new_site);
@@ -238,8 +234,6 @@ public class MainActivity extends AppCompatActivity {
                     if (create_shortcut.isChecked()) {
                         ShortcutDialogFragment frag = ShortcutDialogFragment.newInstance(new_site);
                         frag.show(getSupportFragmentManager(), "SCFetcher-" + new_site.getID());
-
-
                     }
                 } else
                     url.setError(getString(R.string.enter_valid_url));

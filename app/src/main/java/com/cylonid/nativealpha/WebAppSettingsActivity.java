@@ -46,7 +46,7 @@ public class WebAppSettingsActivity extends AppCompatActivity {
 
         webappID = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
         Utility.Assert(webappID != -1, "WebApp ID could not be retrieved.");
-        isGlobalWebApp = webappID == Integer.MAX_VALUE;
+        isGlobalWebApp = webappID == DataManager.getInstance().getSettings().getGlobalWebApp().getID();
 
         final View inflated_view = binding.getRoot();
 
@@ -55,7 +55,7 @@ public class WebAppSettingsActivity extends AppCompatActivity {
             prepareGlobalWebAppScreen();
         }
         else
-            webapp = DataManager.getInstance().getWebApp(webappID);
+            webapp = DataManager.getInstance().getWebAppIgnoringGlobalOverride(webappID, true);
 
         if (webapp == null) {
             finish();
@@ -135,6 +135,11 @@ public class WebAppSettingsActivity extends AppCompatActivity {
         findViewById(R.id.labelWebAppName).setVisibility(View.GONE);
         findViewById(R.id.txtWebAppName).setVisibility(View.GONE);
         findViewById(R.id.switchOverrideGlobal).setVisibility(View.GONE);
+        findViewById(R.id.sectionSSL).setVisibility(View.GONE);
+        findViewById(R.id.labelTitle).setVisibility(View.GONE);
+        TextView page_title = findViewById(R.id.labelPageTitle);
+        page_title.setText(getString(R.string.global_web_app_settings));
+
     }
 }
 

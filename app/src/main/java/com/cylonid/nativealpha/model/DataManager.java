@@ -209,10 +209,14 @@ public class DataManager {
 
 
     public WebApp getWebApp(int i) {
+        return getWebAppIgnoringGlobalOverride(i, false);
+    }
+
+    public WebApp getWebAppIgnoringGlobalOverride(int i, boolean ignoreOverride) {
 
         try {
             WebApp webApp = websites.get(i);
-            if (!webApp.isOverrideGlobalSettings()) {
+            if (!webApp.isOverrideGlobalSettings() && !ignoreOverride) {
                 webApp.copySettings(settings.getGlobalWebApp());
                 return webApp;
             }

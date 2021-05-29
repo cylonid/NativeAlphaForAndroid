@@ -23,6 +23,7 @@
             android:weightSum="100">
 
             <TextView
+                android:id="@+id/labelPageTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/web_app_settings"
@@ -77,16 +78,17 @@
                         android:fontFamily="sans-serif"
                         android:inputType="text"
                         android:text="@={webapp.title}" />
+
                     <Switch
                         android:id="@+id/switchOverrideGlobal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
                         android:layout_marginBottom="@dimen/settings_bottom_innersection"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:checked="@={webapp.overrideGlobalSettings}"
                         android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchOverrideGlobalSettingsChanged(switch, checked)}"
-                        android:text="@string/override_global_settings" />
+                        android:text="@string/override_global_settings"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:id="@+id/sectionWebAppDetailSettings"
@@ -107,9 +109,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/remove_divider"
-                                android:textStyle="bold"
                                 android:text="@string/webapp_section_security"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textStyle="bold" />
 
                             <Switch
                                 android:id="@+id/switchJavascript"
@@ -144,12 +146,12 @@
                             android:showDividers="middle">
 
                             <TextView
-                                android:textStyle="bold"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/remove_divider"
                                 android:text="@string/webapp_section_cookies"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textStyle="bold" />
 
                             <Switch
                                 android:id="@+id/switchCookies"
@@ -186,12 +188,12 @@
                             android:showDividers="middle">
 
                             <TextView
-                                android:textStyle="bold"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/remove_divider"
                                 android:text="@string/dark_mode"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textStyle="bold" />
 
                             <Switch
                                 android:id="@+id/switchDarkMode"
@@ -285,12 +287,12 @@
                             android:showDividers="middle">
 
                             <TextView
-                                android:textStyle="bold"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/remove_divider"
                                 android:text="@string/webapp_section_datasaving"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textStyle="bold" />
 
                             <Switch
                                 android:id="@+id/switchSaveDataRequest"
@@ -320,10 +322,10 @@
 
                             <TextView
                                 android:layout_width="match_parent"
-                                android:textStyle="bold"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/remove_divider"
-                                android:text="@string/webapp_autoreload" />
+                                android:text="@string/webapp_autoreload"
+                                android:textStyle="bold" />
 
                             <Switch
                                 android:id="@+id/switchAutoreload"
@@ -369,12 +371,12 @@
                             android:showDividers="middle">
 
                             <TextView
-                                android:textStyle="bold"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/remove_divider"
                                 android:text="@string/webapp_section_misc"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textStyle="bold" />
 
                             <Switch
                                 android:id="@+id/switchDesktopSite"
@@ -404,12 +406,12 @@
                             android:visibility="gone">
 
                             <TextView
-                                android:textStyle="bold"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/remove_divider"
                                 android:text="@string/webapp_section_restorepage"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textStyle="bold" />
 
                             <Switch
                                 android:id="@+id/switchRestorePage"
@@ -444,10 +446,10 @@
 
                         <TextView
                             android:layout_width="match_parent"
-                            android:textStyle="bold"
                             android:layout_height="wrap_content"
                             android:text="@string/expert_settings"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textStyle="bold" />
 
                         <Switch
                             android:id="@+id/switchExpertSettings"
@@ -472,9 +474,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/remove_divider"
-                                android:textStyle="bold"
                                 android:text="@string/user_agent"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textStyle="bold" />
 
                             <Switch
                                 android:id="@+id/switchUserAgent"
@@ -507,40 +509,47 @@
 
                             </LinearLayout>
 
-                            <TextView
-                                android:textStyle="bold"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/ssl_errors"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:id="@+id/sectionSSL"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-
-                                    android:layout_marginEnd="@dimen/settings_bottom_innersection"
-                                    android:background="@android:drawable/ic_dialog_alert"
-                                    android:backgroundTint="@color/colorPrimary" />
+                                android:orientation="vertical">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/ssl_permanent_warning"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                                    android:text="@string/ssl_errors"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                    android:textStyle="bold" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+
+                                        android:layout_marginEnd="@dimen/settings_bottom_innersection"
+                                        android:background="@android:drawable/ic_dialog_alert"
+                                        android:backgroundTint="@color/colorPrimary" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/ssl_permanent_warning"
+                                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                                </LinearLayout>
+
+                                <Switch
+                                    android:id="@+id/switchIgnoreSSLErrors"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:checked="@={webapp.ignoreSslErrors}"
+                                    android:text="@string/ignore_ssl_errors" />
+
                             </LinearLayout>
-
-                            <Switch
-                                android:id="@+id/switchIgnoreSSLErrors"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:checked="@={webapp.ignoreSslErrors}"
-                                android:text="@string/ignore_ssl_errors" />
-
                         </LinearLayout>
 
                         <Space
