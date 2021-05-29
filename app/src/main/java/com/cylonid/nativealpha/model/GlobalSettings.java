@@ -57,10 +57,6 @@ public class GlobalSettings {
         this.clear_cache = clearCache;
     }
 
-    public boolean isClearCookies() {
-        return clear_cookies;
-    }
-
     public void setClearCookies(boolean clear_cookies) {
         this.clear_cookies = clear_cookies;
     }

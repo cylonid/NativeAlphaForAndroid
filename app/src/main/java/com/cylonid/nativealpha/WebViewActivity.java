@@ -291,10 +291,11 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             if (webapp.isClearCache() || DataManager.getInstance().getSettings().isClearCache())
                 wv.clearCache(true);
 
+/*            LEGACY SETTING REMOVED WITH RELEASE 0.86/1.00
             if (DataManager.getInstance().getSettings().isClearCookies()) {
                 CookieManager.getInstance().removeAllCookies(null);
                 CookieManager.getInstance().flush();
-            }
+            }*/
         }
         if (reload_handler != null) {
             reload_handler.removeCallbacksAndMessages(null);

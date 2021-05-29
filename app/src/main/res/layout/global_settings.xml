@@ -39,12 +39,12 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/these_settings_are_applied_globally_and_override_app_specific_settings"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        />
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@string/these_settings_are_applied_globally_and_override_app_specific_settings"-->
+<!--                        android:textAppearance="@style/TextAppearance.AppCompat.Small"-->
+<!--                        />-->
 
                     <Space
                         android:layout_width="1dp"
@@ -72,14 +72,6 @@
                         android:layout_height="wrap_content"
                         android:checked="@={settings.clearCache}"
                         android:text="@string/clear_cache_after_usage" />
-
-
-                    <Switch
-                        android:id="@+id/switchGlobalCookies"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="@={settings.clearCookies}"
-                        android:text="@string/clear_cookies_after_usage" />
 
                     <Switch
                         android:id="@+id/switchGlobalMultiTouchReload"

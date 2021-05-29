@@ -4,7 +4,7 @@
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="spinner_prompt">UI Mode</string>
-    <string name="global_settings">Global settings</string>
+    <string name="global_settings">Global Settings</string>
     <string name="these_settings_are_applied_globally_and_override_app_specific_settings">These settings are applied globally and override webapp-specific settings.</string>
     <string name="clear_cookies_after_usage">Clear cookies after usage</string>
     <string name="use_three_finger_swipes_to_switch_between_web_apps_experimental">Use three-finger swipes ⇄ to switch between Web Apps (experimental)</string>

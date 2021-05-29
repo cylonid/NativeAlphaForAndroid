@@ -51,7 +51,7 @@ public class WebApp {
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
-        base_url = url.toLowerCase();
+        base_url = url;
         ID = id;
         override_global_settings = true;
         open_url_external = true;
