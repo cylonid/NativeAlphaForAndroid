@@ -5,7 +5,7 @@
     <!-- Strings used for fragments for navigation -->
     <string name="spinner_prompt">UI Mode</string>
     <string name="global_settings">Global Settings</string>
-    <string name="these_settings_are_applied_globally_and_override_app_specific_settings">These settings are applied globally and override webapp-specific settings.</string>
+    <string name="these_settings_are_applied_globally_and_override_app_specific_settings">These settings are used by all Web Apps, except those which explicitly override the global settings.</string>
     <string name="clear_cookies_after_usage">Clear cookies after usage</string>
     <string name="use_three_finger_swipes_to_switch_between_web_apps_experimental">Use three-finger swipes ⇄ to switch between Web Apps (experimental)</string>
     <string name="select_ui_mode">Select UI mode</string>
@@ -113,6 +113,8 @@
     <string name="webapp_already_deleted">This Web App is no longer available. You can delete this shortcut.</string>
     <string name="override_global_settings">Override global settings</string>
     <string name="global_web_app_settings">Global Web App Settings</string>
+    <string name="general">Allgemeines</string>
+    <string name="backup">Backup</string>
 
 
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_settings">Allgemeine Einstellungen</string>
-    <string name="these_settings_are_applied_globally_and_override_app_specific_settings">Diese Einstellungen werden global angewendet und überschreiben webappspezifische Einstellungen.</string>
+    <string name="these_settings_are_applied_globally_and_override_app_specific_settings">Diese Einstellungen werden für alle Web-Apps angewendet, außer die Web-App überschreibt die globalen Einstellungen.</string>
     <string name="spinner_prompt">Farbschema</string>
     <string name="clear_cache_after_usage">Cache nach Benutzung löschen</string>
     <string name="clear_cookies_after_usage">Cookies nach Benutzung löschen</string>
@@ -107,4 +107,6 @@
     <string name="webapp_already_deleted">Diese Web-App wurde gelöscht. Sie können diese Verknüpfung löschen.</string>
     <string name="override_global_settings">Globale Einstellungen überschreiben</string>
     <string name="global_web_app_settings">Globale Web-App-Einstellungen</string>
+    <string name="general">General</string>
+    <string name="backup">Backup</string>
 </resources>

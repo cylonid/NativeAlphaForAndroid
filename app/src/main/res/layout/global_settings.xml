@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -11,23 +10,31 @@
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/layoutSettingsActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/layoutSettingsActivity"
         tools:context=".WebAppSettingsActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/margin_activity"
+            android:weightSum="100"
             android:orientation="vertical">
+
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fillViewport="false">
+                android:layout_height="0dp"
+                android:layout_weight="99"
+                android:fadeScrollbars="false"
+                android:fillViewport="false"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbarThumbVertical="@color/colorPrimary">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
                     android:orientation="vertical"
                     android:visibility="visible">
 
@@ -36,105 +43,142 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/global_settings"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="@string/these_settings_are_applied_globally_and_override_app_specific_settings"-->
-<!--                        android:textAppearance="@style/TextAppearance.AppCompat.Small"-->
-<!--                        />-->
 
                     <Space
                         android:layout_width="1dp"
                         android:layout_height="30dp" />
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/export_settings_web_apps"
-                        android:id="@+id/btnExportSettings" />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/import_settings_web_apps"
-                        android:id="@+id/btnImportSettings" />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/global_web_app_settings"
-                        android:id="@+id/btnGlobalWebApp" />
-                    <Switch
-                        android:id="@+id/switchGlobalCache"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="@={settings.clearCache}"
-                        android:text="@string/clear_cache_after_usage" />
-
-                    <Switch
-                        android:id="@+id/switchGlobalMultiTouchReload"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="@={settings.multitouchReload}"
-                        android:text="@string/global_settings_multitouch_reload" />
-
-                    <Switch
-                        android:id="@+id/switchGlobalMultiTouch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="@={settings.twoFingerMultitouch}"
-                        android:text="@string/use_two_finger_swipes_for_browser_forward_and_backward_navigation" />
 
 
-                    <Switch
-                        android:id="@+id/switchGlobalMultiTouch3Fingers"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="@={settings.threeFingerMultitouch}"
-                        android:text="@string/use_three_finger_swipes_to_switch_between_web_apps_experimental" />
-
-                    <Switch
-                        android:id="@+id/switchShowProgressbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="@={settings.showProgressbar}"
-                        android:text="@string/show_progress_bar_during_page_load" />
 
                     <LinearLayout
-                        android:id="@+id/layoutUIModeSelection"
+                        android:id="@+id/sectionGeneral"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="25dp"
+                        android:layout_marginBottom="@dimen/settings_bottom"
+                        android:divider="@drawable/empty_10dp_vertical"
                         android:orientation="vertical"
-                        android:visibility="gone">
+                        android:showDividers="middle">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/remove_divider"
+                            android:text="@string/general"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/select_ui_mode" />
+                            android:text="@string/these_settings_are_applied_globally_and_override_app_specific_settings"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-                        <Spinner
-                            android:id="@+id/dropDownTheme"
+                        <Button
+                            android:id="@+id/btnGlobalWebApp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/global_web_app_settings" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutUIModeSelection"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:entries="@array/ui_modes"
-                            android:prompt="@string/spinner_prompt"
-                            android:spinnerMode="dropdown"
-                            tools:listitem="@android:layout/simple_spinner_item" />
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/select_ui_mode" />
+
+                            <Spinner
+                                android:id="@+id/dropDownTheme"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:entries="@array/ui_modes"
+                                android:prompt="@string/spinner_prompt"
+                                android:spinnerMode="dropdown"
+                                tools:listitem="@android:layout/simple_spinner_item" />
+
+                        </LinearLayout>
+
+                        <Switch
+                            android:id="@+id/switchGlobalCache"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="@={settings.clearCache}"
+                            android:text="@string/clear_cache_after_usage" />
+
+                        <Switch
+                            android:id="@+id/switchGlobalMultiTouchReload"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="@={settings.multitouchReload}"
+                            android:text="@string/global_settings_multitouch_reload" />
+
+                        <Switch
+                            android:id="@+id/switchGlobalMultiTouch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="@={settings.twoFingerMultitouch}"
+                            android:text="@string/use_two_finger_swipes_for_browser_forward_and_backward_navigation" />
+
+                        <Switch
+                            android:id="@+id/switchGlobalMultiTouch3Fingers"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="@={settings.threeFingerMultitouch}"
+                            android:text="@string/use_three_finger_swipes_to_switch_between_web_apps_experimental" />
+
+                        <Switch
+                            android:id="@+id/switchShowProgressbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="@={settings.showProgressbar}"
+                            android:text="@string/show_progress_bar_during_page_load" />
 
                     </LinearLayout>
-                    <Space
-                        android:layout_width="1dp"
-                        android:layout_height="15dp" />
+
+                    <LinearLayout
+                        android:id="@+id/sectionBackup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/settings_bottom"
+                        android:divider="@drawable/empty_10dp_vertical"
+                        android:orientation="vertical"
+                        android:showDividers="middle">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/remove_divider"
+                            android:text="@string/backup"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/btnExportSettings"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/export_settings_web_apps" />
+
+                        <Button
+                            android:id="@+id/btnImportSettings"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/import_settings_web_apps" />
+                    </LinearLayout>
                 </LinearLayout>
+
             </ScrollView>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:layout_marginBottom="-10dp"
                 android:orientation="horizontal">
 
                 <Button

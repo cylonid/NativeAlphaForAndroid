@@ -16,12 +16,12 @@ import java.util.Arrays;
 
 public class WebApp {
 
+    private final int ID;
     private String title;
     private String base_url;
     private String last_used_url;
     private Long timestamp_last_used_url;
     private int timeout_last_used_url;
-    private int ID;
     private boolean override_global_settings;
 
     private boolean open_url_external;
@@ -54,7 +54,7 @@ public class WebApp {
         base_url = url;
         ID = id;
         override_global_settings = true;
-        open_url_external = true;
+        open_url_external = false;
         active_entry = true;
         timeout_last_used_url = 10;
         last_used_url = null;
@@ -85,6 +85,19 @@ public class WebApp {
         initDefaultSettings();
     }
 
+    public WebApp(WebApp other) {
+        this.title = other.title;
+        this.base_url = other.base_url;
+        this.ID = other.ID;
+        this.last_used_url = other.last_used_url;
+        this.url_on_first_pageload = other.url_on_first_pageload;
+        this.timestamp_last_used_url = other.timestamp_last_used_url;
+        this.timeout_last_used_url = other.timeout_last_used_url;
+        this.override_global_settings = other.override_global_settings;
+
+        copySettings(other);
+    }
+
     //This part of the copy ctor should be callable independently from actual object construction to copy values of the global web app template
     public void copySettings(WebApp other) {
         this.open_url_external = other.open_url_external;
@@ -112,19 +125,6 @@ public class WebApp {
         this.show_expert_settings = other.show_expert_settings;
     }
 
-    public WebApp(WebApp other) {
-        this.title = other.title;
-        this.base_url = other.base_url;
-        this.ID = other.ID;
-        this.last_used_url = other.last_used_url;
-        this.url_on_first_pageload = other.url_on_first_pageload;
-        this.timestamp_last_used_url = other.timestamp_last_used_url;
-        this.timeout_last_used_url = other.timeout_last_used_url;
-        this.override_global_settings = other.override_global_settings;
-
-        copySettings(other);
-    }
-
     private void initDefaultSettings() {
         if (base_url.contains("facebook.com")) {
             this.user_agent = Const.DESKTOP_USER_AGENT;
@@ -132,14 +132,14 @@ public class WebApp {
         }
     }
 
-/*
-    This function is used for settings where the ctor needs to have a different setting because
-    we want different behaviour for already existing and newly created Web Apps.
-        */
-
+    /*
+        This function is used for settings where the ctor needs to have a different setting because
+        we want different behaviour for already existing and newly created Web Apps.
+            */
     public void applySettingsForNewWebApp() {
         this.override_global_settings = false;
     }
+
 
     public boolean isOverrideGlobalSettings() {
         return override_global_settings;
@@ -295,7 +295,9 @@ public class WebApp {
         this.open_url_external = open_url_external;
     }
 
-    public boolean isActiveEntry() { return active_entry; }
+    public boolean isActiveEntry() {
+        return active_entry;
+    }
 
     public void setActiveEntry(boolean active_entry) {
         this.active_entry = active_entry;
@@ -380,6 +382,7 @@ public class WebApp {
     public void setAllowLocationAccess(boolean allow_location_access) {
         this.allow_location_access = allow_location_access;
     }
+
     public boolean isForceDarkMode() {
         return force_dark_mode;
     }
@@ -425,7 +428,7 @@ public class WebApp {
     }
 
     public String getUrlOnFirstPageload() {
-            return url_on_first_pageload;
+        return url_on_first_pageload;
     }
 
 
@@ -448,6 +451,7 @@ public class WebApp {
             third_party_cookies.setChecked(false);
         }
     }
+
     public void onSwitchJsChanged(CompoundButton mSwitch, boolean isChecked) {
         Switch switchDesktopVersion = mSwitch.getRootView().findViewById(R.id.switchDesktopSite);
         Switch switchAdblock = mSwitch.getRootView().findViewById(R.id.switchAdblock);
@@ -461,6 +465,7 @@ public class WebApp {
             switchAdblock.setEnabled(false);
         }
     }
+
     public void onSwitchForceDarkChanged(CompoundButton mSwitch, boolean isChecked) {
         Switch switchLimit = mSwitch.getRootView().findViewById(R.id.switchTimeSpanDarkMode);
         EditText txtBegin = mSwitch.getRootView().findViewById(R.id.textDarkModeBegin);
@@ -495,7 +500,8 @@ public class WebApp {
     public void onSwitchRestorePageChanged(CompoundButton mSwitch, boolean isChecked) {
         EditText textTimeout = mSwitch.getRootView().findViewById(R.id.textTimeout);
         textTimeout.setEnabled(isChecked);
-     }
+    }
+
     public void onSwitchUserAgentChanged(CompoundButton mSwitch, boolean isChecked) {
         EditText txt = mSwitch.getRootView().findViewById(R.id.textUserAgent);
         Switch switchDesktopVersion = mSwitch.getRootView().findViewById(R.id.switchDesktopSite);
@@ -504,8 +510,7 @@ public class WebApp {
             switchDesktopVersion.setEnabled(false);
             txt.setEnabled(true);
 
-        }
-        else {
+        } else {
             txt.setEnabled(false);
             switchDesktopVersion.setEnabled(true);
         }
@@ -527,14 +532,9 @@ public class WebApp {
         else
             expertSettings.setVisibility(View.GONE);
     }
+
     public void onSwitchOverrideGlobalSettingsChanged(CompoundButton mSwitch, boolean isChecked) {
         LinearLayout sectionDetailedWebAppSettings = mSwitch.getRootView().findViewById(R.id.sectionWebAppDetailSettings);
-//        if (isChecked) {
-            Utility.setViewAndChildrenEnabled(sectionDetailedWebAppSettings, isChecked);
-//            sectionDetailedWebAppSettings.setEnabled(isChecked);
-//        }
-//        else {
-////            Utility.setViewAndChildrenEnabled(sectionDetailedWebAppSettings, false);
-//        }
+        Utility.setViewAndChildrenEnabled(sectionDetailedWebAppSettings, isChecked);
     }
 }

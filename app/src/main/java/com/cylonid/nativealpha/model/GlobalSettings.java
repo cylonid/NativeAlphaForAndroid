@@ -60,9 +60,11 @@ public class GlobalSettings {
     public void setClearCookies(boolean clear_cookies) {
         this.clear_cookies = clear_cookies;
     }
+
     public int getThemeId() {
         return theme_id;
     }
+
     public void setThemeId(int theme_id) {
         this.theme_id = theme_id;
     }
@@ -74,6 +76,7 @@ public class GlobalSettings {
     public void setMultitouchReload(boolean multitouch_reload) {
         this.multitouch_reload = multitouch_reload;
     }
+
     public boolean isShowProgressbar() {
         return show_progressbar;
     }
@@ -89,8 +92,6 @@ public class GlobalSettings {
     public void setGlobalWebApp(WebApp globalWebApp) {
         this.global_web_app = globalWebApp;
     }
-
-
 
 
 }

@@ -43,7 +43,7 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="95"
+                android:layout_weight="99"
                 android:fadeScrollbars="false"
                 android:fillViewport="false"
                 android:scrollbarStyle="outsideOverlay"
