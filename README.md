@@ -18,33 +18,32 @@
 ## Download Options
 [![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v0.85.1/NativeAlpha_0.85.1.apk)
 
-## Latest Changes (v0.85)
-* Custom icons supported
-* Progress bar indicating reload added
-* Custom user-agent option added
-* Periodical page refresh option added
-* Several minor fixes, e.g., new LibAdblockWebView version (causing a larger APK size)
+## Latest Changes (v1.00)
+* Added option to control Google Safe Browsing usage
+* Added option to ignore SSL errors for single Web Apps (hidden in expert settings)
+* Pages are no longer reloaded if you switch between portrait and landscape mode
+* New settings model: You can use a set of Web App Settings globally for all Web Apps and override this set for single apps if necessary
+* UI overhaul for global and Web App settings
+* Greatly reduced APK size by not including x86 libs
+* Several minor fixes
   
-**Bugfix release (v0.85.1)**
+<!-- **Bugfix release (v0.85.1)**
 * Fixed an issue where the app could not restore a backup properly
-* Fixed an issue where an unavailable favicon led to a crash during favicon retrieval 
+* Fixed an issue where an unavailable favicon led to a crash during favicon retrieval  -->
 
 ## FAQ
-*Q: Why is it not possible to find an icon for a certain website?*
-
-A: This problem can occur due to multiple reasons. In most cases, the website does not offer a high-resolution icon. If you are a website maintainer and your website icon cannot be found, look at [RealFaviconGenerator](https://realfavicongenerator.net) for further information. If you think it should work, feel free to post the URL and I will look into it.
-
 *Q: Why would I need this app if any mobile browser can do the same?*
 
-A: Mobile browsers usually only are able to create shortcuts which give a native, borderless fullscreen experience if the website has a Progressive Web App (PWA) manifest. Unfortunately, most websites do not offer this feature yet.
+A: Mobile browsers usually only are able to create shortcuts which give a native, borderless fullscreen experience if the website has a Progressive Web App (PWA) manifest. Unfortunately, most websites do not offer this feature yet. Additionally, you cannot set different settings for different websites with an usual browser.
 
 *Q: Is this a web browser?*
 
 A: No. As stated, this app relies on the system built-in Android WebView in order to display the website. For privacy reasons, you can opt to use alternative webviews such as [Bromite](https://www.bromite.org/system_web_view) on rooted phones. Always make sure to use to most recent version of any WebView implementation you use!
 
-*Q: Why does this app require Android Oreo?*
+*Q: Why is it not possible to find an icon for a certain website?*
 
-A: Android introduced a new shortcut API with Oreo. However, it is planned to add legacy shortcut support. Older versions should also work then.
+A: This problem can occur due to multiple reasons. In most cases, the website does not offer a high-resolution icon. If you are a website maintainer and your website icon cannot be found, look at [RealFaviconGenerator](https://realfavicongenerator.net) for further information. If you think it should work, feel free to post the URL and I will look into it.
+
 
 *Q: In constrast to your promise, this app has a large memory footprint!*
 
@@ -82,5 +81,5 @@ will. Specifically you can redistribute and/or modify it under the terms of the
 published by the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-## End user license agreement
+## End User License Agreement
 THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

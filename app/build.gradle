@@ -4,27 +4,22 @@ apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
-//    splits {
-//
-//        // Configures multiple APKs based on ABI.
-//        abi {
-//            // Enables building multiple APKs per ABI.
-//            enable true
-//            reset()
-//            include  "armeabi-v7a", "arm64-v8a"
-//
-//            // Specifies that we do not want to also generate a universal APK that includes all ABIs.
-//            universalApk true
-//        }
-//    }
+    splits {
+        abi {
+            enable true
+            reset()
+            include  "armeabi-v7a", "arm64-v8a"
+            universalApk true
+        }
+    }
 
 
     defaultConfig {
         applicationId "com.cylonid.nativealpha"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 860
-        versionName "0.86A"
+        versionCode 1000
+        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -43,6 +38,26 @@ android {
         }
         debug {
 
+        }
+        applicationVariants.all{
+                // this method is use to rename your release apk only
+            variant ->
+                variant.outputs.each{
+                        // on below line we are setting a name to our apk
+                    output->
+                        // on below line we are specifying our app name.
+                        project.ext { appName = 'NativeAlpha' }
+                        // on below line we are adding the formatted date to our apk file name.
+                        def formattedDate = new Date().format('yyyy-MM-dd-HH-mm-ss')
+                        // on below line we are creating a new name for our apk.
+                        def newName = output.outputFile.name
+                        // on below line we are replacing our previous name with our app name.
+                        newName = newName.replace("app-", "$project.ext.appName-")
+                        // on below line we are replacing -release with our formatted date.
+                        newName = newName.replace("-release", "-release-" + formattedDate)
+                        // at last we are setting our apk name to it.
+                        output.outputFileName  = newName
+                }
         }
     }
     testOptions {
