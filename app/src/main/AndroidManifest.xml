@@ -8,7 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
+        android:value="false" />
 
     <application
         android:name="com.cylonid.nativealpha.util.App"

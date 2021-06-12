@@ -48,6 +48,7 @@ public class WebApp {
     private String timespan_dark_mode_end;
     private boolean ignore_ssl_errors;
     private boolean show_expert_settings;
+    private boolean safe_browsing;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -80,7 +81,7 @@ public class WebApp {
         timespan_dark_mode_end = "06:00";
         ignore_ssl_errors = false;
         show_expert_settings = false;
-
+        safe_browsing = true;
 
         initDefaultSettings();
     }
@@ -123,6 +124,7 @@ public class WebApp {
         this.timespan_dark_mode_end = other.timespan_dark_mode_end;
         this.ignore_ssl_errors = other.ignore_ssl_errors;
         this.show_expert_settings = other.show_expert_settings;
+        this.safe_browsing = other.safe_browsing;
     }
 
     private void initDefaultSettings() {
@@ -140,6 +142,13 @@ public class WebApp {
         this.override_global_settings = false;
     }
 
+    public boolean isSafeBrowsing() {
+        return safe_browsing;
+    }
+
+    public void setSafeBrowsing(boolean safeBrowsing) {
+        this.safe_browsing = safeBrowsing;
+    }
 
     public boolean isOverrideGlobalSettings() {
         return override_global_settings;

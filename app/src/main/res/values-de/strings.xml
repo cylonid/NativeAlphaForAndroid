@@ -109,4 +109,5 @@
     <string name="global_web_app_settings">Globale Web-App-Einstellungen</string>
     <string name="general">General</string>
     <string name="backup">Backup</string>
+    <string name="use_google_safe_browsing">Google Safe Browsing aktivieren</string>
 </resources>

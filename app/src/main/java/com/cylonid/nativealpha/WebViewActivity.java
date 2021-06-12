@@ -99,6 +99,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             }
 
             wv.setWebViewClient(new CustomBrowser());
+            wv.getSettings().setSafeBrowsingEnabled(webapp.isSafeBrowsing());
             wv.getSettings().setDomStorageEnabled(true);
             wv.getSettings().setBlockNetworkLoads(false);
 //        wv.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);

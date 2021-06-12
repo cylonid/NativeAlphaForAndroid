@@ -122,6 +122,13 @@
                                 android:text="@string/allow_javascript" />
 
                             <Switch
+                                android:id="@+id/switchSafeBrowsing"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.safeBrowsing}"
+                                android:text="@string/use_google_safe_browsing" />
+
+                            <Switch
                                 android:id="@+id/switchHTTP"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

@@ -40,6 +40,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 import java.util.TreeMap;
@@ -161,7 +162,10 @@ public class ShortcutDialogFragment extends DialogFragment  {
         Bitmap bitmap;
         try {
             inputStream = new java.net.URL(url).openStream();
-            bitmap = BitmapFactory.decodeStream(inputStream);
+            URL ulrn = new URL(url);
+            HttpURLConnection con = (HttpURLConnection)ulrn.openConnection();
+            InputStream is = con.getInputStream();
+            bitmap = BitmapFactory.decodeStream(is);
             if (bitmap == null || bitmap.getWidth() < Const.FAVICON_MIN_WIDTH)
                 return null;
 
@@ -215,6 +219,13 @@ public class ShortcutDialogFragment extends DialogFragment  {
         if (host_part.startsWith("explosm.net"))
             found_icons.put(Integer.MAX_VALUE, "https://files.explosm.net/img/favicons/site/android-chrome-192x192.png");
 
+        //Path in PWA manifest is HTTP
+        if (host_part.startsWith("oe3.orf.at"))
+            found_icons.put(Integer.MAX_VALUE, "https://tubestatic.orf.at/mojo/1_3/storyserver//tube/common/images/apple-icons/oe3.png");
+
+        //Non-existing path
+        if (host_part.startsWith("darfichrein.de"))
+            found_icons.put(Integer.MAX_VALUE, "https://c.darfichrein.de/assets/img/logo1.png");
 
         return found_icons;
     }
