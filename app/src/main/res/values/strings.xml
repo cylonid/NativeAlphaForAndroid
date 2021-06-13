@@ -62,7 +62,7 @@
     <string name="no_https_dialog_accept">Allow HTTP within this Web App</string>
     <string name="no_https_dialog_msg">This page uses an unencrypted HTTP connection. Do not enter any sensible data.</string>
     <string name="allow_http">Allow HTTP</string>
-    <string name="webapp_section_security">Security</string>
+    <string name="webapp_section_security">Security &amp; Privacy</string>
     <string name="webapp_section_cookies">Cookies &amp; Ads</string>
     <string name="webapp_section_datasaving">Data saving</string>
     <string name="webapp_section_misc">Miscellaneous</string>
@@ -116,6 +116,7 @@
     <string name="general">Allgemeines</string>
     <string name="backup">Backup</string>
     <string name="use_google_safe_browsing">Use Google Safe Browsing</string>
+    <string name="block_all_third_party_requests">Block all third-party requests</string>
 
 
 </resources>

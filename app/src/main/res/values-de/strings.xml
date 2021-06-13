@@ -19,7 +19,7 @@
     <string name="open_external_links_in_browser_app">Externe Links in Browser-App öffnen</string>
     <string name="allow_javascript">Javascript zulassen</string>
     <string name="accept_cookies">Cookies akzeptieren</string>
-    <string name="accept_third_party_cookies">Third-Party-Cookies akzeptieren</string>
+    <string name="accept_third_party_cookies">Drittanbieter-Cookies akzeptieren</string>
     <string name="enable_adblock_experimental">Werbeblocker aktivieren</string>
     <string name="timeout_for_page_restore_in_minutes">Timeout in min</string>
     <string name="re_create_shortcut">Startseitenverknüpfung erstellen</string>
@@ -58,7 +58,7 @@
     <string name="no_https_dialog_accept">HTTP in dieser Web-App zulassen</string>
     <string name="no_https_dialog_msg">Diese Seite verwendet HTTP (unverschlüsselt). Geben Sie keine sensiblen Daten ein.</string>
     <string name="allow_http">HTTP zulassen</string>
-    <string name="webapp_section_security">Sicherheit</string>
+    <string name="webapp_section_security">Sicherheit &amp; Privatsphäre</string>
     <string name="webapp_section_cookies">Cookies &amp; Werbung</string>
     <string name="webapp_section_datasaving">Daten sparen</string>
     <string name="webapp_section_misc">Sonstiges</string>
@@ -110,4 +110,5 @@
     <string name="general">General</string>
     <string name="backup">Backup</string>
     <string name="use_google_safe_browsing">Google Safe Browsing aktivieren</string>
+    <string name="block_all_third_party_requests">Alle Drittanbieter-Anfragen blockieren</string>
 </resources>

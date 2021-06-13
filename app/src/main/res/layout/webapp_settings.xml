@@ -127,6 +127,12 @@
                                 android:layout_height="wrap_content"
                                 android:checked="@={webapp.safeBrowsing}"
                                 android:text="@string/use_google_safe_browsing" />
+                            <Switch
+                                android:id="@+id/switchBlockThirdParty"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.blockThirdPartyRequests}"
+                                android:text="@string/block_all_third_party_requests" />
 
                             <Switch
                                 android:id="@+id/switchHTTP"

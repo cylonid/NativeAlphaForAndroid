@@ -49,6 +49,7 @@ public class WebApp {
     private boolean ignore_ssl_errors;
     private boolean show_expert_settings;
     private boolean safe_browsing;
+    private boolean block_third_party_requests;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -82,6 +83,7 @@ public class WebApp {
         ignore_ssl_errors = false;
         show_expert_settings = false;
         safe_browsing = true;
+        block_third_party_requests = false;
 
         initDefaultSettings();
     }
@@ -125,6 +127,7 @@ public class WebApp {
         this.ignore_ssl_errors = other.ignore_ssl_errors;
         this.show_expert_settings = other.show_expert_settings;
         this.safe_browsing = other.safe_browsing;
+        this.block_third_party_requests = other.block_third_party_requests;
     }
 
     private void initDefaultSettings() {
@@ -156,6 +159,14 @@ public class WebApp {
 
     public void setOverrideGlobalSettings(boolean overrideGlobalSettings) {
         this.override_global_settings = overrideGlobalSettings;
+    }
+
+    public boolean isBlockThirdPartyRequests() {
+        return block_third_party_requests;
+    }
+
+    public void setBlockThirdPartyRequests(boolean blockThirdPartyRequests) {
+        this.block_third_party_requests = blockThirdPartyRequests;
     }
 
     public boolean isShowExpertSettings() {

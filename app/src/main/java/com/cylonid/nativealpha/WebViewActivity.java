@@ -18,11 +18,13 @@ import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 
 import pub.devrel.easypermissions.EasyPermissions;
+import timber.log.Timber;
 
 public class WebViewActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
@@ -311,9 +314,11 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             reload();
         }, webapp.getTimeAutoreload() * 1000);
     }
+
     public WebView getWebView() {
         return wv;
     }
+
     private Map<String, String> initCustomHeaders(boolean save_data) {
         Map<String, String> extraHeaders = new HashMap<>();
         extraHeaders.put("DNT", "1");
@@ -431,6 +436,20 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     }
 
     private class CustomBrowser extends WebViewClient {
+        @Nullable
+        @Override
+        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+            if (webapp.isBlockThirdPartyRequests()) {
+                Uri uri = request.getUrl();
+                Uri webapp_uri = Uri.parse(webapp.getBaseUrl());
+
+                if (!uri.getHost().endsWith(webapp_uri.getHost())) {
+//                    Timber.tag("BLOCK3rd").d("Uri: " + uri + "is not within the URL scope.");
+                    return null;
+                }
+            }
+            return super.shouldInterceptRequest(view, request);
+        }
 
         @Override
         public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
@@ -480,9 +499,9 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth / 1024));", null);
         }
 
-        @SuppressWarnings("deprecation")
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            String url = request.getUrl().toString();
             WebApp webapp = DataManager.getInstance().getWebApp(webappID);
 
             if (webapp.isOpenUrlExternal()) {
@@ -497,12 +516,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             }
             loadURL(view, url);
             return true;
-        }
-
-        @RequiresApi(Build.VERSION_CODES.N)
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            return shouldOverrideUrlLoading(view, request.getUrl().toString());
         }
     }
 }
