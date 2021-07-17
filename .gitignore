@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 app/release/**
+app/standard/**
+app/extended/**

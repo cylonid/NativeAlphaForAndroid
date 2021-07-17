@@ -8,11 +8,25 @@ android {
         abi {
             enable true
             reset()
-            include  "armeabi-v7a", "arm64-v8a"
+            include "armeabi-v7a", "arm64-v8a"
             universalApk true
         }
     }
+    flavorDimensions "default"
+    productFlavors {
+        extended {
+            dimension "default"
+            applicationIdSuffix ".plus"
+            resValue "string", "app_name_unicode", "Native α+"
+        }
+        standard {
+            dimension "default"
+            isDefault true
+            resValue "string", "app_name_unicode", "Native α"
+        }
 
+
+    }
 
     defaultConfig {
         applicationId "com.cylonid.nativealpha"
@@ -39,12 +53,12 @@ android {
         debug {
 
         }
-        applicationVariants.all{
+        applicationVariants.all {
                 // this method is use to rename your release apk only
             variant ->
-                variant.outputs.each{
+                variant.outputs.each {
                         // on below line we are setting a name to our apk
-                    output->
+                    output ->
                         // on below line we are specifying our app name.
                         project.ext { appName = 'NativeAlpha' }
                         // on below line we are adding the formatted date to our apk file name.
@@ -54,9 +68,10 @@ android {
                         // on below line we are replacing our previous name with our app name.
                         newName = newName.replace("app-", "$project.ext.appName-")
                         // on below line we are replacing -release with our formatted date.
-                        newName = newName.replace("-release", "-release-" + formattedDate)
+                        newName = newName.replace("-release", "-release-" + "v" + variant.versionName)
                         // at last we are setting our apk name to it.
-                        output.outputFileName  = newName
+                        output.outputFileName = newName
+
                 }
         }
     }
@@ -76,27 +91,27 @@ repositories {
     jcenter()
 }
 
-    dependencies {
+dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
-    implementation 'org.jsoup:jsoup:1.13.1'
+    implementation 'org.jsoup:jsoup:1.14.1'
     implementation 'org.adblockplus:adblock-android-webview:4.4.0'
     implementation 'com.github.ihimanshurawat:Hasher:1.2'
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'com.github.medyo:android-about-page:1.3'
-    testImplementation 'junit:junit:4.13'
-    testImplementation "org.robolectric:robolectric:4.3.1"
-    testImplementation "org.json:json:20180813"
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-web:3.3.0'
-    androidTestImplementation 'androidx.test:rules:1.3.0'
-    androidTestImplementation 'androidx.test:runner:1.3.0'
-    androidTestUtil 'androidx.test:orchestrator:1.3.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.3.1'
+    testImplementation 'org.json:json:20210307'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-web:3.4.0'
+    androidTestImplementation 'androidx.test:rules:1.4.0'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestUtil 'androidx.test:orchestrator:1.4.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     //noinspection GradleDependency
     implementation "com.mikepenz:aboutlibraries:8.1.6"
     //noinspection GradleDependency

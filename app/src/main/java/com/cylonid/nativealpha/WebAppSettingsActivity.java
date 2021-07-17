@@ -113,10 +113,16 @@ public class WebAppSettingsActivity extends AppCompatActivity {
 
             webapp.onSwitchExpertSettingsChanged(inflated_view.findViewById(R.id.switchExpertSettings), webapp.isShowExpertSettings());
             webapp.onSwitchOverrideGlobalSettingsChanged(findViewById(R.id.switchOverrideGlobal), webapp.isOverrideGlobalSettings());
-
+            setPlusSettings(inflated_view);
         }
     }
 
+    private void setPlusSettings(View v) {
+        LinearLayout secDarkMode = v.findViewById(R.id.sectionDarkmode);
+        if (!BuildConfig.FLAVOR.equals("extended")) { 
+            secDarkMode.setVisibility(View.GONE);
+        }
+    }
 
     private void showTimePicker(EditText txtField) {
         Calendar c = Utility.convertStringToCalendar(txtField.getText().toString());

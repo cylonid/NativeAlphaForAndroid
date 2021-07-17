@@ -1,22 +1,24 @@
 
 # <img src="graphics/logo.png" width="50px" alt=""></img> Native Alpha
-
+![OS](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white&style=plastic)
+![SDK](https://img.shields.io/badge/SDK-30-yellowgreen)
 [![GitHub release](https://img.shields.io/github/v/release/cylonid/NativeAlphaForAndroid?include_prereleases&color=blueviolet)](https://github.com/cylonid/NativeAlphaForAndroid/releases)
-[![Github all releases](https://img.shields.io/github/downloads/cylonid/NativeAlphaForAndroid/total?color=blue)](https://somsubhra.github.io/github-release-stats/?username=cylonid&repository=NativeAlphaForAndroid&page=1&per_page=10)
+[![Github all releases](https://img.shields.io/github/downloads/cylonid/NativeAlphaForAndroid/total?color=blue&label=GitHub%E2%87%A9&style=plastic)](https://somsubhra.github.io/github-release-stats/?username=cylonid&repository=NativeAlphaForAndroid&page=1&per_page=10)
 [![GitHub license](https://img.shields.io/github/license/cylonid/NativeAlphaForAndroid?color=orange)](https://github.com/cylonid/NativeAlphaForAndroid/blob/master/LICENSE)
 ![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
+
 
 ## Features
   * Show any website in a borderless full-screen window using Android System WebView.
   * Offers to create home screen shortcuts and retrieves icons in suitable resolution.
-  * Various settings (JavaScript, Cookies, Third-Party-Cookies, AdBlock) can be set for every web app individually
+  * Various settings (JavaScript, Cookies, 3rd party Cookies, Adblocking, location access) can be set for every web app individually
   * Navigation with multi-touch gestures while browsing.
   * Opt-in adblock using an AdBlock Plus custom webview.
   * Less memory footprint and no privacy-invading app permissions in comparison to native apps
   * Dark mode for Android 10+
 
 ## Download Options
-[![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v0.85.1/NativeAlpha_0.85.1.apk)
+[![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v1.00/NativeAlpha-standard-universal-release-v1.0.apk)
 
 ## Latest Changes (v1.00)
 * Added option to control Google Safe Browsing usage
