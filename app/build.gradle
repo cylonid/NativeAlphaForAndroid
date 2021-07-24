@@ -32,8 +32,8 @@ android {
         applicationId "com.cylonid.nativealpha"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 1000
-        versionName "1.0"
+        versionCode 1010
+        versionName "1.01"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'

@@ -20,7 +20,10 @@
 ## Download Options
 [![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v1.00/NativeAlpha-standard-universal-release-v1.0.apk)
 
-## Latest Changes (v1.00)
+## Latest Changes (v1.01)
+*Hotfix release(v1.01):*
+* Fixed an issue where Web Apps were forcefully displayed in Dark Mode when the app itself was in Dark Mode.
+
 * Added option to control Google Safe Browsing usage
 * Added option to ignore SSL errors for single Web Apps (hidden in expert settings)
 * Pages are no longer reloaded if you switch between portrait and landscape mode
