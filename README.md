@@ -18,7 +18,8 @@
   * Dark mode for Android 10+
 
 ## Download Options
-[![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v1.00/NativeAlpha-standard-universal-release-v1.0.apk)
+[![IzzyOnDroid Download Badge](graphics/IzzyOnDroid.png)](https://apt.izzysoft.de/fdroid/index/apk/com.cylonid.nativealpha)
+[![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v1.01/NativeAlpha-standard-universal-release-v1.0.apk)
 
 ## Latest Changes (v1.01)
 *Hotfix release(v1.01):*
