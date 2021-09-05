@@ -1,20 +1,16 @@
 package com.cylonid.nativealpha;
 
-import android.app.Activity;
+import android.view.View;
 
 import androidx.annotation.CheckResult;
 import androidx.annotation.IdRes;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.test.espresso.AmbiguousViewMatcherException;
-import androidx.test.espresso.FailureHandler;
 import androidx.test.espresso.NoMatchingRootException;
-import androidx.test.espresso.ViewAssertion;
-import androidx.test.espresso.ViewInteraction;
-
-import android.view.View;
-
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.ViewInteraction;
 
 import org.hamcrest.Matcher;
 import org.junit.Assert;
@@ -73,9 +69,9 @@ public class TestUtils {
 
     }
 
-    public static Activity getCurrentActivity() {
-        final Activity[] activity = new Activity[1];
-        onView(isRoot()).check((view, noViewFoundException) -> activity[0] = (Activity) view.getContext());
+    public static AppCompatActivity getCurrentActivity() {
+        final AppCompatActivity[] activity = new AppCompatActivity[1];
+        onView(isRoot()).check((view, noViewFoundException) -> activity[0] = (AppCompatActivity) view.getContext());
         return activity[0];
     }
     private static class MatcherExtension {

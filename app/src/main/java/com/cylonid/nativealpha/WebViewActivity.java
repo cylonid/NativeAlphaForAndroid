@@ -29,6 +29,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewFeature;
 
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
@@ -112,6 +114,12 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                         || (!webapp.isUseTimespanDarkMode() && webapp.isForceDarkMode())) {
                         wv.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
                         wv.setBackgroundColor(Color.BLACK);
+
+                    if(WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK_STRATEGY)) {
+                        WebSettingsCompat.setForceDarkStrategy(wv.getSettings(), WebSettingsCompat.DARK_STRATEGY_USER_AGENT_DARKENING_ONLY);
+                    }
+
+
                 }
                 else {
                     wv.getSettings().setForceDark(WebSettings.FORCE_DARK_OFF);

@@ -1,6 +1,5 @@
 package com.cylonid.nativealpha;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,17 +18,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +48,7 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static android.app.Activity.RESULT_OK;
+import static androidx.appcompat.app.AppCompatActivity.RESULT_OK;
 import static com.cylonid.nativealpha.util.Const.CODE_OPEN_FILE;
 
 
@@ -144,7 +145,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
             try {
                 startActivityForResult(Intent.createChooser(intent, "Select an icon"), CODE_OPEN_FILE);
             } catch (android.content.ActivityNotFoundException e) {
-                Utility.showInfoSnackbar(requireActivity(), getString(R.string.no_filemanager), Snackbar.LENGTH_LONG);
+                Utility.showInfoSnackbar((AppCompatActivity) requireActivity(), getString(R.string.no_filemanager), Snackbar.LENGTH_LONG);
                 e.printStackTrace();
             }
         });

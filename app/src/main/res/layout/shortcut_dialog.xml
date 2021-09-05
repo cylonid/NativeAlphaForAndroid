@@ -42,7 +42,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/native_alpha_shortcut"
+            app:srcCompat="@mipmap/native_alpha_shortcut"
             android:visibility="gone"
             />
 
