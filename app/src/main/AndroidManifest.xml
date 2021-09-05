@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cylonid.nativealpha.WebViewActivity"
+            android:name=".WebViewActivity"
             android:label="@string/app_name_unicode"
             android:parentActivityName=".MainActivity"
             android:icon="@mipmap/native_alpha"
@@ -42,8 +42,8 @@
             android:configChanges="orientation|screenSize"
             android:launchMode="standard"
             android:documentLaunchMode="intoExisting"
-         >
-        </activity>
+         />
+        <!--Placeholder-->
         <activity
             android:name="com.cylonid.nativealpha.SettingsActivity"
             android:label="@string/app_name_unicode"

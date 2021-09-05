@@ -1,7 +1,6 @@
 package com.cylonid.nativealpha.util;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ShortcutInfo;
@@ -9,7 +8,6 @@ import android.content.pm.ShortcutManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,20 +23,14 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.R;
-import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.WebViewActivity;
+import com.cylonid.nativealpha.model.DataManager;
+import com.cylonid.nativealpha.model.WebApp;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -50,10 +42,16 @@ import java.util.regex.Pattern;
 
 public final class Utility {
 
-    public static Intent createWebViewIntent(WebApp d, Context c) {
-        Intent intent = new Intent(c, WebViewActivity.class);
-        intent.putExtra(Const.INTENT_WEBAPPID, d.getID());
-        intent.setData(Uri.parse(d.getBaseUrl()));
+    public static Intent createWebViewIntent(WebApp webapp, Context c) {
+        Class webview_class = null;
+        try {
+            webview_class = Class.forName("com.cylonid.nativealpha.__WebViewActivity_1");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Intent intent = new Intent(c, webview_class);
+        intent.putExtra(Const.INTENT_WEBAPPID, webapp.getID());
+        intent.setData(Uri.parse(webapp.getBaseUrl()));
         intent.setAction(Intent.ACTION_VIEW);
 
         return intent;
@@ -195,7 +193,7 @@ public final class Utility {
         }
     }
 
-    public static void showInfoSnackbar(Activity activity, String msg, int duration) {
+    public static void showInfoSnackbar(AppCompatActivity activity, String msg, int duration) {
 
         Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content), msg, duration);
 
