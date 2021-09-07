@@ -111,4 +111,7 @@
     <string name="backup">Backup</string>
     <string name="use_google_safe_browsing">Google Safe Browsing aktivieren</string>
     <string name="block_all_third_party_requests">Alle Drittanbieter-Anfragen blockieren</string>
+    <string name="sandbox">Sandbox</string>
+    <string name="no_sandbox">Sandbox nicht verwenden.</string>
+    <string name="all_sandboxes_used">Alle Sandboxen sind in Verwendung.</string>
 </resources>

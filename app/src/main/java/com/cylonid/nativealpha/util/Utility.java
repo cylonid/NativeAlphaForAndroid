@@ -45,7 +45,12 @@ public final class Utility {
     public static Intent createWebViewIntent(WebApp webapp, Context c) {
         Class webview_class = null;
         try {
-            webview_class = Class.forName("com.cylonid.nativealpha.__WebViewActivity_1");
+            if (webapp.getContainerId() != Const.NO_CONTAINER) {
+                webview_class = Class.forName("com.cylonid.nativealpha.__WebViewActivity_" + webapp.getContainerId());
+            }
+            else {
+                webview_class = Class.forName("com.cylonid.nativealpha.WebViewActivity");
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

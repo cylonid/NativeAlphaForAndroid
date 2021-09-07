@@ -78,7 +78,28 @@
                         android:fontFamily="sans-serif"
                         android:inputType="text"
                         android:text="@={webapp.title}" />
+                <LinearLayout
+                    android:id="@+id/sectionSandbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/settings_bottom"
+                    android:divider="@drawable/empty_10dp_vertical"
+                    android:orientation="vertical"
+                    android:showDividers="middle">
 
+                    <TextView
+                        android:id="@+id/labelSandbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sandbox"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                    <Spinner
+                        android:id="@+id/dropdownSandbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:spinnerMode="dialog" />
+                </LinearLayout>
                     <Switch
                         android:id="@+id/switchOverrideGlobal"
                         android:layout_width="match_parent"

@@ -8,10 +8,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -28,6 +32,7 @@ import com.cylonid.nativealpha.util.Utility;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class WebAppSettingsActivity extends AppCompatActivity {
 
@@ -108,6 +113,9 @@ public class WebAppSettingsActivity extends AppCompatActivity {
             btnCancel.setOnClickListener(v -> finish());
             EditText txtBeginDarkMode = inflated_view.findViewById(R.id.textDarkModeBegin);
             EditText txtEndDarkMode = inflated_view.findViewById(R.id.textDarkModeEnd);
+            handleSandboxes(inflated_view, modified_webapp);
+
+
             txtBeginDarkMode.setOnClickListener(view -> showTimePicker(txtBeginDarkMode));
             txtEndDarkMode.setOnClickListener(view -> showTimePicker(txtEndDarkMode));
 
@@ -119,9 +127,55 @@ public class WebAppSettingsActivity extends AppCompatActivity {
 
     private void setPlusSettings(View v) {
         LinearLayout secDarkMode = v.findViewById(R.id.sectionDarkmode);
+        LinearLayout secSandbox= v.findViewById(R.id.sectionSandbox);
         if (!BuildConfig.FLAVOR.equals("extended")) { 
             secDarkMode.setVisibility(View.GONE);
+            secSandbox.setVisibility(View.GONE);
+
         }
+    }
+
+    private void handleSandboxes(View inflated_view, WebApp modified_webapp) {
+        Spinner dropdownSandbox = inflated_view.findViewById(R.id.dropdownSandbox);
+
+        List<String> sandboxes = DataManager.getInstance().getAvailableSandboxes(modified_webapp.getContainerId());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, sandboxes);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        if (sandboxes.size() == 1) {
+            dropdownSandbox.setEnabled(false);
+        }
+
+        dropdownSandbox.setAdapter(adapter);
+        if (modified_webapp.getContainerId() != Const.NO_CONTAINER) {
+            for (int pos_idx = 1; pos_idx < sandboxes.size(); pos_idx++) {
+                if (modified_webapp.getContainerId() == Integer.parseInt(sandboxes.get(pos_idx))) {
+                    dropdownSandbox.setSelection(pos_idx);
+                    break;
+                }
+            }
+
+        }
+        dropdownSandbox.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                if (position == 0) {
+                    modified_webapp.setContainerId(Const.NO_CONTAINER);
+                }
+                else {
+                    modified_webapp.setContainerId(Integer.parseInt(sandboxes.get(position)));
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                modified_webapp.setContainerId(Const.NO_CONTAINER);
+            }
+
+        });
     }
 
     private void showTimePicker(EditText txtField) {

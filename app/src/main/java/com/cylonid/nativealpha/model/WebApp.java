@@ -50,6 +50,7 @@ public class WebApp {
     private boolean show_expert_settings;
     private boolean safe_browsing;
     private boolean block_third_party_requests;
+    private int container_id;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -84,6 +85,7 @@ public class WebApp {
         show_expert_settings = false;
         safe_browsing = true;
         block_third_party_requests = false;
+        container_id = Const.NO_CONTAINER;
 
         initDefaultSettings();
     }
@@ -128,6 +130,7 @@ public class WebApp {
         this.show_expert_settings = other.show_expert_settings;
         this.safe_browsing = other.safe_browsing;
         this.block_third_party_requests = other.block_third_party_requests;
+        this.container_id = other.container_id;
     }
 
     private void initDefaultSettings() {
@@ -284,6 +287,13 @@ public class WebApp {
 
     public void setTimeoutLastUsedUrl(int timeout_last_used_url) {
         this.timeout_last_used_url = timeout_last_used_url;
+    }
+    public int getContainerId() {
+        return container_id;
+    }
+
+    public void setContainerId(int containerId) {
+        this.container_id = containerId;
     }
 
     public String getTitle() {

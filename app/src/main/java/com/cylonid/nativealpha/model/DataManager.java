@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.IntStream;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -40,6 +41,7 @@ public class DataManager {
     private static final String SHARED_PREF_KEY = "WEBSITEDATA";
     private static final String SHARED_PREF_LEGACY_KEY = "GLOBALSETTINGS";
     private static final String shared_pref_max_id  = "MAX_ID";
+    private static final int NUM_OF_SANDBOXES = 2;
 
 
     private static final String shared_pref_webappdata = "WEBSITEDATA";
@@ -60,6 +62,7 @@ public class DataManager {
     private ArrayList<WebApp> websites;
     private int max_assigned_ID;
     private SharedPreferences appdata;
+    private Sandbox[] sandboxes = new Sandbox[NUM_OF_SANDBOXES];
   
     private GlobalSettings settings;
 
@@ -68,6 +71,8 @@ public class DataManager {
         websites = new ArrayList<>();
         max_assigned_ID = -1;
         settings = new GlobalSettings();
+        IntStream.range(0, NUM_OF_SANDBOXES).forEach(x -> sandboxes[x] = new Sandbox(x+1));
+
     }
 
     public static DataManager getInstance(){
@@ -81,6 +86,21 @@ public class DataManager {
     public void setSettings(GlobalSettings settings) {
         this.settings = settings;
         saveGlobalSettings();
+    }
+
+    public List<String> getAvailableSandboxes(int currentlySelectedSandboxId) {
+        ArrayList<String> labels = new ArrayList<>();
+        labels.add(App.getAppContext().getString(R.string.no_sandbox));
+
+        for (Sandbox sb : sandboxes) {
+            if (!sb.isUsed() || sb.getSID() == currentlySelectedSandboxId) {
+                labels.add(sb.getLabel());
+            }
+        }
+        if (labels.size() == 1) {
+            labels.set(0, App.getAppContext().getString(R.string.all_sandboxes_used));
+        }
+        return labels;
     }
 
     public void saveWebAppData() {
