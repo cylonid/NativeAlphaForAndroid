@@ -113,7 +113,48 @@ public class WebAppSettingsActivity extends AppCompatActivity {
             btnCancel.setOnClickListener(v -> finish());
             EditText txtBeginDarkMode = inflated_view.findViewById(R.id.textDarkModeBegin);
             EditText txtEndDarkMode = inflated_view.findViewById(R.id.textDarkModeEnd);
-            handleSandboxes(inflated_view, modified_webapp);
+
+            Spinner dropdownSandbox = inflated_view.findViewById(R.id.dropdownSandbox);
+
+            List<String> sandboxes = DataManager.getInstance().getAvailableSandboxes(modified_webapp.getContainerId());
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_item, sandboxes);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            if (sandboxes.size() == 1) {
+                dropdownSandbox.setEnabled(false);
+            }
+
+            dropdownSandbox.setAdapter(adapter);
+            if (modified_webapp.getContainerId() != Const.NO_CONTAINER) {
+                for (int pos_idx = 1; pos_idx < sandboxes.size(); pos_idx++) {
+                    if (modified_webapp.getContainerId() == Integer.parseInt(sandboxes.get(pos_idx))) {
+                        dropdownSandbox.setSelection(pos_idx);
+                        break;
+                    }
+                }
+
+            }
+            dropdownSandbox.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view,
+                                           int position, long id) {
+                    if (position == 0) {
+                        modified_webapp.setContainerId(Const.NO_CONTAINER);
+                    }
+                    else {
+                        Integer selected = Integer.parseInt(sandboxes.get(position));
+                        modified_webapp.setContainerId(selected);
+                    }
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    modified_webapp.setContainerId(Const.NO_CONTAINER);
+                }
+
+            });
 
 
             txtBeginDarkMode.setOnClickListener(view -> showTimePicker(txtBeginDarkMode));
@@ -136,46 +177,7 @@ public class WebAppSettingsActivity extends AppCompatActivity {
     }
 
     private void handleSandboxes(View inflated_view, WebApp modified_webapp) {
-        Spinner dropdownSandbox = inflated_view.findViewById(R.id.dropdownSandbox);
 
-        List<String> sandboxes = DataManager.getInstance().getAvailableSandboxes(modified_webapp.getContainerId());
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, sandboxes);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        if (sandboxes.size() == 1) {
-            dropdownSandbox.setEnabled(false);
-        }
-
-        dropdownSandbox.setAdapter(adapter);
-        if (modified_webapp.getContainerId() != Const.NO_CONTAINER) {
-            for (int pos_idx = 1; pos_idx < sandboxes.size(); pos_idx++) {
-                if (modified_webapp.getContainerId() == Integer.parseInt(sandboxes.get(pos_idx))) {
-                    dropdownSandbox.setSelection(pos_idx);
-                    break;
-                }
-            }
-
-        }
-        dropdownSandbox.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                if (position == 0) {
-                    modified_webapp.setContainerId(Const.NO_CONTAINER);
-                }
-                else {
-                    modified_webapp.setContainerId(Integer.parseInt(sandboxes.get(position)));
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                modified_webapp.setContainerId(Const.NO_CONTAINER);
-            }
-
-        });
     }
 
     private void showTimePicker(EditText txtField) {

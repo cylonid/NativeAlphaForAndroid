@@ -41,7 +41,7 @@ public class DataManager {
     private static final String SHARED_PREF_KEY = "WEBSITEDATA";
     private static final String SHARED_PREF_LEGACY_KEY = "GLOBALSETTINGS";
     private static final String shared_pref_max_id  = "MAX_ID";
-    private static final int NUM_OF_SANDBOXES = 2;
+
 
 
     private static final String shared_pref_webappdata = "WEBSITEDATA";
@@ -62,6 +62,7 @@ public class DataManager {
     private ArrayList<WebApp> websites;
     private int max_assigned_ID;
     private SharedPreferences appdata;
+    private static final int NUM_OF_SANDBOXES = 10;
     private Sandbox[] sandboxes = new Sandbox[NUM_OF_SANDBOXES];
   
     private GlobalSettings settings;

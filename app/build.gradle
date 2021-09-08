@@ -136,18 +136,15 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
 }
 
-int NUM_OF_CONTAINERS = 5
-String x = "<!--Placeholder-->"
+int NUM_OF_CONTAINERS = 10
+String placeholder = "<!--Placeholder-->"
 
-0.upto(NUM_OF_CONTAINERS) { int i ->
+1.upto(NUM_OF_CONTAINERS) { int i ->
     def trTask = tasks.register( "createWebViewclass${i}", Copy ) {
         from 'src/main/java/com/cylonid/nativealpha/WebViewActivity.java'
         into 'src/main/java/com/cylonid/nativealpha'
         filter {
             String line -> line.replaceAll("WebViewActivity", "__WebViewActivity_${i}")
-        }
-        filter {
-            String line -> line.replaceAll(x, "s")
         }
         rename { String fileName ->
             fileName.replace("WebViewActivity.java", "__WebViewActivity_${i}.java")
@@ -167,7 +164,7 @@ def generateWebViewActivities = tasks.register( "extendAndroidManifest", Copy ) 
     into 'src/main'
 
     String replacement = ""
-    for (int i = 0; i < NUM_OF_CONTAINERS; i++) {
+    for (int i = 1; i <= NUM_OF_CONTAINERS; i++) {
         replacement += "        <activity\n" +
                 "            android:name=\".__WebViewActivity_" + String.valueOf(i) + "\"\n" +
                 "            android:label=\"@string/app_name_unicode\"\n" +
@@ -177,11 +174,12 @@ def generateWebViewActivities = tasks.register( "extendAndroidManifest", Copy ) 
                 "            android:theme=\"@style/AppTheme.NoActionBar.Webapp\"\n" +
                 "            android:configChanges=\"orientation|screenSize\"\n" +
                 "            android:launchMode=\"standard\"\n" +
+                "            android:process=\":web_sandbox_" + String.valueOf(i) + "\"\n" +
                 "            android:documentLaunchMode=\"intoExisting\"\n" +
                 "         />\n";
     }
     filter {
-        String line -> line.replaceAll(x, replacement)
+        String line -> line.replaceAll(placeholder, replacement)
     }
     rename { String fileName ->
         fileName.replace("_original", "")

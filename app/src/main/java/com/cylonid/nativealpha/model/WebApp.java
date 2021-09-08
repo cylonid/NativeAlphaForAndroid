@@ -99,6 +99,7 @@ public class WebApp {
         this.timestamp_last_used_url = other.timestamp_last_used_url;
         this.timeout_last_used_url = other.timeout_last_used_url;
         this.override_global_settings = other.override_global_settings;
+        this.container_id = other.container_id;
 
         copySettings(other);
     }
@@ -130,7 +131,7 @@ public class WebApp {
         this.show_expert_settings = other.show_expert_settings;
         this.safe_browsing = other.safe_browsing;
         this.block_third_party_requests = other.block_third_party_requests;
-        this.container_id = other.container_id;
+
     }
 
     private void initDefaultSettings() {
@@ -311,6 +312,10 @@ public class WebApp {
     public void setBaseUrl(String base_url) {
         this.base_url = base_url;
         DataManager.getInstance().saveWebAppData();
+    }
+
+    public String getAlphanumericBaseUrl() {
+        return base_url.replaceAll("\\P{Alnum}", "").replace("https", "").replace("http", "").replace("www", "");
     }
 
     public int getID() {
