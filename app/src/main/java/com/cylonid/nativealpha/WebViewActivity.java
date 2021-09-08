@@ -82,194 +82,195 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
         if (webapp == null) {
             finish();
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            String processName = Application.getProcessName();
-            String packageName = this.getPackageName();
-            if (!packageName.equals(processName)) {
-                try {
-                    WebView.setDataDirectorySuffix(webapp.getContainerId() + webapp.getAlphanumericBaseUrl() + "_" + webapp.getID());
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                    android.os.Process.killProcess(android.os.Process.myPid());
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                String processName = Application.getProcessName();
+                String packageName = this.getPackageName();
+                if (!packageName.equals(processName)) {
+                    try {
+                        WebView.setDataDirectorySuffix(webapp.getContainerId() + webapp.getAlphanumericBaseUrl() + "_" + webapp.getID());
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                    }
                 }
+
+            }
+            setContentView(R.layout.full_webview);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+            String url = webapp.getLoadableUrl();
+
+            wv = findViewById(R.id.webview);
+            progressBar = findViewById(R.id.progressBar);
+
+            if (webapp.isUseAdblock()) {
+                wv.setVisibility(View.GONE);
+                wv = findViewById(R.id.adblockwebview);
+                wv.setVisibility(View.VISIBLE);
             }
 
-        }
-        setContentView(R.layout.full_webview);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+            if (webapp.isUseCustomUserAgent()) {
+                wv.getSettings().setUserAgentString(webapp.getUserAgent());
+            }
 
-        String url = webapp.getLoadableUrl();
-
-        wv = findViewById(R.id.webview);
-        progressBar = findViewById(R.id.progressBar);
-
-        if (webapp.isUseAdblock()) {
-            wv.setVisibility(View.GONE);
-            wv = findViewById(R.id.adblockwebview);
-            wv.setVisibility(View.VISIBLE);
-        }
-
-        if (webapp.isUseCustomUserAgent()) {
-            wv.getSettings().setUserAgentString(webapp.getUserAgent());
-        }
-
-        wv.setWebViewClient(new CustomBrowser());
-        wv.getSettings().setSafeBrowsingEnabled(webapp.isSafeBrowsing());
-        wv.getSettings().setDomStorageEnabled(true);
-        wv.getSettings().setBlockNetworkLoads(false);
+            wv.setWebViewClient(new CustomBrowser());
+            wv.getSettings().setSafeBrowsingEnabled(webapp.isSafeBrowsing());
+            wv.getSettings().setDomStorageEnabled(true);
+            wv.getSettings().setBlockNetworkLoads(false);
 //        wv.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (webapp.isUseTimespanDarkMode() &&
-                    Utility.isInInterval(Utility.convertStringToCalendar(webapp.getTimespanDarkModeBegin()), Calendar.getInstance(), Utility.convertStringToCalendar(webapp.getTimespanDarkModeEnd()))
-                    || (!webapp.isUseTimespanDarkMode() && webapp.isForceDarkMode())) {
-                wv.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
-                wv.setBackgroundColor(Color.BLACK);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (webapp.isUseTimespanDarkMode() &&
+                        Utility.isInInterval(Utility.convertStringToCalendar(webapp.getTimespanDarkModeBegin()), Calendar.getInstance(), Utility.convertStringToCalendar(webapp.getTimespanDarkModeEnd()))
+                        || (!webapp.isUseTimespanDarkMode() && webapp.isForceDarkMode())) {
+                    wv.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
+                    wv.setBackgroundColor(Color.BLACK);
 
-                if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK_STRATEGY)) {
-                    WebSettingsCompat.setForceDarkStrategy(wv.getSettings(), WebSettingsCompat.DARK_STRATEGY_USER_AGENT_DARKENING_ONLY);
+                    if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK_STRATEGY)) {
+                        WebSettingsCompat.setForceDarkStrategy(wv.getSettings(), WebSettingsCompat.DARK_STRATEGY_USER_AGENT_DARKENING_ONLY);
+                    }
+
+
+                } else {
+                    wv.getSettings().setForceDark(WebSettings.FORCE_DARK_OFF);
                 }
-
-
-            } else {
-                wv.getSettings().setForceDark(WebSettings.FORCE_DARK_OFF);
             }
-        }
 
-        wv.getSettings().setJavaScriptEnabled(webapp.isAllowJs());
+            wv.getSettings().setJavaScriptEnabled(webapp.isAllowJs());
 
-        CookieManager.getInstance().setAcceptCookie(webapp.isAllowCookies());
-        CookieManager.getInstance().setAcceptThirdPartyCookies(wv, webapp.isAllowThirdPartyCookies());
+            CookieManager.getInstance().setAcceptCookie(webapp.isAllowCookies());
+            CookieManager.getInstance().setAcceptThirdPartyCookies(wv, webapp.isAllowThirdPartyCookies());
 
-        if (webapp.isBlockImages())
-            wv.getSettings().setBlockNetworkImage(true);
+            if (webapp.isBlockImages())
+                wv.getSettings().setBlockNetworkImage(true);
 
-        if (webapp.isRequestDesktop()) {
-            wv.getSettings().setUserAgentString(Const.DESKTOP_USER_AGENT);
-            wv.getSettings().setUseWideViewPort(true);
-            wv.getSettings().setLoadWithOverviewMode(true);
+            if (webapp.isRequestDesktop()) {
+                wv.getSettings().setUserAgentString(Const.DESKTOP_USER_AGENT);
+                wv.getSettings().setUseWideViewPort(true);
+                wv.getSettings().setLoadWithOverviewMode(true);
 
-            wv.getSettings().setSupportZoom(true);
-            wv.getSettings().setBuiltInZoomControls(true);
-            wv.getSettings().setDisplayZoomControls(false);
+                wv.getSettings().setSupportZoom(true);
+                wv.getSettings().setBuiltInZoomControls(true);
+                wv.getSettings().setDisplayZoomControls(false);
 
-            wv.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
-            wv.setScrollbarFadingEnabled(false);
+                wv.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+                wv.setScrollbarFadingEnabled(false);
 
-        }
+            }
 
-        CUSTOM_HEADERS = initCustomHeaders(webapp.isSendSavedataRequest());
-        loadURL(wv, url);
-        wv.setWebChromeClient(new CustomWebChromeClient());
-        wv.setDownloadListener((dl_url, userAgent, contentDisposition, mimeType, contentLength) -> {
+            CUSTOM_HEADERS = initCustomHeaders(webapp.isSendSavedataRequest());
+            loadURL(wv, url);
+            wv.setWebChromeClient(new CustomWebChromeClient());
+            wv.setDownloadListener((dl_url, userAgent, contentDisposition, mimeType, contentLength) -> {
 
-            if (mimeType.equals("application/pdf")) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(dl_url));
-                startActivity(i);
-            } else {
-                DownloadManager.Request request = new DownloadManager.Request(
-                        Uri.parse(dl_url));
-                String file_name = Utility.getFileNameFromDownload(dl_url, contentDisposition, mimeType);
+                if (mimeType.equals("application/pdf")) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(dl_url));
+                    startActivity(i);
+                } else {
+                    DownloadManager.Request request = new DownloadManager.Request(
+                            Uri.parse(dl_url));
+                    String file_name = Utility.getFileNameFromDownload(dl_url, contentDisposition, mimeType);
 
-                request.setMimeType(mimeType);
-                request.addRequestHeader("cookie", CookieManager.getInstance().getCookie(dl_url));
-                request.addRequestHeader("User-Agent", userAgent);
-                request.setTitle(file_name);
-                request.allowScanningByMediaScanner();
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                request.setDestinationInExternalPublicDir(
-                        Environment.DIRECTORY_DOWNLOADS, file_name);
+                    request.setMimeType(mimeType);
+                    request.addRequestHeader("cookie", CookieManager.getInstance().getCookie(dl_url));
+                    request.addRequestHeader("User-Agent", userAgent);
+                    request.setTitle(file_name);
+                    request.allowScanningByMediaScanner();
+                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                    request.setDestinationInExternalPublicDir(
+                            Environment.DIRECTORY_DOWNLOADS, file_name);
 
-                DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                    DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
 
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                    String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-                    if (!EasyPermissions.hasPermissions(WebViewActivity.this, perms)) {
-                        dl_request = request;
-                        EasyPermissions.requestPermissions(WebViewActivity.this, getString(R.string.permission_storage_rationale), Const.PERMISSION_RC_STORAGE, perms);
-                    } else {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+                        if (!EasyPermissions.hasPermissions(WebViewActivity.this, perms)) {
+                            dl_request = request;
+                            EasyPermissions.requestPermissions(WebViewActivity.this, getString(R.string.permission_storage_rationale), Const.PERMISSION_RC_STORAGE, perms);
+                        } else {
+                            if (dm != null) {
+                                dm.enqueue(request);
+                                Utility.showInfoSnackbar(this, getString(R.string.file_download), Snackbar.LENGTH_SHORT);
+                            }
+                        }
+                    }
+                    //No storage permission needed for Android 10+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         if (dm != null) {
                             dm.enqueue(request);
                             Utility.showInfoSnackbar(this, getString(R.string.file_download), Snackbar.LENGTH_SHORT);
                         }
                     }
+
                 }
-                //No storage permission needed for Android 10+
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    if (dm != null) {
-                        dm.enqueue(request);
-                        Utility.showInfoSnackbar(this, getString(R.string.file_download), Snackbar.LENGTH_SHORT);
-                    }
-                }
+            });
+            wv.setOnTouchListener(new View.OnTouchListener() {
+                private int mode = NONE;
+                private float startX;
+                private float stopX;
+                private float startY;
+                private float stopY;
 
-            }
-        });
-        wv.setOnTouchListener(new View.OnTouchListener() {
-            private int mode = NONE;
-            private float startX;
-            private float stopX;
-            private float startY;
-            private float stopY;
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    WebApp webapp = DataManager.getInstance().getWebApp(webappID);
+                    if (webapp.getUrlOnFirstPageload() == null)
+                        DataManager.getInstance().getWebApp(webappID).saveUrlOnFirstPageLoad(wv.getUrl());
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                WebApp webapp = DataManager.getInstance().getWebApp(webappID);
-                if (webapp.getUrlOnFirstPageload() == null)
-                    DataManager.getInstance().getWebApp(webappID).saveUrlOnFirstPageLoad(wv.getUrl());
-
-                if (webapp.isRequestDesktop())
-                    return false;
-
-                switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_POINTER_DOWN:
-                        // This happens when you touch the screen with two fingers
-                        mode = SWIPE;
-                        // You can also use event.getY(1) or the average of the two
-                        startX = event.getX(0);
-                        startY = event.getY(0);
-                        return true;
-
-                    case MotionEvent.ACTION_POINTER_UP:
-                        // This happens when you release the second finger
-                        mode = NONE;
-                        if (Math.abs(startX - stopX) > TRESHOLD) {
-                            if (startX > stopX) {
-                                if (event.getPointerCount() == 3 && DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
-                                    startActivity(Utility.createWebViewIntent(DataManager.getInstance().getPredecessor(webappID), WebViewActivity.this));
-                                    finish();
-                                } else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch()) {
-                                    if (wv.canGoForward())
-                                        wv.goForward();
-                                }
-                            } else {
-                                if (event.getPointerCount() == 3 && DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
-                                    startActivity(Utility.createWebViewIntent(DataManager.getInstance().getSuccessor(webappID), WebViewActivity.this));
-                                    finish();
-                                } else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch())
-                                    onBackPressed();
-
-                            }
-                            return true;
-                        }
-                        if (DataManager.getInstance().getSettings().isMultitouchReload() && Math.abs(startY - stopY) > TRESHOLD) {
-                            if (stopY > startY) {
-                                currently_reloading = true;
-                                wv.reload();
-                            }
-                            return true;
-                        }
-                    case MotionEvent.ACTION_MOVE:
-                        if (mode == SWIPE) {
-                            stopX = event.getX(0);
-                            stopY = event.getY(0);
-                        }
+                    if (webapp.isRequestDesktop())
                         return false;
-                }
-                return false;
-            }
-        });
 
+                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                        case MotionEvent.ACTION_POINTER_DOWN:
+                            // This happens when you touch the screen with two fingers
+                            mode = SWIPE;
+                            // You can also use event.getY(1) or the average of the two
+                            startX = event.getX(0);
+                            startY = event.getY(0);
+                            return true;
+
+                        case MotionEvent.ACTION_POINTER_UP:
+                            // This happens when you release the second finger
+                            mode = NONE;
+                            if (Math.abs(startX - stopX) > TRESHOLD) {
+                                if (startX > stopX) {
+                                    if (event.getPointerCount() == 3 && DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
+                                        startActivity(Utility.createWebViewIntent(DataManager.getInstance().getPredecessor(webappID), WebViewActivity.this));
+                                        finish();
+                                    } else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch()) {
+                                        if (wv.canGoForward())
+                                            wv.goForward();
+                                    }
+                                } else {
+                                    if (event.getPointerCount() == 3 && DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
+                                        startActivity(Utility.createWebViewIntent(DataManager.getInstance().getSuccessor(webappID), WebViewActivity.this));
+                                        finish();
+                                    } else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch())
+                                        onBackPressed();
+
+                                }
+                                return true;
+                            }
+                            if (DataManager.getInstance().getSettings().isMultitouchReload() && Math.abs(startY - stopY) > TRESHOLD) {
+                                if (stopY > startY) {
+                                    currently_reloading = true;
+                                    wv.reload();
+                                }
+                                return true;
+                            }
+                        case MotionEvent.ACTION_MOVE:
+                            if (mode == SWIPE) {
+                                stopX = event.getX(0);
+                                stopY = event.getY(0);
+                            }
+                            return false;
+                    }
+                    return false;
+                }
+            });
+
+        }
     }
 
 

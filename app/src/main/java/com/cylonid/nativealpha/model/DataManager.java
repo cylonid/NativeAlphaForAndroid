@@ -41,6 +41,7 @@ public class DataManager {
     private static final String SHARED_PREF_KEY = "WEBSITEDATA";
     private static final String SHARED_PREF_LEGACY_KEY = "GLOBALSETTINGS";
     private static final String shared_pref_max_id  = "MAX_ID";
+    private static final String shared_pref_next_container = "NEXT_CONTAINER";
 
 
 
@@ -62,8 +63,9 @@ public class DataManager {
     private ArrayList<WebApp> websites;
     private int max_assigned_ID;
     private SharedPreferences appdata;
-    private static final int NUM_OF_SANDBOXES = 10;
+    private static final int NUM_OF_SANDBOXES = 2;
     private Sandbox[] sandboxes = new Sandbox[NUM_OF_SANDBOXES];
+    private int next_container;
   
     private GlobalSettings settings;
 
@@ -71,8 +73,9 @@ public class DataManager {
     {
         websites = new ArrayList<>();
         max_assigned_ID = -1;
+        next_container = 0;
         settings = new GlobalSettings();
-        IntStream.range(0, NUM_OF_SANDBOXES).forEach(x -> sandboxes[x] = new Sandbox(x+1));
+        IntStream.range(0, NUM_OF_SANDBOXES).forEach(x -> sandboxes[x] = new Sandbox(x));
 
     }
 
@@ -87,6 +90,13 @@ public class DataManager {
     public void setSettings(GlobalSettings settings) {
         this.settings = settings;
         saveGlobalSettings();
+    }
+
+    public int getNextFreeContainer() {
+        if (next_container == NUM_OF_SANDBOXES) {
+            next_container = 0;
+        }
+        return next_container++;
     }
 
     public List<String> getAvailableSandboxes(int currentlySelectedSandboxId) {
@@ -113,6 +123,7 @@ public class DataManager {
         String json = gson.toJson(websites);
         editor.putString(shared_pref_webappdata, json);
         editor.putInt(shared_pref_max_id, max_assigned_ID);
+        editor.putInt(shared_pref_next_container, next_container);
         editor.apply();
     }
 
@@ -151,6 +162,7 @@ public class DataManager {
         }
 
         max_assigned_ID = appdata.getInt(shared_pref_max_id, max_assigned_ID);
+        next_container = appdata.getInt(shared_pref_next_container, next_container);
 
         //Check legacy global settings
         if (appdata.getBoolean(shared_pref_global_settings_json, false)) {
@@ -234,7 +246,7 @@ public class DataManager {
     }
 
     public WebApp getWebAppIgnoringGlobalOverride(int i, boolean ignoreOverride) {
-
+        loadAppData();
         try {
             WebApp webApp = websites.get(i);
             if (!webApp.isOverrideGlobalSettings() && !ignoreOverride) {

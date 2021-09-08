@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="webapp"
             type="com.cylonid.nativealpha.model.WebApp" />
@@ -93,12 +92,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/sandbox"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-                    <Spinner
-                        android:id="@+id/dropdownSandbox"
-                        android:layout_width="wrap_content"
+                    <Switch
+                        android:id="@+id/switchSandbox"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:spinnerMode="dialog" />
+                        android:checked="@={webapp.useContainer}"
+                        android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchSandboxChanged(switch, checked)}"
+                        android:text="@string/enable_sandbox" />
+
                 </LinearLayout>
                     <Switch
                         android:id="@+id/switchOverrideGlobal"

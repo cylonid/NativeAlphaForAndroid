@@ -119,6 +119,7 @@
     <string name="sandbox">Sandbox</string>
     <string name="no_sandbox">Do not use sandbox.</string>
     <string name="all_sandboxes_used">All sandboxes are currently in use.</string>
+    <string name="enable_sandbox">Enable Sandbox</string>
 
 
 </resources>

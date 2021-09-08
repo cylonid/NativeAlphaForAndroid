@@ -51,6 +51,7 @@ public class WebApp {
     private boolean safe_browsing;
     private boolean block_third_party_requests;
     private int container_id;
+    private boolean use_container;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -86,9 +87,11 @@ public class WebApp {
         safe_browsing = true;
         block_third_party_requests = false;
         container_id = Const.NO_CONTAINER;
+        use_container = false;
 
         initDefaultSettings();
     }
+
 
     public WebApp(WebApp other) {
         this.title = other.title;
@@ -100,6 +103,7 @@ public class WebApp {
         this.timeout_last_used_url = other.timeout_last_used_url;
         this.override_global_settings = other.override_global_settings;
         this.container_id = other.container_id;
+        this.use_container = other.use_container;
 
         copySettings(other);
     }
@@ -163,6 +167,14 @@ public class WebApp {
 
     public void setOverrideGlobalSettings(boolean overrideGlobalSettings) {
         this.override_global_settings = overrideGlobalSettings;
+    }
+
+    public boolean isUseContainer() {
+        return use_container;
+    }
+
+    public void setUseContainer(boolean useContainer) {
+        this.use_container = useContainer;
     }
 
     public boolean isBlockThirdPartyRequests() {
@@ -567,6 +579,16 @@ public class WebApp {
         else
             expertSettings.setVisibility(View.GONE);
     }
+
+    public void onSwitchSandboxChanged(CompoundButton mSwitch, boolean isChecked) {
+        if (isChecked) {
+            container_id = DataManager.getInstance().getNextFreeContainer();
+
+        } else {
+            container_id = Const.NO_CONTAINER;
+        }
+    }
+
 
     public void onSwitchOverrideGlobalSettingsChanged(CompoundButton mSwitch, boolean isChecked) {
         LinearLayout sectionDetailedWebAppSettings = mSwitch.getRootView().findViewById(R.id.sectionWebAppDetailSettings);
