@@ -94,9 +94,9 @@ public class DataManager {
         labels.add(App.getAppContext().getString(R.string.no_sandbox));
 
         for (Sandbox sb : sandboxes) {
-            if (!sb.isUsed() || sb.getSID() == currentlySelectedSandboxId) {
+            //if (!sb.isUsed() || sb.getSID() == currentlySelectedSandboxId) {
                 labels.add(sb.getLabel());
-            }
+            //}
         }
         if (labels.size() == 1) {
             labels.set(0, App.getAppContext().getString(R.string.all_sandboxes_used));

@@ -87,8 +87,14 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             String processName = Application.getProcessName();
             String packageName = this.getPackageName();
             if (!packageName.equals(processName)) {
-                WebView.setDataDirectorySuffix(webapp.getContainerId() + webapp.getAlphanumericBaseUrl());
+                try {
+                    WebView.setDataDirectorySuffix(webapp.getContainerId() + webapp.getAlphanumericBaseUrl() + "_" + webapp.getID());
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                }
             }
+
         }
         setContentView(R.layout.full_webview);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
@@ -296,6 +302,9 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             reload_handler = new Handler();
             reload();
         }
+        int new_id = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
+        Log.d("Hannes", new_id + " " + webappID);
+
     }
 
     @Override
