@@ -1,26 +1,39 @@
 package com.cylonid.nativealpha.model;
 
 public class Sandbox {
-    private int sID;
+    private int sIndex;
+    private String baseUrl;
+    private int currently_registered_webapp = -1;
+    private static String SANDBOX_NO_BASE_URL_SET = "SANDBOX_NO_BASE_URL";
 
-    public Sandbox(int sID) {
-        this.sID = sID;
+
+    public Sandbox(int sIndex) {
+        this.sIndex = sIndex;
+        this.baseUrl = SANDBOX_NO_BASE_URL_SET;
     }
 
-    public int getSID() {
-        return sID;
+    public int getCurrentlyRegisteredWebapp() {
+        return currently_registered_webapp;
     }
 
-    public boolean isUsed() {
-        for (WebApp webapp : DataManager.getInstance().getActiveWebsites()) {
-            if (webapp.getContainerId() == this.sID)
-                return true;
-        }
-        return false;
+    public boolean isUnoccupied() {
+        return currently_registered_webapp == -1 && baseUrl.equals(SANDBOX_NO_BASE_URL_SET);
     }
 
-    public String getLabel() {
-        return String.valueOf(sID);
+    public boolean isUsedByAnotherApp(WebApp webapp) {
+        if(this.isUnoccupied()) return false;
+
+        return currently_registered_webapp != webapp.getID() || !baseUrl.equals(webapp.getBaseUrl());
+    }
+
+    public void registerWebApp(int currentlyRegisteredWebapp, String baseUrl) {
+        this.currently_registered_webapp = currentlyRegisteredWebapp;
+        this.baseUrl = baseUrl;
+    }
+
+    public void unregisterWebApp() {
+        this.currently_registered_webapp = -1;
+        this.baseUrl = SANDBOX_NO_BASE_URL_SET;
     }
 
 }

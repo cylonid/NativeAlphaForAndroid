@@ -37,6 +37,7 @@ import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.util.Calendar;
 import java.util.Collections;
@@ -72,6 +73,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         webappID = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
 
         DataManager.getInstance().loadAppData();
@@ -87,11 +89,16 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 String processName = Application.getProcessName();
                 String packageName = this.getPackageName();
                 if (!packageName.equals(processName)) {
+                    if (DataManager.getInstance().isSandboxUsedByAnotherApp(webapp)) {
+                        DataManager.getInstance().unregisterWebAppFromSandbox(webapp.getContainerId());
+                        ProcessPhoenix.triggerRebirth(this, Utility.createWebViewIntent(webapp, this));
+                    }
                     try {
+                        DataManager.getInstance().registerWebAppToSandbox(webapp);
                         WebView.setDataDirectorySuffix(webapp.getContainerId() + webapp.getAlphanumericBaseUrl() + "_" + webapp.getID());
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
-                        android.os.Process.killProcess(android.os.Process.myPid());
+//                        android.os.Process.killProcess(android.os.Process.myPid());
                     }
                 }
 
@@ -304,7 +311,12 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             reload();
         }
         int new_id = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
-        Log.d("Hannes", new_id + " " + webappID);
+        Log.d("XYZ", "new web app started in sandbox: " + webappID + " vs " + new_id);
+        if (new_id != webappID) {
+            WebApp new_webapp = DataManager.getInstance().getWebApp(new_id);
+            ProcessPhoenix.triggerRebirth(this, Utility.createWebViewIntent(new_webapp, this));
+
+        }
 
     }
 

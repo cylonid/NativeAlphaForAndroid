@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.util.Base64;
 import android.util.Base64InputStream;
 import android.util.Base64OutputStream;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -34,6 +35,8 @@ import java.util.TreeMap;
 import java.util.stream.IntStream;
 
 import static android.content.Context.MODE_PRIVATE;
+import androidx.annotation.NonNull;
+
 
 
 public class DataManager {
@@ -63,8 +66,8 @@ public class DataManager {
     private ArrayList<WebApp> websites;
     private int max_assigned_ID;
     private SharedPreferences appdata;
-    private static final int NUM_OF_SANDBOXES = 2;
-    private Sandbox[] sandboxes = new Sandbox[NUM_OF_SANDBOXES];
+    private static final int NUM_OF_SANDBOXES = 10;
+    private final Sandbox[] sandboxes = new Sandbox[NUM_OF_SANDBOXES];
     private int next_container;
   
     private GlobalSettings settings;
@@ -99,19 +102,23 @@ public class DataManager {
         return next_container++;
     }
 
-    public List<String> getAvailableSandboxes(int currentlySelectedSandboxId) {
-        ArrayList<String> labels = new ArrayList<>();
-        labels.add(App.getAppContext().getString(R.string.no_sandbox));
+    public void registerWebAppToSandbox(WebApp webapp) {
+        int sId = webapp.getContainerId();
+        sandboxes[sId].registerWebApp(webapp.getID(), webapp.getBaseUrl());
+        Log.d("SBX ", "Sandbox "  + webapp.getContainerId() + " is occupied by " + webapp.getTitle());
+    }
 
-        for (Sandbox sb : sandboxes) {
-            //if (!sb.isUsed() || sb.getSID() == currentlySelectedSandboxId) {
-                labels.add(sb.getLabel());
-            //}
+    public void unregisterWebAppFromSandbox(int sandboxId) {
+        if(!sandboxes[sandboxId].isUnoccupied()) {
+            WebApp currently_set_webapp = DataManager.getInstance().getWebApp(sandboxes[sandboxId].getCurrentlyRegisteredWebapp());
+            sandboxes[sandboxId].unregisterWebApp();
+            Log.d("SBX", "Sandbox " + sandboxId + " is left by " + currently_set_webapp.getTitle());
         }
-        if (labels.size() == 1) {
-            labels.set(0, App.getAppContext().getString(R.string.all_sandboxes_used));
-        }
-        return labels;
+    }
+
+    public boolean isSandboxUsedByAnotherApp(@NonNull WebApp webapp) {
+        int sId = webapp.getContainerId();
+        return sandboxes[sId].isUsedByAnotherApp(webapp);
     }
 
     public void saveWebAppData() {

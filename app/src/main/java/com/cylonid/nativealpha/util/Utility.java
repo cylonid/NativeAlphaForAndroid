@@ -2,13 +2,17 @@ package com.cylonid.nativealpha.util;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +28,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.cylonid.nativealpha.BuildConfig;
 import com.cylonid.nativealpha.R;
 import com.cylonid.nativealpha.WebViewActivity;
 import com.cylonid.nativealpha.model.DataManager;
@@ -42,15 +47,30 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Utility {
+    private static final String TAG = "XXX";
+
+    public static void killWebSandbox(int id) {
+        ActivityManager activityManager =
+                (ActivityManager) App.getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
+
+        for (ActivityManager.RunningAppProcessInfo processInfo : activityManager.getRunningAppProcesses()) {
+            if (processInfo.processName.contains("web_sandbox_" + id)) {
+                android.os.Process.killProcess(processInfo.pid);
+            }
+        }
+    }
 
     public static Intent createWebViewIntent(WebApp webapp, Context c) {
+        String apk_id = "com.cylonid.nativealpha";
+
         Class webview_class = null;
         try {
             if (webapp.getContainerId() != Const.NO_CONTAINER) {
-                webview_class = Class.forName("com.cylonid.nativealpha.__WebViewActivity_" + webapp.getContainerId());
+                webview_class = Class.forName(apk_id + ".__WebViewActivity_" + webapp.getContainerId());
+
             }
             else {
-                webview_class = Class.forName("com.cylonid.nativealpha.WebViewActivity");
+                webview_class = Class.forName(apk_id + ".WebViewActivity");
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
