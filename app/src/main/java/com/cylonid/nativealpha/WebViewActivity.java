@@ -88,6 +88,12 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 String processName = Application.getProcessName();
                 String packageName = this.getPackageName();
+
+                // Sandboxed Web App is openend in main process using an old shortcut
+                if(packageName.equals(processName) && webapp.isUseContainer()) {
+                    ProcessPhoenix.triggerRebirth(this, Utility.createWebViewIntent(webapp, this));
+                }
+
                 if (!packageName.equals(processName)) {
                     if (DataManager.getInstance().isSandboxUsedByAnotherApp(webapp)) {
                         DataManager.getInstance().unregisterWebAppFromSandbox(webapp.getContainerId());
