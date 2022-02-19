@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
+import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -39,6 +40,8 @@ import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
@@ -431,6 +434,34 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
     private class CustomWebChromeClient extends android.webkit.WebChromeClient {
 
+        @Override
+        public void onPermissionRequest(PermissionRequest request) {
+            List<String> permissionsToGrant = new ArrayList<>();
+
+            boolean containsDrmRequest = Arrays.asList(request.getResources()).contains(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID);
+
+            if(containsDrmRequest && webapp.isDrmAllowed()) {
+                permissionsToGrant.add(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID);
+            }
+            if(containsDrmRequest && !webapp.isDrmAllowed()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(WebViewActivity.this);
+                builder.setTitle(getString(R.string.dialog_permission_drm_title));
+                builder.setMessage(getString(R.string.dialog_permission_drm_text))
+                        .setPositiveButton(android.R.string.yes, (dialog, id) -> {
+                            webapp.setOverrideGlobalSettings(true);
+                            webapp.setDrmAllowed(true);
+                            DataManager.getInstance().replaceWebApp(webapp);
+                            permissionsToGrant.add(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID);
+                        }).setNegativeButton(android.R.string.no, (dialog, id) -> {
+                    webapp.setDrmAllowed(false);
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+
+            request.grant(permissionsToGrant.stream().toArray(String[]::new));
+        }
+
         public void onProgressChanged(WebView view, int progress) {
 
             if (DataManager.getInstance().getSettings().isShowProgressbar() || currently_reloading) {
@@ -461,8 +492,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                     builder.setTitle(getString(R.string.dialog_permission_location_title));
                     builder.setMessage(getString(R.string.dialog_permission_location_txt))
                             .setPositiveButton(android.R.string.yes, (dialog, id) -> {
-                                callback.invoke(origin, true, false);
+                                webapp.setOverrideGlobalSettings(true);
                                 webapp.enableLocationAccess();
+                                DataManager.getInstance().replaceWebApp(webapp);
+                                callback.invoke(origin, true, false);
                             }).setNegativeButton(android.R.string.no, (dialog, id) -> callback.invoke(origin, false, false));
                     AlertDialog dialog = builder.create();
                     dialog.show();

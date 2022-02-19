@@ -169,6 +169,13 @@
                                 android:layout_height="wrap_content"
                                 android:checked="@={webapp.allowLocationAccess}"
                                 android:text="@string/allow_location_access" />
+
+                            <Switch
+                                android:id="@+id/switchDRMContent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.drmAllowed}"
+                                android:text="@string/allow_drm_content" />
                         </LinearLayout>
 
                         <LinearLayout

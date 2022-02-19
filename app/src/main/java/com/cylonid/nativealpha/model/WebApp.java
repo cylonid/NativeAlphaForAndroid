@@ -1,6 +1,7 @@
 package com.cylonid.nativealpha.model;
 
 
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -52,6 +53,7 @@ public class WebApp {
     private boolean block_third_party_requests;
     private int container_id;
     private boolean use_container;
+    private boolean drm_allowed;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -88,6 +90,7 @@ public class WebApp {
         block_third_party_requests = false;
         container_id = Const.NO_CONTAINER;
         use_container = false;
+        drm_allowed = false;
 
         initDefaultSettings();
     }
@@ -135,6 +138,7 @@ public class WebApp {
         this.show_expert_settings = other.show_expert_settings;
         this.safe_browsing = other.safe_browsing;
         this.block_third_party_requests = other.block_third_party_requests;
+        this.drm_allowed = other.drm_allowed;
 
     }
 
@@ -484,10 +488,13 @@ public class WebApp {
         DataManager.getInstance().saveWebAppData();
     }
 
-    public String getDomain() {
-        return base_url.replace("http://", "").replace("https://", "").replace("www.", "");
+    public boolean isDrmAllowed() {
+        return drm_allowed;
     }
 
+    public void setDrmAllowed(boolean drmAllowed) {
+        this.drm_allowed = drmAllowed;
+    }
 
     public void onSwitchCookiesChanged(CompoundButton mSwitch, boolean isChecked) {
         Switch third_party_cookies = mSwitch.getRootView().findViewById(R.id.switch3PCookies);
