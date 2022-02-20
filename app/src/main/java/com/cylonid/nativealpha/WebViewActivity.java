@@ -19,6 +19,8 @@ import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -49,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 
 import pub.devrel.easypermissions.EasyPermissions;
+import static com.cylonid.nativealpha.util.Const.CODE_OPEN_FILE;
 
 public class WebViewActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
@@ -64,6 +67,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     private String geo_origin = null;
     private DownloadManager.Request dl_request = null;
     private Map<String, String> CUSTOM_HEADERS;
+    protected ValueCallback<Uri[]> filePathCallback;
 
     private boolean quit_on_next_backpress = false;
     private String last_onbackpress_url = "";
@@ -133,6 +137,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             wv.setWebViewClient(new CustomBrowser());
             wv.getSettings().setSafeBrowsingEnabled(webapp.isSafeBrowsing());
             wv.getSettings().setDomStorageEnabled(true);
+            wv.getSettings().setAllowFileAccess(true);
             wv.getSettings().setBlockNetworkLoads(false);
 //        wv.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -320,7 +325,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             reload();
         }
         int new_id = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
-        Log.d("XYZ", "new web app started in sandbox: " + webappID + " vs " + new_id);
+
         if (new_id != webappID) {
             WebApp new_webapp = DataManager.getInstance().getWebApp(new_id);
             ProcessPhoenix.triggerRebirth(this, Utility.createWebViewIntent(new_webapp, this));
@@ -432,7 +437,37 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent intent) {
+
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == RESULT_CANCELED && requestCode == CODE_OPEN_FILE) {
+            this.filePathCallback.onReceiveValue(null);
+        } else if (resultCode == RESULT_OK && requestCode == CODE_OPEN_FILE) {
+            filePathCallback.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, intent));
+            filePathCallback = null;
+        }
+    }
+
+
     private class CustomWebChromeClient extends android.webkit.WebChromeClient {
+
+        @Override
+        public boolean onShowFileChooser(
+                WebView webView, ValueCallback<Uri[]> pFilePathCallback,
+                WebChromeClient.FileChooserParams fileChooserParams) {
+            filePathCallback = pFilePathCallback;
+            try {
+                Intent intent = fileChooserParams.createIntent();
+                startActivityForResult(intent, CODE_OPEN_FILE);
+            } catch (Exception e) {
+                Utility.showInfoSnackbar(WebViewActivity.this, getString(R.string.no_filemanager), Snackbar.LENGTH_LONG);
+                e.printStackTrace();
+            }
+            return true;
+        }
+
 
         @Override
         public void onPermissionRequest(PermissionRequest request) {
