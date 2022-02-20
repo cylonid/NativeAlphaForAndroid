@@ -427,7 +427,12 @@
                                 android:checked="@={webapp.requestDesktop}"
                                 android:enabled="@{webapp.allowJs}"
                                 android:text="@string/request_website_in_desktop_version" />
-
+                            <Switch
+                                android:id="@+id/switchFullScreen"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.showFullscreen}"
+                                android:text="@string/show_fullscreen" />
                             <Switch
                                 android:id="@+id/switchOpenUrlExternal"
                                 android:layout_width="match_parent"

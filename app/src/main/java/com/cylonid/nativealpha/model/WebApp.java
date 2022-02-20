@@ -54,6 +54,7 @@ public class WebApp {
     private int container_id;
     private boolean use_container;
     private boolean drm_allowed;
+    private boolean show_fullscreen;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -91,6 +92,7 @@ public class WebApp {
         container_id = Const.NO_CONTAINER;
         use_container = false;
         drm_allowed = false;
+        show_fullscreen = false;
 
         initDefaultSettings();
     }
@@ -139,6 +141,7 @@ public class WebApp {
         this.safe_browsing = other.safe_browsing;
         this.block_third_party_requests = other.block_third_party_requests;
         this.drm_allowed = other.drm_allowed;
+        this.show_fullscreen = other.show_fullscreen;
 
     }
 
@@ -494,6 +497,14 @@ public class WebApp {
 
     public void setDrmAllowed(boolean drmAllowed) {
         this.drm_allowed = drmAllowed;
+    }
+
+    public boolean isShowFullscreen() {
+        return show_fullscreen;
+    }
+
+    public void setShowFullscreen(boolean showFullscreen) {
+        this.show_fullscreen = showFullscreen;
     }
 
     public void onSwitchCookiesChanged(CompoundButton mSwitch, boolean isChecked) {

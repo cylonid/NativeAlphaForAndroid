@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -135,9 +136,11 @@ public class WebAppSettingsActivity extends AppCompatActivity {
     private void setPlusSettings(View v) {
         LinearLayout secDarkMode = v.findViewById(R.id.sectionDarkmode);
         LinearLayout secSandbox= v.findViewById(R.id.sectionSandbox);
+        Switch switchImmersive = v.findViewById(R.id.switchFullScreen);
         if (!BuildConfig.FLAVOR.equals("extended")) { 
             secDarkMode.setVisibility(View.GONE);
             secSandbox.setVisibility(View.GONE);
+            switchImmersive.setVisibility(View.GONE);
 
         }
     }
