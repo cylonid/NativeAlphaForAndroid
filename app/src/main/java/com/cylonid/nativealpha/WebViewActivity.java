@@ -5,6 +5,9 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.app.DownloadManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -28,6 +31,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
@@ -401,7 +405,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             view.loadUrl(url, CUSTOM_HEADERS);
 
     }
-    private void hideSystemBars(){
+    private void hideSystemBars() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             getWindow().setDecorFitsSystemWindows(false);
             WindowInsetsController controller = getWindow().getInsetsController();
@@ -477,6 +481,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
 
     private class CustomWebChromeClient extends android.webkit.WebChromeClient {
+        private View mCustomView;
+        private WebChromeClient.CustomViewCallback mCustomViewCallback;
+        private int mOriginalOrientation;
+        private int mOriginalSystemUiVisibility;
 
         @Override
         public boolean onShowFileChooser(
@@ -493,8 +501,38 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             return true;
         }
 
-
         @Override
+        public Bitmap getDefaultVideoPoster() {
+            final Bitmap bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            canvas.drawARGB(0, 0, 0, 0);
+            return bitmap;
+        }
+
+        public void onHideCustomView()
+        {
+            ((FrameLayout)getWindow().getDecorView()).removeView(this.mCustomView);
+            this.mCustomView = null;
+            getWindow().getDecorView().setSystemUiVisibility(this.mOriginalSystemUiVisibility);
+            setRequestedOrientation(this.mOriginalOrientation);
+            this.mCustomViewCallback.onCustomViewHidden();
+            this.mCustomViewCallback = null;
+        }
+
+        public void onShowCustomView(View pView, WebChromeClient.CustomViewCallback pViewCallback) {
+            if (this.mCustomView != null) {
+                onHideCustomView();
+                return;
+            }
+            this.mCustomView = pView;
+            this.mOriginalSystemUiVisibility = getWindow().getDecorView().getSystemUiVisibility();
+            this.mOriginalOrientation = getRequestedOrientation();
+            this.mCustomViewCallback = pViewCallback;
+            ((FrameLayout) getWindow().getDecorView()).addView(this.mCustomView, new FrameLayout.LayoutParams(-1, -1));
+            hideSystemBars();
+        }
+
+            @Override
         public void onPermissionRequest(PermissionRequest request) {
             List<String> permissionsToGrant = new ArrayList<>();
 
@@ -637,6 +675,17 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             String url = request.getUrl().toString();
             WebApp webapp = DataManager.getInstance().getWebApp(webappID);
+
+            if (url.startsWith("tel:")) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
+                startActivity(intent);
+                return true;
+            }
+            if (url.startsWith("mailto:")) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+                return true;
+            }
 
             if (webapp.isOpenUrlExternal()) {
                 String base_url = webapp.getBaseUrl();
