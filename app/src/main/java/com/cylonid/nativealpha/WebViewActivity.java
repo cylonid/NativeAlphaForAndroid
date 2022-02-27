@@ -54,6 +54,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import pub.devrel.easypermissions.EasyPermissions;
@@ -608,6 +609,23 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     }
 
     private class CustomBrowser extends WebViewClient {
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            if(url.equals("about:blank")) {
+                String langExtension;
+                switch(Locale.getDefault().getLanguage()) {
+                    case "de":
+                        langExtension = "de";
+                        break;
+                    default:
+                        langExtension = "en";
+                }
+                wv.loadUrl("file:///android_asset/errorSite/error_" + langExtension + ".html");
+            }
+            super.onPageFinished(view, url);
+        }
+
         @Nullable
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {

@@ -96,7 +96,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
 
             }
             catch(IOException e) {
-                Toast toast = Toast.makeText(getActivity(), "Icon could not be loaded.", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getActivity(), getString(R.string.icon_not_found), Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.TOP, 0, 100);
                 toast.show();
                 e.printStackTrace();
@@ -158,13 +158,11 @@ public class ShortcutDialogFragment extends DialogFragment  {
         last_webapp_inside_backup = true;
     }
 
-    private Bitmap loadBitmap(String url)  {
-        InputStream inputStream;
+    private Bitmap loadBitmap(String strUrl)  {
         Bitmap bitmap;
         try {
-            inputStream = new java.net.URL(url).openStream();
-            URL ulrn = new URL(url);
-            HttpURLConnection con = (HttpURLConnection)ulrn.openConnection();
+            URL url = new URL(strUrl);
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
             InputStream is = con.getInputStream();
             bitmap = BitmapFactory.decodeStream(is);
             if (bitmap == null || bitmap.getWidth() < Const.FAVICON_MIN_WIDTH)

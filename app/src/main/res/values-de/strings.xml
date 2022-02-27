@@ -119,4 +119,6 @@
     <string name="all_sandboxes_used">Alle Sandboxen sind in Verwendung.</string>
     <string name="enable_sandbox">Sandbox aktivieren</string>
     <string name="show_fullscreen">Vollbildmodus</string>
+    <string name="site_not_found">Seite konnte nicht geladen werden.</string>
+    <string name="icon_not_found">Icon konnte nicht geladen werden.</string>
 </resources>

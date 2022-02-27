@@ -124,6 +124,8 @@
     <string name="all_sandboxes_used">All sandboxes are currently in use.</string>
     <string name="enable_sandbox">Enable Sandbox</string>
     <string name="show_fullscreen">Full Screen (Immersive Mode)</string>
+    <string name="site_not_found">Page could not be loaded.</string>
+    <string name="icon_not_found">Icon could not be loaded.</string>
 
 
 </resources>

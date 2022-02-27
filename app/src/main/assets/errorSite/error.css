@@ -1,0 +1,21 @@
+.logo {
+  filter: grayscale(1) brightness(2);
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ccc;
+}
+
+main {
+  width: 250px;
+  text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: black;
+  }
+}

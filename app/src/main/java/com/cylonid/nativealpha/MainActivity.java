@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
-import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -220,23 +219,16 @@ public class MainActivity extends AppCompatActivity {
             url.requestFocus();
             positive.setOnClickListener(view -> {
                 String str_url = url.getText().toString().trim();
+                WebApp new_site = new WebApp(str_url, DataManager.getInstance().getIncrementedID());
+                new_site.applySettingsForNewWebApp();
+                DataManager.getInstance().addWebsite(new_site);
 
-                if (!(str_url.startsWith("https://")) && !(str_url.startsWith("http://")))
-                    str_url = "https://" + str_url;
-
-                if (Patterns.WEB_URL.matcher(str_url.toLowerCase()).matches()) {
-                    WebApp new_site = new WebApp(str_url, DataManager.getInstance().getIncrementedID());
-                    new_site.applySettingsForNewWebApp();
-                    DataManager.getInstance().addWebsite(new_site);
-
-                    addRow(new_site);
-                    dialog.dismiss();
-                    if (create_shortcut.isChecked()) {
-                        ShortcutDialogFragment frag = ShortcutDialogFragment.newInstance(new_site);
-                        frag.show(getSupportFragmentManager(), "SCFetcher-" + new_site.getID());
-                    }
-                } else
-                    url.setError(getString(R.string.enter_valid_url));
+                addRow(new_site);
+                dialog.dismiss();
+                if (create_shortcut.isChecked()) {
+                    ShortcutDialogFragment frag = ShortcutDialogFragment.newInstance(new_site);
+                    frag.show(getSupportFragmentManager(), "SCFetcher-" + new_site.getID());
+                }
             });
         });
         dialog.show();
