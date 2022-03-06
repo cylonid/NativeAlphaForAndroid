@@ -137,7 +137,7 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
 }
 
-int NUM_OF_CONTAINERS = 10
+int NUM_OF_CONTAINERS = 8
 String placeholder = "<!--Placeholder-->"
 
 0.upto(NUM_OF_CONTAINERS-1) { int i ->
