@@ -1,7 +1,6 @@
 package com.cylonid.nativealpha.model;
 
 
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -600,7 +599,7 @@ public class WebApp {
 
     public void onSwitchSandboxChanged(CompoundButton mSwitch, boolean isChecked) {
         if (isChecked) {
-            container_id = DataManager.getInstance().getNextFreeContainer();
+            container_id = SandboxManager.getInstance().calculateNextFreeContainerId();
 
         } else {
             container_id = Const.NO_CONTAINER;

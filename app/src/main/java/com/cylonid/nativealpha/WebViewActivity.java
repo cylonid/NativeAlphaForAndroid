@@ -42,6 +42,7 @@ import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
 import com.cylonid.nativealpha.model.DataManager;
+import com.cylonid.nativealpha.model.SandboxManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
@@ -109,16 +110,15 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 }
 
                 if (!packageName.equals(processName)) {
-                    if (DataManager.getInstance().isSandboxUsedByAnotherApp(webapp)) {
-                        DataManager.getInstance().unregisterWebAppFromSandbox(webapp.getContainerId());
+                    if (SandboxManager.getInstance().isSandboxUsedByAnotherApp(webapp)) {
+                        SandboxManager.getInstance().unregisterWebAppFromSandbox(webapp.getContainerId());
                         ProcessPhoenix.triggerRebirth(this, Utility.createWebViewIntent(webapp, this));
                     }
                     try {
-                        DataManager.getInstance().registerWebAppToSandbox(webapp);
+                        SandboxManager.getInstance().registerWebAppToSandbox(webapp);
                         WebView.setDataDirectorySuffix(webapp.getContainerId() + webapp.getAlphanumericBaseUrl() + "_" + webapp.getID());
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
-//                        android.os.Process.killProcess(android.os.Process.myPid());
                     }
                 }
 

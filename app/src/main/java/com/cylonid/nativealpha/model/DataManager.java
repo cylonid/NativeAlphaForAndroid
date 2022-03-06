@@ -46,8 +46,6 @@ public class DataManager {
     private static final String shared_pref_max_id  = "MAX_ID";
     private static final String shared_pref_next_container = "NEXT_CONTAINER";
 
-
-
     private static final String shared_pref_webappdata = "WEBSITEDATA";
     private static final String shared_pref_globalsettings = "GLOBALSETTINGS";
 
@@ -66,20 +64,13 @@ public class DataManager {
     private ArrayList<WebApp> websites;
     private int max_assigned_ID;
     private SharedPreferences appdata;
-    private static final int NUM_OF_SANDBOXES = 10;
-    private final Sandbox[] sandboxes = new Sandbox[NUM_OF_SANDBOXES];
-    private int next_container;
-  
     private GlobalSettings settings;
 
     private DataManager()
     {
         websites = new ArrayList<>();
         max_assigned_ID = -1;
-        next_container = 0;
         settings = new GlobalSettings();
-        IntStream.range(0, NUM_OF_SANDBOXES).forEach(x -> sandboxes[x] = new Sandbox(x));
-
     }
 
     public static DataManager getInstance(){
@@ -95,32 +86,6 @@ public class DataManager {
         saveGlobalSettings();
     }
 
-    public int getNextFreeContainer() {
-        if (next_container == NUM_OF_SANDBOXES) {
-            next_container = 0;
-        }
-        return next_container++;
-    }
-
-    public void registerWebAppToSandbox(WebApp webapp) {
-        int sId = webapp.getContainerId();
-        sandboxes[sId].registerWebApp(webapp.getID(), webapp.getBaseUrl());
-        Log.d("SBX ", "Sandbox "  + webapp.getContainerId() + " is occupied by " + webapp.getTitle());
-    }
-
-    public void unregisterWebAppFromSandbox(int sandboxId) {
-        if(!sandboxes[sandboxId].isUnoccupied()) {
-            WebApp currently_set_webapp = DataManager.getInstance().getWebApp(sandboxes[sandboxId].getCurrentlyRegisteredWebapp());
-            sandboxes[sandboxId].unregisterWebApp();
-            Log.d("SBX", "Sandbox " + sandboxId + " is left by " + currently_set_webapp.getTitle());
-        }
-    }
-
-    public boolean isSandboxUsedByAnotherApp(@NonNull WebApp webapp) {
-        int sId = webapp.getContainerId();
-        return sandboxes[sId].isUsedByAnotherApp(webapp);
-    }
-
     public void saveWebAppData() {
         Utility.Assert(App.getAppContext() != null, "App.getAppContext() null before saving sharedpref");
 
@@ -130,7 +95,7 @@ public class DataManager {
         String json = gson.toJson(websites);
         editor.putString(shared_pref_webappdata, json);
         editor.putInt(shared_pref_max_id, max_assigned_ID);
-        editor.putInt(shared_pref_next_container, next_container);
+        editor.putInt(shared_pref_next_container, SandboxManager.getInstance().getNextContainer());
         editor.apply();
     }
 
@@ -169,7 +134,7 @@ public class DataManager {
         }
 
         max_assigned_ID = appdata.getInt(shared_pref_max_id, max_assigned_ID);
-        next_container = appdata.getInt(shared_pref_next_container, next_container);
+        SandboxManager.getInstance().setNextContainer(appdata.getInt(shared_pref_next_container, 0));
 
         //Check legacy global settings
         if (appdata.getBoolean(shared_pref_global_settings_json, false)) {
