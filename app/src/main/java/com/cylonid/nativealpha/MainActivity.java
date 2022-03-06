@@ -219,6 +219,10 @@ public class MainActivity extends AppCompatActivity {
             url.requestFocus();
             positive.setOnClickListener(view -> {
                 String str_url = url.getText().toString().trim();
+
+                if (!(str_url.startsWith("https://")) && !(str_url.startsWith("http://"))) {
+                    str_url = "https://" + str_url;
+                }
                 WebApp new_site = new WebApp(str_url, DataManager.getInstance().getIncrementedID());
                 new_site.applySettingsForNewWebApp();
                 DataManager.getInstance().addWebsite(new_site);
