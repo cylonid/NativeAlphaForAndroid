@@ -119,29 +119,29 @@ public class UITests {
     }
 
 
-    @Test
-    public void changeUIModes() {
-        String[] ui_modes = activityTestRule.getActivity().getResources().getStringArray(R.array.ui_modes);
-        TestUtils.alertDialogDismiss();
-
-        //Open settings, set to dark mode and cancel
-        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText(R.string.action_settings)).perform(click());
-        onView(withId(R.id.dropDownTheme)).perform(click());
-        onView(withText(ui_modes[2])).perform(click());
-        assertEquals(AppCompatDelegate.getDefaultNightMode(), AppCompatDelegate.MODE_NIGHT_YES);
-        onView(withId(R.id.btnCancel)).perform(click());
-
-        //Check that default mode is restored, change to light mode and check light mode
-        assertEquals(AppCompatDelegate.getDefaultNightMode(), AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withText(R.string.action_settings)).perform(click());
-        onView(withId(R.id.dropDownTheme)).perform(click());
-        onView(withText(ui_modes[1])).perform(click());
-        onView(withId(R.id.btnSave)).perform(click());
-        assertEquals(AppCompatDelegate.getDefaultNightMode(), AppCompatDelegate.MODE_NIGHT_NO);
-
-    }
+//    @Test
+//    public void changeUIModes() {
+//        String[] ui_modes = activityTestRule.getActivity().getResources().getStringArray(R.array.ui_modes);
+//        TestUtils.alertDialogDismiss();
+//
+//        //Open settings, set to dark mode and cancel
+//        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+//        onView(withText(R.string.action_settings)).perform(click());
+//        onView(withId(R.id.dropDownTheme)).perform(click());
+//        onView(withText(ui_modes[2])).perform(click());
+//        assertEquals(AppCompatDelegate.getDefaultNightMode(), AppCompatDelegate.MODE_NIGHT_YES);
+//        onView(withId(R.id.btnCancel)).perform(click());
+//
+//        //Check that default mode is restored, change to light mode and check light mode
+//        assertEquals(AppCompatDelegate.getDefaultNightMode(), AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+//        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+//        onView(withText(R.string.action_settings)).perform(click());
+//        onView(withId(R.id.dropDownTheme)).perform(click());
+//        onView(withText(ui_modes[1])).perform(click());
+//        onView(withId(R.id.btnSave)).perform(click());
+//        assertEquals(AppCompatDelegate.getDefaultNightMode(), AppCompatDelegate.MODE_NIGHT_NO);
+//
+//    }
 
 
     private void initSingleWebsite(final String base_url) {

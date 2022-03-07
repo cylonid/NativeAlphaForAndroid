@@ -154,10 +154,6 @@ public class ShortcutDialogFragment extends DialogFragment  {
         return dialog;
     }
 
-    public void refreshUIMode() {
-        last_webapp_inside_backup = true;
-    }
-
     private Bitmap loadBitmap(String strUrl)  {
         Bitmap bitmap;
         try {

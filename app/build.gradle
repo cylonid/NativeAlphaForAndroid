@@ -130,10 +130,8 @@ dependencies {
     androidTestUtil 'androidx.test:orchestrator:1.4.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    //noinspection GradleDependency
-    implementation "com.mikepenz:aboutlibraries:8.1.6"
-    //noinspection GradleDependency
-    implementation "com.mikepenz:aboutlibraries-core:8.1.6"
+    implementation "com.mikepenz:aboutlibraries:10.0.0"
+    implementation "com.mikepenz:aboutlibraries-core:10.0.0"
     implementation 'pub.devrel:easypermissions:3.0.0'
 }
 

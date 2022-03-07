@@ -110,7 +110,7 @@
     <string name="webapp_already_deleted">Diese Web-App wurde gelöscht. Sie können diese Verknüpfung löschen.</string>
     <string name="override_global_settings">Globale Einstellungen überschreiben</string>
     <string name="global_web_app_settings">Globale Web-App-Einstellungen</string>
-    <string name="general">General</string>
+    <string name="general">Allgemeines</string>
     <string name="backup">Backup</string>
     <string name="use_google_safe_browsing">Google Safe Browsing aktivieren</string>
     <string name="block_all_third_party_requests">Alle Drittanbieter-Anfragen blockieren</string>

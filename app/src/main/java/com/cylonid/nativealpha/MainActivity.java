@@ -62,8 +62,7 @@ public class MainActivity extends AppCompatActivity {
             mainScreen.removeAllViews();
             addActiveWebAppsToUI();
 
-            boolean refresh_ui_mode = intent.getBooleanExtra(Const.INTENT_REFRESH_NEW_THEME, false);
-            buildImportSuccessDialog(refresh_ui_mode);
+            buildImportSuccessDialog();
             intent.putExtra(Const.INTENT_BACKUP_RESTORED, false);
             intent.putExtra(Const.INTENT_REFRESH_NEW_THEME, false);
         }
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void buildImportSuccessDialog(boolean refresh_ui_mode) {
+    private void buildImportSuccessDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         String message =  getString(R.string.import_success_dialog_txt2) + "\n\n" + getString(R.string.import_success_dialog_txt3);
@@ -95,15 +94,9 @@ public class MainActivity extends AppCompatActivity {
                         .setMessage(msg)
                         .setPositiveButton(android.R.string.yes, (dialog1, which) -> {
                             ShortcutDialogFragment frag = ShortcutDialogFragment.newInstance(webapp);
-                            if (refresh_ui_mode && last_webapp && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                frag.refreshUIMode();
-                            }
                             frag.show(getSupportFragmentManager(), "SCFetcher-" + webapp.getID());
                         })
                         .setNegativeButton(android.R.string.no, (dialog1, which) -> {
-                            if (refresh_ui_mode && last_webapp && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                Utility.applyUITheme();
-                            }
                         })
                         .create();
 
