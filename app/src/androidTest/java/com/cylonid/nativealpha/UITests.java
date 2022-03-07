@@ -79,7 +79,7 @@ public class UITests {
     public void changeWebAppSettings() {
         initSingleWebsite("https://whatismybrowser.com/detect/are-cookies-enabled");
         onView(allOf(withTagValue(is((Object) "btnSettings0")))).perform(click());
-        onView(withId(R.id.switchCookies)).perform(click());
+        onView(withId(R.id.switchCookies)).perform(scrollTo()).perform(click());
         onView(withId(R.id.btnSave)).perform(click());
         onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
         onWebView(Matchers.allOf(withId(R.id.webview))).withNoTimeout().withElement(findElement(Locator.ID, "detected_value")).check(webMatches(getText(), containsString("No")));
