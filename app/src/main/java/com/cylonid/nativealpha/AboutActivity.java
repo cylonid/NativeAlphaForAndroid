@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
+import java.time.Year;
+
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 
@@ -21,20 +23,16 @@ public class AboutActivity extends AppCompatActivity {
 
         View aboutPage = new AboutPage(this)
                 .enableDarkMode(false)
-                .setDescription("Native Alpha for Android\nby cylonid © 2020\n")
+                .setDescription("Native Alpha for Android\nby cylonid © " + Year.now().getValue())
                 .setImage(R.drawable.native_alpha_foreground)
                 .addItem(new Element().setTitle("Version " + BuildConfig.VERSION_NAME))
                 .addGitHub("cylonid", "Find us on GitHub")
-                .addItem(showPayPal())
-
-
+                .addPlayStore("com.cylonid.nativealpha")
                 .addGroup(getString(R.string.eula_title))
                 .addItem(showEULA())
                 .addGroup(getString(R.string.license))
                 .addItem(showLicense())
                 .addItem(showOpenSourcelibs())
-//                .addPlayStore("com.ideashower.readitlater.pro")
-
                 .create();
 
         setContentView(aboutPage);
@@ -76,15 +74,10 @@ public class AboutActivity extends AppCompatActivity {
         Element os = new Element();
         os.setTitle(getString(R.string.open_source_libs));
         os.setOnClickListener(v -> {
-//                OssLicensesMenuActivity.setActivityTitle("Open source libraries");
-//                Intent intent = new Intent(AboutActivity.this, OssLicensesMenuActivity.class);
-//                String title = getString(R.string.os_libraries_title);
-//                intent.putExtra("title", title);
-//                startActivity(intent);
-            new LibsBuilder()
-                    .withFields(R.string.class.getFields())
-                    .start(AboutActivity.this);
-
+            startActivity(new LibsBuilder()
+                    .withEdgeToEdge(true)
+                    .withSearchEnabled(true)
+                    .intent(this));
         });
         return os;
     }
