@@ -9,33 +9,30 @@
 
 
 ## Features
-  * Show any website in a borderless full-screen window using Android System WebView.
-  * Offers to create home screen shortcuts and retrieves icons in suitable resolution.
-  * Various settings (JavaScript, Cookies, 3rd party Cookies, Adblocking, location access) can be set for every web app individually
+  * Shows any website in a borderless full-screen window using Android System WebView.
+  * Create home screen shortcuts and retrieves icons in suitable resolution.
+  * Various settings (JavaScript, Cookies, adblocking, location access) can be set for every web app individually
   * Navigation with multi-touch gestures while browsing.
   * Opt-in adblock using an AdBlock Plus custom webview.
   * Less memory footprint and no privacy-invading app permissions in comparison to native apps
   * Dark mode for Android 10+
 
+## Pro Features
+  * Sandbox containers: Web Apps are loaded in fully separated sandboxes, cookies or other data are not shared with other Web Apps
+  * Experimental dark mode also available for websites (configurable)
+  * True fullscreen mode ("immersive") without any menu bars
+ 
 ## Download Options
 [![IzzyOnDroid Download Badge](graphics/IzzyOnDroid.png)](https://apt.izzysoft.de/fdroid/index/apk/com.cylonid.nativealpha)
-[![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v1.01/NativeAlpha-standard-universal-release-v1.0.apk)
+[![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v1.01/NativeAlpha-standard-universal-release-v1.1.apk)
 
-## Latest Changes (v1.01)
-*Hotfix release(v1.01):*
-* Fixed an issue where Web Apps were forcefully displayed in Dark Mode when the app itself was in Dark Mode.
-
-* Added option to control Google Safe Browsing usage
-* Added option to ignore SSL errors for single Web Apps (hidden in expert settings)
-* Pages are no longer reloaded if you switch between portrait and landscape mode
-* New settings model: You can use a set of Web App Settings globally for all Web Apps and override this set for single apps if necessary
-* UI overhaul for global and Web App settings
-* Greatly reduced APK size by not including x86 libs
-* Several minor fixes
-  
-<!-- **Bugfix release (v0.85.1)**
-* Fixed an issue where the app could not restore a backup properly
-* Fixed an issue where an unavailable favicon led to a crash during favicon retrieval  -->
+## Latest Changes (v1.1)
+* Support for mailto and tel hyperlinks
+* Support for file picker dialogs
+* Support for DRM-protected content
+* Enhanced support for video playback
+* Enabled for usage with non-internet addresses
+* Color theme will from now on always follow system settings
 
 ## FAQ
 *Q: Why would I need this app if any mobile browser can do the same?*
@@ -46,6 +43,10 @@ A: Mobile browsers usually only are able to create shortcuts which give a native
 
 A: No. As stated, this app relies on the system built-in Android WebView in order to display the website. For privacy reasons, you can opt to use alternative webviews such as [Bromite](https://www.bromite.org/system_web_view) on rooted phones. Always make sure to use to most recent version of any WebView implementation you use!
 
+*Q: Why isn't the sandbox feature enabled by default?*
+
+A: The sandboxing approach is recommended for specific usage rather than general usage because it can limit the performance of the application and increase the disk usage. Therefore, use it for privacy-invasive websites or websites where you want to be logged in twice, but not for any website just because you can.
+
 *Q: Why is it not possible to find an icon for a certain website?*
 
 A: This problem can occur due to multiple reasons. In most cases, the website does not offer a high-resolution icon. If you are a website maintainer and your website icon cannot be found, look at [RealFaviconGenerator](https://realfavicongenerator.net) for further information. If you think it should work, feel free to post the URL and I will look into it.
@@ -53,7 +54,7 @@ A: This problem can occur due to multiple reasons. In most cases, the website do
 
 *Q: In constrast to your promise, this app has a large memory footprint!*
 
-A: This is because Native Alpha makes use of caching in the same way your browser app does, i.e., it saves web content locally on your device. Then it can be loaded faster if you visit the same page again. I will look into a way for better cache management. In the meantime, you can either delete cache regularly yourself or set the "Clear cache after usage" setting in the global settings if memory footprint is a concern for you. However, then websites will take a longer time to load because everything has to be loaded from net.
+A: This is because Native Alpha makes use of caching in the same way your browser app does, i.e., it saves web content locally on your device. Then it can be loaded faster if you visit the same page again. You can either delete cache regularly yourself or set the "Clear cache after usage" setting in the global settings if memory footprint is a concern for you. However, then websites will take a longer time to load because everything has to be loaded from net.
 
 ## Used libraries/resources
 * [CircularProgressBar](https://github.com/lopspower/CircularProgressBar)
