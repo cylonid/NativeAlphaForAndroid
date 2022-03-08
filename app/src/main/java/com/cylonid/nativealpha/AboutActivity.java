@@ -22,12 +22,12 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         View aboutPage = new AboutPage(this)
-                .enableDarkMode(false)
                 .setDescription("Native Alpha for Android\nby cylonid © " + Year.now().getValue())
                 .setImage(R.drawable.native_alpha_foreground)
                 .addItem(new Element().setTitle("Version " + BuildConfig.VERSION_NAME))
-                .addGitHub("cylonid", "Find us on GitHub")
-                .addPlayStore("com.cylonid.nativealpha")
+                .addGitHub("cylonid", "GitHub")
+                .addPlayStore("com.cylonid.nativealpha", "Play Store")
+                .addWebsite("https://github.com/cylonid/NativeAlphaForAndroid/blob/110releasePreparations/privacy_policy.md", getString(R.string.privacy_policy))
                 .addGroup(getString(R.string.eula_title))
                 .addItem(showEULA())
                 .addGroup(getString(R.string.license))

@@ -38,7 +38,7 @@
     <string name="shortcut_icon">Symbol</string>
     <string name="shortcut_title">Beschriftung</string>
     <string name="eula_title">Endbenutzer-Lizenzvereinbarung</string>
-    <string name="open_source_libs">Verwendete Open-Source-Bibliotheken anzeigen</string>
+    <string name="open_source_libs">Verwendete Programm-Bibliotheken anzeigen</string>
     <string name="app_info">Über die App</string>
     <string name="gnu_license">Diese Software unterliegt der GNU General Public License - Version 3.\nhttps://www.gnu.org/licenses/gpl-3.0.txt</string>
     <string name="license">Lizenz</string>
@@ -121,4 +121,5 @@
     <string name="show_fullscreen">Vollbildmodus</string>
     <string name="site_not_found">Seite konnte nicht geladen werden.</string>
     <string name="icon_not_found">Icon konnte nicht geladen werden.</string>
+    <string name="privacy_policy">Datenschutzerklärung</string>
 </resources>

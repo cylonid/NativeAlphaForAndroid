@@ -1,7 +1,7 @@
 # Privacy Policy
 
 ## What information do you collect?
-This app does not collect any data.
+We do not collect any data about users and their usage of this app.
 
 ## Questions?
 Reach out to us:
