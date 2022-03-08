@@ -61,7 +61,6 @@ public class ShortcutDialogFragment extends DialogFragment  {
     private CircularProgressBar uiProgressBar;
     private EditText uiTitle;
     private Thread faviconFetcherThread;
-    private boolean last_webapp_inside_backup = false;
 
     public ShortcutDialogFragment() {}
 
@@ -116,15 +115,10 @@ public class ShortcutDialogFragment extends DialogFragment  {
                 .setPositiveButton(android.R.string.ok, (dialog1, which) -> {
                     addShortcutToHomeScreen(bitmap);
                     dismiss();
-                    if (last_webapp_inside_backup) {
-                        Utility.applyUITheme();
-                    }
+
                 })
                 .setNegativeButton(android.R.string.cancel,  (dialog1, which) -> {
                     dismiss();
-                    if (last_webapp_inside_backup) {
-                        Utility.applyUITheme();
-                    }
                 })
                 .create();
 

@@ -93,7 +93,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
         DataManager.getInstance().loadAppData();
 
-        Utility.applyUITheme();
         Utility.Assert(webappID != -1, "WebApp ID could not be retrieved.");
         webapp = DataManager.getInstance().getWebApp(webappID);
 

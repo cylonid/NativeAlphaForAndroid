@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         mainScreen = findViewById(R.id.mainScreen);
 
         DataManager.getInstance().loadAppData();
-        Utility.applyUITheme();
         addActiveWebAppsToUI();
 
         if (DataManager.getInstance().getWebsites().size() == 0) {
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-        builder.setNegativeButton(getString(android.R.string.no),  (dialog, id) -> { Utility.applyUITheme();});
+        builder.setNegativeButton(getString(android.R.string.no),  (dialog, id) -> { });
         builder.create().show();
     }
 
