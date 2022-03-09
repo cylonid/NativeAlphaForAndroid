@@ -108,7 +108,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                     ProcessPhoenix.triggerRebirth(this, Utility.createWebViewIntent(webapp, this));
                 }
 
-                if (!packageName.equals(processName)) {
+                if (!packageName.equals(processName)  & SandboxManager.getInstance() != null) {
                     if (SandboxManager.getInstance().isSandboxUsedByAnotherApp(webapp)) {
                         SandboxManager.getInstance().unregisterWebAppFromSandbox(webapp.getContainerId());
                         ProcessPhoenix.triggerRebirth(this, Utility.createWebViewIntent(webapp, this));

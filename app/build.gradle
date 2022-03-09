@@ -47,7 +47,7 @@ android {
         applicationId "com.cylonid.nativealpha"
         minSdkVersion 26
         targetSdkVersion 31
-        versionCode 1100
+        versionCode 1101
         versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
