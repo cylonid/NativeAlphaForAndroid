@@ -354,6 +354,9 @@ public class ShortcutDialogFragment extends DialogFragment  {
         String final_title = uiTitle.getText().toString();
         if (final_title.equals(""))
             final_title = webapp.getTitle();
+        if (webapp.getTitle().equals("")) {
+            final_title = "Unknown";
+        }
 
         if (ShortcutManagerCompat.isRequestPinShortcutSupported(getActivity())) {
 
