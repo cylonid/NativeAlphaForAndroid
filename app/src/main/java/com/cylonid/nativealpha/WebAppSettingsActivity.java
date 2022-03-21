@@ -29,6 +29,7 @@ import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.App;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
+import com.cylonid.nativealpha.BuildConfig;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -136,11 +137,11 @@ public class WebAppSettingsActivity extends AppCompatActivity {
     private void setPlusSettings(View v) {
         LinearLayout secDarkMode = v.findViewById(R.id.sectionDarkmode);
         LinearLayout secSandbox= v.findViewById(R.id.sectionSandbox);
-        Switch switchImmersive = v.findViewById(R.id.switchFullScreen);
+        LinearLayout secKiosk = v.findViewById(R.id.sectionKioskMode);
         if (!BuildConfig.FLAVOR.equals("extended")) { 
             secDarkMode.setVisibility(View.GONE);
             secSandbox.setVisibility(View.GONE);
-            switchImmersive.setVisibility(View.GONE);
+            secKiosk.setVisibility(View.GONE);
 
         }
     }

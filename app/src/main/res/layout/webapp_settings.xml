@@ -402,6 +402,38 @@
 
                             </LinearLayout>
                         </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/sectionKioskMode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:divider="@drawable/empty_10dp_vertical"
+                            android:orientation="vertical"
+                            android:showDividers="middle">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/remove_divider"
+                                android:text="@string/webapp_section_kiosk"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textStyle="bold" />
+
+                            <Switch
+                                android:id="@+id/switchFullScreen"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.showFullscreen}"
+                                android:text="@string/show_fullscreen" />
+
+                            <Switch
+                                android:id="@+id/switchKeepAwake"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.keepAwake}"
+                                android:text="@string/keep_screen_awake" />
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/sectionMisc"
@@ -427,12 +459,7 @@
                                 android:checked="@={webapp.requestDesktop}"
                                 android:enabled="@{webapp.allowJs}"
                                 android:text="@string/request_website_in_desktop_version" />
-                            <Switch
-                                android:id="@+id/switchFullScreen"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:checked="@={webapp.showFullscreen}"
-                                android:text="@string/show_fullscreen" />
+
                             <Switch
                                 android:id="@+id/switchOpenUrlExternal"
                                 android:layout_width="match_parent"

@@ -54,6 +54,7 @@ public class WebApp {
     private boolean use_container;
     private boolean drm_allowed;
     private boolean show_fullscreen;
+    private boolean keep_awake;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -92,6 +93,7 @@ public class WebApp {
         use_container = false;
         drm_allowed = false;
         show_fullscreen = false;
+        keep_awake = false;
 
         initDefaultSettings();
     }
@@ -141,6 +143,7 @@ public class WebApp {
         this.block_third_party_requests = other.block_third_party_requests;
         this.drm_allowed = other.drm_allowed;
         this.show_fullscreen = other.show_fullscreen;
+        this.keep_awake = other.keep_awake;
 
     }
 
@@ -504,6 +507,14 @@ public class WebApp {
 
     public void setShowFullscreen(boolean showFullscreen) {
         this.show_fullscreen = showFullscreen;
+    }
+
+    public boolean isKeepAwake() {
+        return keep_awake;
+    }
+
+    public void setKeepAwake(boolean keepAwake) {
+        this.keep_awake = keepAwake;
     }
 
     public void onSwitchCookiesChanged(CompoundButton mSwitch, boolean isChecked) {

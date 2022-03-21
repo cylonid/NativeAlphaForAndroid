@@ -122,4 +122,6 @@
     <string name="site_not_found">Seite konnte nicht geladen werden.</string>
     <string name="icon_not_found">Icon konnte nicht geladen werden.</string>
     <string name="privacy_policy">Datenschutzerklärung</string>
+    <string name="webapp_section_kiosk">Kiosk-Modus</string>
+    <string name="keep_screen_awake">Standby verhindern</string>
 </resources>

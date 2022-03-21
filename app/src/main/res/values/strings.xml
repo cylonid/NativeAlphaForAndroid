@@ -127,6 +127,8 @@
     <string name="site_not_found">Page could not be loaded.</string>
     <string name="icon_not_found">Icon could not be loaded.</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="webapp_section_kiosk">Kiosk Mode</string>
+    <string name="keep_screen_awake">Keep screen awake</string>
 
 
 </resources>
