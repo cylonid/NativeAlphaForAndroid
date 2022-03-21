@@ -103,6 +103,9 @@ android {
 
 }
 repositories {
+    maven {
+        url 'https://gitlab.com/api/v4/projects/8817162/packages/maven'
+    }
     mavenCentral()
     jcenter()
 }
@@ -112,7 +115,7 @@ dependencies {
 
     implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
     implementation 'org.jsoup:jsoup:1.14.1'
-    implementation 'org.adblockplus:adblock-android-webview:4.4.0'
+    implementation 'org.adblockplus:adblock-android-webview:5.0.0'
     implementation 'com.github.ihimanshurawat:Hasher:1.2'
     implementation 'androidx.navigation:navigation-fragment:2.4.1'
     implementation 'androidx.navigation:navigation-ui:2.4.1'
