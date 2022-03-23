@@ -79,7 +79,7 @@
     <string name="allow_drm_content">DRM-Inhalte erlauben</string>
     <string name="dialog_permission_location_txt">Möchten Sie dieser Web-App Zugriff auf Ihren Standort gewähren? Sie können die Entscheidung jederzeit in den Web-App-Einstellungen ändern.</string>
     <string name="dialog_permission_location_title">Standortzugriff-Anfrage</string>
-    <string name="dialog_permission_drm_text">Möchten Sie dieser Web-App erlauben, DRM-geschützte Inhalte zu laden?</string>
+    <string name="dialog_permission_drm_txt">Möchten Sie dieser Web-App erlauben, DRM-geschützte Inhalte zu laden?</string>
     <string name="dialog_permission_drm_title">DRM-Inhalte</string>
     <string name="permission_location_rationale">Wenn Sie möchten, dass Web-Apps auf Ihren Standort zugreifen können, können Sie Native Alpha die Erlaubnis dazu erteilen. Sie können dies für jede Web-App einzeln entscheiden.</string>
     <string name="permission_storage_rationale">Wenn Sie über Native Alpha Dateien herunterladen möchten, müssen Sie dem Zugriff auf den Speicher zustimmen.</string>
@@ -124,4 +124,8 @@
     <string name="privacy_policy">Datenschutzerklärung</string>
     <string name="webapp_section_kiosk">Kiosk-Modus</string>
     <string name="keep_screen_awake">Standby verhindern</string>
+    <string name="dialog_permission_camera_title">Kamerazugriff</string>
+    <string name="dialog_permission_camera_txt">Möchten Sie dieser Web-App Zugriff auf Ihre Kamera gewähren? Sie können die Entscheidung jederzeit in den Web-App-Einstellungen ändern.</string>
+    <string name="permission_camera_rationale">Wenn Sie möchten, dass Web-Apps auf Ihre Kamera zugreifen können, können Sie Native Alpha die Erlaubnis dazu erteilen. Sie können dies für jede Web-App einzeln entscheiden.</string>
+    <string name="allow_camera_access">Kamerazugriff erlauben</string>
 </resources>

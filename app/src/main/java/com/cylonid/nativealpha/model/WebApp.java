@@ -55,6 +55,7 @@ public class WebApp {
     private boolean drm_allowed;
     private boolean show_fullscreen;
     private boolean keep_awake;
+    private boolean camera_permission;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -94,6 +95,7 @@ public class WebApp {
         drm_allowed = false;
         show_fullscreen = false;
         keep_awake = false;
+        camera_permission = false;
 
         initDefaultSettings();
     }
@@ -144,6 +146,7 @@ public class WebApp {
         this.drm_allowed = other.drm_allowed;
         this.show_fullscreen = other.show_fullscreen;
         this.keep_awake = other.keep_awake;
+        this.camera_permission = other.camera_permission;
 
     }
 
@@ -515,6 +518,14 @@ public class WebApp {
 
     public void setKeepAwake(boolean keepAwake) {
         this.keep_awake = keepAwake;
+    }
+
+    public boolean isCameraPermission() {
+        return camera_permission;
+    }
+
+    public void setCameraPermission(boolean cameraPermission) {
+        this.camera_permission = cameraPermission;
     }
 
     public void onSwitchCookiesChanged(CompoundButton mSwitch, boolean isChecked) {

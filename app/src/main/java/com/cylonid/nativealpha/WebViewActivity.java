@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.app.DownloadManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -35,9 +36,11 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
@@ -50,6 +53,7 @@ import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
+import java.security.acl.Permission;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -431,22 +435,32 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
+    private void enablePermissionBoolOnWebApp(PermissionGrantedCallback successCallback) {
+        webapp.setOverrideGlobalSettings(true);
+        successCallback.execute();
+        DataManager.getInstance().replaceWebApp(webapp);
+        wv.reload();
+    }
+
     @Override
-    public void onPermissionsGranted(int requestCode, List<String> list) {
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> list) {
         if (requestCode == Const.PERMISSION_RC_LOCATION) {
-            DataManager.getInstance().getWebApp(webappID).enableLocationAccess();
+            enablePermissionBoolOnWebApp(() -> webapp.setAllowLocationAccess(true));
 
             if (geo_callback != null) {
                 geo_callback.invoke(geo_origin, true, false);
                 geo_callback = null;
             }
+        }
+        if (requestCode == Const.PERMISSION_CAMERA) {
+            enablePermissionBoolOnWebApp(() -> webapp.setCameraPermission(true));
         }
         if (requestCode == Const.PERMISSION_RC_STORAGE) {
             if (dl_request != null) {
@@ -490,6 +504,38 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         private WebChromeClient.CustomViewCallback mCustomViewCallback;
         private int mOriginalOrientation;
         private int mOriginalSystemUiVisibility;
+        
+        private void handlePermissionRequest(String resId,
+                                             boolean currentState,
+                                             String[] androidPermissions,
+                                             int requestCode,
+                                             List<String> permissionsToGrant,
+                                             String[] webkitPermission,
+                                             PermissionGrantedCallback successCallback) {
+            boolean androidPermissionsMissing = !EasyPermissions.hasPermissions(WebViewActivity.this, androidPermissions);
+            if(currentState && androidPermissionsMissing) {
+                ActivityCompat.requestPermissions(WebViewActivity.this, androidPermissions, requestCode);
+                return;
+            }
+            if(currentState) {
+                permissionsToGrant.addAll(Arrays.asList(webkitPermission));
+                return;
+            }
+
+            new AlertDialog.Builder(WebViewActivity.this).setTitle(getPermissionRequestStringResource("dialog_permission_", resId, "_title"))
+            .setMessage(getPermissionRequestStringResource("dialog_permission_", resId, "_txt"))
+            .setPositiveButton(android.R.string.yes, (dialog, id) -> {
+                enablePermissionBoolOnWebApp(successCallback);
+                permissionsToGrant.addAll(Arrays.asList(webkitPermission));
+                if (androidPermissionsMissing) {
+                    ActivityCompat.requestPermissions(WebViewActivity.this, androidPermissions, requestCode);
+                }
+            }).setNegativeButton(android.R.string.no, (dialog, id) -> {}).create().show();
+        }
+
+        private String getPermissionRequestStringResource(String prefix, String variable, String suffix) {
+            return getString(WebViewActivity.this.getResources().getIdentifier(prefix+variable+suffix, "string", WebViewActivity.this.getPackageName()));
+        }
 
         @Override
         public boolean onShowFileChooser(
@@ -542,28 +588,18 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             List<String> permissionsToGrant = new ArrayList<>();
 
             boolean containsDrmRequest = Arrays.asList(request.getResources()).contains(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID);
+            boolean containsCameraRequest = Arrays.asList(request.getResources()).contains(PermissionRequest.RESOURCE_VIDEO_CAPTURE);
 
-            if(containsDrmRequest && webapp.isDrmAllowed()) {
-                permissionsToGrant.add(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID);
+            if(containsDrmRequest) {
+                this.handlePermissionRequest("drm", webapp.isDrmAllowed(), null, -1, permissionsToGrant, new String[]{PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID}, () -> webapp.setDrmAllowed(true));
             }
-            if(containsDrmRequest && !webapp.isDrmAllowed()) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(WebViewActivity.this);
-                builder.setTitle(getString(R.string.dialog_permission_drm_title));
-                builder.setMessage(getString(R.string.dialog_permission_drm_text))
-                        .setPositiveButton(android.R.string.yes, (dialog, id) -> {
-                            webapp.setOverrideGlobalSettings(true);
-                            webapp.setDrmAllowed(true);
-                            DataManager.getInstance().replaceWebApp(webapp);
-                            permissionsToGrant.add(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID);
-                        }).setNegativeButton(android.R.string.no, (dialog, id) -> {
-                    webapp.setDrmAllowed(false);
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+            if(containsCameraRequest) {
+                this.handlePermissionRequest("camera", webapp.isCameraPermission(), new String[]{Manifest.permission.CAMERA}, Const.PERMISSION_CAMERA, permissionsToGrant, new String[]{PermissionRequest.RESOURCE_VIDEO_CAPTURE}, () -> webapp.setCameraPermission(true));
             }
 
-            request.grant(permissionsToGrant.stream().toArray(String[]::new));
+            request.grant(permissionsToGrant.toArray(new String[0]));
         }
+
 
         public void onProgressChanged(WebView view, int progress) {
 
@@ -595,9 +631,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                     builder.setTitle(getString(R.string.dialog_permission_location_title));
                     builder.setMessage(getString(R.string.dialog_permission_location_txt))
                             .setPositiveButton(android.R.string.yes, (dialog, id) -> {
-                                webapp.setOverrideGlobalSettings(true);
-                                webapp.enableLocationAccess();
-                                DataManager.getInstance().replaceWebApp(webapp);
+                                enablePermissionBoolOnWebApp(() -> webapp.setAllowLocationAccess(true));
                                 callback.invoke(origin, true, false);
                             }).setNegativeButton(android.R.string.no, (dialog, id) -> callback.invoke(origin, false, false));
                     AlertDialog dialog = builder.create();
@@ -638,7 +672,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 Uri webapp_uri = Uri.parse(webapp.getBaseUrl());
 
                 if (!uri.getHost().endsWith(webapp_uri.getHost())) {
-//                    Timber.tag("BLOCK3rd").d("Uri: " + uri + "is not within the URL scope.");
                     return null;
                 }
             }
@@ -722,6 +755,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             loadURL(view, url);
             return true;
         }
+    }
+    @FunctionalInterface
+    interface PermissionGrantedCallback {
+        public void execute();
     }
 }
 

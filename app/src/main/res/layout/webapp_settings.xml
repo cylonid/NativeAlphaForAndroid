@@ -176,6 +176,13 @@
                                 android:layout_height="wrap_content"
                                 android:checked="@={webapp.drmAllowed}"
                                 android:text="@string/allow_drm_content" />
+
+                            <Switch
+                                android:id="@+id/switchCameraAccess"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.cameraPermission}"
+                                android:text="@string/allow_camera_access" />
                         </LinearLayout>
 
                         <LinearLayout

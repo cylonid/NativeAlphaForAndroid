@@ -84,7 +84,7 @@
     <string name="dialog_permission_location_title">Location Permission Request</string>
     <string name="dialog_permission_location_txt">Do you want to grant this Web App access to your location? You can revoke this decision any time in the Web App Settings menu.</string>
     <string name="dialog_permission_drm_title">DRM Content</string>
-    <string name="dialog_permission_drm_text">Do you want allow this Web App to load DRM-protected content?</string>
+    <string name="dialog_permission_drm_txt">Do you want allow this Web App to load DRM-protected content?</string>
     <string name="permission_location_rationale">If you want Web Apps to be able to retrieve your location, you can Native Alpha grant the permission to access the location. You can decide to grant the permission for every Web App individually.</string>
     <string name="permission_storage_rationale">If you want Native Alpha Web Apps to be able to download files, you have to accept the storage permission request.</string>
     <string name="file_download">File is being downloaded…</string>
@@ -129,6 +129,10 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="webapp_section_kiosk">Kiosk Mode</string>
     <string name="keep_screen_awake">Keep screen awake</string>
+    <string name="dialog_permission_camera_title">Camera Access</string>
+    <string name="dialog_permission_camera_txt">Do you want to grant this Web App access to your camera? You can revoke this decision any time in the Web App Settings menu.</string>
+    <string name="permission_camera_rationale">If you want Web Apps to be able to use your camera, you can Native Alpha grant the permission to access it. You can decide to grant the permission for every Web App individually.</string>
+    <string name="allow_camera_access">Allow camera access</string>
 
 
 </resources>
