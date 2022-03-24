@@ -517,7 +517,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 ActivityCompat.requestPermissions(WebViewActivity.this, androidPermissions, requestCode);
                 return;
             }
-            if(currentState) {
+            if(currentState && !androidPermissionsMissing) {
                 permissionsToGrant.addAll(Arrays.asList(webkitPermission));
                 return;
             }
@@ -591,7 +591,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             boolean containsCameraRequest = Arrays.asList(request.getResources()).contains(PermissionRequest.RESOURCE_VIDEO_CAPTURE);
 
             if(containsDrmRequest) {
-                this.handlePermissionRequest("drm", webapp.isDrmAllowed(), null, -1, permissionsToGrant, new String[]{PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID}, () -> webapp.setDrmAllowed(true));
+                this.handlePermissionRequest("drm", webapp.isDrmAllowed(), new String[]{}, -1, permissionsToGrant, new String[]{PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID}, () -> webapp.setDrmAllowed(true));
             }
             if(containsCameraRequest) {
                 this.handlePermissionRequest("camera", webapp.isCameraPermission(), new String[]{Manifest.permission.CAMERA}, Const.PERMISSION_CAMERA, permissionsToGrant, new String[]{PermissionRequest.RESOURCE_VIDEO_CAPTURE}, () -> webapp.setCameraPermission(true));
