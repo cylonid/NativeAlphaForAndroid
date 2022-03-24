@@ -183,6 +183,13 @@
                                 android:layout_height="wrap_content"
                                 android:checked="@={webapp.cameraPermission}"
                                 android:text="@string/allow_camera_access" />
+
+                            <Switch
+                                android:id="@+id/switchMicrophoneAccess"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.microphonePermission}"
+                                android:text="@string/allow_microphone_access" />
                         </LinearLayout>
 
                         <LinearLayout

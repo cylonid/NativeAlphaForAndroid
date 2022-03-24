@@ -56,6 +56,7 @@ public class WebApp {
     private boolean show_fullscreen;
     private boolean keep_awake;
     private boolean camera_permission;
+    private boolean microphone_permission;
 
     public WebApp(String url, int id) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -96,6 +97,7 @@ public class WebApp {
         show_fullscreen = false;
         keep_awake = false;
         camera_permission = false;
+        microphone_permission = false;
 
         initDefaultSettings();
     }
@@ -147,7 +149,7 @@ public class WebApp {
         this.show_fullscreen = other.show_fullscreen;
         this.keep_awake = other.keep_awake;
         this.camera_permission = other.camera_permission;
-
+        this.microphone_permission = other.microphone_permission;
     }
 
     private void initDefaultSettings() {
@@ -526,6 +528,14 @@ public class WebApp {
 
     public void setCameraPermission(boolean cameraPermission) {
         this.camera_permission = cameraPermission;
+    }
+
+    public boolean isMicrophonePermission() {
+        return microphone_permission;
+    }
+
+    public void setMicrophonePermission(boolean microphonePermission) {
+        this.microphone_permission = microphonePermission;
     }
 
     public void onSwitchCookiesChanged(CompoundButton mSwitch, boolean isChecked) {

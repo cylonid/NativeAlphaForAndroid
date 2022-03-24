@@ -17,6 +17,7 @@ public class Const {
     public static final int PERMISSION_RC_LOCATION = 123;
     public static final int PERMISSION_RC_STORAGE = 132;
     public static final int PERMISSION_CAMERA = 100;
+    public static final int PERMISSION_AUDIO = 101;
 
     public static final int CODE_OPEN_FILE = 512;
     public static final int CODE_WRITE_FILE = 4096;

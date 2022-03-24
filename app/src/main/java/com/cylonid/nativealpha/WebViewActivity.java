@@ -504,7 +504,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         private WebChromeClient.CustomViewCallback mCustomViewCallback;
         private int mOriginalOrientation;
         private int mOriginalSystemUiVisibility;
-        
+
         private void handlePermissionRequest(String resId,
                                              boolean currentState,
                                              String[] androidPermissions,
@@ -589,12 +589,17 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
             boolean containsDrmRequest = Arrays.asList(request.getResources()).contains(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID);
             boolean containsCameraRequest = Arrays.asList(request.getResources()).contains(PermissionRequest.RESOURCE_VIDEO_CAPTURE);
+            boolean containsMicrophoneRequest = Arrays.asList(request.getResources()).contains(PermissionRequest.RESOURCE_AUDIO_CAPTURE);
 
             if(containsDrmRequest) {
                 this.handlePermissionRequest("drm", webapp.isDrmAllowed(), new String[]{}, -1, permissionsToGrant, new String[]{PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID}, () -> webapp.setDrmAllowed(true));
             }
             if(containsCameraRequest) {
                 this.handlePermissionRequest("camera", webapp.isCameraPermission(), new String[]{Manifest.permission.CAMERA}, Const.PERMISSION_CAMERA, permissionsToGrant, new String[]{PermissionRequest.RESOURCE_VIDEO_CAPTURE}, () -> webapp.setCameraPermission(true));
+            }
+
+            if(containsMicrophoneRequest) {
+                this.handlePermissionRequest("microphone", webapp.isMicrophonePermission(), new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS}, Const.PERMISSION_AUDIO, permissionsToGrant, new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE}, () -> webapp.setMicrophonePermission(true));
             }
 
             request.grant(permissionsToGrant.toArray(new String[0]));

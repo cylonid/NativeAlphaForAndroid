@@ -126,6 +126,8 @@
     <string name="keep_screen_awake">Standby verhindern</string>
     <string name="dialog_permission_camera_title">Kamerazugriff</string>
     <string name="dialog_permission_camera_txt">Möchten Sie dieser Web-App Zugriff auf Ihre Kamera gewähren? Sie können die Entscheidung jederzeit in den Web-App-Einstellungen ändern.</string>
-    <string name="permission_camera_rationale">Wenn Sie möchten, dass Web-Apps auf Ihre Kamera zugreifen können, können Sie Native Alpha die Erlaubnis dazu erteilen. Sie können dies für jede Web-App einzeln entscheiden.</string>
     <string name="allow_camera_access">Kamerazugriff erlauben</string>
+    <string name="dialog_permission_microphone_title">Mikrofonzugriff</string>
+    <string name="dialog_permission_microphone_txt">Möchten Sie dieser Web-App Zugriff auf Ihr Mikrofon gewähren? Sie können die Entscheidung jederzeit in den Web-App-Einstellungen ändern.</string>
+    <string name="allow_microphone_access">Mikrofonzugriff erlauben</string>
 </resources>
