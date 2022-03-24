@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
@@ -172,7 +173,8 @@ public final class Utility {
     public static void personalizeToolbar(AppCompatActivity a)  {
         Toolbar toolbar = a.findViewById(R.id.toolbar);
         toolbar.setLogo(R.mipmap.native_alpha_white);
-        toolbar.setTitle(R.string.app_name);
+        @StringRes int appName = !BuildConfig.FLAVOR.equals("extended") ? R.string.app_name : R.string.app_name_plus;
+        toolbar.setTitle(appName);
         a.setSupportActionBar(toolbar);
     }
 
