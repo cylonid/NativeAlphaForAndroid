@@ -26,7 +26,7 @@ public class AboutActivity extends AppCompatActivity {
                 .setImage(R.drawable.native_alpha_foreground)
                 .addItem(new Element().setTitle("Version " + BuildConfig.VERSION_NAME))
                 .addGitHub("cylonid", "GitHub")
-                .addPlayStore("com.cylonid.nativealpha", "Play Store")
+                .addPlayStore("com.cylonid.nativealpha.pro", "Play Store")
                 .addWebsite("https://github.com/cylonid/NativeAlphaForAndroid/blob/110releasePreparations/privacy_policy.md", getString(R.string.privacy_policy))
                 .addGroup(getString(R.string.eula_title))
                 .addItem(showEULA())

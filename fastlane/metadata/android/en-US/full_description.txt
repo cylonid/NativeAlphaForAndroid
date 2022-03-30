@@ -1,21 +1,23 @@
 <h2 id="features">Features</h2>
 <ul>
-<li>Show any website in a borderless full-screen window using Android System WebView.</li>
+<li>Shows any website in a borderless full-screen window using Android System WebView.</li>
 <li>Offers to create home screen shortcuts and retrieves icons in suitable resolution.</li>
-<li>Various settings (JavaScript, Cookies, Third-Party-Cookies, AdBlock) can be set for every web app individually</li>
+<li>arious settings (JavaScript, cookies, adblocking, location/camera/microphone access) can be set for every web app individually</li>
 <li>Navigation with multi-touch gestures while browsing.</li>
 <li>Opt-in adblock using an AdBlock Plus custom webview.</li>
 <li>Less memory footprint and no privacy-invading app permissions in comparison to native apps</li>
 <li>Dark mode for Android 10+</li>
 </ul>
 <h2 id="faq">FAQ</h2>
-<p><em>Q: Why is it not possible to find an icon for a certain website?</em></p>
-<p>A: This problem can occur due to multiple reasons. In most cases, the website does not offer a high-resolution icon. If you are a website maintainer and your website icon cannot be found, look at <a href="https://realfavicongenerator.net">RealFaviconGenerator</a> for further information. If you think it should work, feel free to post the URL and I will look into it.</p>
 <p><em>Q: Why would I need this app if any mobile browser can do the same?</em></p>
 <p>A: Mobile browsers usually only are able to create shortcuts which give a native, borderless fullscreen experience if the website has a Progressive Web App (PWA) manifest. Unfortunately, most websites do not offer this feature yet.</p>
-<p><em>Q: Is this a web browser?</em></p>
+<p><em>Q: Can I keep multiple log-in sessions of the same website?</em></p>
+<p>A: Yes, this is possible using the sandbox feature of Native Alpha Plus.</p>
+<p><em>Q: Why isn't the sandbox feature in Native Alpha Plus enabled by default?</em></p>
+<p>A: The sandboxing approach is recommended for specific usage rather than general usage because it can limit the performance of the application and increase the disk usage. Therefore, use it for privacy-invasive websites or websites where you want to be logged in twice, but not for any website just because you can.</p>
+<p><em>Q: Why is it not possible to find an icon for a certain website?</em></p>
+<p>A: This problem can occur due to multiple reasons. In most cases, the website does not offer a high-resolution icon. If you are a website maintainer and your website icon cannot be found, look at <a href="https://realfavicongenerator.net">RealFaviconGenerator</a> for further information. If you think it should work, feel free to post the URL and I will look into it.</p>
+<p><em>Q: Is this app a dedicated web browser with its own browser engine?</em></p>
 <p>A: No. As stated, this app relies on the system built-in Android WebView in order to display the website. For privacy reasons, you can opt to use alternative webviews such as <a href="https://www.bromite.org/system_web_view">Bromite</a> on rooted phones. Always make sure to use to most recent version of any WebView implementation you use!</p>
-<p><em>Q: Why does this app require Android Oreo?</em></p>
-<p>A: Android introduced a new shortcut API with Oreo. However, it is planned to add legacy shortcut support. Older versions should also work then.</p>
 <p><em>Q: In constrast to your promise, this app has a large memory footprint!</em></p>
 <p>A: This is because Native Alpha makes use of caching in the same way your browser app does, i.e., it saves web content locally on your device. Then it can be loaded faster if you visit the same page again. I will look into a way for better cache management. In the meantime, you can either delete cache regularly yourself or set the &quot;Clear cache after usage&quot; setting in the global settings if memory footprint is a concern for you. However, then websites will take a longer time to load because everything has to be loaded from net.</p>

@@ -31,7 +31,7 @@ android {
     productFlavors {
         extended {
             dimension "default"
-            applicationIdSuffix ".plus"
+            applicationIdSuffix ".pro"
             resValue "string", "app_name_unicode", "Native α+"
         }
         standard {
