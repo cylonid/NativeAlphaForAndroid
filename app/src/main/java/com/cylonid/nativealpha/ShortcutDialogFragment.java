@@ -1,5 +1,8 @@
 package com.cylonid.nativealpha;
 
+import static androidx.appcompat.app.AppCompatActivity.RESULT_OK;
+import static com.cylonid.nativealpha.util.Const.CODE_OPEN_FILE;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,6 +31,7 @@ import androidx.fragment.app.DialogFragment;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
@@ -48,11 +52,8 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static androidx.appcompat.app.AppCompatActivity.RESULT_OK;
-import static com.cylonid.nativealpha.util.Const.CODE_OPEN_FILE;
 
-
-public class ShortcutDialogFragment extends DialogFragment  {
+public class ShortcutDialogFragment extends DialogFragment {
 
     private WebApp webapp;
     private String base_url;
@@ -62,7 +63,8 @@ public class ShortcutDialogFragment extends DialogFragment  {
     private EditText uiTitle;
     private Thread faviconFetcherThread;
 
-    public ShortcutDialogFragment() {}
+    public ShortcutDialogFragment() {
+    }
 
     public static ShortcutDialogFragment newInstance(WebApp webapp) {
         ShortcutDialogFragment frag = new ShortcutDialogFragment();
@@ -93,8 +95,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
                 if (bitmap != null)
                     applyNewBitmapToDialog();
 
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 Toast toast = Toast.makeText(getActivity(), getString(R.string.icon_not_found), Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.TOP, 0, 100);
                 toast.show();
@@ -109,7 +110,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
 
         final View view = getLayoutInflater().inflate(R.layout.shortcut_dialog, null);
 
-        final AlertDialog dialog = new AlertDialog.Builder(getActivity())
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity())
                 .setView(view)
                 .setCancelable(false)
                 .setPositiveButton(android.R.string.ok, (dialog1, which) -> {
@@ -117,10 +118,11 @@ public class ShortcutDialogFragment extends DialogFragment  {
                     dismiss();
 
                 })
-                .setNegativeButton(android.R.string.cancel,  (dialog1, which) -> {
+                .setNegativeButton(android.R.string.cancel, (dialog1, which) -> {
                     dismiss();
-                })
-                .create();
+                });
+
+        final AlertDialog dialog = builder.create();
 
         uiTitle = (EditText) view.findViewById(R.id.websiteTitle);
         uiFavicon = (ImageView) view.findViewById(R.id.favicon);
@@ -148,11 +150,11 @@ public class ShortcutDialogFragment extends DialogFragment  {
         return dialog;
     }
 
-    private Bitmap loadBitmap(String strUrl)  {
+    private Bitmap loadBitmap(String strUrl) {
         Bitmap bitmap;
         try {
             URL url = new URL(strUrl);
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
             InputStream is = con.getInputStream();
             bitmap = BitmapFactory.decodeStream(is);
             if (bitmap == null || bitmap.getWidth() < Const.FAVICON_MIN_WIDTH)
@@ -164,6 +166,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
         }
         return bitmap;
     }
+
     private TreeMap<Integer, String> buildIconMap() {
         TreeMap<Integer, String> found_icons = new TreeMap<>();
         String host_part = base_url.replace("http://", "").replace("https://", "").replace("www.", "");
@@ -220,7 +223,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
     }
 
     public String[] fetchWebappData() {
-        String[] result = new String[] {null, null, null};
+        String[] result = new String[]{null, null, null};
         TreeMap<Integer, String> found_icons = buildIconMap();
 
         try {
@@ -320,7 +323,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
         faviconFetcherThread = new Thread(() -> {
             String[] webappdata = fetchWebappData();
             bitmap = loadBitmap(webappdata[Const.RESULT_IDX_FAVICON]);
-            requireActivity().runOnUiThread(()-> {
+            requireActivity().runOnUiThread(() -> {
 
                 applyNewBitmapToDialog();
                 setShortcutTitle(webappdata[Const.RESULT_IDX_TITLE]);
@@ -332,7 +335,9 @@ public class ShortcutDialogFragment extends DialogFragment  {
 
         new CountDownTimer(5000, 5000) {
             @Override
-            public void onTick(long millisUntilFinished) { }
+            public void onTick(long millisUntilFinished) {
+            }
+
             public void onFinish() {
                 faviconFetcherThread.interrupt();
             }
@@ -378,6 +383,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
         uiProgressBar.setVisibility(View.GONE);
         uiFavicon.setVisibility(View.VISIBLE);
     }
+
     private void showFailedMessage() {
         Toast toast = Toast.makeText(getActivity(), getString(R.string.icon_fetch_failed_line1, webapp.getTitle()) + getString(R.string.icon_fetch_failed_line2) + getString(R.string.icon_fetch_failed_line3), Toast.LENGTH_LONG);
         toast.setGravity(Gravity.TOP, 0, 100);
@@ -390,8 +396,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
             if (!shortcut_title.equals(""))
                 uiTitle.setText(shortcut_title);
 
-        }
-        else {
+        } else {
             uiTitle.setText(webapp.getTitle());
         }
         uiTitle.requestFocus();

@@ -43,6 +43,7 @@ public class AboutActivity extends AppCompatActivity {
         license.setTitle(getString(R.string.eula_content));
         return license;
     }
+
     Element showLicense() {
         Element license = new Element();
 
@@ -56,6 +57,7 @@ public class AboutActivity extends AppCompatActivity {
         return license;
 
     }
+
     Element showPayPal() {
         Element license = new Element();
 
@@ -81,7 +83,6 @@ public class AboutActivity extends AppCompatActivity {
         });
         return os;
     }
-
 
 
 //    Element getCopyRightsElement() {

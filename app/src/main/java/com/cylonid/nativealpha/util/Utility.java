@@ -2,17 +2,13 @@ package com.cylonid.nativealpha.util;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +27,6 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.cylonid.nativealpha.BuildConfig;
 import com.cylonid.nativealpha.R;
-import com.cylonid.nativealpha.WebViewActivity;
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.google.android.material.snackbar.Snackbar;
@@ -69,8 +64,7 @@ public final class Utility {
             if (webapp.getContainerId() != Const.NO_CONTAINER) {
                 webview_class = Class.forName(apk_id + ".__WebViewActivity_" + webapp.getContainerId());
 
-            }
-            else {
+            } else {
                 webview_class = Class.forName(apk_id + ".WebViewActivity");
             }
         } catch (ClassNotFoundException e) {
@@ -83,6 +77,7 @@ public final class Utility {
 
         return intent;
     }
+
     public static void deleteShortcuts(List<Integer> removableWebAppIds) {
         ShortcutManager manager = App.getAppContext().getSystemService(ShortcutManager.class);
         for (ShortcutInfo info : manager.getPinnedShortcuts()) {
@@ -98,8 +93,7 @@ public final class Utility {
         view.setClickable(enabled);
         if (enabled) {
             view.setAlpha(1.0f);
-        }
-        else {
+        } else {
             view.setAlpha(0.75f);
         }
 
@@ -112,8 +106,7 @@ public final class Utility {
         }
     }
 
-    public static Long getTimeInSeconds()
-    {
+    public static Long getTimeInSeconds() {
         return System.currentTimeMillis() / 1000;
     }
 
@@ -121,11 +114,11 @@ public final class Utility {
     public static SimpleDateFormat getHourMinFormat() {
         return new SimpleDateFormat("HH:mm");
     }
+
     @SuppressLint("SimpleDateFormat")
     public static SimpleDateFormat getDayHourMinuteSecondsFormat() {
-        return new SimpleDateFormat(    "EEE, d MMM yyyy HH:mm:ss Z");
+        return new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
     }
-
 
 
     public static Calendar convertStringToCalendar(String str) {
@@ -163,14 +156,13 @@ public final class Utility {
 //        System.out.println("Is after low: " + (middle.after(low)));
 
 
-
     public static void Assert(boolean condition, String message) {
         if (!condition) {
             throw new AssertionError(message);
         }
     }
 
-    public static void personalizeToolbar(AppCompatActivity a)  {
+    public static void personalizeToolbar(AppCompatActivity a) {
         Toolbar toolbar = a.findViewById(R.id.toolbar);
         toolbar.setLogo(R.mipmap.native_alpha_white);
         @StringRes int appName = !BuildConfig.FLAVOR.equals("extended") ? R.string.app_name : R.string.app_name_plus;
@@ -208,7 +200,7 @@ public final class Utility {
         }
     }
 
-    public static void writeFileOnInternalStorage(Context mcoContext, String sFileName, String sBody){
+    public static void writeFileOnInternalStorage(Context mcoContext, String sFileName, String sBody) {
 
         try {
             File gpxfile = new File(mcoContext.getExternalFilesDir(null), sFileName);
@@ -216,7 +208,7 @@ public final class Utility {
             writer.append(sBody);
             writer.flush();
             writer.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -274,10 +266,9 @@ public final class Utility {
             (
                     @NonNull final Context context,
                     @AttrRes final int attributeColor
-            )
-    {
+            ) {
         final TypedValue value = new TypedValue();
-        context.getTheme ().resolveAttribute (attributeColor, value, true);
+        context.getTheme().resolveAttribute(attributeColor, value, true);
         return value.data;
     }
 
