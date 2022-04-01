@@ -94,7 +94,7 @@
                             android:text="@string/sandbox"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-                        <Switch
+                        <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switchSandbox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
 
                     </LinearLayout>
 
-                    <Switch
+                    <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switchOverrideGlobal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -276,6 +276,7 @@
                                 android:id="@+id/layoutTimeSpanDarkMode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:baselineAligned="false"
                                 android:orientation="horizontal"
                                 android:visibility="visible">
 
@@ -635,7 +636,7 @@
                                         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                                 </LinearLayout>
 
-                                <androidx.appcompat.widget.SwitchCompat
+                                <com.google.android.material.switchmaterial.SwitchMaterial
                                     android:id="@+id/switchIgnoreSSLErrors"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -660,8 +661,10 @@
 
                 <Button
                     android:id="@+id/btnCancel"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
                     android:text="@android:string/cancel" />
 
                 <Button

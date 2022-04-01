@@ -12,6 +12,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
+        android:autofillHints="@string/url"
         android:hint="@string/url"
         android:inputType="textUri" />
 

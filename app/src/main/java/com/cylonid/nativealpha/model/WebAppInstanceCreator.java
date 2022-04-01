@@ -4,11 +4,9 @@ import com.google.gson.InstanceCreator;
 
 import java.lang.reflect.Type;
 
-public class WebAppInstanceCreator implements InstanceCreator<WebApp>
-{
+public class WebAppInstanceCreator implements InstanceCreator<WebApp> {
     @Override
-    public WebApp createInstance(Type type)
-    {
+    public WebApp createInstance(Type type) {
         return new WebApp("", Integer.MAX_VALUE);
     }
 }
