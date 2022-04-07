@@ -12,13 +12,13 @@ android {
             delete fileTree('src/main') {
                 include '**/AndroidManifest.xml'
             }
-            ant.move(file: 'src/main/AndroidManifest_original.xml', tofile:'src/main/AndroidManifest.xml')
+            ant.move(file: 'src/main/AndroidManifest_original.xml', tofile: 'src/main/AndroidManifest.xml')
 
         }
     }
 
-    compileSdkVersion 31
-    buildToolsVersion "31.0.0"
+    compileSdkVersion 32
+    buildToolsVersion "32.1.0-rc1"
     splits {
         abi {
             enable true
@@ -46,7 +46,7 @@ android {
     defaultConfig {
         applicationId "com.cylonid.nativealpha"
         minSdkVersion 26
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 1200
         versionName "1.2.0"
 
@@ -113,19 +113,20 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
-    implementation 'org.jsoup:jsoup:1.14.1'
+    implementation 'com.mikhaellopez:circularprogressbar:3.1.0'
+    implementation 'org.jsoup:jsoup:1.14.3'
     implementation 'org.adblockplus:adblock-android-webview:5.0.0'
     implementation 'com.github.ihimanshurawat:Hasher:1.2'
+    implementation "com.google.android.material:material:1.5.0"
     implementation 'androidx.navigation:navigation-fragment:2.4.1'
     implementation 'androidx.navigation:navigation-ui:2.4.1'
-    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'io.github.medyo:android-about-page:2.0.0'
     implementation 'androidx.webkit:webkit:1.4.0'
     implementation 'com.jakewharton:process-phoenix:2.1.2'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.3.1'
-    testImplementation 'org.json:json:20210307'
+    testImplementation 'org.json:json:20220320'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-web:3.4.0'
     androidTestImplementation 'androidx.test:rules:1.4.0'
@@ -133,16 +134,16 @@ dependencies {
     androidTestUtil 'androidx.test:orchestrator:1.4.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation "com.mikepenz:aboutlibraries:10.0.0"
-    implementation "com.mikepenz:aboutlibraries-core:10.0.0"
+    implementation 'com.mikepenz:aboutlibraries:10.1.0'
+    implementation 'com.mikepenz:aboutlibraries-core:10.1.0'
     implementation 'pub.devrel:easypermissions:3.0.0'
 }
 
 int NUM_OF_CONTAINERS = 8
 String placeholder = "<!--Placeholder-->"
 
-0.upto(NUM_OF_CONTAINERS-1) { int i ->
-    def trTask = tasks.register( "createWebViewclass${i}", Copy ) {
+0.upto(NUM_OF_CONTAINERS - 1) { int i ->
+    def trTask = tasks.register("createWebViewclass${i}", Copy) {
         from 'src/main/java/com/cylonid/nativealpha/WebViewActivity.java'
         into 'src/main/java/com/cylonid/nativealpha'
         filter {
@@ -156,12 +157,12 @@ String placeholder = "<!--Placeholder-->"
 }
 
 def renameManifest = tasks.register("renameManifest") {
-    ant.move(file: 'src/main/AndroidManifest.xml', tofile:'src/main/AndroidManifest_original.xml')
+    ant.move(file: 'src/main/AndroidManifest.xml', tofile: 'src/main/AndroidManifest_original.xml')
 }
 preBuild.dependsOn renameManifest
 
 
-def generateWebViewActivities = tasks.register( "extendAndroidManifest", Copy ) {
+def generateWebViewActivities = tasks.register("extendAndroidManifest", Copy) {
     from 'src/main/AndroidManifest_original.xml'
     into 'src/main'
 

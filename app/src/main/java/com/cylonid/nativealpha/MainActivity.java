@@ -1,7 +1,8 @@
 package com.cylonid.nativealpha;
 
+import static android.widget.LinearLayout.HORIZONTAL;
+
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -12,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,11 +22,11 @@ import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
-
-import static android.widget.LinearLayout.HORIZONTAL;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         Utility.personalizeToolbar(this);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> buildAddWebsiteDialog(getString(R.string.add_webapp)));
-
 
     }
 
@@ -74,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void buildImportSuccessDialog() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
 
-        String message =  getString(R.string.import_success_dialog_txt2) + "\n\n" + getString(R.string.import_success_dialog_txt3);
+        String message = getString(R.string.import_success_dialog_txt2) + "\n\n" + getString(R.string.import_success_dialog_txt3);
 
         builder.setMessage(message);
         builder.setCancelable(false);
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 WebApp webapp = webapps.get(i);
                 boolean last_webapp = i == webapps.size() - 1;
                 Spanned msg = Html.fromHtml(getString(R.string.restore_shortcut, webapp.getTitle()), Html.FROM_HTML_MODE_COMPACT);
-                final AlertDialog addition_dialog = new AlertDialog.Builder(this)
+                final AlertDialog addition_dialog = new MaterialAlertDialogBuilder(this)
                         .setMessage(msg)
                         .setPositiveButton(android.R.string.yes, (dialog1, which) -> {
                             ShortcutDialogFragment frag = ShortcutDialogFragment.newInstance(webapp);
@@ -104,7 +103,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-        builder.setNegativeButton(getString(android.R.string.no),  (dialog, id) -> { });
+        builder.setNegativeButton(getString(android.R.string.no), (dialog, id) -> {
+        });
         builder.create().show();
     }
 
@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
         return btn;
     }
+
     private void addRow(final WebApp webapp) {
         int row_height = (int) getResources().getDimension(R.dimen.line_height);
         int transparent_color = ResourcesCompat.getColor(getResources(), R.color.transparent, null);
@@ -182,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(Const.INTENT_WEBAPPID, webapp.getID());
             intent.setAction(Intent.ACTION_VIEW);
             startActivity(intent);
-
         });
 
         ImageButton btn_delete = generateImageButton("btnDelete", R.drawable.ic_delete_black_24dp, webapp.getID(), ll_row);
@@ -196,9 +196,9 @@ public class MainActivity extends AppCompatActivity {
     private void buildAddWebsiteDialog(String title) {
         final View inflated_view = getLayoutInflater().inflate(R.layout.add_website_dialogue, null);
         final EditText url = (EditText) inflated_view.findViewById(R.id.websiteUrl);
-        final Switch create_shortcut = (Switch) inflated_view.findViewById(R.id.switchCreateShortcut);
+        final SwitchMaterial create_shortcut = (SwitchMaterial) inflated_view.findViewById(R.id.switchCreateShortcut);
 
-        final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+        final AlertDialog dialog = new MaterialAlertDialogBuilder(MainActivity.this)
                 .setView(inflated_view)
                 .setTitle(title)
                 .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick
@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void buildDeleteItemDialog(final int ID) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
         builder.setMessage(getString(R.string.delete_question));
         builder.setPositiveButton(getString(android.R.string.yes), (dialog, id) -> {
             WebApp webapp = DataManager.getInstance().getWebApp(ID);

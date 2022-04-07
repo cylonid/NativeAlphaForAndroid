@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="settings"
             type="com.cylonid.nativealpha.model.GlobalSettings" />
@@ -13,14 +14,15 @@
         android:id="@+id/layoutSettingsActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:backgroundTint="?android:colorBackground"
         tools:context=".WebAppSettingsActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/margin_activity"
-            android:weightSum="100"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="100">
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -51,7 +53,6 @@
                         android:layout_height="30dp" />
 
 
-
                     <LinearLayout
                         android:id="@+id/sectionGeneral"
                         android:layout_width="match_parent"
@@ -77,6 +78,7 @@
 
                         <Button
                             android:id="@+id/btnGlobalWebApp"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/global_web_app_settings" />
@@ -104,35 +106,35 @@
 
                         </LinearLayout>
 
-                        <Switch
+                        <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switchGlobalCache"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:checked="@={settings.clearCache}"
                             android:text="@string/clear_cache_after_usage" />
 
-                        <Switch
+                        <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switchGlobalMultiTouchReload"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:checked="@={settings.multitouchReload}"
                             android:text="@string/global_settings_multitouch_reload" />
 
-                        <Switch
+                        <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switchGlobalMultiTouch"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:checked="@={settings.twoFingerMultitouch}"
                             android:text="@string/use_two_finger_swipes_for_browser_forward_and_backward_navigation" />
 
-                        <Switch
+                        <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switchGlobalMultiTouch3Fingers"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:checked="@={settings.threeFingerMultitouch}"
                             android:text="@string/use_three_finger_swipes_to_switch_between_web_apps_experimental" />
 
-                        <Switch
+                        <com.google.android.material.switchmaterial.SwitchMaterial
                             android:id="@+id/switchShowProgressbar"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -160,12 +162,14 @@
 
                         <Button
                             android:id="@+id/btnExportSettings"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/export_settings_web_apps" />
 
                         <Button
                             android:id="@+id/btnImportSettings"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/import_settings_web_apps" />
@@ -183,8 +187,10 @@
 
                 <Button
                     android:id="@+id/btnCancel"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:text="@android:string/cancel" />
 
                 <Button

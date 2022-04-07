@@ -1,5 +1,7 @@
 package com.cylonid.nativealpha;
 
+import static com.cylonid.nativealpha.util.Const.CODE_OPEN_FILE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -14,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowInsets;
@@ -48,6 +49,7 @@ import com.cylonid.nativealpha.model.SandboxManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
@@ -61,7 +63,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import pub.devrel.easypermissions.EasyPermissions;
-import static com.cylonid.nativealpha.util.Const.CODE_OPEN_FILE;
+import timber.log.Timber;
 
 public class WebViewActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
@@ -106,11 +108,11 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 String packageName = this.getPackageName();
 
                 // Sandboxed Web App is openend in main process using an old shortcut
-                if(packageName.equals(processName) && webapp.isUseContainer()) {
+                if (packageName.equals(processName) && webapp.isUseContainer()) {
                     ProcessPhoenix.triggerRebirth(this, Utility.createWebViewIntent(webapp, this));
                 }
 
-                if (!packageName.equals(processName)  & SandboxManager.getInstance() != null) {
+                if (!packageName.equals(processName) & SandboxManager.getInstance() != null) {
                     if (SandboxManager.getInstance().isSandboxUsedByAnotherApp(webapp)) {
                         SandboxManager.getInstance().unregisterWebAppFromSandbox(webapp.getContainerId());
                         ProcessPhoenix.triggerRebirth(this, Utility.createWebViewIntent(webapp, this));
@@ -127,7 +129,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             setContentView(R.layout.full_webview);
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
-            if(webapp.isKeepAwake()) {
+            if (webapp.isKeepAwake()) {
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
 
@@ -368,7 +370,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         }
         if (reload_handler != null) {
             reload_handler.removeCallbacksAndMessages(null);
-            Log.d("CLEANUP", "Stopped reload handler");
+            Timber.d("Stopped reload handler");
         }
     }
 
@@ -377,7 +379,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             currently_reloading = true;
             wv.reload();
             reload();
-        }, webapp.getTimeAutoreload() * 1000);
+        }, webapp.getTimeAutoreload() * 1000L);
     }
 
     public WebView getWebView() {
@@ -395,7 +397,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     private void loadURL(final WebView view, final String url) {
         final WebApp webApp = DataManager.getInstance().getWebApp(webappID);
         if (url.contains("http://") && !webApp.isAllowHttp()) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewActivity.this);
+            final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(WebViewActivity.this);
 
             builder.setTitle(getString(R.string.no_https_dialog_title));
             builder.setMessage(getString(R.string.no_https_dialog_msg));
@@ -411,16 +413,16 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             view.loadUrl(url, CUSTOM_HEADERS);
 
     }
+
     private void hideSystemBars() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             getWindow().setDecorFitsSystemWindows(false);
             WindowInsetsController controller = getWindow().getInsetsController();
-            if(controller != null) {
+            if (controller != null) {
                 controller.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
                 controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
             }
-        }
-        else {
+        } else {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -438,6 +440,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
+
     @FunctionalInterface
     interface PermissionGrantedCallback {
         public void execute();
@@ -524,7 +527,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 return;
             }
 
-            new AlertDialog.Builder(WebViewActivity.this).setTitle(getPermissionRequestStringResource("dialog_permission_", resId, "_title"))
+            new MaterialAlertDialogBuilder(WebViewActivity.this).setTitle(getPermissionRequestStringResource("dialog_permission_", resId, "_title"))
                     .setMessage(getPermissionRequestStringResource("dialog_permission_", resId, "_txt"))
                     .setPositiveButton(android.R.string.yes, (dialog, id) -> {
                         enablePermissionBoolOnWebApp(successCallback);
@@ -638,9 +641,9 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            if(url.equals("about:blank")) {
+            if (url.equals("about:blank")) {
                 String langExtension;
-                switch(Locale.getDefault().getLanguage()) {
+                switch (Locale.getDefault().getLanguage()) {
                     case "de":
                         langExtension = "de";
                         break;
@@ -675,7 +678,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 return;
             }
 
-            final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewActivity.this);
+            final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(WebViewActivity.this);
 
             String message = getString(R.string.ssl_error_msg_line1) + " ";
             switch (error.getPrimaryError()) {
