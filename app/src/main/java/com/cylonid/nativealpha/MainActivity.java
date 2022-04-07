@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> buildAddWebsiteDialog(getString(R.string.add_webapp)));
 
-
     }
 
     @Override
@@ -184,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(Const.INTENT_WEBAPPID, webapp.getID());
             intent.setAction(Intent.ACTION_VIEW);
             startActivity(intent);
-
         });
 
         ImageButton btn_delete = generateImageButton("btnDelete", R.drawable.ic_delete_black_24dp, webapp.getID(), ll_row);

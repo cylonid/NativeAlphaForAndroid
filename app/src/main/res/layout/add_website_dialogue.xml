@@ -6,6 +6,7 @@
 
     <EditText
         android:id="@+id/websiteUrl"
+        style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"

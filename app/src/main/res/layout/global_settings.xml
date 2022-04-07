@@ -14,6 +14,7 @@
         android:id="@+id/layoutSettingsActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:backgroundTint="?android:colorBackground"
         tools:context=".WebAppSettingsActivity">
 
         <LinearLayout
@@ -77,6 +78,7 @@
 
                         <Button
                             android:id="@+id/btnGlobalWebApp"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/global_web_app_settings" />
@@ -160,12 +162,14 @@
 
                         <Button
                             android:id="@+id/btnExportSettings"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/export_settings_web_apps" />
 
                         <Button
                             android:id="@+id/btnImportSettings"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/import_settings_web_apps" />

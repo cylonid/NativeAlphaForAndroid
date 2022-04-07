@@ -57,6 +57,7 @@
 
                     <Button
                         android:id="@+id/btnRecreateShortcut"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/re_create_shortcut" />
@@ -70,6 +71,7 @@
 
                     <EditText
                         android:id="@+id/txtWebAppName"
+                        style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="@dimen/settings_bottom"

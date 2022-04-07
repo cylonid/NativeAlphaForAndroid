@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowInsets;
@@ -64,6 +63,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import pub.devrel.easypermissions.EasyPermissions;
+import timber.log.Timber;
 
 public class WebViewActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
@@ -370,7 +370,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         }
         if (reload_handler != null) {
             reload_handler.removeCallbacksAndMessages(null);
-            Log.d("CLEANUP", "Stopped reload handler");
+            Timber.d("Stopped reload handler");
         }
     }
 
@@ -379,7 +379,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             currently_reloading = true;
             wv.reload();
             reload();
-        }, webapp.getTimeAutoreload() * 1000);
+        }, webapp.getTimeAutoreload() * 1000L);
     }
 
     public WebView getWebView() {
