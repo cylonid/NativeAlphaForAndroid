@@ -25,6 +25,7 @@ import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
@@ -122,9 +123,9 @@ public class ShortcutDialogFragment extends DialogFragment  {
                 })
                 .create();
 
-        uiTitle = (EditText) view.findViewById(R.id.websiteTitle);
-        uiFavicon = (ImageView) view.findViewById(R.id.favicon);
-        uiProgressBar = (CircularProgressBar) view.findViewById(R.id.circularProgressBar);
+        uiTitle = view.findViewById(R.id.websiteTitle);
+        uiFavicon = view.findViewById(R.id.favicon);
+        uiProgressBar = view.findViewById(R.id.circularProgressBar);
 
         Button btnCustomIcon = view.findViewById(R.id.btnCustomIcon);
         btnCustomIcon.setOnClickListener(v -> {
@@ -398,8 +399,10 @@ public class ShortcutDialogFragment extends DialogFragment  {
     }
 
     private void applyNewBaseUrl(String url) {
-        if (url != null)
+        if (url != null) {
             webapp.setBaseUrl(url);
+            DataManager.getInstance().saveWebAppData();
+        }
 
     }
 

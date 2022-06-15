@@ -1,19 +1,15 @@
 package com.cylonid.nativealpha.model;
 
 import android.content.SharedPreferences;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Base64InputStream;
 import android.util.Base64OutputStream;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
 import com.cylonid.nativealpha.R;
 import com.cylonid.nativealpha.util.App;
-import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.InvalidChecksumException;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.gson.Gson;
@@ -28,15 +24,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.IntStream;
 
 import static android.content.Context.MODE_PRIVATE;
-import androidx.annotation.NonNull;
-
 
 
 public class DataManager {

@@ -51,7 +51,6 @@ import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -60,7 +59,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import pub.devrel.easypermissions.EasyPermissions;
@@ -134,7 +132,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
 
-            String url = webapp.getLoadableUrl();
+            String url = webapp.getBaseUrl();
 
             wv = findViewById(R.id.webview);
             progressBar = findViewById(R.id.progressBar);
@@ -257,9 +255,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     WebApp webapp = DataManager.getInstance().getWebApp(webappID);
-                    if (webapp.getUrlOnFirstPageload() == null)
-                        DataManager.getInstance().getWebApp(webappID).saveUrlOnFirstPageLoad(wv.getUrl());
-
+                    if (webapp.getUrlOnFirstPageload() == null) {
+                        DataManager.getInstance().getWebApp(webappID).setUrlOnFirstPageload(wv.getUrl());
+                        DataManager.getInstance().saveWebAppData();
+                    }
                     if (webapp.isRequestDesktop())
                         return false;
 
@@ -332,7 +331,8 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         else {
             loadURL(wv, webapp.getBaseUrl());
             quit_on_next_backpress = true;
-            DataManager.getInstance().getWebApp(webappID).saveUrlOnFirstPageLoad(wv.getUrl());
+            DataManager.getInstance().getWebApp(webappID).setUrlOnFirstPageload(wv.getUrl());
+            DataManager.getInstance().saveWebAppData();
         }
         last_onbackpress_url = wv.getUrl();
 
@@ -360,8 +360,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         super.onPause();
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
         if (webapp != null) {
-            if (webapp.isRestorePage())
-                webapp.saveCurrentUrl(wv.getUrl());
             if (webapp.isClearCache() || DataManager.getInstance().getSettings().isClearCache())
                 wv.clearCache(true);
 
@@ -406,7 +404,8 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             builder.setMessage(getString(R.string.no_https_dialog_msg));
             builder.setIcon(android.R.drawable.ic_dialog_alert);
             builder.setPositiveButton(getString(R.string.no_https_dialog_accept), (dialog, id) -> {
-                webApp.allowHTTP();
+                webApp.setAllowHttp(true);
+                DataManager.getInstance().saveWebAppData();
                 view.loadUrl(url, CUSTOM_HEADERS);
             });
             builder.setNegativeButton(getString(android.R.string.cancel), (dialog, id) -> finish());
@@ -445,7 +444,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     }
     @FunctionalInterface
     interface PermissionGrantedCallback {
-        public void execute();
+        void execute();
     }
 
     private void enablePermissionBoolOnWebApp(PermissionGrantedCallback successCallback) {

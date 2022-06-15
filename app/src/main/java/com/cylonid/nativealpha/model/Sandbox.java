@@ -1,10 +1,10 @@
 package com.cylonid.nativealpha.model;
 
 public class Sandbox {
-    private int sIndex;
+    private final int sIndex;
     private String baseUrl;
     private int currently_registered_webapp = -1;
-    private static String SANDBOX_NO_BASE_URL_SET = "SANDBOX_NO_BASE_URL";
+    private static final String SANDBOX_NO_BASE_URL_SET = "SANDBOX_NO_BASE_URL";
 
 
     public Sandbox(int sIndex) {

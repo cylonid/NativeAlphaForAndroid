@@ -1,7 +1,6 @@
 package com.cylonid.nativealpha;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -195,8 +194,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void buildAddWebsiteDialog(String title) {
         final View inflated_view = getLayoutInflater().inflate(R.layout.add_website_dialogue, null);
-        final EditText url = (EditText) inflated_view.findViewById(R.id.websiteUrl);
-        final Switch create_shortcut = (Switch) inflated_view.findViewById(R.id.switchCreateShortcut);
+        final EditText url = inflated_view.findViewById(R.id.websiteUrl);
+        final Switch create_shortcut = inflated_view.findViewById(R.id.switchCreateShortcut);
 
         final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
                 .setView(inflated_view)
@@ -238,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
             WebApp webapp = DataManager.getInstance().getWebApp(ID);
             if (webapp != null) {
                 webapp.markInactive();
+                DataManager.getInstance().saveWebAppData();
             }
             mainScreen.removeAllViews();
             addActiveWebAppsToUI();
