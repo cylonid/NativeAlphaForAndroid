@@ -51,6 +51,7 @@ import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -59,6 +60,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import pub.devrel.easypermissions.EasyPermissions;
 import static com.cylonid.nativealpha.util.Const.CODE_OPEN_FILE;
@@ -141,9 +144,11 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 wv = findViewById(R.id.adblockwebview);
                 wv.setVisibility(View.VISIBLE);
             }
-
+            String fieldName = Stream.of(WebViewActivity.class.getDeclaredFields()).filter(f -> f.getType() == WebView.class).findFirst().orElseThrow(null).getName();
+            String uaString = wv.getSettings().getUserAgentString().replace(fieldName, "NAlphaChrm");
+            wv.getSettings().setUserAgentString(uaString);
             if (webapp.isUseCustomUserAgent()) {
-                wv.getSettings().setUserAgentString(webapp.getUserAgent());
+                wv.getSettings().setUserAgentString(webapp.getUserAgent().replace("\0", "").replace("\n", "").replace("\r", ""));
             }
 
             if (webapp.isShowFullscreen()) {
