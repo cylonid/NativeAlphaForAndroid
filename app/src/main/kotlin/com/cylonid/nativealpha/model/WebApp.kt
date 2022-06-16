@@ -190,11 +190,6 @@ class WebApp {
         }
     }
 
-    fun onSwitchRestorePageChanged(mSwitch: CompoundButton, isChecked: Boolean) {
-        val textTimeout = mSwitch.rootView.findViewById<EditText>(R.id.textTimeout)
-        textTimeout.isEnabled = isChecked
-    }
-
     fun onSwitchUserAgentChanged(mSwitch: CompoundButton, isChecked: Boolean) {
         val txt = mSwitch.rootView.findViewById<EditText>(R.id.textUserAgent)
         val switchDesktopVersion = mSwitch.rootView.findViewById<Switch>(R.id.switchDesktopSite)

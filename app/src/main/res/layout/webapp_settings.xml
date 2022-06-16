@@ -483,55 +483,6 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/sectionRestoreOpenedPage"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/settings_bottom"
-                            android:divider="@drawable/empty_10dp_vertical"
-                            android:orientation="vertical"
-                            android:showDividers="middle"
-                            android:visibility="gone">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/remove_divider"
-                                android:text="@string/webapp_section_restorepage"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                                android:textStyle="bold" />
-
-                            <Switch
-                                android:id="@+id/switchRestorePage"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:checked="@={webapp.restorePage}"
-                                android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchRestorePageChanged(switch, checked)}"
-                                android:text="@string/restore_last_opened_page" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:visibility="visible">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/timeout_for_page_restore_in_minutes"
-                                    android:textColor="?android:attr/textColorPrimary" />
-
-                                <EditText
-                                    android:id="@+id/textTimeout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif"
-                                    android:inputType="number"
-                                    android:text="@={`` + webapp.timeoutLastUsedUrl}" />
-
-                            </LinearLayout>
-                        </LinearLayout>
-
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
