@@ -11,13 +11,14 @@ class WebApp {
     val ID: Int
     var baseUrl: String
     var title: String
+    var isActiveEntry = true
     var isOverrideGlobalSettings = true
+
     var isOpenUrlExternal = false
-    var isAllowCookies = false
+    var isAllowCookies = true
     var isAllowThirdPartyCookies = false
     var isRestorePage = false
-    var isAllowJs = false
-    var isActiveEntry = false
+    var isAllowJs = true
     var isRequestDesktop = false
     var isClearCache = false
     var isUseAdblock = false
