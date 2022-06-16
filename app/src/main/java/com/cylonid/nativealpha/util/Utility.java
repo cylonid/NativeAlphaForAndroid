@@ -225,7 +225,7 @@ public final class Utility {
 
         Snackbar snackbar = Snackbar.make(activity.findViewById(android.R.id.content), msg, duration);
 
-        snackbar.setAction(App.getAppContext().getString(android.R.string.ok), (View.OnClickListener) v -> snackbar.dismiss());
+        snackbar.setAction(App.getAppContext().getString(android.R.string.ok), v -> snackbar.dismiss());
 
         View snackBarView = snackbar.getView();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -239,7 +239,7 @@ public final class Utility {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
             snackBarView.setForceDarkAllowed(false);
 
-        TextView tv = (TextView) snackBarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        TextView tv = snackBarView.findViewById(com.google.android.material.R.id.snackbar_text);
         tv.setMaxLines(10);
         snackbar.setBackgroundTint(ResourcesCompat.getColor(App.getAppContext().getResources(), R.color.snackbar_background, null));
         snackbar.setTextColor(Color.BLACK);

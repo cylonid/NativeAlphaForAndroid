@@ -10,7 +10,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath 'com.android.tools.build:gradle:7.2.1'
         classpath "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin:10.0.0"
         
 

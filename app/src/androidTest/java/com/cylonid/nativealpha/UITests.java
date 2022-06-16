@@ -56,39 +56,39 @@ public class UITests {
         onView(withId(R.id.switchCreateShortcut)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
         assertEquals(DataManager.getInstance().getWebApp(0).getBaseUrl(), "https://github.com");
-        onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
+        onView(allOf(withTagValue(is("btnOpenWebview0")), isDisplayed())).perform(click());
     }
 
     @Test
     public void startWebView() {
         initSingleWebsite("https://twitter.com");
-        onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
+        onView(allOf(withTagValue(is("btnOpenWebview0")), isDisplayed())).perform(click());
         onView(withId(R.id.webview)).check(matches(isDisplayed()));
     }
 
     @Test(expected = NoMatchingViewException.class)
     public void deleteWebsite() {
         initSingleWebsite("https://twitter.com");
-        onView(allOf(withTagValue(is((Object) "btnDelete0")))).perform(click());
+        onView(allOf(withTagValue(is("btnDelete0")))).perform(click());
         TestUtils.alertDialogAccept();
 
-        onView(allOf(withTagValue(is((Object) "btnDelete0")))).check(matches(not(isDisplayed()))); //Throws exception
+        onView(allOf(withTagValue(is("btnDelete0")))).check(matches(not(isDisplayed()))); //Throws exception
     }
 
     @Test
     public void changeWebAppSettings() {
         initSingleWebsite("https://whatismybrowser.com/detect/are-cookies-enabled");
-        onView(allOf(withTagValue(is((Object) "btnSettings0")))).perform(click());
+        onView(allOf(withTagValue(is("btnSettings0")))).perform(click());
         onView(withId(R.id.switchCookies)).perform(scrollTo()).perform(click());
         onView(withId(R.id.btnSave)).perform(click());
-        onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
+        onView(allOf(withTagValue(is("btnOpenWebview0")), isDisplayed())).perform(click());
         onWebView(Matchers.allOf(withId(R.id.webview))).withNoTimeout().withElement(findElement(Locator.ID, "detected_value")).check(webMatches(getText(), containsString("No")));
 
     }
     @Test
     public void badSSLAccept() {
         initSingleWebsite("https://untrusted-root.badssl.com/");
-        onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
+        onView(allOf(withTagValue(is("btnOpenWebview0")), isDisplayed())).perform(click());
         TestUtils.waitForElementWithText(R.string.load_anyway);
         onView(withText(R.string.load_anyway)).perform(click());
         onWebView(Matchers.allOf(withId(R.id.webview))).withNoTimeout().withElement(findElement(Locator.ID, "content")).check(webMatches(getText(), containsString("untrusted-root")));
@@ -97,7 +97,7 @@ public class UITests {
     @Test(expected = java.lang.RuntimeException.class)
     public void badSSLDismiss() {
         initSingleWebsite("https://untrusted-root.badssl.com/");
-        onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
+        onView(allOf(withTagValue(is("btnOpenWebview0")), isDisplayed())).perform(click());
         TestUtils.waitForElementWithText(android.R.string.cancel);
         onView(withText(android.R.string.cancel)).perform(click());
         onWebView(Matchers.allOf(withId(R.id.webview))).withTimeout(3, TimeUnit.SECONDS).withElement(findElement(Locator.ID, "content")).check(webMatches(getText(), containsString("untrusted-root")));
@@ -107,12 +107,12 @@ public class UITests {
     @Test
     public void openHTTPSite() {
         initSingleWebsite("http://annozone.de");
-        onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
+        onView(allOf(withTagValue(is("btnOpenWebview0")), isDisplayed())).perform(click());
         TestUtils.waitForElementWithText(android.R.string.cancel);
         onView(withId(android.R.id.button2)).perform(scrollTo()).perform(click());
 //        onView(isRoot()).perform(ViewActions.pressBack());
 
-        onView(allOf(withTagValue(is((Object) "btnOpenWebview0")), isDisplayed())).perform(click());
+        onView(allOf(withTagValue(is("btnOpenWebview0")), isDisplayed())).perform(click());
         TestUtils.waitForElementWithText(android.R.string.cancel);
         onView(withId(android.R.id.button1)).perform(scrollTo()).perform(click());
         onWebView(Matchers.allOf(withId(R.id.webview))).withTimeout(6, TimeUnit.SECONDS).check(webMatches(getCurrentUrl(), containsString("annozone")));
