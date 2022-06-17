@@ -155,6 +155,7 @@ public class WebAppSettingsActivity extends AppCompatActivity {
         findViewById(R.id.txtWebAppName).setVisibility(View.GONE);
         findViewById(R.id.switchOverrideGlobal).setVisibility(View.GONE);
         findViewById(R.id.sectionSSL).setVisibility(View.GONE);
+        findViewById(R.id.sectionSandbox).setVisibility(View.GONE);
         findViewById(R.id.labelTitle).setVisibility(View.GONE);
         TextView page_title = findViewById(R.id.labelPageTitle);
         page_title.setText(getString(R.string.global_web_app_settings));
