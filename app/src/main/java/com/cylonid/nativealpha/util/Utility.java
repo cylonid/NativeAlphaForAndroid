@@ -1,6 +1,7 @@
 package com.cylonid.nativealpha.util;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -14,11 +15,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
@@ -91,6 +94,16 @@ public final class Utility {
                 manager.disableShortcuts(Arrays.asList(info.getId()), App.getAppContext().getString(R.string.webapp_already_deleted));
             }
         }
+    }
+
+    public static void showToast(Activity a, String text) {
+        showToast(a, text, Toast.LENGTH_LONG);
+    }
+
+    public static void showToast(Activity a, String text, int toastDisplayDuration) {
+        Toast toast = Toast.makeText(a, text, toastDisplayDuration);
+        toast.setGravity(Gravity.TOP, 0, 100);
+        toast.show();
     }
 
     public static void setViewAndChildrenEnabled(View view, boolean enabled) {

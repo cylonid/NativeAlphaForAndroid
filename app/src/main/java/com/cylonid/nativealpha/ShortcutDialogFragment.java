@@ -2,6 +2,7 @@ package com.cylonid.nativealpha;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -9,7 +10,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +27,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
+import com.cylonid.nativealpha.util.App;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
@@ -96,9 +97,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
 
             }
             catch(IOException e) {
-                Toast toast = Toast.makeText(getActivity(), getString(R.string.icon_not_found), Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP, 0, 100);
-                toast.show();
+                Utility.showToast(requireActivity(), getString(R.string.icon_not_found), Toast.LENGTH_SHORT);
                 e.printStackTrace();
             }
         }
@@ -110,7 +109,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
 
         final View view = getLayoutInflater().inflate(R.layout.shortcut_dialog, null);
 
-        final AlertDialog dialog = new AlertDialog.Builder(getActivity())
+        final AlertDialog dialog = new AlertDialog.Builder(requireActivity())
                 .setView(view)
                 .setCancelable(false)
                 .setPositiveButton(android.R.string.ok, (dialog1, which) -> {
@@ -167,6 +166,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
     }
     private TreeMap<Integer, String> buildIconMap() {
         TreeMap<Integer, String> found_icons = new TreeMap<>();
+        if(base_url == null || base_url.equals("")) return found_icons;
         String host_part = base_url.replace("http://", "").replace("https://", "").replace("www.", "");
 
         //No suitable icon
@@ -321,13 +321,15 @@ public class ShortcutDialogFragment extends DialogFragment  {
         faviconFetcherThread = new Thread(() -> {
             String[] webappdata = fetchWebappData();
             bitmap = loadBitmap(webappdata[Const.RESULT_IDX_FAVICON]);
-            requireActivity().runOnUiThread(()-> {
+            if (isAdded()) {
+                requireActivity().runOnUiThread(() -> {
 
-                applyNewBitmapToDialog();
-                setShortcutTitle(webappdata[Const.RESULT_IDX_TITLE]);
-                applyNewBaseUrl(webappdata[Const.RESULT_IDX_NEW_BASEURL]);
+                    applyNewBitmapToDialog();
+                    setShortcutTitle(webappdata[Const.RESULT_IDX_TITLE]);
+                    applyNewBaseUrl(webappdata[Const.RESULT_IDX_NEW_BASEURL]);
 
-            });
+                });
+            }
         });
         faviconFetcherThread.start();
 
@@ -343,13 +345,13 @@ public class ShortcutDialogFragment extends DialogFragment  {
 
 
     private void addShortcutToHomeScreen(Bitmap bitmap) {
-        Intent intent = Utility.createWebViewIntent(webapp, getActivity());
+        Intent intent = Utility.createWebViewIntent(webapp, requireActivity());
 
         IconCompat icon;
         if (bitmap != null)
             icon = IconCompat.createWithBitmap(bitmap);
         else
-            icon = IconCompat.createWithResource(getActivity(), R.mipmap.native_alpha_shortcut);
+            icon = IconCompat.createWithResource(requireActivity(), R.mipmap.native_alpha_shortcut);
 
 
         String final_title = uiTitle.getText().toString();
@@ -359,16 +361,23 @@ public class ShortcutDialogFragment extends DialogFragment  {
             final_title = "Unknown";
         }
 
-        if (ShortcutManagerCompat.isRequestPinShortcutSupported(getActivity())) {
+        if (ShortcutManagerCompat.isRequestPinShortcutSupported(requireActivity())) {
 
-            ShortcutInfoCompat pinShortcutInfo = new ShortcutInfoCompat.Builder(getActivity(), final_title)
+            ShortcutInfoCompat pinShortcutInfo = new ShortcutInfoCompat.Builder(requireActivity(), final_title)
                     .setIcon(icon)
                     .setShortLabel(final_title)
                     .setLongLabel(final_title)
                     .setIntent(intent)
                     .build();
-            ShortcutManagerCompat.requestPinShortcut(getActivity(), pinShortcutInfo, null);
+            String newScId = pinShortcutInfo.getId();
+            ShortcutManager scManager = App.getAppContext().getSystemService(ShortcutManager.class);
+            if(!scManager.getPinnedShortcuts().stream().anyMatch(s -> s.getId().equals(newScId))) {
+                ShortcutManagerCompat.requestPinShortcut(requireActivity(), pinShortcutInfo, null);
+            } else {
+                Utility.showToast(requireActivity(), getString(R.string.shortcut_already_exists));
+            }
         }
+
     }
 
     private void prepareFailedUI() {
@@ -380,11 +389,8 @@ public class ShortcutDialogFragment extends DialogFragment  {
         uiFavicon.setVisibility(View.VISIBLE);
     }
     private void showFailedMessage() {
-        Toast toast = Toast.makeText(getActivity(), getString(R.string.icon_fetch_failed_line1, webapp.getTitle()) + getString(R.string.icon_fetch_failed_line2) + getString(R.string.icon_fetch_failed_line3), Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.TOP, 0, 100);
-        toast.show();
+        Utility.showToast(requireActivity(), getString(R.string.icon_fetch_failed_line1, webapp.getTitle()) + getString(R.string.icon_fetch_failed_line2) + getString(R.string.icon_fetch_failed_line3));
     }
-
 
     private void setShortcutTitle(String shortcut_title) {
         if (shortcut_title != null) {

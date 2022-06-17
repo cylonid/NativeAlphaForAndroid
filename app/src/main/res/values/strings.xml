@@ -136,6 +136,7 @@
     <string name="dialog_permission_microphone_title">Microphone Access</string>
     <string name="dialog_permission_microphone_txt">Do you want to grant this Web App access to your microphone? You can revoke this decision any time in the Web App Settings menu.</string>
     <string name="app_name_plus" translatable="false">Native Alpha +</string>
+    <string name="shortcut_already_exists">A shortcut with this name already exists. Please choose another name or delete the existing shortcut.</string>
 
 
 </resources>
