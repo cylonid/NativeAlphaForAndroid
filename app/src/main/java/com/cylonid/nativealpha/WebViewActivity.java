@@ -81,7 +81,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     protected ValueCallback<Uri[]> filePathCallback;
 
     private boolean quit_on_next_backpress = false;
-    private String last_onbackpress_url = "";
     private Handler reload_handler = null;
     private WebApp webapp = null;
 
@@ -316,23 +315,20 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     @Override
     public void onBackPressed() {
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
-        String current_onbackpress_url = wv.getUrl();
 
-        if (current_onbackpress_url == null)
-            moveTaskToBack(true);
-
-        if (quit_on_next_backpress || Utility.URLEqual(current_onbackpress_url, webapp.getNonNullUrlOnFirstPageload()) || Utility.URLEqual(current_onbackpress_url, last_onbackpress_url)) {
-            moveTaskToBack(true);
-            quit_on_next_backpress = false;
-        } else if (wv.canGoBack())
+        if(wv.canGoBack()) {
             wv.goBack();
-        else {
-            loadURL(wv, webapp.getBaseUrl());
-            quit_on_next_backpress = true;
-            DataManager.getInstance().getWebApp(webappID).setUrlOnFirstPageload(wv.getUrl());
-            DataManager.getInstance().saveWebAppData();
+            return;
         }
-        last_onbackpress_url = wv.getUrl();
+
+        if(quit_on_next_backpress) {
+            quit_on_next_backpress = false;
+            moveTaskToBack(true);
+            return;
+        }
+
+        loadURL(wv, webapp.getBaseUrl());
+        quit_on_next_backpress = true;
 
     }
 
