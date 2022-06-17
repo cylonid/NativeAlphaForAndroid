@@ -205,7 +205,8 @@ public class DataManager {
 
 
     public WebApp getWebApp(int i) {
-        return getWebAppIgnoringGlobalOverride(i, false);
+        WebApp webAppIgnoringGlobalOverride = getWebAppIgnoringGlobalOverride(i, false);
+        return webAppIgnoringGlobalOverride;
     }
 
     public WebApp getWebAppIgnoringGlobalOverride(int i, boolean ignoreOverride) {

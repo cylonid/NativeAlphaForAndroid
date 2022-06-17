@@ -93,13 +93,11 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
 
         webappID = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
-
         DataManager.getInstance().loadAppData();
 
-        Utility.Assert(webappID != -1, "WebApp ID could not be retrieved.");
         webapp = DataManager.getInstance().getWebApp(webappID);
-
         if (webapp == null) {
+            // Toast is shown in getWebApp method
             finish();
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
