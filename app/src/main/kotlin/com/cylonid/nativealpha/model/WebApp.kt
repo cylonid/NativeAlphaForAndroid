@@ -46,6 +46,7 @@ class WebApp {
     var isKeepAwake = false
     var isCameraPermission = false
     var isMicrophonePermission = false
+    var isEnableZooming = false
 
     constructor(url: String, id: Int) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "")
@@ -97,6 +98,7 @@ class WebApp {
         isKeepAwake = other.isKeepAwake
         isCameraPermission = other.isCameraPermission
         isMicrophonePermission = other.isMicrophonePermission
+        isEnableZooming = other.isEnableZooming
     }
 
     private fun initDefaultSettings() {

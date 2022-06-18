@@ -142,6 +142,7 @@
     <string name="copy_url">Copy URL</string>
     <string name="share">Share</string>
     <string name="reload">Reload</string>
+    <string name="activate_two_finger_zoom">Enable Pinch-To-Zoom</string>
 
 
 </resources>

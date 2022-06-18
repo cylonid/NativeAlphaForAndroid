@@ -210,6 +210,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 wv.setScrollbarFadingEnabled(false);
 
             }
+            if(webapp.isEnableZooming()) {
+                wv.getSettings().setSupportZoom(true);
+                wv.getSettings().setBuiltInZoomControls(true);
+            }
 
             CUSTOM_HEADERS = initCustomHeaders(webapp.isSendSavedataRequest());
             loadURL(wv, url);

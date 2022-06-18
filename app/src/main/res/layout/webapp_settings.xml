@@ -481,6 +481,13 @@
                                 android:checked="@={webapp.openUrlExternal}"
                                 android:text="@string/open_external_links_in_browser_app" />
 
+                            <Switch
+                                android:id="@+id/switchEnableZoom"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.enableZooming}"
+                                android:text="@string/activate_two_finger_zoom" />
+
                         </LinearLayout>
 
                         <TextView
