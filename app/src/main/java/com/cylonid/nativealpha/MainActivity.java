@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -167,7 +168,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button btn_title = new Button(this);
         btn_title.setBackgroundColor(transparent_color);
-        btn_title.setText(webapp.getSingleLineTitle());
+        btn_title.setText(webapp.getTitle());
+        btn_title.setMaxLines(1);
+        btn_title.setEllipsize(TextUtils.TruncateAt.END);
         LinearLayout.LayoutParams layout_title = new LinearLayout.LayoutParams(0, row_height, 4);
         btn_title.setLayoutParams(layout_title);
         ll_row.addView(btn_title);

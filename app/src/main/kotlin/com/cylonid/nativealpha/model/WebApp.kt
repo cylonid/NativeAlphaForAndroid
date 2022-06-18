@@ -119,21 +119,9 @@ class WebApp {
         Utility.deleteShortcuts(Arrays.asList(ID))
     }
 
-    val singleLineTitle: String
-        get() {
-            if (title.length > 24) {
-                var single_line = title.substring(0, 25)
-                single_line += " ..."
-                return single_line
-            }
-            return title
-        }
 
     val alphanumericBaseUrl: String
         get() = baseUrl.replace("\\P{Alnum}".toRegex(), "").replace("https", "").replace("http", "").replace("www", "")
-
-    val nonNullUrlOnFirstPageload: String
-        get() = if (urlOnFirstPageload != null) urlOnFirstPageload!! else baseUrl
 
     fun onSwitchCookiesChanged(mSwitch: CompoundButton, isChecked: Boolean) {
         val switchThirdPCookies = mSwitch.rootView.findViewById<Switch>(R.id.switch3PCookies)
