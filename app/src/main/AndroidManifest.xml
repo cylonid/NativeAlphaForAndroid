@@ -24,6 +24,7 @@
         android:supportsRtl="true"
         android:screenOrientation="portrait"
         android:usesCleartextTraffic="true"
+        android:resizeableActivity="true"
         android:fullBackupContent="true">
 
         <activity
@@ -42,108 +43,12 @@
             android:icon="@mipmap/native_alpha"
             android:roundIcon="@mipmap/native_alpha"
             android:theme="@style/AppTheme.NoActionBar.Webapp"
-            android:configChanges="orientation|screenSize"
+            android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|uiMode|keyboard|keyboardHidden|navigation"
             android:launchMode="standard"
             android:documentLaunchMode="intoExisting"
             />
  
-                <activity
-            android:name=".__WebViewActivity_0"
-            android:label="@string/app_name_unicode"
-            android:parentActivityName=".MainActivity"
-            android:icon="@mipmap/native_alpha"
-            android:roundIcon="@mipmap/native_alpha"
-            android:theme="@style/AppTheme.NoActionBar.Webapp"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="standard"
-            android:process=":web_sandbox_0"
-            android:documentLaunchMode="intoExisting"
-         />
-        <activity
-            android:name=".__WebViewActivity_1"
-            android:label="@string/app_name_unicode"
-            android:parentActivityName=".MainActivity"
-            android:icon="@mipmap/native_alpha"
-            android:roundIcon="@mipmap/native_alpha"
-            android:theme="@style/AppTheme.NoActionBar.Webapp"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="standard"
-            android:process=":web_sandbox_1"
-            android:documentLaunchMode="intoExisting"
-         />
-        <activity
-            android:name=".__WebViewActivity_2"
-            android:label="@string/app_name_unicode"
-            android:parentActivityName=".MainActivity"
-            android:icon="@mipmap/native_alpha"
-            android:roundIcon="@mipmap/native_alpha"
-            android:theme="@style/AppTheme.NoActionBar.Webapp"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="standard"
-            android:process=":web_sandbox_2"
-            android:documentLaunchMode="intoExisting"
-         />
-        <activity
-            android:name=".__WebViewActivity_3"
-            android:label="@string/app_name_unicode"
-            android:parentActivityName=".MainActivity"
-            android:icon="@mipmap/native_alpha"
-            android:roundIcon="@mipmap/native_alpha"
-            android:theme="@style/AppTheme.NoActionBar.Webapp"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="standard"
-            android:process=":web_sandbox_3"
-            android:documentLaunchMode="intoExisting"
-         />
-        <activity
-            android:name=".__WebViewActivity_4"
-            android:label="@string/app_name_unicode"
-            android:parentActivityName=".MainActivity"
-            android:icon="@mipmap/native_alpha"
-            android:roundIcon="@mipmap/native_alpha"
-            android:theme="@style/AppTheme.NoActionBar.Webapp"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="standard"
-            android:process=":web_sandbox_4"
-            android:documentLaunchMode="intoExisting"
-         />
-        <activity
-            android:name=".__WebViewActivity_5"
-            android:label="@string/app_name_unicode"
-            android:parentActivityName=".MainActivity"
-            android:icon="@mipmap/native_alpha"
-            android:roundIcon="@mipmap/native_alpha"
-            android:theme="@style/AppTheme.NoActionBar.Webapp"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="standard"
-            android:process=":web_sandbox_5"
-            android:documentLaunchMode="intoExisting"
-         />
-        <activity
-            android:name=".__WebViewActivity_6"
-            android:label="@string/app_name_unicode"
-            android:parentActivityName=".MainActivity"
-            android:icon="@mipmap/native_alpha"
-            android:roundIcon="@mipmap/native_alpha"
-            android:theme="@style/AppTheme.NoActionBar.Webapp"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="standard"
-            android:process=":web_sandbox_6"
-            android:documentLaunchMode="intoExisting"
-         />
-        <activity
-            android:name=".__WebViewActivity_7"
-            android:label="@string/app_name_unicode"
-            android:parentActivityName=".MainActivity"
-            android:icon="@mipmap/native_alpha"
-            android:roundIcon="@mipmap/native_alpha"
-            android:theme="@style/AppTheme.NoActionBar.Webapp"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="standard"
-            android:process=":web_sandbox_7"
-            android:documentLaunchMode="intoExisting"
-         />
-
+        <!--Placeholder-->
         <activity
             android:name="com.cylonid.nativealpha.SettingsActivity"
             android:parentActivityName=".MainActivity"
@@ -173,6 +78,9 @@
         </activity>
 
 
+        <meta-data android:name="com.samsung.android.keepalive.density" android:value="true"/>
+        <meta-data android:name="com.samsung.android.multidisplay.keep_process_alive" android:value="true"/>
+        <!--        https://developer.samsung.com/samsung-dex/modify-optimizing.html-->
     </application>
 
 </manifest>
