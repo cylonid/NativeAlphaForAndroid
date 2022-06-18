@@ -131,4 +131,9 @@
     <string name="dialog_permission_microphone_txt">Möchten Sie dieser Web-App Zugriff auf Ihr Mikrofon gewähren? Sie können die Entscheidung jederzeit in den Web-App-Einstellungen ändern.</string>
     <string name="allow_microphone_access">Mikrofonzugriff erlauben</string>
     <string name="shortcut_already_exists">Eine Verknüpfung mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen oder löschen die existierende Verknüpfung.</string>
+    <string name="back">Zurück</string>
+    <string name="forward">Vor</string>
+    <string name="copy_url">URL kopieren</string>
+    <string name="share">Teilen</string>
+    <string name="reload">Neu laden</string>
 </resources>
