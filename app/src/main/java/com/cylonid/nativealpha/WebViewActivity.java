@@ -98,9 +98,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     private Handler reload_handler = null;
     private WebApp webapp = null;
 
-    private float[] lastTouchDownXY = new float[2];
-
-
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,10 +272,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-                        lastTouchDownXY[0] = event.getX();
-                        lastTouchDownXY[1] = event.getY();
-                    }
                     WebApp webapp = DataManager.getInstance().getWebApp(webappID);
                     if (webapp.getUrlOnFirstPageload() == null) {
                         DataManager.getInstance().getWebApp(webappID).setUrlOnFirstPageload(wv.getUrl());
@@ -387,7 +380,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         if(wv.canGoForward())  powerMenuBuilder.addItem(1, new PowerMenuItem(getString(R.string.forward), R.drawable.ic_baseline_arrow_forward_24));
 
         PowerMenu powerMenu = powerMenuBuilder.build();
-        powerMenu.showAtLocation(wv, (int)lastTouchDownXY[0], (int)lastTouchDownXY[1]);
+        powerMenu.showAtCenter(wv);
     }
 
     @Override
