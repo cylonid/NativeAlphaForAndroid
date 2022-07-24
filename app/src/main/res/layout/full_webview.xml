@@ -13,6 +13,8 @@
             android:id="@+id/webview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             tools:ignore="MissingConstraints" />
 
         <org.adblockplus.libadblockplus.android.webview.AdblockWebView
@@ -20,6 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             tools:ignore="MissingConstraints" />
         <ProgressBar
             style="?android:attr/progressBarStyleHorizontal"

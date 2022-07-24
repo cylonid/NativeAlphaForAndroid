@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -39,7 +38,6 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,10 +56,7 @@ import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
 import com.jakewharton.processphoenix.ProcessPhoenix;
-import com.skydoves.powermenu.CircularEffect;
-import com.skydoves.powermenu.CustomPowerMenu;
 import com.skydoves.powermenu.MenuAnimation;
-import com.skydoves.powermenu.OnMenuItemClickListener;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
@@ -97,13 +92,12 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     private boolean quit_on_next_backpress = false;
     private Handler reload_handler = null;
     private WebApp webapp = null;
+    private String urlOnFirstPageload = "";
 
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         webappID = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
         DataManager.getInstance().loadAppData();
 
@@ -136,7 +130,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
             }
             setContentView(R.layout.full_webview);
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
             if(webapp.isKeepAwake()) {
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -161,8 +154,9 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
             if (webapp.isShowFullscreen()) {
                 this.hideSystemBars();
+            } else {
+                this.showSystemBars();
             }
-
             wv.setWebViewClient(new CustomBrowser());
             wv.getSettings().setSafeBrowsingEnabled(webapp.isSafeBrowsing());
             wv.getSettings().setDomStorageEnabled(true);
@@ -219,6 +213,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 showWebViewContextMenu();
                 return true;
             });
+
             wv.setDownloadListener((dl_url, userAgent, contentDisposition, mimeType, contentLength) -> {
 
                 if (mimeType.equals("application/pdf")) {
@@ -392,7 +387,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             return;
         }
 
-        if(quit_on_next_backpress) {
+        if(quit_on_next_backpress && urlOnFirstPageload.equals("") || urlOnFirstPageload.equals(wv.getUrl())) {
             quit_on_next_backpress = false;
             moveTaskToBack(true);
             return;
@@ -486,6 +481,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             WindowInsetsController controller = getWindow().getInsetsController();
             if(controller != null) {
                 controller.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
+
                 controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
             }
         }
@@ -497,6 +493,25 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                             | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        }
+    }
+
+    private void showSystemBars() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+
+            getWindow().setDecorFitsSystemWindows(true);
+            WindowInsetsController controller = getWindow().getInsetsController();
+            if (controller != null) {
+                controller.show(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
+                controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+            }
+        } else {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
         }
     }
 
@@ -724,6 +739,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         @Nullable
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+            if(urlOnFirstPageload.equals("")) urlOnFirstPageload = request.getUrl().toString();
             if (webapp.isBlockThirdPartyRequests()) {
                 Uri uri = request.getUrl();
                 Uri webapp_uri = Uri.parse(webapp.getBaseUrl());
