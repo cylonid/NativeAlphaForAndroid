@@ -654,6 +654,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             setRequestedOrientation(this.mOriginalOrientation);
             this.mCustomViewCallback.onCustomViewHidden();
             this.mCustomViewCallback = null;
+            showSystemBars();
         }
 
         public void onShowCustomView(View pView, WebChromeClient.CustomViewCallback pViewCallback) {
