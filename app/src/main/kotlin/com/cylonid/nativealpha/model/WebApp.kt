@@ -25,7 +25,6 @@ class WebApp {
     var isSendSavedataRequest = false
     var isBlockImages = false
     var isAllowHttp = false
-    var urlOnFirstPageload: String? = null
     var isAllowLocationAccess = false
     var userAgent: String? = null
     var isUseCustomUserAgent = false
@@ -47,6 +46,7 @@ class WebApp {
     var isCameraPermission = false
     var isMicrophonePermission = false
     var isEnableZooming = false
+    var isBiometricProtection = false
 
     constructor(url: String, id: Int) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "")
@@ -59,7 +59,6 @@ class WebApp {
         title = other.title
         ID = other.ID
         baseUrl = other.baseUrl
-        urlOnFirstPageload = other.urlOnFirstPageload
         isOverrideGlobalSettings = other.isOverrideGlobalSettings
         containerId = other.containerId
         isUseContainer = other.isUseContainer
@@ -99,6 +98,7 @@ class WebApp {
         isCameraPermission = other.isCameraPermission
         isMicrophonePermission = other.isMicrophonePermission
         isEnableZooming = other.isEnableZooming
+        isBiometricProtection = other.isBiometricProtection
     }
 
     private fun initDefaultSettings() {
