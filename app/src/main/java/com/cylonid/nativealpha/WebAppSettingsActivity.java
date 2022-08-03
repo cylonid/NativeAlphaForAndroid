@@ -60,6 +60,7 @@ public class WebAppSettingsActivity extends AppCompatActivity {
         else {
             final WebApp modified_webapp = new WebApp(webapp);
             binding.setWebapp(modified_webapp);
+            binding.setActivity(WebAppSettingsActivity.this);
 
             final Button btnCreateShortcut = inflated_view.findViewById(R.id.btnRecreateShortcut);
 
@@ -128,11 +129,12 @@ public class WebAppSettingsActivity extends AppCompatActivity {
         LinearLayout secDarkMode = v.findViewById(R.id.sectionDarkmode);
         LinearLayout secSandbox= v.findViewById(R.id.sectionSandbox);
         LinearLayout secKiosk = v.findViewById(R.id.sectionKioskMode);
+        LinearLayout secAccessRestriction = v.findViewById(R.id.sectionAccessRestriction);
         if (!BuildConfig.FLAVOR.equals("extended")) { 
             secDarkMode.setVisibility(View.GONE);
             secSandbox.setVisibility(View.GONE);
             secKiosk.setVisibility(View.GONE);
-
+            secAccessRestriction.setVisibility(View.GONE);
         }
     }
 

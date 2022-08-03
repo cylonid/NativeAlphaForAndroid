@@ -7,6 +7,10 @@
         <variable
             name="webapp"
             type="com.cylonid.nativealpha.model.WebApp" />
+
+        <variable
+            name="activity"
+            type="com.cylonid.nativealpha.WebAppSettingsActivity"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -190,6 +194,32 @@
                                 android:layout_height="wrap_content"
                                 android:checked="@={webapp.microphonePermission}"
                                 android:text="@string/allow_microphone_access" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/sectionAccessRestriction"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/settings_bottom"
+                            android:divider="@drawable/empty_10dp_vertical"
+                            android:orientation="vertical"
+                            android:showDividers="middle">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/remove_divider"
+                                android:text="@string/webapp_section_access_restriction"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textStyle="bold" />
+                            <Switch
+                                android:id="@+id/switchBiometricAccess"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checked="@={webapp.biometricProtection}"
+                                android:onCheckedChanged="@{(switch, checked) -> webapp.onSwitchBiometricAccessChanged(switch, checked, activity)}"
+                                android:text="@string/enable_access_restriction" />
+
+
                         </LinearLayout>
 
                         <LinearLayout

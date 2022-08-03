@@ -1,8 +1,13 @@
 package com.cylonid.nativealpha.model
 
+import android.app.Activity
 import android.view.View
 import android.widget.*
+import androidx.fragment.app.FragmentActivity
 import com.cylonid.nativealpha.R
+import com.cylonid.nativealpha.WebAppSettingsActivity
+import com.cylonid.nativealpha.helper.BiometricPromptHelper
+import com.cylonid.nativealpha.util.App
 import com.cylonid.nativealpha.util.Const
 import com.cylonid.nativealpha.util.Utility
 import java.util.*
@@ -130,6 +135,18 @@ class WebApp {
         if (isChecked) switchThirdPCookies.isEnabled = true else {
             switchThirdPCookies.isEnabled = false
             switchThirdPCookies.isChecked = false
+        }
+    }
+
+    fun onSwitchBiometricAccessChanged(mSwitch: CompoundButton, isChecked: Boolean, activity: WebAppSettingsActivity) {
+        val switchBiometricAccess = mSwitch.rootView.findViewById<Switch>(R.id.switchBiometricAccess)
+
+        if (!isChecked) {
+            BiometricPromptHelper(activity as FragmentActivity).showPrompt({ switchBiometricAccess.isChecked = false }, { switchBiometricAccess.isChecked = true }, activity.getString(R.string.bioprompt_disable_restricition))
+        }
+
+        if (isChecked) {
+            BiometricPromptHelper(activity as FragmentActivity).showPrompt({ switchBiometricAccess.isChecked = true }, { switchBiometricAccess.isChecked = false }, activity.getString(R.string.bioprompt_enable_restriction))
         }
     }
 

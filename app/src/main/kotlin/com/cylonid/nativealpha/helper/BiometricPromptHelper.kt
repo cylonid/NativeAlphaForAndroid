@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.biometric.BiometricPrompt.PromptInfo
 
 internal class BiometricPromptHelper(private val activity: FragmentActivity) {
-    fun showPrompt(funSuccess: BiometricPromptCallback, funFail: BiometricPromptCallback) {
+    fun showPrompt(funSuccess: BiometricPromptCallback, funFail: BiometricPromptCallback, promptTitle: String) {
         val executor = ContextCompat.getMainExecutor(activity)
         val biometricPrompt = BiometricPrompt(
             activity,
@@ -33,8 +33,7 @@ internal class BiometricPromptHelper(private val activity: FragmentActivity) {
                 }
             })
         val promptInfo = PromptInfo.Builder()
-            .setTitle("Biometric login for my app")
-            .setNegativeButtonText(activity.getString(R.string.cancel))
+            .setTitle(promptTitle)
             .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
             .build()
         biometricPrompt.authenticate(promptInfo)

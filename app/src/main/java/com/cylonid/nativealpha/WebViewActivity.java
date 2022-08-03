@@ -107,15 +107,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             finish();
         } else {
             if(webapp.isBiometricProtection()) {
-                new BiometricPromptHelper(WebViewActivity.this).showPrompt(() -> setupWebView(), () -> finish());
+                new BiometricPromptHelper(WebViewActivity.this).showPrompt(() -> setupWebView(), () -> finish(), getString(R.string.bioprompt_restricted_webapp));
             }
             setupWebView();
         }
-    }
-
-    @FunctionalInterface
-    interface BiometricPromptSuccessCallback {
-        void execute();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -413,7 +408,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         if(webapp.isBiometricProtection()) {
             View fullActivityView = findViewById(R.id.webviewActivity);
             fullActivityView.setVisibility(View.GONE);
-            new BiometricPromptHelper(WebViewActivity.this).showPrompt(() -> fullActivityView.setVisibility(View.VISIBLE), () -> finish());
+            new BiometricPromptHelper(WebViewActivity.this).showPrompt(() -> fullActivityView.setVisibility(View.VISIBLE), () -> finish(), getString(R.string.bioprompt_restricted_webapp));
         }
         if (webapp.isAutoreload()) {
             reload_handler = new Handler();

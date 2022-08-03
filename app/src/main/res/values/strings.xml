@@ -143,6 +143,11 @@
     <string name="share">Share</string>
     <string name="reload">Reload</string>
     <string name="activate_two_finger_zoom">Enable Pinch-To-Zoom</string>
+    <string name="webapp_section_access_restriction">Access Restriction</string>
+    <string name="bioprompt_restricted_webapp">Access Restriction</string>
+    <string name="bioprompt_disable_restricition">Disable access restriction?</string>
+    <string name="enable_access_restriction">Enable access restriction</string>
+    <string name="bioprompt_enable_restriction">Enable access restriction?</string>
 
 
 </resources>

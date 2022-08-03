@@ -137,4 +137,9 @@
     <string name="share">Teilen</string>
     <string name="reload">Neu laden</string>
     <string name="activate_two_finger_zoom">Pinch-To-Zoom aktivieren</string>
+    <string name="webapp_section_access_restriction">Zugriffsbeschränkung</string>
+    <string name="bioprompt_restricted_webapp">Zugriffsbeschränkung</string>
+    <string name="bioprompt_disable_restricition">Zugriffsbeschränkung aufheben?</string>
+    <string name="enable_access_restriction">Zugriffsbeschränkung aktivieren</string>
+    <string name="bioprompt_enable_restriction">Zugriffsgeschränkung aktivieren?</string>
 </resources>
