@@ -390,23 +390,9 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             wv.goBack();
             return;
         }
-
-        boolean currentUrlEqualsFirstUrl = urlOnFirstPageload.equals("") || urlOnFirstPageload.equals(wv.getUrl();
-
-        if(quitOnNextBackpress && currentUrlEqualsFirstUrl) {
-            quitOnNextBackpress = false;
-            moveTaskToBack(true);
-            return;
-        }
-
+        
         if(quitOnNextBackpress) {
             quitOnNextBackpress = false;
-            forceQuitOnNextBackpress = true;
-            return;
-        }
-
-        if(forceQuitOnNextBackpress) {
-            forceQuitOnNextBackpress = false;
             moveTaskToBack(true);
             return;
         }
