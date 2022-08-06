@@ -90,7 +90,8 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     private Map<String, String> CUSTOM_HEADERS;
     protected ValueCallback<Uri[]> filePathCallback;
 
-    private boolean quit_on_next_backpress = false;
+    private boolean quitOnNextBackpress = false;
+    private boolean forceQuitOnNextBackpress = false;
     private Handler reload_handler = null;
     private WebApp webapp = null;
     private String urlOnFirstPageload = "";
@@ -390,14 +391,28 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             return;
         }
 
-        if(quit_on_next_backpress && urlOnFirstPageload.equals("") || urlOnFirstPageload.equals(wv.getUrl())) {
-            quit_on_next_backpress = false;
+        boolean currentUrlEqualsFirstUrl = urlOnFirstPageload.equals("") || urlOnFirstPageload.equals(wv.getUrl();
+
+        if(quitOnNextBackpress && currentUrlEqualsFirstUrl) {
+            quitOnNextBackpress = false;
+            moveTaskToBack(true);
+            return;
+        }
+
+        if(quitOnNextBackpress) {
+            quitOnNextBackpress = false;
+            forceQuitOnNextBackpress = true;
+            return;
+        }
+
+        if(forceQuitOnNextBackpress) {
+            forceQuitOnNextBackpress = false;
             moveTaskToBack(true);
             return;
         }
 
         loadURL(wv, webapp.getBaseUrl());
-        quit_on_next_backpress = true;
+        quitOnNextBackpress = true;
 
     }
 
