@@ -50,6 +50,7 @@ class WebApp {
     var isMicrophonePermission = false
     var isEnableZooming = false
     var isBiometricProtection = false
+    var isAllowMediaPlaybackInBackground = false
 
     constructor(url: String, id: Int) {
         title = url.replace("http://", "").replace("https://", "").replace("www.", "")
@@ -102,6 +103,7 @@ class WebApp {
         isMicrophonePermission = other.isMicrophonePermission
         isEnableZooming = other.isEnableZooming
         isBiometricProtection = other.isBiometricProtection
+        isAllowMediaPlaybackInBackground = other.isAllowMediaPlaybackInBackground
     }
 
     private fun initDefaultSettings() {

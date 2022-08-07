@@ -142,4 +142,5 @@
     <string name="bioprompt_disable_restricition">Zugriffsbeschränkung aufheben?</string>
     <string name="enable_access_restriction">Zugriffsbeschränkung aktivieren</string>
     <string name="bioprompt_enable_restriction">Zugriffsgeschränkung aktivieren?</string>
+    <string name="allow_media_playback_in_background">Medienwiedergabe im Hintergrund zulassen</string>
 </resources>

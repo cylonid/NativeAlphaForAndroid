@@ -148,6 +148,7 @@
     <string name="bioprompt_disable_restricition">Disable access restriction?</string>
     <string name="enable_access_restriction">Enable access restriction</string>
     <string name="bioprompt_enable_restriction">Enable access restriction?</string>
+    <string name="allow_media_playback_in_background">Allow media playback in background</string>
 
 
 </resources>

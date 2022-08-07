@@ -518,6 +518,15 @@
                                 android:checked="@={webapp.enableZooming}"
                                 android:text="@string/activate_two_finger_zoom" />
 
+                            <Switch
+                                android:id="@+id/switchMediaplaybackBackground"
+                                android:visibility="gone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                                                android:checked="@={webapp.allowMediaPlaybackInBackground}"
+                                android:text="@string/allow_media_playback_in_background" />
+
+
                         </LinearLayout>
 
                         <TextView
