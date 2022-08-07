@@ -554,6 +554,21 @@
                             android:orientation="vertical"
                             android:showDividers="middle"
                             android:visibility="gone">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/remove_divider"
+                                android:text="@string/start_url"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textStyle="bold" />
+                            <EditText
+                                android:id="@+id/textBaseUrl"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:inputType="textUri"
+                                android:text="@={webapp.baseUrl}"
+                                tools:ignore="UnusedAttribute" />
 
                             <TextView
                                 android:layout_width="match_parent"
