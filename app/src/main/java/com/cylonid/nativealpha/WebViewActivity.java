@@ -20,6 +20,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowInsets;
@@ -37,6 +38,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -51,6 +53,7 @@ import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
 import com.cylonid.nativealpha.helper.BiometricPromptHelper;
+import com.cylonid.nativealpha.helper.IconPopupMenuHelper;
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.SandboxManager;
 import com.cylonid.nativealpha.model.WebApp;
@@ -58,9 +61,6 @@ import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
 import com.jakewharton.processphoenix.ProcessPhoenix;
-import com.skydoves.powermenu.MenuAnimation;
-import com.skydoves.powermenu.PowerMenu;
-import com.skydoves.powermenu.PowerMenuItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -96,6 +96,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     private Handler reload_handler = null;
     private WebApp webapp = null;
     private String urlOnFirstPageload = "";
+    private boolean fallbackToDefaultLongClickBehaviour = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,7 +223,11 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         loadURL(wv, url);
         wv.setWebChromeClient(new CustomWebChromeClient());
         wv.setOnLongClickListener(view -> {
-            showWebViewContextMenu();
+            if(fallbackToDefaultLongClickBehaviour) {
+                fallbackToDefaultLongClickBehaviour = false;
+                return false;
+            }
+            showWebViewPopupMenu();
             return true;
         });
 
@@ -332,55 +337,52 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             }
         });
     }
-    private void showWebViewContextMenu() {
-        final View header = getLayoutInflater().inflate(R.layout.context_menu_title, null);
-        TextView contextMenuTitle = header.findViewById(R.id.contextMenuTitle);
-        contextMenuTitle.setText(wv.getUrl());
 
-        @SuppressLint("NonConstantResourceId") PowerMenu.Builder powerMenuBuilder = new PowerMenu.Builder(WebViewActivity.this)
-                .addItem(new PowerMenuItem(getString(R.string.back), R.drawable.ic_baseline_arrow_back_24)) // add an item.
-                .addItem(new PowerMenuItem(getString(R.string.reload), R.drawable.ic_baseline_refresh_24))
-                .setDivider(new ColorDrawable(ContextCompat.getColor(WebViewActivity.this, R.color.colorPrimaryDarkGrey)))
-                .setDividerHeight(2)
-                .addItem(new PowerMenuItem(getString(R.string.copy_url), R.drawable.ic_baseline_content_copy_24))
-                .addItem(new PowerMenuItem(getString(R.string.share), R.drawable.ic_baseline_share_24))
-                .setWidth(getWindowManager().getDefaultDisplay().getWidth() / 2)
-                .setAutoDismiss(true)
-                .setMenuRadius(10f)
-                .setMenuShadow(10f)
-                .setHeaderView(header)
-                .setTextGravity(Gravity.CENTER)
-                .setAnimation(MenuAnimation.SHOWUP_TOP_LEFT)
-                .setLifecycleOwner(WebViewActivity.this)
-                .setOnMenuItemClickListener((position, item) -> {
-                    switch(item.getIcon()) {
-                        case R.drawable.ic_baseline_arrow_forward_24:
-                            wv.goForward();
-                            break;
-                        case R.drawable.ic_baseline_arrow_back_24:
-                            onBackPressed();
-                            break;
-                        case R.drawable.ic_baseline_refresh_24:
-                            wv.reload();
-                            break;
-                        case R.drawable.ic_baseline_content_copy_24:
-                            ClipboardManager clipboard =  getSystemService(ClipboardManager.class);
-                            ClipData clip = ClipData.newPlainText("URL", wv.getUrl());
-                            clipboard.setPrimaryClip(clip);
-                            break;
-                        case R.drawable.ic_baseline_share_24:
-                            new ShareCompat.IntentBuilder(WebViewActivity.this)
-                                    .setType("text/plain")
-                                    .setChooserTitle("Share URL")
-                                    .setText(wv.getUrl())
-                                    .startChooser();
-                            break;
-                    }
-                });
-        if(wv.canGoForward())  powerMenuBuilder.addItem(1, new PowerMenuItem(getString(R.string.forward), R.drawable.ic_baseline_arrow_forward_24));
+    @SuppressLint("NonConstantResourceId")
+    private void showWebViewPopupMenu() {
+        View center = findViewById(R.id.anchorCenterScreen);
+        PopupMenu popupMenu = IconPopupMenuHelper.getMenu(center, R.menu.wv_context_menu, WebViewActivity.this);
 
-        PowerMenu powerMenu = powerMenuBuilder.build();
-        powerMenu.showAtCenter(wv);
+        if(wv.canGoForward()) popupMenu.getMenu().getItem(1).setVisible(true);
+
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            switch(menuItem.getItemId()) {
+                case R.id.cmItemForward:
+                    wv.goForward();
+                    return true;
+                case R.id.cmItemBack:
+                    onBackPressed();
+                    return true;
+                case R.id.cmItemReload:
+                    wv.reload();
+                    return true;
+                case R.id.cmItemCopyUrl:
+                    ClipboardManager clipboard =  getSystemService(ClipboardManager.class);
+                    ClipData clip = ClipData.newPlainText("URL", wv.getUrl());
+                    clipboard.setPrimaryClip(clip);
+                    return true;
+                case R.id.cmItemShareUrl:
+                    new ShareCompat.IntentBuilder(WebViewActivity.this)
+                            .setType("text/plain")
+                            .setChooserTitle("Share URL")
+                            .setText(wv.getUrl())
+                            .startChooser();
+                    return true;
+                case R.id.cmItemCloseWebApp:
+                    finishAndRemoveTask();
+                    return true;
+                case R.id.cmSelectText:
+                    fallbackToDefaultLongClickBehaviour = true;
+                    return true;
+                case R.id.cmMainMenu:
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+                    return true;
+
+            }
+            return false;
+        });
+        popupMenu.show();
     }
 
     @Override

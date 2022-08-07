@@ -119,7 +119,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
-    implementation "com.github.skydoves:powermenu:2.2.0"
     implementation 'org.jsoup:jsoup:1.14.1'
     implementation 'org.adblockplus:adblock-android-webview:5.0.1'
     implementation 'com.github.ihimanshurawat:Hasher:1.2'

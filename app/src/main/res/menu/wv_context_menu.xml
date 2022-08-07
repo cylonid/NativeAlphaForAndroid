@@ -1,22 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    app:showAsAction="always">
 
     <item android:title="@string/back"
-          android:id="@+id/mItemBack"
+          android:id="@+id/cmItemBack"
           android:icon="@drawable/ic_baseline_arrow_back_24"/>
     <item android:title="@string/forward"
-        android:id="@+id/mItemForward"
+        android:id="@+id/cmItemForward"
+        android:visible="false"
         android:icon="@drawable/ic_baseline_arrow_forward_24"/>
-    <item android:title="@string/copy_url"
-        android:id="@+id/mItemCopyUrl"
-        android:icon="@drawable/ic_baseline_content_copy_24"/>
+
     <item android:title="@string/share"
-        android:id="@+id/mItemShareUrl"
+        android:id="@+id/cmItemShareUrl"
         android:icon="@drawable/ic_baseline_share_24"/>
     <item android:title="@string/reload"
-        android:id="@+id/mItemReload"
-        android:icon="@drawable/ic_baseline_refresh_24"/>
-
+        android:id="@+id/cmItemReload"
+        android:icon="@drawable/ic_baseline_refresh_24" />
+    <item android:title="@string/to_main_menu"
+        android:id="@+id/cmMainMenu"
+        android:icon="@drawable/ic_baseline_home_24" />
+    <item
+        android:id="@+id/cmItemMore"
+        android:title="@string/more"
+        android:icon="@drawable/ic_baseline_more_horiz_24">
+        <menu>
+            <item android:title="@string/copy_url"
+                android:id="@+id/cmItemCopyUrl"
+                android:icon="@drawable/ic_baseline_content_copy_24"/>
+            <item android:title="@string/select_text"
+                android:id="@+id/cmSelectText"
+                android:icon="@drawable/ic_baseline_format_quote_24"/>
+            <item
+                android:id="@+id/cmItemCloseWebApp"
+                android:icon="@drawable/ic_baseline_exit_to_app_24"
+                android:title="@string/close_web_app"/>
+        </menu>
+    </item>
 </menu>

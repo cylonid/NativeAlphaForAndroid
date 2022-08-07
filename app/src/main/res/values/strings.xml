@@ -150,6 +150,10 @@
     <string name="bioprompt_enable_restriction">Enable access restriction?</string>
     <string name="allow_media_playback_in_background">Allow media playback in background</string>
     <string name="start_url">Start URL</string>
+    <string name="more">More</string>
+    <string name="close_web_app">Close Web App</string>
+    <string name="select_text">Select text</string>
+    <string name="to_main_menu">To Main Menu</string>
 
 
 </resources>
