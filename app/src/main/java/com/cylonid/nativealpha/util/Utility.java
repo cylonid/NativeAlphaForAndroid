@@ -81,7 +81,7 @@ public final class Utility {
         }
         Intent intent = new Intent(c, webview_class);
         intent.putExtra(Const.INTENT_WEBAPPID, webapp.getID());
-        intent.setData(Uri.parse(webapp.getBaseUrl()));
+        intent.setData(Uri.parse(webapp.getBaseUrl() + webapp.getID()));
         intent.setAction(Intent.ACTION_VIEW);
 
         return intent;
