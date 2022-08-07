@@ -18,8 +18,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,6 +53,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ShareCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuCompat;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
@@ -97,6 +102,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     private WebApp webapp = null;
     private String urlOnFirstPageload = "";
     private boolean fallbackToDefaultLongClickBehaviour = false;
+    private PopupMenu mPopupMenu = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -341,11 +347,17 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     @SuppressLint("NonConstantResourceId")
     private void showWebViewPopupMenu() {
         View center = findViewById(R.id.anchorCenterScreen);
-        PopupMenu popupMenu = IconPopupMenuHelper.getMenu(center, R.menu.wv_context_menu, WebViewActivity.this);
+        mPopupMenu = IconPopupMenuHelper.getMenu(center, R.menu.wv_context_menu, WebViewActivity.this);
 
-        if(wv.canGoForward()) popupMenu.getMenu().getItem(1).setVisible(true);
+        String currentUrl = wv.getUrl();
+        String title = currentUrl.length() < 32 ? currentUrl : currentUrl.substring(0, 32) + "…";
+        SpannableString spanString = new SpannableString(title);
+        spanString.setSpan(new ForegroundColorSpan(Color.BLACK), 0,     spanString.length(), 0); //fix the color to white
+        spanString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, spanString.length(), 0);
+        mPopupMenu.getMenu().getItem(0).setTitle(spanString);
+        if(wv.canGoForward()) mPopupMenu.getMenu().getItem(2).setVisible(true);
 
-        popupMenu.setOnMenuItemClickListener(menuItem -> {
+        mPopupMenu.setOnMenuItemClickListener(menuItem -> {
             switch(menuItem.getItemId()) {
                 case R.id.cmItemForward:
                     wv.goForward();
@@ -382,7 +394,8 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             }
             return false;
         });
-        popupMenu.show();
+
+        mPopupMenu.show();
     }
 
     @Override
@@ -437,7 +450,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         wv.evaluateJavascript("document.querySelectorAll('audio').forEach(x => x.pause());", null);
         wv.onPause();
         wv.pauseTimers();
-
+        if(mPopupMenu != null) mPopupMenu.dismiss();
 
         if (webapp.isClearCache() || DataManager.getInstance().getSettings().isClearCache())
             wv.clearCache(true);
