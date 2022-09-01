@@ -165,7 +165,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             wv.setVisibility(View.VISIBLE);
         }
         String fieldName = Stream.of(WebViewActivity.class.getDeclaredFields()).filter(f -> f.getType() == WebView.class).findFirst().orElseThrow(null).getName();
-        String uaString = wv.getSettings().getUserAgentString().replace(fieldName, "NAlphaChrm");
+        String uaString = wv.getSettings().getUserAgentString().replace("; " + fieldName, "");
         wv.getSettings().setUserAgentString(uaString);
         if (webapp.isUseCustomUserAgent()) {
             wv.getSettings().setUserAgentString(webapp.getUserAgent().replace("\0", "").replace("\n", "").replace("\r", ""));
