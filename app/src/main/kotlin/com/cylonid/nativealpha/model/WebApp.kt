@@ -138,6 +138,29 @@ class WebApp {
         }
     }
 
+    private fun disableSwitchBiometricAccessChangeListener(switchBiometricAccess: Switch) {
+        switchBiometricAccess.setOnCheckedChangeListener(null)
+    }
+
+    private fun enableSwitchBiometricAccessChangeListener(switchBiometricAccess: Switch,
+                                                          activity: WebAppSettingsActivity) {
+        switchBiometricAccess.setOnCheckedChangeListener { switch, checked ->
+            onSwitchBiometricAccessChanged(
+                switch,
+                checked,
+                activity
+            )
+        }
+    }
+
+    private fun setSwitchBiometricAccessSilently(newValue: Boolean,
+                                                 switchBiometricAccess: Switch,
+                                                 activity: WebAppSettingsActivity) {
+        disableSwitchBiometricAccessChangeListener(switchBiometricAccess)
+        switchBiometricAccess.isChecked = newValue
+        enableSwitchBiometricAccessChangeListener(switchBiometricAccess, activity)
+    }
+
     fun onSwitchBiometricAccessChanged(
         mSwitch: CompoundButton,
         isChecked: Boolean,
@@ -146,53 +169,21 @@ class WebApp {
         val switchBiometricAccess =
             mSwitch.rootView.findViewById<Switch>(R.id.switchBiometricAccess)
 
-        switchBiometricAccess.setOnCheckedChangeListener(null)
+        // reset to value before user toggled, actual setting of value is done by prompt success callback
+        setSwitchBiometricAccessSilently(!switchBiometricAccess.isChecked, switchBiometricAccess, activity)
 
-        if (!isChecked) {
+        if (!switchBiometricAccess.isChecked) {
             BiometricPromptHelper(activity as FragmentActivity).showPrompt(
                 {
-                    switchBiometricAccess.isChecked = false
-                    switchBiometricAccess.setOnCheckedChangeListener { switch, checked ->
-                        onSwitchBiometricAccessChanged(
-                            switch,
-                            checked,
-                            activity
-                        )
-                    }
+                    setSwitchBiometricAccessSilently(true, switchBiometricAccess, activity)
                 },
-                {
-                    switchBiometricAccess.isChecked = true
-                    switchBiometricAccess.setOnCheckedChangeListener { switch, checked ->
-                        onSwitchBiometricAccessChanged(
-                            switch,
-                            checked,
-                            activity
-                        )
-                    }
-                }, activity.getString(R.string.bioprompt_disable_restricition)
+                {}, activity.getString(R.string.bioprompt_enable_restriction)
             )
         }
-        if (isChecked) {
+        if (switchBiometricAccess.isChecked) {
             BiometricPromptHelper(activity as FragmentActivity).showPrompt({
-                switchBiometricAccess.isChecked = true
-                switchBiometricAccess.setOnCheckedChangeListener { switch, checked ->
-                    onSwitchBiometricAccessChanged(
-                        switch,
-                        checked,
-                        activity
-                    )
-                }
-            },
-                {
-                    switchBiometricAccess.isChecked = false
-                    switchBiometricAccess.setOnCheckedChangeListener { switch, checked ->
-                        onSwitchBiometricAccessChanged(
-                            switch,
-                            checked,
-                            activity
-                        )
-                    }
-                }, activity.getString(R.string.bioprompt_enable_restriction)
+                setSwitchBiometricAccessSilently(false, switchBiometricAccess, activity)
+            }, {}, activity.getString(R.string.bioprompt_disable_restricition)
             )
         }
     }
