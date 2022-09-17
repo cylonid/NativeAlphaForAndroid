@@ -555,6 +555,7 @@
                             android:showDividers="middle"
                             android:visibility="gone">
                             <TextView
+                                android:id="@+id/labelEditableBaseUrl"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/remove_divider"
