@@ -183,14 +183,6 @@ public final class Utility {
         }
     }
 
-    public static void personalizeToolbar(AppCompatActivity a)  {
-        Toolbar toolbar = a.findViewById(R.id.toolbar);
-        toolbar.setLogo(R.mipmap.native_alpha_white);
-        @StringRes int appName = !BuildConfig.FLAVOR.equals("extended") ? R.string.app_name : R.string.app_name_plus;
-        toolbar.setTitle(appName);
-        a.setSupportActionBar(toolbar);
-    }
-
     public static Integer getWidthFromIcon(String size_string) {
         int x_index = size_string.indexOf("x");
         if (x_index == -1)

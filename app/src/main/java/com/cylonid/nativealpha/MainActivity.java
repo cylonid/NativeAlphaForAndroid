@@ -14,8 +14,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.cylonid.nativealpha.model.DataManager;
@@ -46,13 +48,11 @@ public class MainActivity extends AppCompatActivity {
             buildAddWebsiteDialog(getString(R.string.welcome_msg));
         }
 
-        Utility.personalizeToolbar(this);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> buildAddWebsiteDialog(getString(R.string.add_webapp)));
-
+        personalizeToolbar();
 
     }
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -71,7 +71,13 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(Const.INTENT_WEBAPP_CHANGED, false);
         }
     }
-
+    private void personalizeToolbar()  {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setLogo(R.mipmap.native_alpha_white);
+        @StringRes int appName = !BuildConfig.FLAVOR.equals("extended") ? R.string.app_name : R.string.app_name_plus;
+        toolbar.setTitle(appName);
+        setSupportActionBar(toolbar);
+    }
 
     private void buildImportSuccessDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);

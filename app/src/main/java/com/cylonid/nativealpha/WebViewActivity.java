@@ -97,7 +97,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     protected ValueCallback<Uri[]> filePathCallback;
 
     private boolean quitOnNextBackpress = false;
-    private boolean forceQuitOnNextBackpress = false;
     private Handler reload_handler = null;
     private WebApp webapp = null;
     private String urlOnFirstPageload = "";
@@ -333,7 +332,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         boolean needsDarkMode = webapp.isUseTimespanDarkMode() &&
                 Utility.isInInterval(Utility.convertStringToCalendar(webapp.getTimespanDarkModeBegin()), Calendar.getInstance(), Utility.convertStringToCalendar(webapp.getTimespanDarkModeEnd()))
                 || (!webapp.isUseTimespanDarkMode() && webapp.isForceDarkMode());
-        
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             boolean isDark = wv.getSettings().getForceDark() == WebSettings.FORCE_DARK_ON;
             if (needsDarkMode && !isDark) {
@@ -498,6 +497,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             builder.setIcon(android.R.drawable.ic_dialog_alert);
             builder.setPositiveButton(getString(R.string.no_https_dialog_accept), (dialog, id) -> {
                 webApp.setAllowHttp(true);
+                webApp.setOverrideGlobalSettings(true);
                 DataManager.getInstance().saveWebAppData();
                 view.loadUrl(url, CUSTOM_HEADERS);
             });
