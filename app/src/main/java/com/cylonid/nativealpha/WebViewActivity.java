@@ -531,6 +531,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
     private void showSystemBars() {
 
+        if(webapp.isShowFullscreen()) return;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
             getWindow().setDecorFitsSystemWindows(true);
