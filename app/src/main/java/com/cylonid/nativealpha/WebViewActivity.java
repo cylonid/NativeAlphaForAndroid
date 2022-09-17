@@ -333,16 +333,17 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         boolean needsDarkMode = webapp.isUseTimespanDarkMode() &&
                 Utility.isInInterval(Utility.convertStringToCalendar(webapp.getTimespanDarkModeBegin()), Calendar.getInstance(), Utility.convertStringToCalendar(webapp.getTimespanDarkModeEnd()))
                 || (!webapp.isUseTimespanDarkMode() && webapp.isForceDarkMode());
-
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (needsDarkMode) {
+            boolean isDark = wv.getSettings().getForceDark() == WebSettings.FORCE_DARK_ON;
+            if (needsDarkMode && !isDark) {
                 wv.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
                 wv.setBackgroundColor(Color.BLACK);
 
                 if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK_STRATEGY)) {
                     WebSettingsCompat.setForceDarkStrategy(wv.getSettings(), WebSettingsCompat.DARK_STRATEGY_PREFER_WEB_THEME_OVER_USER_AGENT_DARKENING);
                 }
-            } else {
+            } else if(!needsDarkMode && isDark) {
                 wv.getSettings().setForceDark(WebSettings.FORCE_DARK_OFF);
                 wv.setBackgroundColor(Color.WHITE);
             }
