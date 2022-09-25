@@ -20,16 +20,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.cylonid.nativealpha.activities.NewsActivity;
 import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
+import com.cylonid.nativealpha.util.LocaleUtils;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 import static android.widget.LinearLayout.HORIZONTAL;
-
 
 public class MainActivity extends AppCompatActivity {
     private LinearLayout mainScreen;
@@ -40,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainScreen = findViewById(R.id.mainScreen);
+        if (DataManager.getInstance().getEulaData()) {
+            Intent i = new Intent(MainActivity.this, NewsActivity.class);
+            i.putExtra("text", "eula");
+            i.putExtra("enforceCheck", true);
+            startActivity(i);
+        }
 
         DataManager.getInstance().loadAppData();
         addActiveWebAppsToUI();

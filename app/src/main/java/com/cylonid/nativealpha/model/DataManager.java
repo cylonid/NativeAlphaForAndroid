@@ -1,5 +1,6 @@
 package com.cylonid.nativealpha.model;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Base64;
@@ -33,6 +34,10 @@ import static android.content.Context.MODE_PRIVATE;
 public class DataManager {
 
     private static final String SHARED_PREF_KEY = "WEBSITEDATA";
+    private static final String INTRO_SCREENS = "com.cylonid.nativealpha.shownIntroScreens";
+    public static final String EULA_ACCEPTED = "eulaAccepted";
+    public static final String LAST_SHOWN_UPDATE = "lastShownUpdate";
+
     private static final String SHARED_PREF_LEGACY_KEY = "GLOBALSETTINGS";
     private static final String shared_pref_max_id  = "MAX_ID";
     private static final String shared_pref_next_container = "NEXT_CONTAINER";
@@ -40,6 +45,8 @@ public class DataManager {
     private static final String shared_pref_webappdata = "WEBSITEDATA";
     private static final String shared_pref_globalsettings = "GLOBALSETTINGS";
 
+    // TODO: Major cleanup...
+    // Convert to Kotlin, streamline interface, save separated by uuid
     //<Legacy strings to be deleted in future>
     private static final String shared_pref_glob_cache = "Cache";
     private static final String shared_pref_glob_cookie = "Cookies";
@@ -55,6 +62,7 @@ public class DataManager {
     private ArrayList<WebApp> websites;
     private int max_assigned_ID;
     private SharedPreferences appdata;
+
     private GlobalSettings settings;
 
     private DataManager()
@@ -88,6 +96,28 @@ public class DataManager {
         editor.putInt(shared_pref_max_id, max_assigned_ID);
         if (SandboxManager.getInstance() != null) editor.putInt(shared_pref_next_container, SandboxManager.getInstance().getNextContainer());
         editor.apply();
+    }
+
+    public boolean getEulaData() {
+        return getIntroScreensData().getBoolean(EULA_ACCEPTED, false);
+    }
+
+    public String getLastShownUpdate() {
+        return getIntroScreensData().getString(LAST_SHOWN_UPDATE, "");
+    }
+
+    public void setEulaData(boolean newValue) {
+        getIntroScreensData().edit().putBoolean(EULA_ACCEPTED, newValue).apply();
+    }
+
+    public void setLastShownUpdate(String newValue) {
+        getIntroScreensData().edit().putString(LAST_SHOWN_UPDATE, newValue).apply();
+    }
+
+    private SharedPreferences getIntroScreensData() {
+        Utility.Assert(App.getAppContext() != null, "App.getAppContext() null before saving sharedpref");
+        return App.getAppContext().getSharedPreferences(INTRO_SCREENS, MODE_PRIVATE);
+
     }
 
     private void checkIfWebAppIdsCollide(ArrayList<WebApp> oldWebApps, ArrayList<WebApp> newWebApps) {

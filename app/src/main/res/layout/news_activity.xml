@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:forceDarkAllowed="false"
+    android:id="@+id/news_main">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <ScrollView android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <WebView
+                android:id="@+id/news_content"
+                android:layout_weight=".60"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                tools:ignore="MissingConstraints" />
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/news_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@android:string/cancel" />
+        <Button
+            android:id="@+id/news_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@android:string/ok" />
+
+    </LinearLayout>
+
+</LinearLayout>

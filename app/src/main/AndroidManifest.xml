@@ -48,7 +48,6 @@
             android:documentLaunchMode="intoExisting"
             />
  
-        <!--Placeholder-->
         <activity
             android:name="com.cylonid.nativealpha.SettingsActivity"
             android:parentActivityName=".MainActivity"
@@ -67,6 +66,14 @@
 
         <activity
             android:name="com.cylonid.nativealpha.AboutActivity"
+            android:parentActivityName=".MainActivity"
+            android:icon="@mipmap/native_alpha"
+            android:roundIcon="@mipmap/native_alpha"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:name="com.cylonid.nativealpha.activities.NewsActivity"
             android:parentActivityName=".MainActivity"
             android:icon="@mipmap/native_alpha"
             android:roundIcon="@mipmap/native_alpha"
