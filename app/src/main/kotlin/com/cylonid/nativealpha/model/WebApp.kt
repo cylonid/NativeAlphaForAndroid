@@ -176,6 +176,7 @@ class WebApp {
             BiometricPromptHelper(activity as FragmentActivity).showPrompt(
                 {
                     setSwitchBiometricAccessSilently(true, switchBiometricAccess, activity)
+                    isBiometricProtection = true
                 },
                 {}, activity.getString(R.string.bioprompt_enable_restriction)
             )
@@ -183,6 +184,7 @@ class WebApp {
         if (switchBiometricAccess.isChecked) {
             BiometricPromptHelper(activity as FragmentActivity).showPrompt({
                 setSwitchBiometricAccessSilently(false, switchBiometricAccess, activity)
+                isBiometricProtection = false
             }, {}, activity.getString(R.string.bioprompt_disable_restricition)
             )
         }

@@ -141,7 +141,7 @@
     <string name="bioprompt_restricted_webapp">Zugriffsbeschränkung</string>
     <string name="bioprompt_disable_restricition">Zugriffsbeschränkung aufheben?</string>
     <string name="enable_access_restriction">Zugriffsbeschränkung aktivieren</string>
-    <string name="bioprompt_enable_restriction">Zugriffsgeschränkung aktivieren?</string>
+    <string name="bioprompt_enable_restriction">Zugriffsbeschränkung aktivieren?</string>
     <string name="allow_media_playback_in_background">Medienwiedergabe im Hintergrund zulassen</string>
     <string name="start_url">Start-URL</string>
     <string name="more">Mehr</string>
