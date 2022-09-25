@@ -176,21 +176,6 @@ public class ShortcutDialogFragment extends DialogFragment  {
         if (host_part.startsWith("amazon."))
             found_icons.put(300, "https://s3.amazonaws.com/prod-widgetSource/in-shop/pub/images/amzn_favicon_blk.png");
 
-        if (host_part.startsWith("ebay."))
-            found_icons.put(360, "https://play-lh.googleusercontent.com/31-mJUIynIfQBizOn-w1yWLKHBxVeRKA3gz348_E3K-TnuEaqCjn_-Fr9j0yQ6i0y5E=s360");
-
-        if (host_part.startsWith("ebay-kleinanzeigen."))
-            found_icons.put(360, "https://play-lh.googleusercontent.com/3vS4GdhvzXeQuSkwhXZnDElNIE3jQ4hZPEnnLX9BywdsBqUrfc8OBoa9aNRl-Bh84B4=s360");
-
-        if (host_part.startsWith("onedrive.com"))
-            found_icons.put(360, "https://play-lh.googleusercontent.com/4iLRlu-E5hbgoHCb5dkR8wUbjEHFWHfXHkYKexE9hGVaISUGuYzwnFsSvKLgQWTi3cg=s360");
-
-        if (host_part.startsWith("onenote.com"))
-            found_icons.put(360, "https://play-lh.googleusercontent.com/3Wr_nlhRHjIGfPd-BNUbgffLfxPPqNW8GFPscqnQ4t2aPRyKlFMuXT4yhb-PSMsHgss=s360");
-
-        if (host_part.startsWith("office.com"))
-            found_icons.put(360, "https://play-lh.googleusercontent.com/D6XDCje7pB0nNP1sOZkwD-tXkV0_As3ni21us5yZ71_sy0FTWv1s_MQBe1JUnHlgE94=s360");
-
         if (host_part.startsWith("paypal."))
             found_icons.put(196, "https://www.paypalobjects.com/webstatic/icon/pp196.png");
 
