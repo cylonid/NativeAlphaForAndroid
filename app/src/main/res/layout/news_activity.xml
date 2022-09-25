@@ -35,15 +35,15 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/news_cancel"
+            android:id="@+id/btnNewsCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@android:string/cancel" />
+            android:text="@string/cancel" />
         <Button
-            android:id="@+id/news_confirm"
+            android:id="@+id/btnNewsConfirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@android:string/ok" />
+            android:text="@string/ok" />
 
     </LinearLayout>
 

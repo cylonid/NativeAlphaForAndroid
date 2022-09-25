@@ -185,7 +185,7 @@
                     android:id="@+id/btnCancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@android:string/cancel" />
+                    android:text="@string/cancel" />
 
                 <Button
                     android:id="@+id/btnSave"

@@ -2,12 +2,11 @@ package com.cylonid.nativealpha.activities;
 
 import android.os.Bundle
 import android.view.View
-import android.webkit.WebSettings
 import androidx.appcompat.app.AppCompatActivity
-import androidx.webkit.WebSettingsCompat
 import com.cylonid.nativealpha.R
 import com.cylonid.nativealpha.model.DataManager
 import com.cylonid.nativealpha.util.LocaleUtils
+import com.cylonid.nativealpha.util.Utility
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.news_activity.*
 
@@ -23,14 +22,15 @@ class NewsActivity : AppCompatActivity() {
     private fun initializeUI() {
         val enforceCheck = intent.extras!!.getBoolean("enforceCheck")
         if(enforceCheck) {
-            news_cancel.setOnClickListener { cancelEULA() }
-            news_confirm.setOnClickListener {
+            btnNewsCancel.setOnClickListener { cancelEULA() }
+            btnNewsConfirm.setOnClickListener {
                 confirmEULA()
             }
+            btnNewsConfirm.text = resources.getString(R.string.accept)
             setText()
         } else {
-            news_cancel.visibility = View.GONE
-            news_confirm.setOnClickListener {
+            btnNewsCancel.visibility = View.GONE
+            btnNewsConfirm.setOnClickListener {
                 finish()
             }
         }
@@ -42,13 +42,9 @@ class NewsActivity : AppCompatActivity() {
     }
 
     private fun cancelEULA() {
-        Snackbar.make(
-            findViewById(android.R.id.content),
-            "You must accept the EULA to continue",
-            Snackbar.LENGTH_LONG
-        ).show()
+        Utility.showInfoSnackbar(this, getString(R.string.cancel_eula), Snackbar.LENGTH_LONG)
     }
-    
+
     private fun confirmEULA() {
         DataManager.getInstance().eulaData = true
         finish()

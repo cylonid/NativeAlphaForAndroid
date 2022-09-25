@@ -154,6 +154,10 @@
     <string name="close_web_app">Close Web App</string>
     <string name="select_text">Select text</string>
     <string name="to_main_menu">To Main Menu</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="accept">Accept</string>
+    <string name="cancel_eula">You must accept the EULA to continue.</string>
 
 
 </resources>
