@@ -30,7 +30,9 @@ import static org.hamcrest.Matchers.any;
 public class TestUtils {
 
 
-
+    public static void acceptLicense() {
+        onView(withId(R.id.btnNewsConfirm)).perform(click());
+    }
     public static void alertDialogAccept() {
         onView(withId(android.R.id.button1)).perform(click());
     }

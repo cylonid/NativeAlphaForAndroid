@@ -149,6 +149,8 @@ public class UITests {
             DataManager.getInstance().addWebsite(new WebApp(base_url, DataManager.getInstance().getIncrementedID()));
             activityTestRule.getActivity().addActiveWebAppsToUI();
         });
+
+        TestUtils.acceptLicense();
         //Get rid of welcome message
         TestUtils.alertDialogDismiss();
     }

@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainScreen = findViewById(R.id.mainScreen);
-        if (DataManager.getInstance().getEulaData()) {
+        if (!DataManager.getInstance().getEulaData()) {
             Intent i = new Intent(MainActivity.this, NewsActivity.class);
             i.putExtra("text", "eula");
             i.putExtra("enforceCheck", true);
