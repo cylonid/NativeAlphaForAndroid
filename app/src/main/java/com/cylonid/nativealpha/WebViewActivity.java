@@ -64,6 +64,7 @@ import com.cylonid.nativealpha.model.SandboxManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.EntryPointUtils;
+import com.cylonid.nativealpha.util.LocaleUtils;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
 import com.jakewharton.processphoenix.ProcessPhoenix;
@@ -759,18 +760,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         @Override
         public void onPageFinished(WebView view, String url) {
             if(url.equals("about:blank")) {
-                String langExtension;
-                switch(Locale.getDefault().getLanguage()) {
-                    case "de":
-                        langExtension = "de";
-                        break;
-                    default:
-                        langExtension = "en";
-                }
+                String langExtension = LocaleUtils.getFileEnding();
                 wv.loadUrl("file:///android_asset/errorSite/error_" + langExtension + ".html");
             }
-            wv.loadUrl("javascript:document.addEventListener(\"visibilitychange\",function (event) {event.stopImmediatePropagation();},true);");
-           wv.evaluateJavascript("document.addEventListener(\"visibilitychange\",function (event) {event.stopImmediatePropagation();},true);", null);
+            wv.evaluateJavascript("document.addEventListener(\"visibilitychange\",function (event) {event.stopImmediatePropagation();},true);", null);
             super.onPageFinished(view, url);
         }
 
@@ -835,9 +828,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             super.onLoadResource(view, url);
             if (DataManager.getInstance().getWebApp(webappID).isRequestDesktop())
                 view.evaluateJavascript("document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth / 1024));", null);
-//            view.loadUrl("javascript:window.addEventListener('load', function(){alert('loaded');})");
-
-            view.loadUrl("javascript:document.__defineGetter__(\"visibilityState\",  function() { return \"visible\";})");
             view.evaluateJavascript("document.addEventListener(    \"visibilitychange\"    , (event) => {         event.stopImmediatePropagation();    }  );", null);
         }
 
