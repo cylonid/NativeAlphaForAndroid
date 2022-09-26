@@ -9,9 +9,11 @@
     android:id="@+id/news_main">
     <View
         android:layout_width="match_parent"
+        android:weightSum="100"
         android:layout_height="1dp"/>
 
     <ScrollView android:layout_height="wrap_content"
+        android:layout_weight="90"
         android:layout_width="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,9 +31,10 @@
     </ScrollView>
     <LinearLayout
         android:id="@+id/header"
+        android:layout_weight="10"
         android:layout_width="wrap_content"
-        android:layout_height="56dp"
-        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:orientation="horizontal">
 
         <Button

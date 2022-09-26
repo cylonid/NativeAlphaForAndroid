@@ -11,12 +11,13 @@ header {
 
 main {
   display: flex;
-  width: 60%;
+  max-width: 100%;
   flex-direction: column;
+  overflow-wrap: break-word;
 }
 
 aside {
-  width: 20%;
+  display: none;
 }
 
 #eula {
@@ -25,6 +26,7 @@ aside {
 
 ul {
   list-style: none;
+  padding: 0;
 }
 
 ul li::before {
@@ -33,5 +35,4 @@ ul li::before {
   font-weight: bold;
   display: inline-block; 
   width: 2em;
-
 }
