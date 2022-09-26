@@ -115,6 +115,7 @@ dependencies {
 
     implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
     implementation 'org.jsoup:jsoup:1.14.1'
+    //    https://gitlab.com/eyeo/distpartners/libadblockplus-android/-/tags
     implementation 'org.adblockplus:adblock-android-webview:5.0.1'
     implementation 'com.github.ihimanshurawat:Hasher:1.2'
     implementation 'androidx.navigation:navigation-fragment:2.5.2'
