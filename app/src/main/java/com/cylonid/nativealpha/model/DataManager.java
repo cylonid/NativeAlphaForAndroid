@@ -102,16 +102,16 @@ public class DataManager {
         return getIntroScreensData().getBoolean(EULA_ACCEPTED, false);
     }
 
-    public String getLastShownUpdate() {
-        return getIntroScreensData().getString(LAST_SHOWN_UPDATE, "");
+    public int getLastShownUpdate() {
+        return getIntroScreensData().getInt(LAST_SHOWN_UPDATE, 0);
     }
 
     public void setEulaData(boolean newValue) {
         getIntroScreensData().edit().putBoolean(EULA_ACCEPTED, newValue).apply();
     }
 
-    public void setLastShownUpdate(String newValue) {
-        getIntroScreensData().edit().putString(LAST_SHOWN_UPDATE, newValue).apply();
+    public void setLastShownUpdate(int newValue) {
+        getIntroScreensData().edit().putInt(LAST_SHOWN_UPDATE, newValue).apply();
     }
 
     private SharedPreferences getIntroScreensData() {

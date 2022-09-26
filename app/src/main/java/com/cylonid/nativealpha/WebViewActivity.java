@@ -63,6 +63,7 @@ import com.cylonid.nativealpha.model.DataManager;
 import com.cylonid.nativealpha.model.SandboxManager;
 import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.Const;
+import com.cylonid.nativealpha.util.EntryPointUtils;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.android.material.snackbar.Snackbar;
 import com.jakewharton.processphoenix.ProcessPhoenix;
@@ -107,7 +108,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         webappID = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
-        DataManager.getInstance().loadAppData();
+        EntryPointUtils.entryPointReached(this);
 
         webapp = DataManager.getInstance().getWebApp(webappID);
         if (webapp == null) {
