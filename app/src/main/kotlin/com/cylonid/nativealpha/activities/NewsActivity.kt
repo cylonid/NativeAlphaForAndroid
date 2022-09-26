@@ -1,13 +1,12 @@
 package com.cylonid.nativealpha.activities;
 
 import android.os.Bundle
-import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.cylonid.nativealpha.R
 import com.cylonid.nativealpha.model.DataManager
 import com.cylonid.nativealpha.util.LocaleUtils
-import com.cylonid.nativealpha.util.Utility
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.news_activity.*
 
 
@@ -20,33 +19,32 @@ class NewsActivity : AppCompatActivity() {
     }
 
     private fun initializeUI() {
-        val enforceCheck = intent.extras!!.getBoolean("enforceCheck")
-        if(enforceCheck) {
-            btnNewsCancel.setOnClickListener { cancelEULA() }
-            btnNewsConfirm.setOnClickListener {
-                confirmEULA()
-            }
-            btnNewsConfirm.text = resources.getString(R.string.accept)
-            setText()
-        } else {
-            btnNewsCancel.visibility = View.GONE
-            btnNewsConfirm.setOnClickListener {
-                finish()
-            }
+        setText()
+        btnNewsConfirm.setOnClickListener {
+            confirm()
         }
     }
 
     private fun setText() {
-        val fileId = intent.extras!!.getString("text")
+        val fileId = intent.extras!!.getString("text") ?: "latestUpdate"
         news_content.loadUrl("file:///android_asset/news/" + fileId + "_" + LocaleUtils.fileEnding +".html")
+        if(DataManager.getInstance().eulaData) {
+            news_content.settings.javaScriptEnabled = true
+            news_content.webViewClient = NewsWebViewClient()
+        }
     }
 
-    private fun cancelEULA() {
-        Utility.showInfoSnackbar(this, getString(R.string.cancel_eula), Snackbar.LENGTH_LONG)
-    }
 
-    private fun confirmEULA() {
+    private fun confirm() {
         DataManager.getInstance().eulaData = true
         finish()
     }
+}
+
+private class NewsWebViewClient : WebViewClient() {
+    override fun onPageFinished(view: WebView, url: String) {
+        view.evaluateJavascript("hideById('eula')", null)
+        view.settings.javaScriptEnabled = false
+    }
+
 }

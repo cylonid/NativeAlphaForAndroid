@@ -4,16 +4,34 @@ header {
   flex-direction: column;
   align-items: center;
 }
-main {
+#wrapper {
   display: flex;
   flex-direction: row;
+}
+
+main {
+  display: flex;
+  width: 60%;
+  flex-direction: column;
 }
 
 aside {
   width: 20%;
 }
 
-article {
-  width: 60%;
+#eula {
   text-align: justify;
+}
+
+ul {
+  list-style: none;
+}
+
+ul li::before {
+  content: "✔";
+  color: rgb(122, 122, 122);
+  font-weight: bold;
+  display: inline-block; 
+  width: 2em;
+
 }

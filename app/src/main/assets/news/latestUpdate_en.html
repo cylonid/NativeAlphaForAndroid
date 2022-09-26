@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="news.css">
+  <meta name="color-scheme" content="light dark">
+</head>
+
+<script>
+  function hideById(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+</script>
+
+<body>
+  <header>
+    <img width="230px" class="logo" src="../logo.svg">
+  </header>
+  <div id="wrapper">
+    <aside></aside>
+    <main>
+      <article id="update">
+        <h3>Version: v1.3.0</h3>
+        <ul>
+          <li>Resolved unusual going back behaviour on certain websites</li>
+          <li>Added support for Google OAuth-enabled sites</li>
+          <li>Context Menu: Long-press context menu with several options (Share, going back/forward, reload...)</li>
+          <li>Added pinch-to-zoom setting</li>
+          <li>Added option to freely set start URL of Web Apps to support non-standard URLs (expert settings)</li>
+          <li>Several bugfixes and general improvements</li>
+        </ul>
+        <h5>Native Alpha Plus</h4>
+          <ul>
+            <li>Access Protection: For every Web App, you can enable access protection (Android lockscreen PIN or
+              fingerprint)</li>
+            <li>Further enhancements for Dark Mode</li>
+          </ul>
+      </article>
+      <article id="eula">
+        <h1>Nutzungsbedingungen/Haftungsausschluss</h1>
+        <p>This app is published under <a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html">GNU General Public
+            License v3</a> . The source code is freely accessible on GitHub.</p>
+        <p>
+          The software is provided “as is”, without warranty of any kind, express or implied, including but not limited
+          to
+          the warranties of merchantability, fitness for a particular purpose and noninfringement. In no event shall the
+          authors or copyright holders be liable for any claim, damages or other liability, whether in an action of
+          contract, tort or otherwise, arising from, out of or in connection with the software or the use or other
+          dealings
+          in the software.</p>
+      </article>
+    </main>
+    <aside></aside>
+  </div id="wrapper">
+</body>
+
+</html>
