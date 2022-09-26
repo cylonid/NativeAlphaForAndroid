@@ -52,6 +52,7 @@ public class UITests {
 //    public ActivityScenarioRule<MainActivity> scenarioRule = new ActivityScenarioRule<>(MainActivity.class);
     @Test
     public void addWebsite() {
+        TestUtils.acceptLicense();
         onView(withId(R.id.websiteUrl)).perform(clearText(), typeText("github.com"));
         onView(withId(R.id.switchCreateShortcut)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
