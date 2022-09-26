@@ -1,9 +1,7 @@
 package com.cylonid.nativealpha.activities;
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -22,6 +20,8 @@ class NewsActivity : AppCompatActivity() {
         setContentView(R.layout.news_activity)
         initializeUI()
     }
+
+    override fun onBackPressed() {}
 
     private fun initializeUI() {
         setText()
