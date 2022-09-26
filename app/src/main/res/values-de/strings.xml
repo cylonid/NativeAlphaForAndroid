@@ -152,4 +152,5 @@
     <string name="ok">OK</string>
     <string name="accept">Akzeptieren</string>
     <string name="cancel_eula">Sie müssen die EULA akzeptieren, um fortzufahren.</string>
+    <string name="eula_content" translatable="false">Die Software wird ohne Mängelgewähr und ohne jegliche ausdrückliche oder stillschweigende Gewährleistung, einschließlich, aber nicht beschränkt auf die Gewährleistung der Marktgängigkeit, der Eignung für einen bestimmten Zweck und der Nichtverletzung von Rechten Dritter, zur Verfügung gestellt. Die Autoren oder Urreberrechtsinhaber sind in keinem Fall haftbar für Ansprüche, Schäden oder andere Verpflichtungen, ob in einer Vertrags- oder Haftungsklage, einer unerlaubten Handlung oder anderweitig, die sich aus oder in Verbindung mit der Software oder der Nutzung oder anderen Geschäften mit der Software ergeben.</string>
 </resources>
