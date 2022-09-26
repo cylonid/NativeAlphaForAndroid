@@ -37,6 +37,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+<!--        Make sure to also copy changes to WebViewActivity in build.gradle-->
         <activity
             android:name=".WebViewActivity"
             android:parentActivityName=".MainActivity"
@@ -48,6 +50,7 @@
             android:documentLaunchMode="intoExisting"
             />
  
+        <!--Placeholder-->
         <activity
             android:name="com.cylonid.nativealpha.SettingsActivity"
             android:parentActivityName=".MainActivity"

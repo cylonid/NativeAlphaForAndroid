@@ -65,16 +65,15 @@ public final class Utility {
     }
 
     public static Intent createWebViewIntent(WebApp webapp, Context c) {
-        String apk_id = "com.cylonid.nativealpha";
+        String packageName = "com.cylonid.nativealpha";
 
         Class webview_class = null;
         try {
             if (webapp.getContainerId() != Const.NO_CONTAINER) {
-                webview_class = Class.forName(apk_id + ".__WebViewActivity_" + webapp.getContainerId());
-
+                webview_class = Class.forName(packageName + ".__WebViewActivity_" + webapp.getContainerId());
             }
             else {
-                webview_class = Class.forName(apk_id + ".WebViewActivity");
+                webview_class = Class.forName(packageName + ".WebViewActivity");
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

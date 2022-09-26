@@ -47,8 +47,8 @@ android {
         applicationId "com.cylonid.nativealpha"
         minSdkVersion 26
         targetSdkVersion 32
-        versionCode 1207
-        versionName "1.3.0Alpha7"
+        versionCode 1212
+        versionName "1.3.0Alpha12"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -181,12 +181,14 @@ def generateWebViewActivities = tasks.register( "extendAndroidManifest", Copy ) 
                 "            android:icon=\"@mipmap/native_alpha\"\n" +
                 "            android:roundIcon=\"@mipmap/native_alpha\"\n" +
                 "            android:theme=\"@style/AppTheme.NoActionBar.Webapp\"\n" +
-                "            android:configChanges=\"orientation|screenSize\"\n" +
+                "            android:configChanges=\"orientation|screenSize|smallestScreenSize|density|screenLayout|uiMode|keyboard|keyboardHidden|navigation\"\n" +
                 "            android:launchMode=\"standard\"\n" +
                 "            android:process=\":web_sandbox_" + String.valueOf(i) + "\"\n" +
                 "            android:documentLaunchMode=\"intoExisting\"\n" +
                 "         />\n"
     }
+
+
     filter {
         String line -> line.replaceAll(placeholder, replacement)
     }
