@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialog</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -15,6 +15,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialog</item>
     </style>
 
     <style name="AppTheme.NoActionBar.Webapp">
@@ -23,7 +24,19 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkGrey</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:timePickerDialogTheme">@style/CustomDatePickerDialog</item>
+
     </style>
+    <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:textColorPrimary">#818181</item>
+        <item name="android:textColorSecondary">@color/colorPrimary</item>
+
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorControlActivated">@color/colorPrimaryDark</item>
+        <item name="android:timePickerMode">clock</item>
+        <item name="android:headerBackground">@color/colorPrimaryDark</item>
+    </style>
+
 
     <style name="AppTheme.Launcher">
     <item name="android:windowBackground">@drawable/launch_screen</item>

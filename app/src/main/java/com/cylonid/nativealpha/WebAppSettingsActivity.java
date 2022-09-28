@@ -141,7 +141,7 @@ public class WebAppSettingsActivity extends AppCompatActivity {
 
     private void showTimePicker(EditText txtField) {
         Calendar c = Utility.convertStringToCalendar(txtField.getText().toString());
-        TimePickerDialog timePickerDialog = new TimePickerDialog(WebAppSettingsActivity.this, (timePicker, selectedHour, selectedMinute) -> {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(WebAppSettingsActivity.this, R.style.CustomDatePickerDialog, (timePicker, selectedHour, selectedMinute) -> {
             Calendar datetime = Calendar.getInstance();
             datetime.set(Calendar.HOUR_OF_DAY, selectedHour);
             datetime.set(Calendar.MINUTE, selectedMinute);
