@@ -26,11 +26,6 @@ internal class BiometricPromptHelper(private val activity: FragmentActivity) {
                     super.onAuthenticationSucceeded(result)
                     funSuccess.execute()
                 }
-
-                override fun onAuthenticationFailed() {
-                    super.onAuthenticationFailed()
-                    funFail.execute()
-                }
             })
         val promptInfo = PromptInfo.Builder()
             .setTitle(promptTitle)
