@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -79,6 +80,7 @@ public final class Utility {
             e.printStackTrace();
         }
         Intent intent = new Intent(c, webview_class);
+        if(webapp.isBiometricProtection()) intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         intent.putExtra(Const.INTENT_WEBAPPID, webapp.getID());
         intent.setData(Uri.parse(webapp.getBaseUrl() + webapp.getID()));
         intent.setAction(Intent.ACTION_VIEW);
@@ -210,6 +212,11 @@ public final class Utility {
                     break;
             }
         }
+    }
+
+    public static boolean isNightMode(Context context) {
+        int nightModeFlags = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
     }
 
     public static void writeFileOnInternalStorage(Context mcoContext, String sFileName, String sBody){

@@ -8,6 +8,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -331,21 +332,26 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     }
 
     private void setDarkModeIfNeeded() {
-        boolean needsDarkMode = webapp.isUseTimespanDarkMode() &&
+        boolean needsForcedDarkMode = webapp.isUseTimespanDarkMode() &&
                 Utility.isInInterval(Utility.convertStringToCalendar(webapp.getTimespanDarkModeBegin()), Calendar.getInstance(), Utility.convertStringToCalendar(webapp.getTimespanDarkModeEnd()))
                 || (!webapp.isUseTimespanDarkMode() && webapp.isForceDarkMode());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            boolean isDark = wv.getSettings().getForceDark() == WebSettings.FORCE_DARK_ON;
-            if (needsDarkMode && !isDark) {
+            if (Utility.isNightMode(this) || needsForcedDarkMode) {
                 wv.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
-                wv.setBackgroundColor(Color.BLACK);
+            } else {
+                wv.getSettings().setForceDark(WebSettings.FORCE_DARK_OFF);
+            }
 
+            if (needsForcedDarkMode) {
                 if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK_STRATEGY)) {
                     WebSettingsCompat.setForceDarkStrategy(wv.getSettings(), WebSettingsCompat.DARK_STRATEGY_PREFER_WEB_THEME_OVER_USER_AGENT_DARKENING);
                 }
-            } else if(!needsDarkMode && isDark) {
-                wv.getSettings().setForceDark(WebSettings.FORCE_DARK_OFF);
+                wv.setBackgroundColor(Color.BLACK);
+            } else {
+                if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK_STRATEGY)) {
+                    WebSettingsCompat.setForceDarkStrategy(wv.getSettings(), WebSettingsCompat.DARK_STRATEGY_WEB_THEME_DARKENING_ONLY);
+                }
                 wv.setBackgroundColor(Color.WHITE);
             }
         }
@@ -406,6 +412,12 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     }
 
     @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        this.setDarkModeIfNeeded();
+    }
+
+    @Override
     public void onBackPressed() {
         WebApp webapp = DataManager.getInstance().getWebApp(webappID);
 
@@ -438,6 +450,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         wv.onResume();
         wv.resumeTimers();
         this.setDarkModeIfNeeded();
+
         
         if(webapp.isBiometricProtection()) {
             View fullActivityView = findViewById(R.id.webviewActivity);
