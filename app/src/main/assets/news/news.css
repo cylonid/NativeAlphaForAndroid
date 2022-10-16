@@ -12,12 +12,14 @@ header {
 main {
   display: flex;
   max-width: 100%;
+  width: 80%;
   flex-direction: column;
   overflow-wrap: break-word;
 }
 
 aside {
   display: none;
+  width: 10%;
 }
 
 #eula {
