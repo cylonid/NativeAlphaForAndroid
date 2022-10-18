@@ -65,28 +65,6 @@ public final class Utility {
         }
     }
 
-    public static Intent createWebViewIntent(WebApp webapp, Context c) {
-        String packageName = "com.cylonid.nativealpha";
-
-        Class webview_class = null;
-        try {
-            if (webapp.getContainerId() != Const.NO_CONTAINER) {
-                webview_class = Class.forName(packageName + ".__WebViewActivity_" + webapp.getContainerId());
-            }
-            else {
-                webview_class = Class.forName(packageName + ".WebViewActivity");
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        Intent intent = new Intent(c, webview_class);
-        if(webapp.isBiometricProtection()) intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        intent.putExtra(Const.INTENT_WEBAPPID, webapp.getID());
-        intent.setData(Uri.parse(webapp.getBaseUrl() + webapp.getID()));
-        intent.setAction(Intent.ACTION_VIEW);
-
-        return intent;
-    }
     public static void deleteShortcuts(List<Integer> removableWebAppIds) {
         ShortcutManager manager = App.getAppContext().getSystemService(ShortcutManager.class);
         for (ShortcutInfo info : manager.getPinnedShortcuts()) {

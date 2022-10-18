@@ -27,6 +27,7 @@ import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.EntryPointUtils;
 import com.cylonid.nativealpha.util.LocaleUtils;
 import com.cylonid.nativealpha.util.Utility;
+import com.cylonid.nativealpha.util.WebViewLauncher;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -267,9 +268,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void openWebView(WebApp d) {
-        startActivity(Utility.createWebViewIntent(d, MainActivity.this));
-        //finish();
+    private void openWebView(WebApp webapp) {
+        WebViewLauncher.startWebView(webapp, MainActivity.this);
     }
 
 

@@ -67,6 +67,7 @@ import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.EntryPointUtils;
 import com.cylonid.nativealpha.util.LocaleUtils;
 import com.cylonid.nativealpha.util.Utility;
+import com.cylonid.nativealpha.util.WebViewLauncher;
 import com.google.android.material.snackbar.Snackbar;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
@@ -133,13 +134,13 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
             // Sandboxed Web App is openend in main process using an old shortcut
             if(packageName.equals(processName) && webapp.isUseContainer()) {
-                ProcessPhoenix.triggerRebirth(this, Utility.createWebViewIntent(webapp, this));
+                WebViewLauncher.startWebViewInNewProcess(webapp, this);
             }
 
             if (!packageName.equals(processName) && SandboxManager.getInstance() != null) {
                 if (SandboxManager.getInstance().isSandboxUsedByAnotherApp(webapp)) {
                     SandboxManager.getInstance().unregisterWebAppFromSandbox(webapp.getContainerId());
-                    ProcessPhoenix.triggerRebirth(this, Utility.createWebViewIntent(webapp, this));
+                    WebViewLauncher.startWebViewInNewProcess(webapp, this);
                 }
                 try {
                     SandboxManager.getInstance().registerWebAppToSandbox(webapp);
@@ -296,7 +297,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                         if (Math.abs(startX - stopX) > TRESHOLD) {
                             if (startX > stopX) {
                                 if (event.getPointerCount() == 3 && DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
-                                    startActivity(Utility.createWebViewIntent(DataManager.getInstance().getPredecessor(webappID), WebViewActivity.this));
+                                    WebViewLauncher.startWebView(DataManager.getInstance().getPredecessor(webappID), WebViewActivity.this);
                                     finish();
                                 } else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch()) {
                                     if (wv.canGoForward())
@@ -304,7 +305,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                                 }
                             } else {
                                 if (event.getPointerCount() == 3 && DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
-                                    startActivity(Utility.createWebViewIntent(DataManager.getInstance().getSuccessor(webappID), WebViewActivity.this));
+                                    WebViewLauncher.startWebView(DataManager.getInstance().getSuccessor(webappID), WebViewActivity.this);
                                     finish();
                                 } else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch())
                                     onBackPressed();
@@ -444,7 +445,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
         if (new_id != webappID) {
             WebApp new_webapp = DataManager.getInstance().getWebApp(new_id);
-            ProcessPhoenix.triggerRebirth(this, Utility.createWebViewIntent(new_webapp, this));
+            WebViewLauncher.startWebViewInNewProcess(new_webapp, this);
         }
 
         wv.onResume();

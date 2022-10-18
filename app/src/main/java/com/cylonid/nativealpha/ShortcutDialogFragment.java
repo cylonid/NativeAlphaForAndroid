@@ -30,6 +30,7 @@ import com.cylonid.nativealpha.model.WebApp;
 import com.cylonid.nativealpha.util.App;
 import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.Utility;
+import com.cylonid.nativealpha.util.WebViewLauncher;
 import com.google.android.material.snackbar.Snackbar;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
@@ -330,7 +331,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
 
 
     private void addShortcutToHomeScreen(Bitmap bitmap) {
-        Intent intent = Utility.createWebViewIntent(webapp, requireActivity());
+        Intent intent = WebViewLauncher.createWebViewIntent(webapp, requireActivity());
 
         IconCompat icon;
         if (bitmap != null)
