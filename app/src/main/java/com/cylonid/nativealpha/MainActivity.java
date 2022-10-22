@@ -29,6 +29,7 @@ import com.cylonid.nativealpha.util.LocaleUtils;
 import com.cylonid.nativealpha.util.Utility;
 import com.cylonid.nativealpha.util.WebViewLauncher;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -222,19 +223,22 @@ public class MainActivity extends AppCompatActivity {
             url.requestFocus();
             positive.setOnClickListener(view -> {
                 String str_url = url.getText().toString().trim();
+                if(str_url.equals("")) {
+                    Utility.showInfoSnackbar(this, getString(R.string.no_url_entered), Snackbar.LENGTH_SHORT);
+                } else {
+                    if (!(str_url.startsWith("https://")) && !(str_url.startsWith("http://"))) {
+                        str_url = "https://" + str_url;
+                    }
+                    WebApp new_site = new WebApp(str_url, DataManager.getInstance().getIncrementedID());
+                    new_site.applySettingsForNewWebApp();
+                    DataManager.getInstance().addWebsite(new_site);
 
-                if (!(str_url.startsWith("https://")) && !(str_url.startsWith("http://"))) {
-                    str_url = "https://" + str_url;
-                }
-                WebApp new_site = new WebApp(str_url, DataManager.getInstance().getIncrementedID());
-                new_site.applySettingsForNewWebApp();
-                DataManager.getInstance().addWebsite(new_site);
-
-                addRow(new_site);
-                dialog.dismiss();
-                if (create_shortcut.isChecked()) {
-                    ShortcutDialogFragment frag = ShortcutDialogFragment.newInstance(new_site);
-                    frag.show(getSupportFragmentManager(), "SCFetcher-" + new_site.getID());
+                    addRow(new_site);
+                    dialog.dismiss();
+                    if (create_shortcut.isChecked()) {
+                        ShortcutDialogFragment frag = ShortcutDialogFragment.newInstance(new_site);
+                        frag.show(getSupportFragmentManager(), "SCFetcher-" + new_site.getID());
+                    }
                 }
             });
         });

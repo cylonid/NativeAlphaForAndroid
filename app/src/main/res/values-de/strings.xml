@@ -156,4 +156,5 @@
     <string name="no_biometric_devices">Ihr Gerät unterstützt keine biometrische Authentifizierung.</string>
     <string name="no_biometric_keys_enrolled">Ihr Gerät unterstützt biometrische Authentifizierung, aber bisher wurde keine Aktivierungsmethode festgelegt.</string>
     <string name="webview_activity_launch_failed">Web-App konnte nicht gestartet werden.</string>
+    <string name="no_url_entered">Bitte geben Sie eine URL an.</string>
 </resources>
