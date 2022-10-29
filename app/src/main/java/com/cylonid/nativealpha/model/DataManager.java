@@ -1,6 +1,5 @@
 package com.cylonid.nativealpha.model;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Base64;
@@ -33,10 +32,14 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class DataManager {
 
+    // Corresponds to app release version
+    private static final int LEGACY_DATA_FORMAT = 1000;
+
     private static final String SHARED_PREF_KEY = "WEBSITEDATA";
-    private static final String INTRO_SCREENS = "com.cylonid.nativealpha.shownIntroScreens";
+    private static final String GENERAL_INFO = "com.cylonid.nativealpha.GENERAL_INFO";
     public static final String EULA_ACCEPTED = "eulaAccepted";
     public static final String LAST_SHOWN_UPDATE = "lastShownUpdate";
+    public static final String DATA_FORMAT = "dataFormat";
 
     private static final String SHARED_PREF_LEGACY_KEY = "GLOBALSETTINGS";
     private static final String shared_pref_max_id  = "MAX_ID";
@@ -98,25 +101,33 @@ public class DataManager {
         editor.apply();
     }
 
+    public void setDataFormat(int dataFormat) {
+        getGeneralInfo().edit().putInt(DATA_FORMAT, dataFormat).apply();
+    }
+
+    public int getDataFormat() {
+        return getGeneralInfo().getInt(DATA_FORMAT, LEGACY_DATA_FORMAT);
+    }
+
     public boolean getEulaData() {
-        return getIntroScreensData().getBoolean(EULA_ACCEPTED, false);
+        return getGeneralInfo().getBoolean(EULA_ACCEPTED, false);
     }
 
     public int getLastShownUpdate() {
-        return getIntroScreensData().getInt(LAST_SHOWN_UPDATE, 0);
+        return getGeneralInfo().getInt(LAST_SHOWN_UPDATE, 0);
     }
 
     public void setEulaData(boolean newValue) {
-        getIntroScreensData().edit().putBoolean(EULA_ACCEPTED, newValue).apply();
+        getGeneralInfo().edit().putBoolean(EULA_ACCEPTED, newValue).apply();
     }
 
     public void setLastShownUpdate(int newValue) {
-        getIntroScreensData().edit().putInt(LAST_SHOWN_UPDATE, newValue).apply();
+        getGeneralInfo().edit().putInt(LAST_SHOWN_UPDATE, newValue).apply();
     }
 
-    private SharedPreferences getIntroScreensData() {
+    private SharedPreferences getGeneralInfo() {
         Utility.Assert(App.getAppContext() != null, "App.getAppContext() null before saving sharedpref");
-        return App.getAppContext().getSharedPreferences(INTRO_SCREENS, MODE_PRIVATE);
+        return App.getAppContext().getSharedPreferences(GENERAL_INFO, MODE_PRIVATE);
 
     }
 
@@ -144,14 +155,16 @@ public class DataManager {
         appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE);
         //Webapp data
         if (appdata.contains(shared_pref_webappdata)) {
-
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeAdapter(WebApp.class, new WebAppInstanceCreator());
             Gson gson = gsonBuilder.create();
             String json = appdata.getString(shared_pref_webappdata, "");
-            ArrayList<WebApp> new_websites = gson.fromJson(json, new TypeToken<ArrayList<WebApp>>() {}.getType());
+            int oldDataFormat = DataVersionConverter.getDataFormat(json);
+            String currentDataFormattedJson = this.checkDataFormat(oldDataFormat, json);
+            ArrayList<WebApp> new_websites = gson.fromJson(currentDataFormattedJson, new TypeToken<ArrayList<WebApp>>() {}.getType());
             checkIfWebAppIdsCollide(websites, new_websites);
             websites = new_websites;
+            if(oldDataFormat != DataVersionConverter.getDataFormat(currentDataFormattedJson)) this.saveWebAppData();
         }
 
         max_assigned_ID = appdata.getInt(shared_pref_max_id, max_assigned_ID);
@@ -332,6 +345,18 @@ public class DataManager {
         return result;
     }
 
+    private String checkDataFormat(int dataFormat, String jsonInput) {
+        switch(dataFormat) {
+            case LEGACY_DATA_FORMAT:
+                String convertedInput = DataVersionConverter.convertToDataFormat(jsonInput, DataVersionConverter.getLegacyTo1300Map());
+                this.setDataFormat(1300);
+                return convertedInput;
+            default:
+            case 1300: // Current data format => corresponding to app release version
+                return jsonInput;
+        }
+    }
+
     public WebApp getSuccessor(int i) {
         int INVALID = websites.size();
         int neighbor = i;
@@ -368,5 +393,7 @@ public class DataManager {
 //        else
 //            return websites.get(websites.size() - 1);
     }
+
+
 }
 
