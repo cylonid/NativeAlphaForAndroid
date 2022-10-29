@@ -1,7 +1,8 @@
 
 # <img src="graphics/logo.png" width="50px" alt=""></img> Native Alpha
 ![OS](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white&style=plastic)
-![SDK](https://img.shields.io/badge/SDK-31-yellowgreen)
+![OS](https://img.shields.io/badge/MinVersion-8.0-red)
+![SDK](https://img.shields.io/badge/SDK-32-yellowgreen)
 [![GitHub release](https://img.shields.io/github/v/release/cylonid/NativeAlphaForAndroid?include_prereleases&color=blueviolet)](https://github.com/cylonid/NativeAlphaForAndroid/releases)
 [![Github all releases](https://img.shields.io/github/downloads/cylonid/NativeAlphaForAndroid/total?color=blue&label=GitHub%E2%87%A9&style=plastic)](https://somsubhra.github.io/github-release-stats/?username=cylonid&repository=NativeAlphaForAndroid&page=1&per_page=20)
 [![GitHub license](https://img.shields.io/github/license/cylonid/NativeAlphaForAndroid?color=orange)](https://github.com/cylonid/NativeAlphaForAndroid/blob/master/LICENSE)
@@ -70,6 +71,14 @@ A: This problem can occur due to multiple reasons. In most cases, the website do
 *Q: In constrast to your promise, this app has a large memory footprint!*
 
 A: This is because Native Alpha makes use of caching in the same way your browser app does, i.e., it saves web content locally on your device. Then it can be loaded faster if you visit the same page again. You can either delete cache regularly yourself or set the "Clear cache after usage" setting in the global settings if memory footprint is a concern for you. However, then websites will take a longer time to load because everything has to be loaded from net.
+
+*Q: What is the minimum Android version for running Native Alpha?*
+
+A: Oreo (8.0). This is because older versions use a discontinued API for creating screenshots which currently is not implemented.
+
+*Q: I don't want to use Google Play services, is there any other way to obtain Native Alpha Plus?*
+
+A: You can build the app yourself, everything is open-source including the paid features.
 
 ## Used libraries/resources
 * [CircularProgressBar](https://github.com/lopspower/CircularProgressBar)
