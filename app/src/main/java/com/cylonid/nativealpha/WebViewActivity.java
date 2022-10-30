@@ -847,6 +847,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            runOnUiThread(() -> setDarkModeIfNeeded());
             String url = request.getUrl().toString();
             WebApp webapp = DataManager.getInstance().getWebApp(webappID);
 
