@@ -14,8 +14,10 @@
 
     <ScrollView android:layout_height="wrap_content"
         android:layout_weight="90"
+        android:id="@+id/news_scrollview"
         android:layout_width="match_parent">
         <LinearLayout
+            android:id="@+id/news_scrollchild"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">

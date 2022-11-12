@@ -4,6 +4,11 @@ header {
   flex-direction: column;
   align-items: center;
 }
+
+header img {
+  width: 100px;
+}
+
 #wrapper {
   display: flex;
   flex-direction: row;

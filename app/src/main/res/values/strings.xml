@@ -162,6 +162,7 @@
     <string name="no_biometric_keys_enrolled">Your device does support biometric  authentication, but you did not enroll any method yet.</string>
     <string name="webview_activity_launch_failed">Web App could not be started.</string>
     <string name="no_url_entered">Please enter an URL.</string>
+    <string name="scroll_to_bottom">Please scroll to the bottom.</string>
 
 
 </resources>
