@@ -1,0 +1,168 @@
+<resources>
+    <string name="app_name" translatable="false">Native Alpha</string>
+    <string name="action_settings">Configuraciones</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="spinner_prompt">Modo de interfaz</string>
+    <string name="global_settings">Ajustes generales</string>
+    <string name="these_settings_are_applied_globally_and_override_app_specific_settings">Estas configuraciones son utilizadas por todas las Aplicaciones Web, excepto aquellas que anulan explícitamente las configuraciones generales.</string>
+    <string name="clear_cookies_after_usage">Eliminar cookies después del uso</string>
+    <string name="use_three_finger_swipes_to_switch_between_web_apps_experimental">Utiliza el deslizamiento de tres dedos ⇄ para cambiar entre las Aplicaciones Web (experimental)</string>
+    <string name="select_ui_mode">Seleccione el modo de interfaz</string>
+    <string name="save">Guardar</string>
+    <string name="loading_icon_and_website_title">Cargando el icono y el título del sitio web...</string>
+    <string name="open_external_links_in_browser_app">Abrir enlaces externos en la aplicación del navegador</string>
+    <string name="allow_javascript">Permitir Javascript</string>
+    <string name="accept_cookies">Acceptar cookies</string>
+    <string name="accept_third_party_cookies">Acceptar cookies de terceros</string>
+    <string name="clear_cache_after_usage">Eliminar el cache después del uso</string>
+    <string name="enable_adblock_experimental">Activar el bloqueo de anuncios</string>
+    <string name="timeout_for_page_restore_in_minutes">Tiempo de espera en min.</string>
+    <string name="re_create_shortcut">Volver a crear el acceso directo</string>
+    <string name="create_shortcut_on_home_screen">Crear un acceso directo en la pantalla de inicio</string>
+    <string name="url" translatable="false">URL</string>
+    <string name="use_two_finger_swipes_for_browser_forward_and_backward_navigation">Utilice el deslizamiento de dos dedos ⇄ para la navegación hacia delante y hacia atrás del navegador</string>
+    <string-array name="ui_modes">
+        <item>Por defecto del sistema</item>
+        <item>Modo Claro</item>
+        <item>Modo Oscuro</item>
+    </string-array>
+    <string name="icon_fetch_failed_line1">No hemos podido recuperar un icono para %1$s.\nPosibles razones:\n</string>
+    <string name="icon_fetch_failed_line2">• No hay conexión a Internet\n</string>
+    <string name="icon_fetch_failed_line3">• El sitio web no tiene un icono adecuado almacenado.</string>
+    <string name="delete_question">¿Está seguro de que quiere eliminar este sitio web?</string>
+    <string name="enter_valid_url">Por favor, introduzca una dirección web válida.</string>
+    <string name="edit_webapp_settings">Editar la configuración de la aplicación web</string>
+    <string name="add_webapp">Añadir aplicación web</string>
+    <string name="welcome_msg">Bienvenido.\nAñade tu primera aplicación web:</string>
+    <string name="restore_last_opened_page">Restaurar la última página abierta</string>
+    <string name="request_website_in_desktop_version">Solicitar el sitio web en versión de escritorio</string>
+    <string name="shortcut_icon">Icono de acceso directo</string>
+    <string name="shortcut_title">Título de acceso directo</string>
+
+    <string name="eula_title">Acuerdo de licencia de usuario final</string>
+    <string name="eula_content">El software se suministra "tal cual", sin garantía de ningún tipo, expresa o implícita, incluidas, pero sin limitarse a ellas, las garantías de comerciabilidad, idoneidad para un fin determinado y no infracción. En ningún caso los autores o los titulares de los derechos de autor serán responsables de ninguna reclamación, daño u otra responsabilidad, ya sea en una acción contractual, extracontractual o de otro tipo, que surja de, o esté relacionada con el software o el uso u otras operaciones con el software.</string>
+    <string name="open_source_libs">Mostrar las bibliotecas utilizadas</string>
+    <string name="gnu_license">Este software se publica bajo la Licencia Pública General GNU - Versión 3.\nhttps://www.gnu.org/licenses/gpl-3.0.txt</string>
+    <string name="app_info">Acerca de</string>
+    <string name="license">Licencia</string>
+    <string name="os_libraries_title">Bibliotecas de código abierto</string>
+    <string name="web_app_settings">Configuración de la aplicación web</string>
+    <string name="do_not_load_images">No cargar imágenes</string>
+    <string name="request_data_saving_page">Enviar petición de \"Guardar datos\"</string>
+    <string name="ssl_error_msg_line1">Esta página tiene un problema con su certificado SSL.</string>
+    <string name="ssl_error_unknown_authority">La autoridad de certificación no es de confianza.</string>
+    <string name="ssl_error_expired">El certificado ha caducado.</string>
+    <string name="ssl_error_id_mismatch">El certificado no coincide con el nombre del host.</string>
+    <string name="ssl_error_notyetvalid">El certificado aún no es válido.</string>
+    <string name="ssl_error_msg_line2">No se recomienda cargar la página.</string>
+    <string name="ssl_error_title">Advertencia: Posible amenaza a la seguridad</string>
+    <string name="load_anyway">Cargar de todos modos</string>
+    <string name="no_https_dialog_title">No hay cifrado HTTPS</string>
+    <string name="no_https_dialog_accept">Permitir HTTP en esta aplicación web</string>
+    <string name="no_https_dialog_msg">Esta página utiliza una conexión HTTP no cifrada. No introduzca ningún dato sensible.</string>
+    <string name="allow_http">Permitir HTTP</string>
+    <string name="webapp_section_security">Seguridad &amp; Privacidad</string>
+    <string name="webapp_section_cookies">Cookies &amp; Anuncios</string>
+    <string name="webapp_section_datasaving">Ahorro de datos</string>
+    <string name="webapp_section_misc">Varios</string>
+    <string name="paypal" translatable="false">" ☕ Cómprame un café en PayPal"</string>
+    <string name="webapp_section_restorepage">Restaurar la página</string>
+    <string name="import_failed">La copia de seguridad no se ha podido restaurar.</string>
+    <string name="import_success">Copia de seguridad con %1$d aplicación(es) web ha sido restaurada con éxito.</string>
+    <string name="export_failed">No se ha podido exportar la copia de seguridad.</string>
+    <string name="export_success">La copia de seguridad se ha creado con éxito.</string>
+    <string name="webapp_not_found">La aplicación web a la que intenta acceder ya no está disponible.</string>
+    <string name="import_success_dialog_txt1">La copia de seguridad contenía</string>
+    <string name="import_success_dialog_txt2">¿Quieres volver a crear accesos directos para todas las aplicaciones web?</string>
+    <string name="import_success_dialog_txt3">Tenga en cuenta que tendrá que confirmar manualmente la adición de cada acceso directo.</string>
+    <string name="no_filemanager">Por favor, instala un gestor de archivos.</string>
+    <string name="export_settings_web_apps"><![CDATA[Ajustes de exportación y Aplicaciones Web]]></string>
+    <string name="import_settings_web_apps"><![CDATA[Importar ajustes y Aplicaciones Web]]></string>
+    <string name="global_settings_multitouch_reload">Usa dos dedos ↓ para recargar la página</string>
+    <string name="allow_location_access">Permitir el acceso a la ubicación</string>
+    <string name="allow_drm_content">Permitir contenidos DRM</string>
+    <string name="dialog_permission_location_title">Solicitud de permiso de ubicación</string>
+    <string name="dialog_permission_location_txt">¿Desea conceder a esta Aplicación Web acceso a su ubicación? Puedes revocar esta decisión en cualquier momento en el menú de configuración de la Aplicación Web.</string>
+    <string name="dialog_permission_drm_title">Contenido DRM</string>
+    <string name="dialog_permission_drm_txt">¿Quiere permitir que esta aplicación web cargue contenidos protegidos por DRM?</string>
+    <string name="permission_location_rationale">Si desea que las aplicaciones web puedan recuperar su ubicación, puede conceder a Native Alpha el permiso para acceder a la ubicación. Puedes decidir conceder el permiso para cada Aplicación Web individualmente.</string>
+    <string name="permission_storage_rationale">Si quieres que las Aplicaciones Web de Native Alpha sean capaces de descargar archivos, tienes que aceptar la solicitud de permiso de almacenamiento.</string>
+    <string name="file_download">El archivo se está descargando...</string>
+    <string name="custom_icon">Seleccione un icono personalizado</string>
+    <string name="show_progress_bar_during_page_load">Mostrar la barra de progreso durante la carga de la página</string>
+    <string name="user_agent">Agente de usuario</string>
+    <string name="use_custom_user_agent">Utilizar un agente de usuario personalizado</string>
+    <string name="insert_custom_user_agent">Inserte el agente de usuario personalizado aquí...</string>
+    <string name="webapp_autoreload">Recargar automáticamente la página</string>
+    <string name="webapp_interval_for_reload">Intervalo en segundos</string>
+    <string name="webapp_autoreload_switch">Actualizar la página regularmente</string>
+    <string name="hint_user_agent">Consulta <![CDATA[<a href="https://www.whatismybrowser.com/guides/the-latest-user-agent/">WhatIsMyBrowser.com</a>]]> para una lista de agentes de usuario recientes.</string>
+
+    <string name="label">Etiqueta</string>
+    <string name="backup_import_done">La importación de la copia de seguridad ha finalizado</string>
+    <string name="backup_imported_done_txt">Es necesario recargar la pantalla para aplicar el tema de la interfaz de usuario restaurado.</string>
+    <string name="restore_shortcut">¿Desea restaurar el acceso directo para <![CDATA[<b>%1$s</b>]]>?</string>
+    <string name="force_dark_mode">Forzar el modo oscuro</string>
+    <string name="end">Final</string>
+    <string name="begin">Inicio</string>
+    <string name="limit_dark_mode_to_time_span">Limitar el modo oscuro a un intervalo de tiempo</string>
+    <string name="dark_mode">Modo oscuro</string>
+    <string name="expert_settings">Ajustes expertos</string>
+    <string name="show_expert_settings">Mostrar la configuración de expertos</string>
+    <string name="ssl_errors">Errores SSL</string>
+    <string name="ssl_permanent_warning">Utilice esta opción sólo para los sitios web autoalojados que no sean de producción</string>
+    <string name="ignore_ssl_errors">Ignorar los errores de SSL</string>
+    <string name="webapp_already_deleted">Esta aplicación web ya no está disponible. Puede eliminar este acceso directo.</string>
+    <string name="override_global_settings">Anular la configuración general</string>
+    <string name="global_web_app_settings">Configuración general de la aplicación web</string>
+    <string name="general">General</string>
+    <string name="backup">Copia de seguridad</string>
+    <string name="use_google_safe_browsing">Utilizar la navegación segura de Google</string>
+    <string name="block_all_third_party_requests">Bloquear todas las solicitudes de terceros</string>
+    <string name="sandbox">Sandbox</string>
+    <string name="no_sandbox">No usar la sandbox.</string>
+    <string name="all_sandboxes_used">Todas las sandboxes están en uso actualmente.</string>
+    <string name="enable_sandbox">Habilitar Sandbox</string>
+    <string name="show_fullscreen">Pantalla completa (modo inmersivo)</string>
+    <string name="site_not_found">No se ha podido cargar la página.</string>
+    <string name="icon_not_found">No se ha podido cargar el icono.</string>
+    <string name="privacy_policy">Política de privacidad</string>
+    <string name="webapp_section_kiosk">Modo quiosco</string>
+    <string name="keep_screen_awake">Mantener la pantalla despierta</string>
+    <string name="dialog_permission_camera_title">Acceso a la cámara</string>
+    <string name="dialog_permission_camera_txt">¿Desea conceder a esta Aplicación Web acceso a su cámara? Puedes revocar esta decisión en cualquier momento en el menú de configuración de la Aplicación Web.</string>
+    <string name="allow_camera_access">Permitir el acceso a la cámara</string>
+    <string name="allow_microphone_access">Permitir el acceso al micrófono</string>
+    <string name="dialog_permission_microphone_title">Acceso al micrófono</string>
+    <string name="dialog_permission_microphone_txt">¿Desea conceder a esta Aplicación Web acceso a su micrófono? Puedes revocar esta decisión en cualquier momento en el menú de configuración de la Aplicación Web.</string>
+    <string name="app_name_plus" translatable="false">Native Alpha +</string>
+    <string name="shortcut_already_exists">Ya existe un acceso directo con este nombre. Por favor, elija otro nombre o elimine el acceso directo existente.</string>
+    <string name="back">Volver</string>
+    <string name="forward">Avanzar</string>
+    <string name="copy_url">Copiar URL</string>
+    <string name="share">Compartir</string>
+    <string name="reload">Recargar</string>
+    <string name="activate_two_finger_zoom">Activar la función de Zoom</string>
+    <string name="webapp_section_access_restriction">Restricción de acceso</string>
+    <string name="bioprompt_restricted_webapp">Restricción de acceso</string>
+    <string name="bioprompt_disable_restricition">¿Desactivar la restricción de acceso?</string>
+    <string name="enable_access_restriction">Activar la restricción de acceso</string>
+    <string name="bioprompt_enable_restriction">¿Permitir la restricción de acceso?</string>
+    <string name="allow_media_playback_in_background">Permitir la reproducción de medios en segundo plano</string>
+    <string name="start_url">URL inicial</string>
+    <string name="more">Más</string>
+    <string name="close_web_app">Cerrar Aplicación Web</string>
+    <string name="select_text">Seleccionar texto</string>
+    <string name="to_main_menu">Ir al menú principal</string>
+    <string name="cancel">Cancelar</string>
+    <string name="ok">De Acuerdo</string>
+    <string name="accept">Aceptar</string>
+    <string name="cancel_eula">Debes aceptar el EULA para continuar.</string>
+    <string name="no_biometric_devices">Su dispositivo no admite la autenticación biométrica.</string>
+    <string name="no_biometric_keys_enrolled">Su dispositivo admite la autenticación biométrica, pero aún no ha registrado ningún método.</string>
+    <string name="webview_activity_launch_failed">La Aplicación Web no pudo ser iniciada.</string>
+    <string name="no_url_entered">Por favor, introduzca una URL.</string>
+    <string name="scroll_to_bottom">Por favor, desplácese hasta el final.</string>
+
+
+</resources>
