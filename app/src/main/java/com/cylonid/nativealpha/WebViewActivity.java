@@ -171,7 +171,9 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         String uaString = wv.getSettings().getUserAgentString().replace("; " + fieldName, "");
         wv.getSettings().setUserAgentString(uaString);
         if (webapp.isUseCustomUserAgent()) {
-            wv.getSettings().setUserAgentString(webapp.getUserAgent().replace("\0", "").replace("\n", "").replace("\r", ""));
+            if(webapp.getUserAgent() != null && !webapp.getUserAgent().equals("")) {
+                wv.getSettings().setUserAgentString(webapp.getUserAgent().replace("\0", "").replace("\n", "").replace("\r", ""));
+            }
         }
 
         if (webapp.isShowFullscreen()) {
@@ -789,8 +791,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 Uri uri = request.getUrl();
                 Uri webapp_uri = Uri.parse(webapp.getBaseUrl());
 
-                if (!uri.getHost().endsWith(webapp_uri.getHost())) {
-                    return null;
+                if(uri.getHost() != null) {
+                    if (!uri.getHost().endsWith(webapp_uri.getHost())) {
+                        return null;
+                    }
                 }
             }
             return super.shouldInterceptRequest(view, request);
