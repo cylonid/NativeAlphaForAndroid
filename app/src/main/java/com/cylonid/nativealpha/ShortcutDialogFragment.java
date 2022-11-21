@@ -175,7 +175,7 @@ public class ShortcutDialogFragment extends DialogFragment  {
             found_icons.put(325, "https://static.xx.fbcdn.net/rsrc.php/v3/y3/r/UrYT8B96uSq.png");
 
         if (host_part.startsWith("amazon."))
-            found_icons.put(300, "https://s3.amazonaws.com/prod-widgetSource/in-shop/pub/images/amzn_favicon_blk.png");
+            found_icons.put(300, "https://upload.wikimedia.org/wikipedia/commons/d/de/Amazon_icon.png");
 
         if (host_part.startsWith("paypal."))
             found_icons.put(196, "https://www.paypalobjects.com/webstatic/icon/pp196.png");
@@ -368,7 +368,10 @@ public class ShortcutDialogFragment extends DialogFragment  {
 
     private void prepareFailedUI() {
         showFailedMessage();
-        uiTitle.setText(webapp.getTitle());
+        if(webapp.getTitle() != null && !webapp.getTitle().equals("")) {
+          uiTitle.setText(webapp.getTitle());
+        }
+
         uiTitle.requestFocus();
 
         uiProgressBar.setVisibility(View.GONE);

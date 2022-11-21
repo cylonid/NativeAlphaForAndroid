@@ -178,7 +178,10 @@ public class DataManager {
                 gsonBuilder.registerTypeAdapter(GlobalSettings.class, new GlobalSettingsInstanceCreator());
                 Gson gson = gsonBuilder.create();
                 String json = appdata.getString(shared_pref_globalsettings, "");
-                settings = gson.fromJson(json, new TypeToken<GlobalSettings>() {}.getType());
+                int oldDataFormat = DataVersionConverter.getDataFormat(json);
+                String currentDataFormattedJson = this.checkDataFormat(oldDataFormat, json);
+                settings = gson.fromJson(currentDataFormattedJson, new TypeToken<GlobalSettings>() {}.getType());
+                if(oldDataFormat != DataVersionConverter.getDataFormat(currentDataFormattedJson)) this.saveGlobalSettings();
             }
         }
         else
@@ -208,29 +211,13 @@ public class DataManager {
         editor.apply();
     }
 
-
-//    public void initDummyData()
-//    {
-//        loadAppData();
-//        WebApp d1 = new WebApp("orf.at");
-//        WebApp d2 = new WebApp("diepresse.com");
-//        WebApp d3 = new WebApp("oebb.at");
-//
-//        addWebsite(d1);
-//        addWebsite(d2);
-//        addWebsite(d3);
-//
-//    }
-
     public void addWebsite(WebApp new_site) {
             websites.add(new_site);
-            Utility.Assert(new_site.getBaseUrl().equals(websites.get(new_site.getID()).getBaseUrl()), "WebApp ID and array position out of sync.");
             saveWebAppData();
     }
 
     public int getIncrementedID() {
-        max_assigned_ID++;
-        return max_assigned_ID;
+        return getWebsites().size();
     }
     public ArrayList<WebApp> getWebsites() {
         Utility.Assert(websites != null, "Websites not loaded");
