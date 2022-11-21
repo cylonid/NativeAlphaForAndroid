@@ -368,7 +368,10 @@ public class ShortcutDialogFragment extends DialogFragment  {
 
     private void prepareFailedUI() {
         showFailedMessage();
-        uiTitle.setText(webapp.getTitle());
+        if(webapp.getTitle() != null && !webapp.getTitle().equals("")) {
+          uiTitle.setText(webapp.getTitle());
+        }
+
         uiTitle.requestFocus();
 
         uiProgressBar.setVisibility(View.GONE);
