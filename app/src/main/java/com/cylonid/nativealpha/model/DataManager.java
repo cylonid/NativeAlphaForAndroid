@@ -178,7 +178,10 @@ public class DataManager {
                 gsonBuilder.registerTypeAdapter(GlobalSettings.class, new GlobalSettingsInstanceCreator());
                 Gson gson = gsonBuilder.create();
                 String json = appdata.getString(shared_pref_globalsettings, "");
-                settings = gson.fromJson(json, new TypeToken<GlobalSettings>() {}.getType());
+                int oldDataFormat = DataVersionConverter.getDataFormat(json);
+                String currentDataFormattedJson = this.checkDataFormat(oldDataFormat, json);
+                settings = gson.fromJson(currentDataFormattedJson, new TypeToken<GlobalSettings>() {}.getType());
+                if(oldDataFormat != DataVersionConverter.getDataFormat(currentDataFormattedJson)) this.saveGlobalSettings();
             }
         }
         else
