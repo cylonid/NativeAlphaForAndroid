@@ -20,7 +20,7 @@
 
 ## Download Options
 [![IzzyOnDroid Download Badge](graphics/IzzyOnDroid.png)](https://apt.izzysoft.de/fdroid/index/apk/com.cylonid.nativealpha)
-[![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v1.3.0/NativeAlpha-standard-universal-release-v1.3.0.apk)
+[![APK Download Badge](graphics/apk_badge.png)](https://github.com/cylonid/NativeAlphaForAndroid/releases/download/v1.3.1/NativeAlpha-standard-universal-release-v1.3.1.apk)
 [![Google Play Download Badge](graphics/google_play.png)](https://play.google.com/store/apps/details?id=com.cylonid.nativealpha)
 ### Paid Download
 [![Google Play Download Badge](graphics/google_play.png)](https://play.google.com/store/apps/details?id=com.cylonid.nativealpha.pro)
@@ -40,6 +40,13 @@
 * Added option to freely set start URL of Web Apps to support non-standard URLs (expert settings)
 * Build for x86 and x86_64 platform included
 * Several bugfixes and general improvements
+
+### Minor changes (v1.3.1)
+* Fixed a crash upon adding new Web Apps in certain situations
+* Fixed global Web App settings being disabled in certain situations
+* Other minor fixes
+* Spanish translation added (thanks to https://github.com/cyanwolfg)
+
 
 ### Native Alpha Plus
 
