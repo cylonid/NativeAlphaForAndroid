@@ -15,8 +15,8 @@ public class DataVersionConverter {
     }
 
     public static int getDataFormat(String input) {
-        if(input.contains(DataVersionConverter.formatAsJsonKey("base_url"))) return 1000;
-        if(input.contains(DataVersionConverter.formatAsJsonKey("baseUrl"))) return 1300;
+        if(input.contains(DataVersionConverter.formatAsJsonKey("allow_js"))) return 1000;
+        if(input.contains(DataVersionConverter.formatAsJsonKey("isAllowJs"))) return 1300;
 
         return 0;
     }

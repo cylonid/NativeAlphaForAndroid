@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.cylonid.nativealpha.R;
 import com.cylonid.nativealpha.util.App;
+import com.cylonid.nativealpha.util.Const;
 import com.cylonid.nativealpha.util.InvalidChecksumException;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.gson.Gson;
@@ -101,14 +102,6 @@ public class DataManager {
         editor.apply();
     }
 
-    public void setDataFormat(int dataFormat) {
-        getGeneralInfo().edit().putInt(DATA_FORMAT, dataFormat).apply();
-    }
-
-    public int getDataFormat() {
-        return getGeneralInfo().getInt(DATA_FORMAT, LEGACY_DATA_FORMAT);
-    }
-
     public boolean getEulaData() {
         return getGeneralInfo().getBoolean(EULA_ACCEPTED, false);
     }
@@ -181,6 +174,7 @@ public class DataManager {
                 int oldDataFormat = DataVersionConverter.getDataFormat(json);
                 String currentDataFormattedJson = this.checkDataFormat(oldDataFormat, json);
                 settings = gson.fromJson(currentDataFormattedJson, new TypeToken<GlobalSettings>() {}.getType());
+                assertGlobalWebappData();
                 if(oldDataFormat != DataVersionConverter.getDataFormat(currentDataFormattedJson)) this.saveGlobalSettings();
             }
         }
@@ -336,7 +330,6 @@ public class DataManager {
         switch(dataFormat) {
             case LEGACY_DATA_FORMAT:
                 String convertedInput = DataVersionConverter.convertToDataFormat(jsonInput, DataVersionConverter.getLegacyTo1300Map());
-                this.setDataFormat(1300);
                 return convertedInput;
             default:
             case 1300: // Current data format => corresponding to app release version
@@ -366,19 +359,16 @@ public class DataManager {
         }
         while (!websites.get(neighbor).isActiveEntry());
         return websites.get(neighbor);
+    }
 
-//        if (i != (websites.size() - 1)) {
-//            return websites.get(i + 1);
-//        }
-//        else
-//            return websites.get(0);
-
-//
-//        if (i != 0) {
-//            return websites.get(i - 1);
-//        }
-//        else
-//            return websites.get(websites.size() - 1);
+    private void assertGlobalWebappData() {
+        boolean override = settings.getGlobalWebApp().isOverrideGlobalSettings();
+        int container = settings.getGlobalWebApp().getContainerId();
+        if(!override || container != Const.NO_CONTAINER) {
+            settings.getGlobalWebApp().setOverrideGlobalSettings(true);
+            settings.getGlobalWebApp().setContainerId(Const.NO_CONTAINER);
+            this.saveGlobalSettings();
+        }
     }
 
 
