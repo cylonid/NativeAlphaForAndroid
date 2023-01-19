@@ -51,6 +51,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ShareCompat;
 import androidx.core.content.ContextCompat;
@@ -186,6 +187,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         wv.getSettings().setDomStorageEnabled(true);
         wv.getSettings().setAllowFileAccess(true);
         wv.getSettings().setBlockNetworkLoads(false);
+        wv.getSettings().setSupportMultipleWindows(true);
 //        wv.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
         this.setDarkModeIfNeeded();
 
@@ -724,6 +726,27 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             hideSystemBars();
         }
 
+        @Override
+        public boolean onCreateWindow(WebView view, boolean isDialog,
+                                      boolean isUserGesture, android.os.Message resultMsg) {
+
+            WebView newWebView = new WebView(WebViewActivity.this);
+            view.addView(newWebView);
+            WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+            transport.setWebView(newWebView);
+            resultMsg.sendToTarget();
+
+            newWebView.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                    CustomTabsIntent customTabsIntent = builder.build();
+                    customTabsIntent.launchUrl(WebViewActivity.this, Uri.parse(url));
+                    return true;
+                }
+            });
+            return true;
+        }
         @Override
         public void onPermissionRequest(PermissionRequest request) {
             List<String> permissionsToGrant = new ArrayList<>();
