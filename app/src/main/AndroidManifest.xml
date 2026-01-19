@@ -25,7 +25,8 @@
         android:screenOrientation="portrait"
         android:usesCleartextTraffic="true"
         android:resizeableActivity="true"
-        android:fullBackupContent="true">
+        android:fullBackupContent="true"
+        android:enableOnBackInvokedCallback="true">
 
         <activity
             android:name="com.cylonid.nativealpha.MainActivity"
