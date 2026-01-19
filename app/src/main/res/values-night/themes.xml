@@ -48,6 +48,8 @@
         <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
-        <item name="android:statusBarColor">@color/colorSignatureDark</item>
+        <item name="android:statusBarColor">@color/colorSignature</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="colorControlNormal">@android:color/white</item>
     </style>
 </resources>
