@@ -113,6 +113,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     private String urlOnFirstPageload = "";
     private boolean fallbackToDefaultLongClickBehaviour = false;
     private PopupMenu mPopupMenu = null;
+    private String lastLongClickedLinkUrl = null;
 
     private AdFilter adFilter;
 
@@ -254,6 +255,15 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 fallbackToDefaultLongClickBehaviour = false;
                 return false;
             }
+
+            WebView.HitTestResult result = wv.getHitTestResult();
+            if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE ||
+                result.getType() == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
+                lastLongClickedLinkUrl = result.getExtra();
+            } else {
+                lastLongClickedLinkUrl = null;
+            }
+
             showWebViewPopupMenu();
             return true;
         });
@@ -433,7 +443,8 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         View center = findViewById(R.id.anchorCenterScreen);
         mPopupMenu = IconPopupMenuHelper.getMenu(center, R.menu.wv_context_menu, WebViewActivity.this);
 
-        String currentUrl = wv.getUrl();
+        boolean hasLink = lastLongClickedLinkUrl != null && !lastLongClickedLinkUrl.isEmpty();
+        String currentUrl = hasLink ? lastLongClickedLinkUrl : wv.getUrl();
         String title = "";
         if (currentUrl != null) {
             title = currentUrl.length() < 32 ? currentUrl : currentUrl.substring(0, 32) + "…";
@@ -454,9 +465,9 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             spanString.setSpan(foregroundColorSpan, 0, spanString.length(),0);
             item.setTitle(spanString);
         }
-        if(wv.canGoForward()) mPopupMenu.getMenu().getItem(2).setVisible(true);
+        if(wv.canGoForward()) mPopupMenu.getMenu().findItem(R.id.cmItemForward).setVisible(true);
         if(BuildConfig.DEBUG) {
-            mPopupMenu.getMenu().getItem(6).setVisible(true);
+            mPopupMenu.getMenu().findItem(R.id.cmShowAdblockProviders).setVisible(true);
         }
         mPopupMenu.setOnMenuItemClickListener(menuItem -> {
             switch(menuItem.getItemId()) {
@@ -478,7 +489,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                     new ShareCompat.IntentBuilder(WebViewActivity.this)
                             .setType("text/plain")
                             .setChooserTitle("Share URL")
-                            .setText(wv.getUrl())
+                            .setText(hasLink ? lastLongClickedLinkUrl : wv.getUrl())
                             .startChooser();
                     return true;
                 case R.id.cmItemCloseWebApp:
@@ -547,7 +558,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         wv.resumeTimers();
         this.setDarkModeIfNeeded();
 
-        
+
         if(webapp.isBiometricProtection()) {
             View fullActivityView = findViewById(R.id.webviewActivity);
             fullActivityView.setVisibility(View.GONE);
