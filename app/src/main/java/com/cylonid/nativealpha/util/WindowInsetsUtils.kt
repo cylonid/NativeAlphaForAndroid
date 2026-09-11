@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.google.android.material.R
 import com.google.android.material.color.MaterialColors
 
 object WindowInsetsUtils {
@@ -37,6 +38,9 @@ object WindowInsetsUtils {
         types: Int = INSET_TYPES,
     ) {
         WindowCompat.setDecorFitsSystemWindows(activity.window, false)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            activity.window.isNavigationBarContrastEnforced = false
+        }
         ViewCompat.setOnApplyWindowInsetsListener(activity.findViewById(android.R.id.content)) { v, windowInsets ->
             val insets = windowInsets.getInsets(types)
             v.setPadding(insets.left, if (includeTop) insets.top else 0, insets.right, insets.bottom)
@@ -53,14 +57,22 @@ object WindowInsetsUtils {
     /** Paints each area kept free for the system bars and adapts the icon colour. */
     @JvmStatic
     fun applyBarColors(activity: Activity, topCss: String?, bottomCss: String?) {
-        val top = parseCssColor(topCss) ?: parseCssColor(bottomCss) ?: return
-        val bottom = parseCssColor(bottomCss) ?: top
         val content = activity.findViewById<View>(android.R.id.content)
+        val parsedBottom = parseCssColor(bottomCss)
+        val top = parseCssColor(topCss) ?: parsedBottom
+        if (top == null) {
+            content.background = null
+            val surface = MaterialColors.getColor(content, R.attr.colorSurface, Color.WHITE)
+            setBarAppearance(activity, surface, surface)
+            return
+        }
+        val bottom = parsedBottom ?: top
         (content.background as? BarBackground)?.setColors(top, bottom)
             ?: run { content.background = BarBackground(top, bottom, content) }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            activity.window.isNavigationBarContrastEnforced = false
-        }
+        setBarAppearance(activity, top, bottom)
+    }
+
+    private fun setBarAppearance(activity: Activity, top: Int, bottom: Int) {
         WindowInsetsControllerCompat(activity.window, activity.window.decorView).apply {
             isAppearanceLightStatusBars = MaterialColors.isColorLight(top)
             isAppearanceLightNavigationBars = MaterialColors.isColorLight(bottom)
@@ -98,8 +110,15 @@ object WindowInsetsUtils {
         val v = value?.trim { it == '"' || it.isWhitespace() }?.takeIf { it.isNotEmpty() } ?: return null
         RGB.matchEntire(v)?.let { m ->
             if ((m.groupValues[4].toFloatOrNull() ?: 1f) < 0.5f) return null
-            return Color.rgb(m.groupValues[1].toInt(), m.groupValues[2].toInt(), m.groupValues[3].toInt())
+            val rgb = (1..3).map { m.groupValues[it].toIntOrNull() ?: return null }
+            if (rgb.any { it > 255 }) return null
+            return Color.rgb(rgb[0], rgb[1], rgb[2])
         }
-        return runCatching { Color.parseColor(v) }.getOrNull()
+        val hex = if (v.length == 4 && v[0] == '#') {
+            v.drop(1).map { "$it$it" }.joinToString(separator = "", prefix = "#")
+        } else {
+            v
+        }
+        return runCatching { Color.parseColor(hex) }.getOrNull()
     }
 }

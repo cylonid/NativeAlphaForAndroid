@@ -388,7 +388,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     }
 
     private void matchBarsToPage() {
-        wv.evaluateJavascript("(function(){var e=document.body||document.documentElement,c=\"\";while(e){var v=getComputedStyle(e).backgroundColor;if(v&&!v.startsWith(\"rgba(0, 0, 0, 0\")){c=v;break;}e=e.parentElement;}var m=document.querySelector('meta[name=\"theme-color\"]');return ((m&&m.content)||\"\")+\"|\"+c;})()", value -> {
+        wv.evaluateJavascript("(function(){function opaque(v){var m=v&&v.match(/^rgba?\\(([^)]+)\\)/);if(!m)return false;var p=m[1].split(/[,\\/\\s]+/).filter(Boolean);return p.length<4||parseFloat(p[3])>=0.5;}var e=document.body||document.documentElement,c=\"\";while(e){var v=getComputedStyle(e).backgroundColor;if(opaque(v)){c=v;break;}e=e.parentElement;}var m=document.querySelector('meta[name=\"theme-color\"]');return ((m&&m.content)||\"\")+\"|\"+c;})()", value -> {
             String[] colors = value.split("\\|", -1);
             WindowInsetsUtils.applyBarColors(this, colors[0], colors.length > 1 ? colors[1] : null);
         });
