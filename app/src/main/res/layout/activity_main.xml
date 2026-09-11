@@ -19,7 +19,8 @@
             app:titleTextColor="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorSignature" />
+            android:background="@color/colorSignature"
+            android:theme="@style/ThemeOverlay.AppTheme.Toolbar" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -52,6 +52,10 @@
         <item name="android:windowLightNavigationBar">true</item>
     </style>
 
+    <style name="ThemeOverlay.AppTheme.Toolbar" parent="ThemeOverlay.Material3.ActionBar">
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
     <style name="AppTheme.Launcher">
         <item name="android:windowBackground">@drawable/launch_screen</item>
     </style>
