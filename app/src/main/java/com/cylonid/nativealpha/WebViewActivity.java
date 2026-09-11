@@ -388,6 +388,12 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     }
 
     @SuppressLint("RequiresFeature")
+
+    private void matchBarsToPage() {
+        wv.evaluateJavascript("(function(){var m=document.querySelector('meta[name=\"theme-color\"]');if(m&&m.content)return m.content;var e=document.body||document.documentElement;while(e){var c=getComputedStyle(e).backgroundColor;if(c&&c!==\"transparent\"&&!c.startsWith(\"rgba(0, 0, 0, 0\"))return c;e=e.parentElement;}return \"\";})()",
+                color -> WindowInsetsUtils.applyBarColor(this, color));
+    }
+
     private void setDarkModeIfNeeded() {
         if (!BuildConfig.FLAVOR.contains("extended")) {
             return;
@@ -903,6 +909,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                 wv.loadUrl("file:///android_asset/errorSite/error_" + langExtension + ".html");
             }
             wv.evaluateJavascript("document.addEventListener(\"visibilitychange\",function (event) {event.stopImmediatePropagation();},true);", null);
+            matchBarsToPage();
             super.onPageFinished(view, url);
         }
 
