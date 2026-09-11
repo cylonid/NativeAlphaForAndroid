@@ -52,6 +52,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.ShareCompat;
 import androidx.core.content.ContextCompat;
 import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewCompat;
 import androidx.webkit.WebViewFeature;
 
 import com.cylonid.nativealpha.databinding.DialogHttpAuthBinding;
@@ -119,6 +120,8 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     private AdblockProviderApiHelper adblockProviderApiHelper;
     private AdblockLifecycleHelper adblockLifecycleHelper;
 
+    private static final int MAX_SAVED_STATE_BYTES = 256 * 1024;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,14 +138,14 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             finish();
         } else {
             if(webapp.isBiometricProtection()) {
-                new BiometricPromptHelper(WebViewActivity.this).showPrompt(() -> setupWebView(), () -> finish(), getString(R.string.bioprompt_restricted_webapp));
+                new BiometricPromptHelper(WebViewActivity.this).showPrompt(() -> setupWebView(savedInstanceState), () -> finish(), getString(R.string.bioprompt_restricted_webapp));
             }
-            setupWebView();
+            setupWebView(savedInstanceState);
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setupWebView() {
+    private void setupWebView(Bundle savedState) {
 
         String processName = Application.getProcessName();
         String packageName = this.getPackageName();
@@ -246,7 +249,9 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         }
 
         CUSTOM_HEADERS = initCustomHeaders(webapp.isSendSavedataRequest());
-        loadURL(wv, url);
+        if (savedState == null || wv.restoreState(savedState) == null) {
+            loadURL(wv, url);
+        }
         wv.setWebChromeClient(new CustomWebChromeClient());
         wv.setOnLongClickListener(view -> {
             if(webapp.getAlwaysUseFallbackContextMenu()) return false;
@@ -505,6 +510,14 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         });
 
         mPopupMenu.show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (wv != null && WebViewFeature.isFeatureSupported(WebViewFeature.SAVE_STATE)) {
+            WebViewCompat.saveState(wv, outState, MAX_SAVED_STATE_BYTES, false);
+        }
     }
 
     @Override
