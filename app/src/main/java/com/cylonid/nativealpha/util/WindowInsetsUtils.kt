@@ -1,7 +1,12 @@
 package com.cylonid.nativealpha.util
 
 import android.app.Activity
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.Paint
+import android.graphics.PixelFormat
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
 import androidx.core.graphics.ColorUtils
@@ -35,19 +40,40 @@ object WindowInsetsUtils {
         apply(activity, WindowInsetsCompat.Type.ime(), true)
     }
 
-    /** Paints the area kept free for the system bars in [cssColor] and adapts the icon colour. */
+    /** Paints each area kept free for the system bars and adapts the icon colour. */
     @JvmStatic
-    fun applyBarColor(activity: Activity, cssColor: String?) {
-        val color = parseCssColor(cssColor) ?: return
-        activity.findViewById<View>(android.R.id.content).setBackgroundColor(color)
+    fun applyBarColors(activity: Activity, topCss: String?, bottomCss: String?) {
+        val top = parseCssColor(topCss) ?: parseCssColor(bottomCss) ?: return
+        val bottom = parseCssColor(bottomCss) ?: top
+        val content = activity.findViewById<View>(android.R.id.content)
+        content.background = BarBackground(top, bottom, content)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             activity.window.isNavigationBarContrastEnforced = false
         }
-        val light = ColorUtils.calculateLuminance(color) > 0.5
         WindowInsetsControllerCompat(activity.window, activity.window.decorView).apply {
-            isAppearanceLightStatusBars = light
-            isAppearanceLightNavigationBars = light
+            isAppearanceLightStatusBars = ColorUtils.calculateLuminance(top) > 0.5
+            isAppearanceLightNavigationBars = ColorUtils.calculateLuminance(bottom) > 0.5
         }
+    }
+
+    private class BarBackground(
+        private val top: Int,
+        private val bottom: Int,
+        private val host: View,
+    ) : Drawable() {
+        private val paint = Paint()
+
+        override fun draw(canvas: Canvas) {
+            val b = bounds
+            paint.color = top
+            canvas.drawRect(b.left.toFloat(), b.top.toFloat(), b.right.toFloat(), (b.top + host.paddingTop).toFloat(), paint)
+            paint.color = bottom
+            canvas.drawRect(b.left.toFloat(), (b.bottom - host.paddingBottom).toFloat(), b.right.toFloat(), b.bottom.toFloat(), paint)
+        }
+
+        override fun setAlpha(alpha: Int) = Unit
+        override fun setColorFilter(colorFilter: ColorFilter?) = Unit
+        override fun getOpacity() = PixelFormat.TRANSLUCENT
     }
 
     private fun parseCssColor(value: String?): Int? {

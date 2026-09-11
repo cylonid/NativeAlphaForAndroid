@@ -390,8 +390,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
     @SuppressLint("RequiresFeature")
 
     private void matchBarsToPage() {
-        wv.evaluateJavascript("(function(){var m=document.querySelector('meta[name=\"theme-color\"]');if(m&&m.content)return m.content;var e=document.body||document.documentElement;while(e){var c=getComputedStyle(e).backgroundColor;if(c&&c!==\"transparent\"&&!c.startsWith(\"rgba(0, 0, 0, 0\"))return c;e=e.parentElement;}return \"\";})()",
-                color -> WindowInsetsUtils.applyBarColor(this, color));
+        wv.evaluateJavascript("(function(){function bg(e){while(e){var c=getComputedStyle(e).backgroundColor;if(c&&c!==\"transparent\"&&!c.startsWith(\"rgba(0, 0, 0, 0\"))return c;e=e.parentElement;}return \"\";}var m=document.querySelector('meta[name=\"theme-color\"]');var t=(m&&m.content)||bg(document.body);var b=bg(document.body)||t;return t+\"|\"+b;})()", value -> {
+            String[] colors = value.replace("\"", "").split("\\|");
+            WindowInsetsUtils.applyBarColors(this, colors[0], colors.length > 1 ? colors[1] : colors[0]);
+        });
     }
 
     private void setDarkModeIfNeeded() {
