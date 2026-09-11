@@ -17,6 +17,7 @@ import com.cylonid.nativealpha.BuildConfig
 import com.cylonid.nativealpha.databinding.NewsActivityBinding
 import com.cylonid.nativealpha.model.DataManager
 import com.cylonid.nativealpha.util.LocaleUtils
+import com.cylonid.nativealpha.util.WindowInsetsUtils
 
 
 class NewsActivity : AppCompatActivity(), View.OnTouchListener {
@@ -38,6 +39,7 @@ class NewsActivity : AppCompatActivity(), View.OnTouchListener {
         binding = NewsActivityBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        WindowInsetsUtils.applyAsPadding(this)
 
         binding.newsContent.settings.javaScriptEnabled = true
         binding.newsContent.isLongClickable = false

@@ -6,6 +6,7 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import com.cylonid.nativealpha.databinding.ActivityToolbarBaseBinding
+import com.cylonid.nativealpha.util.WindowInsetsUtils
 
 abstract class ToolbarBaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
@@ -21,6 +22,7 @@ abstract class ToolbarBaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
         val baseBinding = ActivityToolbarBaseBinding.inflate(layoutInflater)
         setContentView(baseBinding.root)
+        WindowInsetsUtils.applyAsPadding(this, false)
 
         _binding = inflateBinding(layoutInflater)
         baseBinding.activityContent.addView(_binding.root)

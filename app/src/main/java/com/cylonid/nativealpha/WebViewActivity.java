@@ -43,6 +43,7 @@ import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -70,6 +71,7 @@ import com.cylonid.nativealpha.util.LocaleUtils;
 import com.cylonid.nativealpha.util.NotificationUtils;
 import com.cylonid.nativealpha.util.Utility;
 import com.cylonid.nativealpha.util.WebViewLauncher;
+import com.cylonid.nativealpha.util.WindowInsetsUtils;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -167,6 +169,9 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         }
 
         setContentView(R.layout.full_webview);
+        if (webapp.isShowFullscreen()) WindowInsetsUtils.applyKeyboardPadding(this);
+        else WindowInsetsUtils.applyAsPadding(this);
+        getOnBackPressedDispatcher().addCallback(this, backCallback);
 
         if(webapp.isKeepAwake()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -358,7 +363,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                                     WebViewLauncher.startWebView(DataManager.getInstance().getSuccessor(webappID), WebViewActivity.this);
                                     finish();
                                 } else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch())
-                                    onBackPressed();
+                                    backCallback.handleOnBackPressed();
 
                             }
                             return true;
@@ -464,7 +469,7 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
                     wv.goForward();
                     return true;
                 case R.id.cmItemBack:
-                    onBackPressed();
+                    backCallback.handleOnBackPressed();
                     return true;
                 case R.id.cmItemReload:
                     wv.reload();
@@ -513,25 +518,26 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         this.setDarkModeIfNeeded();
     }
 
-    @Override
-    public void onBackPressed() {
-        WebApp webapp = DataManager.getInstance().getWebApp(webappID);
+    private final OnBackPressedCallback backCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            WebApp webapp = DataManager.getInstance().getWebApp(webappID);
 
-        if(wv.canGoBack()) {
-            wv.goBack();
-            return;
+            if (wv.canGoBack()) {
+                wv.goBack();
+                return;
+            }
+
+            if (quitOnNextBackpress) {
+                quitOnNextBackpress = false;
+                moveTaskToBack(true);
+                return;
+            }
+
+            loadURL(wv, webapp.getBaseUrl());
+            quitOnNextBackpress = true;
         }
-
-        if(quitOnNextBackpress) {
-            quitOnNextBackpress = false;
-            moveTaskToBack(true);
-            return;
-        }
-
-        loadURL(wv, webapp.getBaseUrl());
-        quitOnNextBackpress = true;
-
-    }
+    };
 
     @Override
     protected void onResume() {
@@ -646,7 +652,6 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         if(webapp.isShowFullscreen()) return;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
-            getWindow().setDecorFitsSystemWindows(true);
             WindowInsetsController controller = getWindow().getInsetsController();
             if (controller != null) {
                 controller.show(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());

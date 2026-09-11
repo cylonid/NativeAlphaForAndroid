@@ -25,7 +25,7 @@ android {
     dependenciesInfo {
         includeInApk = false
     }
-    compileSdk 35
+    compileSdk 36
     splits {
         abi {
             enable true
@@ -55,7 +55,7 @@ android {
     defaultConfig {
         applicationId "com.cylonid.nativealpha"
         minSdkVersion 28
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode 1520
         versionName "1.5.2"
 

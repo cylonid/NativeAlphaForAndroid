@@ -80,7 +80,7 @@
             android:parentActivityName=".MainActivity"
             android:icon="@mipmap/native_alpha"
             android:roundIcon="@mipmap/native_alpha"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.News">
         </activity>
 
         <activity

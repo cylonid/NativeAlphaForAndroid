@@ -12,6 +12,7 @@ import com.mikepenz.aboutlibraries.LibsBuilder
 import mehdi.sakout.aboutpage.AboutPage
 import mehdi.sakout.aboutpage.Element
 import java.time.Year
+import com.cylonid.nativealpha.util.WindowInsetsUtils
 
 class AboutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +20,7 @@ class AboutActivity : AppCompatActivity() {
 
         val baseBinding = ActivityToolbarBaseBinding.inflate(layoutInflater)
         setContentView(baseBinding.root)
+        WindowInsetsUtils.applyAsPadding(this, false)
 
         baseBinding.activityContent.addView(generateAboutPageView())
 
