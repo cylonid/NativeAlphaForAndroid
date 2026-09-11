@@ -248,6 +248,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             wv.getSettings().setBuiltInZoomControls(true);
         }
 
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.BACK_FORWARD_CACHE)) {
+            WebSettingsCompat.setBackForwardCacheEnabled(wv.getSettings(), true);
+        }
+
         CUSTOM_HEADERS = initCustomHeaders(webapp.isSendSavedataRequest());
         if (savedState == null || wv.restoreState(savedState) == null) {
             loadURL(wv, url);
