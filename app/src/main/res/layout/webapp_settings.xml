@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/margin_activity"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="@dimen/settings_action_gap"
             android:orientation="vertical"
             android:weightSum="100">
 
@@ -666,23 +666,22 @@
                 </LinearLayout>
             </ScrollView>
 
-            <View
+            <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?attr/colorOutlineVariant" />
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 style="?android:attr/buttonBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/settings_action_gap"
                 android:layout_marginEnd="@dimen/margin_activity"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btnCancel"
-                    style="@style/Widget.Material3.Button.TextButton"
+                    style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/cancel" />
@@ -690,8 +689,8 @@
 
                 <Button
                     android:id="@+id/btnSave"
-                    style="@style/Widget.Material3.Button"
-                    android:layout_marginStart="8dp"
+                    style="?attr/materialButtonStyle"
+                    android:layout_marginStart="@dimen/settings_action_gap"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/save" />

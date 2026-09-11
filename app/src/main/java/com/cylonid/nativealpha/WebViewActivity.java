@@ -387,15 +387,14 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
         });
     }
 
-    @SuppressLint("RequiresFeature")
-
     private void matchBarsToPage() {
-        wv.evaluateJavascript("(function(){function bg(e){while(e){var c=getComputedStyle(e).backgroundColor;if(c&&c!==\"transparent\"&&!c.startsWith(\"rgba(0, 0, 0, 0\"))return c;e=e.parentElement;}return \"\";}var m=document.querySelector('meta[name=\"theme-color\"]');var t=(m&&m.content)||bg(document.body);var b=bg(document.body)||t;return t+\"|\"+b;})()", value -> {
-            String[] colors = value.replace("\"", "").split("\\|");
-            WindowInsetsUtils.applyBarColors(this, colors[0], colors.length > 1 ? colors[1] : colors[0]);
+        wv.evaluateJavascript("(function(){var e=document.body||document.documentElement,c=\"\";while(e){var v=getComputedStyle(e).backgroundColor;if(v&&!v.startsWith(\"rgba(0, 0, 0, 0\")){c=v;break;}e=e.parentElement;}var m=document.querySelector('meta[name=\"theme-color\"]');return ((m&&m.content)||\"\")+\"|\"+c;})()", value -> {
+            String[] colors = value.split("\\|", -1);
+            WindowInsetsUtils.applyBarColors(this, colors[0], colors.length > 1 ? colors[1] : null);
         });
     }
 
+    @SuppressLint("RequiresFeature")
     private void setDarkModeIfNeeded() {
         if (!BuildConfig.FLAVOR.contains("extended")) {
             return;
@@ -909,9 +908,10 @@ public class WebViewActivity extends AppCompatActivity implements EasyPermission
             if(url.equals("about:blank")) {
                 String langExtension = LocaleUtils.getFileEnding();
                 wv.loadUrl("file:///android_asset/errorSite/error_" + langExtension + ".html");
+                return;
             }
             wv.evaluateJavascript("document.addEventListener(\"visibilitychange\",function (event) {event.stopImmediatePropagation();},true);", null);
-            matchBarsToPage();
+            if (!webapp.isShowFullscreen()) matchBarsToPage();
             super.onPageFinished(view, url);
         }
 

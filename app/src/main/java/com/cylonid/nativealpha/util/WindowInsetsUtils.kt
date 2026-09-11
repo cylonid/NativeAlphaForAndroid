@@ -9,12 +9,12 @@ import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
-import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.google.android.material.color.MaterialColors
 
 object WindowInsetsUtils {
 
@@ -31,13 +31,23 @@ object WindowInsetsUtils {
      */
     @JvmStatic
     @JvmOverloads
-    fun applyAsPadding(activity: Activity, includeTop: Boolean = true) {
-        apply(activity, INSET_TYPES, includeTop)
+    fun applyAsPadding(
+        activity: Activity,
+        includeTop: Boolean = true,
+        types: Int = INSET_TYPES,
+    ) {
+        WindowCompat.setDecorFitsSystemWindows(activity.window, false)
+        ViewCompat.setOnApplyWindowInsetsListener(activity.findViewById(android.R.id.content)) { v, windowInsets ->
+            val insets = windowInsets.getInsets(types)
+            v.setPadding(insets.left, if (includeTop) insets.top else 0, insets.right, insets.bottom)
+            val unhandled = if (includeTop) Insets.NONE else Insets.of(0, insets.top, 0, 0)
+            WindowInsetsCompat.Builder(windowInsets).setInsets(types, unhandled).build()
+        }
     }
 
     @JvmStatic
     fun applyKeyboardPadding(activity: Activity) {
-        apply(activity, WindowInsetsCompat.Type.ime(), true)
+        applyAsPadding(activity, types = WindowInsetsCompat.Type.ime())
     }
 
     /** Paints each area kept free for the system bars and adapts the icon colour. */
@@ -46,22 +56,30 @@ object WindowInsetsUtils {
         val top = parseCssColor(topCss) ?: parseCssColor(bottomCss) ?: return
         val bottom = parseCssColor(bottomCss) ?: top
         val content = activity.findViewById<View>(android.R.id.content)
-        content.background = BarBackground(top, bottom, content)
+        (content.background as? BarBackground)?.setColors(top, bottom)
+            ?: run { content.background = BarBackground(top, bottom, content) }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             activity.window.isNavigationBarContrastEnforced = false
         }
         WindowInsetsControllerCompat(activity.window, activity.window.decorView).apply {
-            isAppearanceLightStatusBars = ColorUtils.calculateLuminance(top) > 0.5
-            isAppearanceLightNavigationBars = ColorUtils.calculateLuminance(bottom) > 0.5
+            isAppearanceLightStatusBars = MaterialColors.isColorLight(top)
+            isAppearanceLightNavigationBars = MaterialColors.isColorLight(bottom)
         }
     }
 
     private class BarBackground(
-        private val top: Int,
-        private val bottom: Int,
+        private var top: Int,
+        private var bottom: Int,
         private val host: View,
     ) : Drawable() {
         private val paint = Paint()
+
+        fun setColors(top: Int, bottom: Int) {
+            if (top == this.top && bottom == this.bottom) return
+            this.top = top
+            this.bottom = bottom
+            invalidateSelf()
+        }
 
         override fun draw(canvas: Canvas) {
             val b = bounds
@@ -77,21 +95,11 @@ object WindowInsetsUtils {
     }
 
     private fun parseCssColor(value: String?): Int? {
-        val v = value?.trim()?.removeSurrounding("\"")?.trim()?.takeIf { it.isNotEmpty() } ?: return null
+        val v = value?.trim { it == '"' || it.isWhitespace() }?.takeIf { it.isNotEmpty() } ?: return null
         RGB.matchEntire(v)?.let { m ->
             if ((m.groupValues[4].toFloatOrNull() ?: 1f) < 0.5f) return null
             return Color.rgb(m.groupValues[1].toInt(), m.groupValues[2].toInt(), m.groupValues[3].toInt())
         }
         return runCatching { Color.parseColor(v) }.getOrNull()
-    }
-
-    private fun apply(activity: Activity, types: Int, includeTop: Boolean) {
-        WindowCompat.setDecorFitsSystemWindows(activity.window, false)
-        ViewCompat.setOnApplyWindowInsetsListener(activity.findViewById(android.R.id.content)) { v, windowInsets ->
-            val insets = windowInsets.getInsets(types)
-            v.setPadding(insets.left, if (includeTop) insets.top else 0, insets.right, insets.bottom)
-            val unhandled = if (includeTop) Insets.NONE else Insets.of(0, insets.top, 0, 0)
-            WindowInsetsCompat.Builder(windowInsets).setInsets(types, unhandled).build()
-        }
     }
 }

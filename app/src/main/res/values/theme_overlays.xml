@@ -95,4 +95,7 @@
         <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh_highContrast</item>
         <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest_highContrast</item>
     </style>
+    <style name="ThemeOverlay.AppTheme.Toolbar" parent="ThemeOverlay.Material3.ActionBar">
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
 </resources>
