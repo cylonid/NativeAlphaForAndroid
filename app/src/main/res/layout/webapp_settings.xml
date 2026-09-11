@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/margin_activity"
-            android:layout_marginBottom="@dimen/margin_activity"
+            android:layout_marginBottom="8dp"
             android:orientation="vertical"
             android:weightSum="100">
 
@@ -676,12 +676,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="@dimen/margin_activity"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btnCancel"
-                    style="?android:attr/buttonBarButtonStyle"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/cancel" />
@@ -689,7 +690,8 @@
 
                 <Button
                     android:id="@+id/btnSave"
-                    style="?android:attr/buttonBarButtonStyle"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_marginStart="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/save" />
