@@ -142,7 +142,6 @@
     <color name="md_theme_surfaceContainerHighest_highContrast">#D4C3C0</color>
 
     <color name="colorSignature">#b71c1c</color>
-    <color name="colorSignatureDark">#7f0000</color>
 
     <color name="transparent">#07000000</color>
     <color name="snackbar_background">#CCCCCC</color>

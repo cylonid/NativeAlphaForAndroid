@@ -21,7 +21,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/margin_activity"
+            android:layout_marginTop="@dimen/margin_activity"
+            android:layout_marginBottom="@dimen/margin_activity"
             android:orientation="vertical"
             android:weightSum="100">
 
@@ -29,6 +30,8 @@
                 android:id="@+id/labelTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_activity"
+                android:layout_marginEnd="@dimen/margin_activity"
                 android:text="@{webapp.baseUrl}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -47,7 +50,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
+                    android:paddingStart="@dimen/margin_activity"
+                    android:paddingEnd="@dimen/margin_activity"
                     android:orientation="vertical"
                     android:visibility="visible">
 
@@ -667,6 +671,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_activity"
                 android:orientation="horizontal">
 
                 <Button
