@@ -666,6 +666,11 @@
                 </LinearLayout>
             </ScrollView>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorOutlineVariant" />
+
             <LinearLayout
                 style="?android:attr/buttonBarStyle"
                 android:layout_width="wrap_content"

@@ -167,13 +167,17 @@
 
             </ScrollView>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorOutlineVariant" />
+
             <LinearLayout
                 style="?android:attr/buttonBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginEnd="@dimen/margin_activity"
-                android:layout_marginBottom="-10dp"
                 android:orientation="horizontal">
 
                 <Button

@@ -14,8 +14,7 @@
     <ImageView
         android:background="?attr/colorSurface"
         android:id="@+id/dragAnchor"
-        android:layout_weight="0.5"
-        android:layout_width="wrap_content"
+        android:layout_width="56dp"
         android:layout_height="match_parent"
         android:src="@drawable/baseline_drag_indicator_24"
         android:scaleType="center"
@@ -26,10 +25,10 @@
         android:id="@+id/btnWebAppTitle"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="4"
+        android:layout_weight="1"
         android:maxLines="1"
-        android:gravity="center"
-        android:textAllCaps="true"
+        android:gravity="center_vertical"
+        android:paddingEnd="@dimen/margin_activity"
         android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
         android:ellipsize="end" />
 
