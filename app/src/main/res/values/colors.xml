@@ -150,7 +150,6 @@
     <color name="disabled_text_color">#aaa</color>
     <color name="secondary_text_color">#8A8A8A</color>
 
-    <color name="swipe_action_positive">#4DFF53</color>
-    <color name="swipe_action_neutral">#EF6C00</color>
-    <color name="swipe_action_negative">#FD2C2C</color>
+    <color name="swipe_action_neutral">@color/md_theme_tertiaryContainer</color>
+    <color name="swipe_action_negative">@color/md_theme_errorContainer</color>
 </resources>
