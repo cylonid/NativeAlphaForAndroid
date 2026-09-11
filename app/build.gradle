@@ -129,7 +129,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.8.9'
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'io.github.medyo:android-about-page:2.0.0'
-    implementation 'androidx.webkit:webkit:1.13.0'
+    implementation 'androidx.webkit:webkit:1.17.0'
     implementation 'com.jakewharton:process-phoenix:2.1.2'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.14.1'
