@@ -18,7 +18,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/margin_activity"
+            android:layout_marginTop="@dimen/margin_activity"
+            android:layout_marginBottom="@dimen/settings_action_gap"
             android:weightSum="100"
             android:orientation="vertical">
 
@@ -33,7 +34,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
+                    android:paddingStart="@dimen/margin_activity"
+                    android:paddingEnd="@dimen/margin_activity"
                     android:orientation="vertical"
                     android:visibility="visible">
 
@@ -165,24 +167,30 @@
 
             </ScrollView>
 
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <LinearLayout
                 style="?android:attr/buttonBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginBottom="-10dp"
+                android:layout_marginTop="@dimen/settings_action_gap"
+                android:layout_marginEnd="@dimen/margin_activity"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btnCancel"
-                    style="?android:attr/buttonBarButtonStyle"
+                    style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/cancel" />
 
                 <Button
                     android:id="@+id/btnSave"
-                    style="?android:attr/buttonBarButtonStyle"
+                    style="?attr/materialButtonStyle"
+                    android:layout_marginStart="@dimen/settings_action_gap"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/save" />

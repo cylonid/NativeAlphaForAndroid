@@ -22,6 +22,7 @@ import com.cylonid.nativealpha.util.Const
 import com.cylonid.nativealpha.util.EntryPointUtils.entryPointReached
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.github.edsuns.adfilter.AdFilter
+import com.cylonid.nativealpha.util.WindowInsetsUtils
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        WindowInsetsUtils.applyAsPadding(this, false)
         webAppListFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as WebAppListFragment
         entryPointReached(this)

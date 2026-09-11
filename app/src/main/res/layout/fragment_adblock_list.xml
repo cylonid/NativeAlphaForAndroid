@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:behind_swiped_item_icon="@drawable/ic_delete_black_24dp"
-        app:behind_swiped_item_bg_color="@color/swipe_action_negative"
+        app:behind_swiped_item_bg_color="?attr/colorErrorContainer"
         app:item_layout="@layout/adblock_list_item"
         app:swiped_item_opacity_fades_on_swiping="true"
         app:behind_swiped_item_icon_margin="@dimen/margin_swipe_icon"
