@@ -18,12 +18,15 @@ import androidx.core.graphics.scale
 import com.cylonid.nativealpha.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URL
@@ -53,6 +56,8 @@ object ShortcutIconUtils {
 
     // In-memory LRU cache: cache up to 24 icons (~1-2MB RAM maximum)
     private val memoryCache = LruCache<Int, Bitmap>(24)
+    private val ioScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private const val MAX_ICON_BYTES = 5 * 1024 * 1024
 
     private val _iconUpdates = MutableSharedFlow<Int>(extraBufferCapacity = 64)
 
@@ -131,6 +136,9 @@ object ShortcutIconUtils {
     }
 
     @JvmStatic
+    fun getCachedIcon(webAppId: Int): Bitmap? = if (webAppId < 0) null else memoryCache.get(webAppId)
+
+    @JvmStatic
     fun saveIcon(
         context: Context,
         webAppId: Int,
@@ -138,26 +146,31 @@ object ShortcutIconUtils {
     ): Boolean {
         if (webAppId < 0) return false
         val downscaled = downscaleIfNecessary(bitmap)
-        memoryCache.put(webAppId, downscaled)
 
         val success =
             runCatching {
                 val file = getIconFile(context, webAppId)
-                val tmpFile = File(file.parentFile, "$webAppId.tmp")
-                FileOutputStream(tmpFile).use { out ->
-                    downscaled.compress(Bitmap.CompressFormat.PNG, 100, out)
-                    out.flush()
-                }
-                if (tmpFile.renameTo(file)) {
-                    true
-                } else {
-                    tmpFile.copyTo(file, overwrite = true)
+                val tmpFile = File(file.parentFile, "$webAppId.${System.nanoTime()}.tmp")
+                try {
+                    FileOutputStream(tmpFile).use { out ->
+                        downscaled.compress(Bitmap.CompressFormat.PNG, 100, out)
+                        out.flush()
+                    }
+                    if (tmpFile.renameTo(file)) {
+                        true
+                    } else {
+                        tmpFile.copyTo(file, overwrite = true)
+                        tmpFile.delete()
+                        true
+                    }
+                } catch (e: Exception) {
                     tmpFile.delete()
-                    true
+                    throw e
                 }
             }.getOrDefault(false)
 
         if (success) {
+            memoryCache.put(webAppId, downscaled)
             _iconUpdates.tryEmit(webAppId)
             updatePinnedShortcuts(context, webAppId, downscaled)
         }
@@ -259,7 +272,7 @@ object ShortcutIconUtils {
             deleteIcon(appContext, id)
         }
         val manager = appContext.getSystemService(ShortcutManager::class.java) ?: return
-        CoroutineScope(Dispatchers.IO).launch {
+        ioScope.launch {
             runCatching {
                 val toDisable = mutableListOf<String>()
                 for (info in manager.pinnedShortcuts) {
@@ -289,7 +302,7 @@ object ShortcutIconUtils {
         val appContext = context.applicationContext ?: context
         val downscaled = downscaleIfNecessary(bitmap)
         val scManager = appContext.getSystemService(ShortcutManager::class.java) ?: return
-        CoroutineScope(Dispatchers.IO).launch {
+        ioScope.launch {
             runCatching {
                 val matching =
                     scManager.pinnedShortcuts.filter { info ->
@@ -392,6 +405,11 @@ object ShortcutIconUtils {
         var con: HttpURLConnection? = null
         return try {
             val url = URL(strUrl)
+            if (!url.protocol.equals("http", ignoreCase = true) &&
+                !url.protocol.equals("https", ignoreCase = true)
+            ) {
+                return null
+            }
             con =
                 (url.openConnection() as HttpURLConnection).apply {
                     connectTimeout = 5000
@@ -402,13 +420,29 @@ object ShortcutIconUtils {
                         Const.DESKTOP_USER_AGENT,
                     )
                 }
-            con.inputStream
-                .use { stream ->
-                    BitmapFactory.decodeStream(stream)
-                }?.let { loaded ->
-                    val downscaled = downscaleIfNecessary(loaded, MAX_ICON_DIMENSION)
-                    if (downscaled.width >= Const.FAVICON_MIN_WIDTH) downscaled else null
+            if (con.responseCode !in 200..299) {
+                return null
+            }
+            val bytes =
+                con.inputStream.use { stream ->
+                    val buffer = ByteArray(8192)
+                    val out = ByteArrayOutputStream()
+                    var total = 0
+                    while (true) {
+                        val read = stream.read(buffer)
+                        if (read == -1) break
+                        total += read
+                        if (total > MAX_ICON_BYTES) {
+                            throw IOException("Icon exceeds maximum allowed size")
+                        }
+                        out.write(buffer, 0, read)
+                    }
+                    out.toByteArray()
                 }
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.let { loaded ->
+                val downscaled = downscaleIfNecessary(loaded, MAX_ICON_DIMENSION)
+                if (downscaled.width >= Const.FAVICON_MIN_WIDTH) downscaled else null
+            }
         } catch (_: Exception) {
             null
         } finally {

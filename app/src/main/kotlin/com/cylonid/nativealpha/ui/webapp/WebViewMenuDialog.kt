@@ -23,25 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import com.cylonid.nativealpha.model.DataManager
 import com.cylonid.nativealpha.model.WebApp
-import com.cylonid.nativealpha.ui.theme.NativeAlphaTheme
 
 class WebViewMenuDialogFragment : DialogFragment() {
-    private var title: String = ""
-    private var url: String = ""
-    private var canGoBack: Boolean = true
-    private var canGoForward: Boolean = false
-    private var webAppId: Int = -1
+    private var args: WebViewMenuArgs = WebViewMenuArgs()
     private var listener: WebViewMenuListener? = null
 
     companion object {
         private const val TAG = "WebViewMenuDialogFragment"
-        private const val ARG_TITLE = "arg_title"
-        private const val ARG_URL = "arg_url"
-        private const val ARG_CAN_GO_BACK = "arg_can_go_back"
-        private const val ARG_CAN_GO_FORWARD = "arg_can_go_forward"
-        private const val ARG_WEBAPP_ID = "arg_webapp_id"
 
         @JvmStatic
         fun show(
@@ -52,27 +41,21 @@ class WebViewMenuDialogFragment : DialogFragment() {
             canGoForward: Boolean,
             webApp: WebApp?,
             listener: WebViewMenuListener,
-        ): WebViewMenuDialogFragment? {
-            if (fragmentManager.isStateSaved) return null
-            val existing = fragmentManager.findFragmentByTag(TAG) as? WebViewMenuDialogFragment
-            if (existing != null) {
-                existing.dismissAllowingStateLoss()
-            }
-            val dialog =
+        ): WebViewMenuDialogFragment? =
+            WebViewMenuFragmentSupport.showMenuFragment(
+                fragmentManager = fragmentManager,
+                tag = TAG,
+                title = title,
+                url = url,
+                canGoBack = canGoBack,
+                canGoForward = canGoForward,
+                webApp = webApp,
+            ) { bundle ->
                 WebViewMenuDialogFragment().apply {
                     this.listener = listener
-                    arguments =
-                        Bundle().apply {
-                            putString(ARG_TITLE, title)
-                            putString(ARG_URL, url)
-                            putBoolean(ARG_CAN_GO_BACK, canGoBack)
-                            putBoolean(ARG_CAN_GO_FORWARD, canGoForward)
-                            putInt(ARG_WEBAPP_ID, webApp?.ID ?: -1)
-                        }
+                    arguments = bundle
                 }
-            dialog.show(fragmentManager, TAG)
-            return dialog
-        }
+            }
     }
 
     override fun onAttach(context: Context) {
@@ -89,13 +72,7 @@ class WebViewMenuDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let { args ->
-            title = args.getString(ARG_TITLE, "")
-            url = args.getString(ARG_URL, "")
-            canGoBack = args.getBoolean(ARG_CAN_GO_BACK, true)
-            canGoForward = args.getBoolean(ARG_CAN_GO_FORWARD, false)
-            webAppId = args.getInt(ARG_WEBAPP_ID, -1)
-        }
+        args = WebViewMenuFragmentSupport.readArgs(arguments)
     }
 
     override fun onStart() {
@@ -114,32 +91,25 @@ class WebViewMenuDialogFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View {
-        val webApp = if (webAppId != -1) DataManager.getInstance().getWebApp(webAppId) else null
-        return androidx.compose.ui.platform.ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(androidx.compose.ui.platform.ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                NativeAlphaTheme {
-                    WebViewMenuDialogContent(
-                        title = title,
-                        url = url,
-                        canGoBack = canGoBack,
-                        canGoForward = canGoForward,
-                        webApp = webApp,
-                        onBack = { listener?.onBack() },
-                        onForward = { listener?.onForward() },
-                        onReload = { listener?.onReload() },
-                        onShare = { listener?.onShare() },
-                        onCopyUrl = { listener?.onCopyUrl() },
-                        onMainMenu = { listener?.onMainMenu() },
-                        onFallbackContextMenu = { listener?.onFallbackContextMenu() },
-                        onCloseWebApp = { listener?.onCloseWebApp() },
-                        onDismiss = { dismiss() },
-                    )
-                }
-            }
+    ): View =
+        WebViewMenuFragmentSupport.createMenuComposeView(this, args) { menuArgs, webApp ->
+            WebViewMenuDialogContent(
+                title = menuArgs.title,
+                url = menuArgs.url,
+                canGoBack = menuArgs.canGoBack,
+                canGoForward = menuArgs.canGoForward,
+                webApp = webApp,
+                onBack = { listener?.onBack() },
+                onForward = { listener?.onForward() },
+                onReload = { listener?.onReload() },
+                onShare = { listener?.onShare() },
+                onCopyUrl = { listener?.onCopyUrl() },
+                onMainMenu = { listener?.onMainMenu() },
+                onFallbackContextMenu = { listener?.onFallbackContextMenu() },
+                onCloseWebApp = { listener?.onCloseWebApp() },
+                onDismiss = { dismiss() },
+            )
         }
-    }
 }
 
 @Composable

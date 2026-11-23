@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.cylonid.nativealpha.helper.AdblockLifecycleHelper
 import com.cylonid.nativealpha.model.DataManager
+import com.cylonid.nativealpha.model.ReleaseNotes
 import com.cylonid.nativealpha.model.ReleaseNotesRepository
 import com.cylonid.nativealpha.ui.components.ReleaseNotesBottomSheet
 import com.cylonid.nativealpha.ui.theme.NativeAlphaTheme
@@ -27,20 +28,24 @@ import com.cylonid.nativealpha.ui.webapplist.WebAppListViewModel
 import com.cylonid.nativealpha.util.Const
 import com.cylonid.nativealpha.util.EntryPointUtils.entryPointReached
 import com.cylonid.nativealpha.util.WebViewLauncher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private val viewModel: WebAppListViewModel by viewModels()
+    private var isDynamicColor by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         entryPointReached()
+        isDynamicColor = runCatching { DataManager.getInstance().settings.isDynamicColor }.getOrDefault(false)
 
         setContent {
             val context = LocalContext.current
             var showReleaseNotesSheet by rememberSaveable { mutableStateOf(false) }
-            val releaseNotes = remember { ReleaseNotesRepository.load(context) }
+            var releaseNotes by remember { mutableStateOf<ReleaseNotes?>(null) }
 
             LaunchedEffect(Unit) {
                 val lastShown = DataManager.getInstance().lastShownUpdate
@@ -52,10 +57,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            val isDynamicColor by remember {
-                mutableStateOf(
-                    runCatching { DataManager.getInstance().settings.isDynamicColor }.getOrDefault(false),
-                )
+            LaunchedEffect(showReleaseNotesSheet) {
+                if (showReleaseNotesSheet && releaseNotes == null) {
+                    releaseNotes = withContext(Dispatchers.IO) { ReleaseNotesRepository.load(context) }
+                }
             }
 
             NativeAlphaTheme(dynamicColor = isDynamicColor) {
@@ -83,9 +88,10 @@ class MainActivity : AppCompatActivity() {
                     },
                 )
 
-                if (showReleaseNotesSheet) {
+                val loadedNotes = releaseNotes
+                if (showReleaseNotesSheet && loadedNotes != null) {
                     ReleaseNotesBottomSheet(
-                        releaseNotes = releaseNotes,
+                        releaseNotes = loadedNotes,
                         onDismiss = {
                             DataManager.getInstance().lastShownUpdate = BuildConfig.VERSION_CODE
                             showReleaseNotesSheet = false
@@ -103,6 +109,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         DataManager.getInstance().loadAppData()
+        isDynamicColor = runCatching { DataManager.getInstance().settings.isDynamicColor }.getOrDefault(false)
         viewModel.loadWebApps()
     }
 

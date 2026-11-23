@@ -1,9 +1,9 @@
 package com.cylonid.nativealpha.ui.webapp
 
+import android.app.Activity
 import android.app.ActivityManager
 import android.app.TimePickerDialog
 import android.content.Context
-import android.os.Process
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -68,6 +68,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.neverEqualPolicy
@@ -119,16 +120,20 @@ fun WebAppSettingsScreen(
         }
 
     if (initialWebApp == null) {
-        onNavigateBack()
+        LaunchedEffect(Unit) {
+            onNavigateBack()
+        }
         return
     }
 
     var webapp by remember { mutableStateOf(WebApp(initialWebApp), policy = neverEqualPolicy()) }
+    var isDirty by remember { mutableStateOf(false) }
 
     fun updateWebApp(modify: WebApp.() -> Unit) {
         val updated = WebApp(webapp)
         updated.modify()
         webapp = updated
+        isDirty = true
     }
 
     fun saveSettings() {
@@ -142,15 +147,11 @@ fun WebAppSettingsScreen(
             dataManager.saveGlobalSettings()
         } else {
             if (activityManager != null) {
-                for (task in activityManager.appTasks) {
+                for (task in activityManager.appTasks.orEmpty()) {
                     val id = task.taskInfo?.baseIntent?.getIntExtra(Const.INTENT_WEBAPPID, -1) ?: -1
                     if (id == webappId) task.finishAndRemoveTask()
                 }
-                for (processInfo in activityManager.runningAppProcesses ?: emptyList()) {
-                    if (processInfo.processName.contains("web_sandbox_" + webapp.containerId)) {
-                        Process.killProcess(processInfo.pid)
-                    }
-                }
+                ProcessUtils.killWebSandbox(webapp.containerId, activityManager)
             }
             dataManager.replaceWebApp(webapp)
         }
@@ -158,7 +159,10 @@ fun WebAppSettingsScreen(
 
     DisposableEffect(Unit) {
         onDispose {
-            saveSettings()
+            val isConfigChange = (context as? Activity)?.isChangingConfigurations == true
+            if (isDirty && !isConfigChange) {
+                saveSettings()
+            }
         }
     }
 

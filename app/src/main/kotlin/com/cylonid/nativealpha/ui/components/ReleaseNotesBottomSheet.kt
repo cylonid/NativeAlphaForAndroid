@@ -1,6 +1,5 @@
 package com.cylonid.nativealpha.ui.components
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,11 +38,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.cylonid.nativealpha.BuildConfig
 import com.cylonid.nativealpha.R
 import com.cylonid.nativealpha.model.ReleaseNotes
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,12 +57,8 @@ fun ReleaseNotesBottomSheet(
     val context = LocalContext.current
 
     val openUrl: (String) -> Unit = { url ->
-        try {
-            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            Timber.w(e, "Failed to open URL: %s", url)
-        }
+        com.cylonid.nativealpha.util.IntentUtils
+            .openExternalUrl(context, url)
     }
 
     ModalBottomSheet(

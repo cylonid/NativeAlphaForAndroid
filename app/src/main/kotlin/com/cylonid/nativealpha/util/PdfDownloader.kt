@@ -165,6 +165,8 @@ object PdfDownloader {
             }
         }
 
+    private const val MAX_PDF_BYTES = 100L * 1024 * 1024 // 100 MB
+
     private fun copyStreamWithProgress(
         input: InputStream,
         output: FileOutputStream,
@@ -176,8 +178,11 @@ object PdfDownloader {
         var bytesRead: Int
 
         while (input.read(buffer).also { bytesRead = it } != -1) {
-            output.write(buffer, 0, bytesRead)
             bytesDownloaded += bytesRead
+            if (bytesDownloaded > MAX_PDF_BYTES) {
+                throw IOException("PDF exceeds maximum allowed size of $MAX_PDF_BYTES bytes")
+            }
+            output.write(buffer, 0, bytesRead)
             onProgress?.invoke(bytesDownloaded, totalBytes)
         }
         output.flush()
@@ -188,19 +193,25 @@ object PdfDownloader {
         uri: Uri,
         fileName: String?,
     ): Result<File> {
+        val cacheDir = getPdfCacheDir(context)
+        val name = sanitizeFileName(fileName ?: "document.pdf")
+        val targetFile = File(cacheDir, "${System.currentTimeMillis()}_$name")
+        val tempFile = File(cacheDir, "${targetFile.name}.tmp")
         return try {
-            val cacheDir = getPdfCacheDir(context)
-            val name = sanitizeFileName(fileName ?: "document.pdf")
-            val targetFile = File(cacheDir, "${System.currentTimeMillis()}_$name")
-
             context.contentResolver.openInputStream(uri)?.use { input ->
-                FileOutputStream(targetFile).use { output ->
-                    input.copyTo(output)
+                FileOutputStream(tempFile).use { output ->
+                    copyStreamWithProgress(input, output, -1L, null)
                 }
             } ?: return Result.failure(IOException("Could not open input stream for URI: $uri"))
 
+            if (!tempFile.renameTo(targetFile)) {
+                tempFile.copyTo(targetFile, overwrite = true)
+                tempFile.delete()
+            }
             Result.success(targetFile)
         } catch (e: Exception) {
+            tempFile.delete()
+            targetFile.delete()
             Result.failure(e)
         }
     }

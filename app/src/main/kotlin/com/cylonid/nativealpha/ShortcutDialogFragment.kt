@@ -49,6 +49,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -77,6 +78,7 @@ import com.cylonid.nativealpha.util.NotificationUtils
 import com.cylonid.nativealpha.util.ShortcutIconUtils
 import com.cylonid.nativealpha.util.WebViewLauncher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import org.json.JSONException
@@ -420,16 +422,25 @@ private fun ShortcutDialogContent(
 ) {
     val context = LocalContext.current
     val activity = context as? Activity
+    val coroutineScope = rememberCoroutineScope()
     val iconNotFoundMsg = stringResource(R.string.icon_not_found)
-    val initialIcon = remember(webapp?.ID) { webapp?.let { ShortcutIconUtils.getIcon(context, it.ID) } }
+    val initialIcon = remember(webapp?.ID) { webapp?.let { ShortcutIconUtils.getCachedIcon(it.ID) } }
     var titleText by remember { mutableStateOf(webapp?.title.orEmpty()) }
     var bitmap by remember(webapp?.ID) { mutableStateOf(initialIcon) }
     var isLoading by remember(webapp?.ID) { mutableStateOf(initialIcon == null) }
 
     LaunchedEffect(webapp?.ID) {
+        val id = webapp?.ID
+        if (id != null && bitmap == null) {
+            val diskIcon = withContext(Dispatchers.IO) { ShortcutIconUtils.getIcon(context, id) }
+            if (diskIcon != null) {
+                bitmap = diskIcon
+                isLoading = false
+            }
+        }
         ShortcutIconUtils.iconUpdates.collect { updatedId ->
-            if (updatedId == webapp?.ID && bitmap == null) {
-                val loaded = ShortcutIconUtils.getIcon(context, updatedId)
+            if (updatedId == id && bitmap == null) {
+                val loaded = withContext(Dispatchers.IO) { ShortcutIconUtils.getIcon(context, updatedId) }
                 if (loaded != null) {
                     bitmap = loaded
                     isLoading = false
@@ -443,25 +454,29 @@ private fun ShortcutDialogContent(
             contract = ActivityResultContracts.GetContent(),
         ) { uri: Uri? ->
             if (uri != null) {
-                val customIcon =
-                    ShortcutIconUtils.decodeSampledBitmapFromUri(
-                        context,
-                        uri,
-                        ShortcutIconUtils.MAX_ICON_DIMENSION,
-                        ShortcutIconUtils.MAX_ICON_DIMENSION,
-                    )
-                if (customIcon != null) {
-                    bitmap = customIcon
-                    isLoading = false
-                } else {
-                    if (activity != null) {
-                        NotificationUtils.showToast(
-                            activity,
-                            iconNotFoundMsg,
-                            Toast.LENGTH_SHORT,
-                        )
+                coroutineScope.launch {
+                    val customIcon =
+                        withContext(Dispatchers.IO) {
+                            ShortcutIconUtils.decodeSampledBitmapFromUri(
+                                context,
+                                uri,
+                                ShortcutIconUtils.MAX_ICON_DIMENSION,
+                                ShortcutIconUtils.MAX_ICON_DIMENSION,
+                            )
+                        }
+                    if (customIcon != null) {
+                        bitmap = customIcon
+                        isLoading = false
                     } else {
-                        Toast.makeText(context, iconNotFoundMsg, Toast.LENGTH_SHORT).show()
+                        if (activity != null) {
+                            NotificationUtils.showToast(
+                                activity,
+                                iconNotFoundMsg,
+                                Toast.LENGTH_SHORT,
+                            )
+                        } else {
+                            Toast.makeText(context, iconNotFoundMsg, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }

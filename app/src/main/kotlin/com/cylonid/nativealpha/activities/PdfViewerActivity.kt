@@ -25,6 +25,8 @@ import com.cylonid.nativealpha.ui.pdf.PdfViewerUiState
 import com.cylonid.nativealpha.ui.theme.NativeAlphaTheme
 import com.cylonid.nativealpha.util.PdfDownloader
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -35,6 +37,7 @@ import java.io.FileOutputStream
 class PdfViewerActivity : AppCompatActivity() {
     private var currentHelper: PdfRendererHelper? = null
     private var currentPdfFile: File? = null
+    private var loadJob: Job? = null
 
     companion object {
         const val EXTRA_PDF_URL = "EXTRA_PDF_URL"
@@ -62,43 +65,51 @@ class PdfViewerActivity : AppCompatActivity() {
                 val coroutineScope = rememberCoroutineScope()
 
                 fun loadPdf() {
+                    loadJob?.cancel()
                     uiState = PdfViewerUiState.Loading
                     currentHelper?.close()
                     currentHelper = null
 
-                    lifecycleScope.launch {
-                        val cookie = intent.getStringExtra(EXTRA_COOKIE)
-                        val allowHttp = intent.getBooleanExtra(EXTRA_ALLOW_HTTP, false)
-                        val result =
-                            PdfDownloader.downloadPdf(
-                                context = this@PdfViewerActivity,
-                                urlStr = url,
-                                preferredFileName = fileName,
-                                userAgent = userAgent,
-                                cookieHeader = cookie,
-                                allowHttp = allowHttp,
-                            )
+                    loadJob =
+                        lifecycleScope.launch {
+                            val cookie = intent.getStringExtra(EXTRA_COOKIE)
+                            val allowHttp = intent.getBooleanExtra(EXTRA_ALLOW_HTTP, false)
+                            val result =
+                                PdfDownloader.downloadPdf(
+                                    context = this@PdfViewerActivity,
+                                    urlStr = url,
+                                    preferredFileName = fileName,
+                                    userAgent = userAgent,
+                                    cookieHeader = cookie,
+                                    allowHttp = allowHttp,
+                                )
 
-                        result
-                            .onSuccess { file ->
-                                try {
-                                    val helper = PdfRendererHelper(file)
-                                    currentHelper = helper
-                                    currentPdfFile = file
-                                    uiState = PdfViewerUiState.Ready(file, helper)
-                                } catch (e: Exception) {
+                            if (!isActive || isDestroyed) return@launch
+
+                            result
+                                .onSuccess { file ->
+                                    try {
+                                        val helper = withContext(Dispatchers.IO) { PdfRendererHelper(file) }
+                                        if (!isActive || isDestroyed) {
+                                            helper.close()
+                                            return@launch
+                                        }
+                                        currentHelper = helper
+                                        currentPdfFile = file
+                                        uiState = PdfViewerUiState.Ready(file, helper)
+                                    } catch (e: Exception) {
+                                        uiState =
+                                            PdfViewerUiState.Error(
+                                                e.localizedMessage ?: getString(R.string.pdf_viewer_error_loading),
+                                            )
+                                    }
+                                }.onFailure { error ->
                                     uiState =
                                         PdfViewerUiState.Error(
-                                            e.localizedMessage ?: getString(R.string.pdf_viewer_error_loading),
+                                            error.localizedMessage ?: getString(R.string.pdf_viewer_error_loading),
                                         )
                                 }
-                            }.onFailure { error ->
-                                uiState =
-                                    PdfViewerUiState.Error(
-                                        error.localizedMessage ?: getString(R.string.pdf_viewer_error_loading),
-                                    )
-                            }
-                    }
+                        }
                 }
 
                 // Initial load
@@ -272,8 +283,10 @@ class PdfViewerActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        loadJob?.cancel()
+        loadJob = null
         currentHelper?.close()
         currentHelper = null
+        super.onDestroy()
     }
 }

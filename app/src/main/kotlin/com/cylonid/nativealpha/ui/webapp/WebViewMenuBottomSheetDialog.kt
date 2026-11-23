@@ -24,33 +24,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentManager
-import com.cylonid.nativealpha.model.DataManager
 import com.cylonid.nativealpha.model.WebApp
-import com.cylonid.nativealpha.ui.theme.NativeAlphaTheme
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class WebViewMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
-    private var title: String = ""
-    private var url: String = ""
-    private var canGoBack: Boolean = true
-    private var canGoForward: Boolean = false
-    private var webAppId: Int = -1
+    private var args: WebViewMenuArgs = WebViewMenuArgs()
     private var listener: WebViewMenuListener? = null
 
     companion object {
         private const val TAG = "WebViewMenuBottomSheetDialogFragment"
-        private const val ARG_TITLE = "arg_title"
-        private const val ARG_URL = "arg_url"
-        private const val ARG_CAN_GO_BACK = "arg_can_go_back"
-        private const val ARG_CAN_GO_FORWARD = "arg_can_go_forward"
-        private const val ARG_WEBAPP_ID = "arg_webapp_id"
 
         @JvmStatic
         fun show(
@@ -61,27 +48,21 @@ class WebViewMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
             canGoForward: Boolean,
             webApp: WebApp?,
             listener: WebViewMenuListener,
-        ): WebViewMenuBottomSheetDialogFragment? {
-            if (fragmentManager.isStateSaved) return null
-            val existing = fragmentManager.findFragmentByTag(TAG) as? WebViewMenuBottomSheetDialogFragment
-            if (existing != null) {
-                existing.dismissAllowingStateLoss()
-            }
-            val sheet =
+        ): WebViewMenuBottomSheetDialogFragment? =
+            WebViewMenuFragmentSupport.showMenuFragment(
+                fragmentManager = fragmentManager,
+                tag = TAG,
+                title = title,
+                url = url,
+                canGoBack = canGoBack,
+                canGoForward = canGoForward,
+                webApp = webApp,
+            ) { bundle ->
                 WebViewMenuBottomSheetDialogFragment().apply {
                     this.listener = listener
-                    arguments =
-                        Bundle().apply {
-                            putString(ARG_TITLE, title)
-                            putString(ARG_URL, url)
-                            putBoolean(ARG_CAN_GO_BACK, canGoBack)
-                            putBoolean(ARG_CAN_GO_FORWARD, canGoForward)
-                            putInt(ARG_WEBAPP_ID, webApp?.ID ?: -1)
-                        }
+                    arguments = bundle
                 }
-            sheet.show(fragmentManager, TAG)
-            return sheet
-        }
+            }
     }
 
     override fun onAttach(context: Context) {
@@ -98,13 +79,7 @@ class WebViewMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let { args ->
-            title = args.getString(ARG_TITLE, "")
-            url = args.getString(ARG_URL, "")
-            canGoBack = args.getBoolean(ARG_CAN_GO_BACK, true)
-            canGoForward = args.getBoolean(ARG_CAN_GO_FORWARD, false)
-            webAppId = args.getInt(ARG_WEBAPP_ID, -1)
-        }
+        args = WebViewMenuFragmentSupport.readArgs(arguments)
     }
 
     override fun onStart() {
@@ -131,32 +106,25 @@ class WebViewMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View {
-        val webApp = if (webAppId != -1) DataManager.getInstance().getWebApp(webAppId) else null
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                NativeAlphaTheme {
-                    WebViewMenuBottomSheetContent(
-                        title = title,
-                        url = url,
-                        canGoBack = canGoBack,
-                        canGoForward = canGoForward,
-                        webApp = webApp,
-                        onBack = { listener?.onBack() },
-                        onForward = { listener?.onForward() },
-                        onReload = { listener?.onReload() },
-                        onShare = { listener?.onShare() },
-                        onCopyUrl = { listener?.onCopyUrl() },
-                        onMainMenu = { listener?.onMainMenu() },
-                        onFallbackContextMenu = { listener?.onFallbackContextMenu() },
-                        onCloseWebApp = { listener?.onCloseWebApp() },
-                        onDismiss = { dismiss() },
-                    )
-                }
-            }
+    ): View =
+        WebViewMenuFragmentSupport.createMenuComposeView(this, args) { menuArgs, webApp ->
+            WebViewMenuBottomSheetContent(
+                title = menuArgs.title,
+                url = menuArgs.url,
+                canGoBack = menuArgs.canGoBack,
+                canGoForward = menuArgs.canGoForward,
+                webApp = webApp,
+                onBack = { listener?.onBack() },
+                onForward = { listener?.onForward() },
+                onReload = { listener?.onReload() },
+                onShare = { listener?.onShare() },
+                onCopyUrl = { listener?.onCopyUrl() },
+                onMainMenu = { listener?.onMainMenu() },
+                onFallbackContextMenu = { listener?.onFallbackContextMenu() },
+                onCloseWebApp = { listener?.onCloseWebApp() },
+                onDismiss = { dismiss() },
+            )
         }
-    }
 }
 
 @Composable

@@ -1,6 +1,5 @@
 package com.cylonid.nativealpha.ui.about
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,11 +43,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.cylonid.nativealpha.R
 import com.mikepenz.aboutlibraries.entity.Library
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -134,12 +131,8 @@ fun DependenciesScreen(
                         onClick = {
                             val url = library.website ?: library.licenses.firstOrNull()?.url
                             if (!url.isNullOrBlank()) {
-                                try {
-                                    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-                                    context.startActivity(intent)
-                                } catch (e: Exception) {
-                                    Timber.w(e, "Failed to open library URL: %s", url)
-                                }
+                                com.cylonid.nativealpha.util.IntentUtils
+                                    .openExternalUrl(context, url)
                             }
                         },
                     )

@@ -10,6 +10,7 @@ import androidx.core.graphics.createBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -72,12 +73,17 @@ open class PdfRendererHelper(
             .toInt()
 
     private val bitmapCache =
-        object : LruCache<Int, Bitmap>(maxCacheMemory) {
+        object : LruCache<String, Bitmap>(maxCacheMemory) {
             override fun sizeOf(
-                key: Int,
+                key: String,
                 value: Bitmap,
             ): Int = value.byteCount
         }
+
+    private fun cacheKey(
+        pageIndex: Int,
+        targetWidth: Int,
+    ): String = "$pageIndex:$targetWidth"
 
     override suspend fun getPageDimensions(pageIndex: Int): Pair<Int, Int> =
         withContext(Dispatchers.IO) {
@@ -108,7 +114,8 @@ open class PdfRendererHelper(
                 return@withContext null
             }
 
-            bitmapCache.get(pageIndex)?.let { cached ->
+            val key = cacheKey(pageIndex, targetWidth)
+            bitmapCache.get(key)?.let { cached ->
                 if (!cached.isRecycled) {
                     return@withContext cached
                 }
@@ -116,7 +123,7 @@ open class PdfRendererHelper(
 
             mutex.withLock {
                 if (isClosed) return@withLock null
-                bitmapCache.get(pageIndex)?.let { cached ->
+                bitmapCache.get(key)?.let { cached ->
                     if (!cached.isRecycled) {
                         return@withLock cached
                     }
@@ -182,7 +189,7 @@ open class PdfRendererHelper(
                     canvas.drawColor(Color.WHITE)
 
                     page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                    bitmapCache.put(pageIndex, bitmap)
+                    bitmapCache.put(key, bitmap)
                     bitmap
                 } finally {
                     page.close()
@@ -217,6 +224,7 @@ open class PdfRendererHelper(
                         parcelFileDescriptor.close()
                     } catch (_: Exception) {
                     }
+                    closeScope.cancel()
                 }
             }
         }

@@ -67,4 +67,16 @@ class ProcessUtilsTest {
         assertTrue(webAppShadow.finished)
         assertFalse(mainShadow.finished)
     }
+
+    @Test
+    fun testHandlesNullRunningProcessesWithoutNpe() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val am = context.getSystemService(ActivityManager::class.java)!!
+        val shadowAm = Shadows.shadowOf(am)
+        shadowAm.setAppTasks(emptyList())
+        shadowAm.setProcesses(emptyList())
+
+        ProcessUtils.closeAllWebAppsAndProcesses(am)
+        ProcessUtils.killWebSandbox(1, am)
+    }
 }

@@ -10,7 +10,7 @@ object DateUtils {
     fun getTimeInSeconds(): Long = System.currentTimeMillis() / 1000
 
     @JvmStatic
-    fun getHourMinFormat(): SimpleDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+    fun getHourMinFormat(): SimpleDateFormat = SimpleDateFormat("HH:mm", Locale.US)
 
     @JvmStatic
     fun getDayHourMinuteSecondsFormat(): SimpleDateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.US)
@@ -42,13 +42,14 @@ object DateUtils {
             )
 
         // CASE: If the end of our timespan is after midnight, add one day to the end date to get a proper span.
-        if (high.before(low)) {
-            high.add(Calendar.DATE, 1)
+        val adjustedHigh = high.clone() as Calendar
+        if (adjustedHigh.before(low)) {
+            adjustedHigh.add(Calendar.DATE, 1)
             if (middle.before(low)) {
                 middle.add(Calendar.DATE, 1)
             }
         }
-        return middle.after(low) && middle.before(high)
+        return middle.after(low) && middle.before(adjustedHigh)
     }
 
     @JvmStatic

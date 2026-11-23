@@ -185,9 +185,10 @@ class WebAppListViewModel(
         newSite.applySettingsForNewWebApp()
         dataManager.addWebsite(newSite)
 
-        if (context != null) {
+        val appContext = context?.applicationContext
+        if (appContext != null) {
             viewModelScope.launch(Dispatchers.IO) {
-                ShortcutIconUtils.autoFetchAndSaveFavicon(context, newSite.ID, newSite.baseUrl)
+                ShortcutIconUtils.autoFetchAndSaveFavicon(appContext, newSite.ID, newSite.baseUrl)
             }
         }
 

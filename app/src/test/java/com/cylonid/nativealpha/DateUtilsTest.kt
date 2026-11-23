@@ -96,4 +96,32 @@ class DateUtilsTest {
         val thirteenDaysAgo = System.currentTimeMillis() - (13L * 24 * 60 * 60 * 1000)
         assertFalse(DateUtils.isOlderThanDays(thirteenDaysAgo, 14))
     }
+
+    @Test
+    fun `isInInterval does not mutate caller high Calendar`() {
+        val format = DateUtils.getHourMinFormat()
+        val low = Calendar.getInstance().also { it.time = format.parse("23:00")!! }
+        val time = Calendar.getInstance().also { it.time = format.parse("01:00")!! }
+        val high = Calendar.getInstance().also { it.time = format.parse("02:00")!! }
+        val originalHighMillis = high.timeInMillis
+
+        assertTrue(DateUtils.isInInterval(low, time, high))
+        assertEquals(originalHighMillis, high.timeInMillis)
+    }
+
+    @Test
+    fun `getHourMinFormat uses ASCII digits under non-Latin locale`() {
+        val original = Locale.getDefault()
+        try {
+            Locale.setDefault(Locale.forLanguageTag("ar-EG-u-nu-arab"))
+            val calendar =
+                Calendar.getInstance().also {
+                    it.set(Calendar.HOUR_OF_DAY, 9)
+                    it.set(Calendar.MINUTE, 5)
+                }
+            assertEquals("09:05", DateUtils.getHourMinFormat().format(calendar.time))
+        } finally {
+            Locale.setDefault(original)
+        }
+    }
 }

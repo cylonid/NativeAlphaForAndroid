@@ -244,9 +244,9 @@ private fun PdfContent(
     val listState = rememberLazyListState()
     val totalPages = rendererHelper.pageCount
 
-    val currentVisiblePage by remember {
+    val currentVisiblePage by remember(totalPages) {
         derivedStateOf {
-            (listState.firstVisibleItemIndex + 1).coerceIn(1, totalPages)
+            (listState.firstVisibleItemIndex + 1).coerceIn(1, totalPages.coerceAtLeast(1))
         }
     }
 
@@ -343,14 +343,14 @@ private fun PdfPageCard(
     rendererHelper: PdfRendererEngine,
     modifier: Modifier = Modifier,
 ) {
-    var dimensions by remember(pageIndex) { mutableStateOf<Pair<Int, Int>?>(null) }
-    var bitmap by remember(pageIndex, targetWidthPx) { mutableStateOf<Bitmap?>(null) }
+    var dimensions by remember(pageIndex, rendererHelper) { mutableStateOf<Pair<Int, Int>?>(null) }
+    var bitmap by remember(pageIndex, targetWidthPx, rendererHelper) { mutableStateOf<Bitmap?>(null) }
 
-    LaunchedEffect(pageIndex) {
+    LaunchedEffect(pageIndex, rendererHelper) {
         dimensions = rendererHelper.getPageDimensions(pageIndex)
     }
 
-    LaunchedEffect(pageIndex, targetWidthPx) {
+    LaunchedEffect(pageIndex, targetWidthPx, rendererHelper) {
         if (targetWidthPx > 0) {
             bitmap = rendererHelper.renderPage(pageIndex, targetWidthPx)
         }
@@ -358,7 +358,7 @@ private fun PdfPageCard(
 
     val aspectRatio =
         dimensions?.let { (w, h) ->
-            (w.toFloat() / h.toFloat()).coerceIn(0.2f, 5f)
+            if (h > 0) (w.toFloat() / h.toFloat()).coerceIn(0.2f, 5f) else (1f / 1.414f)
         } ?: (1f / 1.414f) // standard A4 aspect ratio fallback
 
     Card(

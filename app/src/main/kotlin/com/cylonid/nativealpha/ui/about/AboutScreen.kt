@@ -56,7 +56,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.cylonid.nativealpha.BuildConfig
 import com.cylonid.nativealpha.DependenciesActivity
 import com.cylonid.nativealpha.R
@@ -78,7 +77,13 @@ fun AboutScreen(
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val context = LocalContext.current
-    val releaseNotes = remember { ReleaseNotesRepository.load(context) }
+    var releaseNotes by remember { mutableStateOf<com.cylonid.nativealpha.model.ReleaseNotes?>(null) }
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        releaseNotes =
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                ReleaseNotesRepository.load(context)
+            }
+    }
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -358,9 +363,10 @@ fun AboutScreen(
         )
     }
 
-    if (showReleaseNotesSheet) {
+    val loadedNotes = releaseNotes
+    if (showReleaseNotesSheet && loadedNotes != null) {
         ReleaseNotesBottomSheet(
-            releaseNotes = releaseNotes,
+            releaseNotes = loadedNotes,
             onDismiss = { showReleaseNotesSheet = false },
         )
     }
@@ -370,10 +376,6 @@ private fun openUrl(
     context: android.content.Context,
     url: String,
 ) {
-    try {
-        val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-        context.startActivity(intent)
-    } catch (e: Exception) {
-        Timber.w(e, "Failed to open URL: %s", url)
-    }
+    com.cylonid.nativealpha.util.IntentUtils
+        .openExternalUrl(context, url)
 }

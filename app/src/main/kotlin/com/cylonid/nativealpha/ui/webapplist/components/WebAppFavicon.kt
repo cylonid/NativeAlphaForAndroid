@@ -38,7 +38,7 @@ fun WebAppFavicon(
 ) {
     val context = LocalContext.current
     var iconBitmap by remember(webApp.ID) {
-        mutableStateOf<Bitmap?>(ShortcutIconUtils.getIcon(context, webApp.ID))
+        mutableStateOf<Bitmap?>(ShortcutIconUtils.getCachedIcon(webApp.ID))
     }
 
     LaunchedEffect(webApp.ID, webApp.baseUrl) {
