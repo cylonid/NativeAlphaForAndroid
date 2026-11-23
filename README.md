@@ -1,8 +1,8 @@
 # <img src="graphics/logo.png" width="48px" alt="Native Alpha Logo" style="vertical-align: middle;"> Native Alpha
 
 [![GitHub release](https://img.shields.io/github/v/release/JoestarLabs/NativeAlpha?color=blueviolet&style=flat)](https://github.com/JoestarLabs/NativeAlpha/releases)
-[![Min SDK](https://img.shields.io/badge/Min%20SDK-26-blue?style=flat)](https://developer.android.com)
-[![Target SDK](https://img.shields.io/badge/Target%20SDK-37-green?style=flat)](https://developer.android.com)
+[![Min SDK](https://img.shields.io/badge/Min%20SDK-28-blue?style=flat)](https://developer.android.com)
+[![Target SDK](https://img.shields.io/badge/Target%20SDK-35-green?style=flat)](https://developer.android.com)
 
 **Native Alpha** turns web applications and websites into distraction-free, borderless, full-screen native Android applications powered by Android System WebView.
 
@@ -92,10 +92,10 @@ Native Alpha probes the site's manifest, apple-touch-icon, and favicon tags (inc
 ## Building from Source
 
 ### Prerequisites
-- Android SDK (API Level 37)
+- Android SDK (API Level 37.2)
 - Android NDK (r28+) & CMake (3.22.1+)
-- JDK 21+
-- Gradle 9.8+ (included wrapper)
+- JDK 25
+- Gradle 9.9+ (included wrapper)
 
 ### Build Debug APK
 ```bash
@@ -105,6 +105,11 @@ Native Alpha probes the site's manifest, apple-touch-icon, and favicon tags (inc
 ### Build Release APK
 ```bash
 ./gradlew assembleStandardRelease
+```
+
+### Run Formatting, Unit Tests & Lint
+```bash
+./gradlew spotlessCheck testStandardDebugUnitTest lintStandardDebug
 ```
 
 ### 16 KB Page Size Compatibility
