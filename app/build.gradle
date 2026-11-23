@@ -17,7 +17,11 @@ def calculateVersionCode(String version) {
 
 android {
     namespace 'com.cylonid.nativealpha'
-    compileSdk 37.2
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 2
+        }
+    }
 
     dependenciesInfo {
         includeInApk = false
