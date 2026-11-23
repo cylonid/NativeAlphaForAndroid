@@ -88,6 +88,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -109,7 +110,7 @@ public class WebViewActivity extends AppCompatActivity
 	// Constants for touchlistener
 	private static final int NONE = 0;
 	private static final int SWIPE = 1;
-	private static final int TRESHOLD = 100;
+	private static final int SWIPE_THRESHOLD = 100;
 	int webappID = -1;
 	private WebView wv;
 	private ProgressBar progressBar;
@@ -183,16 +184,10 @@ public class WebViewActivity extends AppCompatActivity
 		adblockLifecycleHelper.trySyncOperation(() -> {
 			adFilter = AdblockLifecycleHelper.initAdFilter(getApplicationContext());
 		});
-		if (adFilter == null) {
-			try {
-				adFilter = AdblockLifecycleHelper.initAdFilter(getApplicationContext());
-			} catch (Throwable ignored) {
-			}
-		}
 
 		adblockProviderApiHelper = new AdblockProviderApiHelper(adFilter);
 		webappID = getIntent().getIntExtra(Const.INTENT_WEBAPPID, -1);
-		EntryPointUtils.entryPointReached(this);
+		EntryPointUtils.entryPointReached();
 		webapp = DataManager.getInstance().getWebApp(webappID);
 		getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
 			@Override
@@ -354,8 +349,8 @@ public class WebViewActivity extends AppCompatActivity
 		wv.setDownloadListener((dl_url, userAgent, contentDisposition, mimeType, contentLength) -> {
 			String file_name = Utility.getFileNameFromDownload(dl_url, contentDisposition, mimeType);
 			boolean isPdf = (mimeType != null && mimeType.equalsIgnoreCase("application/pdf"))
-					|| (file_name != null && file_name.toLowerCase().endsWith(".pdf"))
-					|| (dl_url != null && dl_url.toLowerCase().split("\\?")[0].endsWith(".pdf"));
+					|| (file_name != null && file_name.toLowerCase(Locale.ROOT).endsWith(".pdf"))
+					|| (dl_url != null && dl_url.toLowerCase(Locale.ROOT).split("\\?")[0].endsWith(".pdf"));
 
 			String targetUrl = dl_url;
 			if (targetUrl != null && targetUrl.startsWith("blob:")) {
@@ -478,7 +473,7 @@ public class WebViewActivity extends AppCompatActivity
 					case MotionEvent.ACTION_POINTER_UP :
 						// This happens when you release the second finger
 						mode = NONE;
-						if (Math.abs(startX - stopX) > TRESHOLD) {
+						if (Math.abs(startX - stopX) > SWIPE_THRESHOLD) {
 							if (startX > stopX) {
 								if (event.getPointerCount() == 3
 										&& DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
@@ -502,13 +497,14 @@ public class WebViewActivity extends AppCompatActivity
 							return true;
 						}
 						if (DataManager.getInstance().getSettings().isMultitouchReload()
-								&& Math.abs(startY - stopY) > TRESHOLD) {
+								&& Math.abs(startY - stopY) > SWIPE_THRESHOLD) {
 							if (stopY > startY) {
 								currently_reloading = true;
 								wv.reload();
 							}
 							return true;
 						}
+						break;
 					case MotionEvent.ACTION_MOVE :
 						if (mode == SWIPE) {
 							stopX = event.getX(0);
@@ -1282,7 +1278,7 @@ public class WebViewActivity extends AppCompatActivity
 
 			if ("GET".equalsIgnoreCase(method) && webapp != null && webapp.isUseBuiltinPdfViewer()
 					&& isSupportedPdfScheme(url)) {
-				String cleanUrl = url.toLowerCase().split("\\?")[0].split("#")[0];
+				String cleanUrl = url.toLowerCase(Locale.ROOT).split("\\?")[0].split("#")[0];
 				if (cleanUrl.endsWith(".pdf")) {
 					if (isHttpUrl(url) && !webapp.isAllowHttp()) {
 						loadURL(view, url);

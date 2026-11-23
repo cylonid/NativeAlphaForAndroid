@@ -101,9 +101,13 @@ class WebAppListViewModel(
     ) {
         val originalIndex = _uiState.value.allWebApps.indexOfFirst { it.ID == webApp.ID }
         val cachedIcon = ShortcutIconUtils.getIcon(context, webApp.ID)
-        webApp.markInactive(context)
         val storedApp = dataManager.websites.firstOrNull { it.ID == webApp.ID }
-        storedApp?.markInactive(context)
+        if (storedApp != null) {
+            storedApp.markInactive(context)
+            webApp.isActiveEntry = false
+        } else {
+            webApp.markInactive(context)
+        }
 
         val updatedActive =
             dataManager.websites
@@ -180,7 +184,6 @@ class WebAppListViewModel(
             )
         newSite.applySettingsForNewWebApp()
         dataManager.addWebsite(newSite)
-        dataManager.saveWebAppData()
 
         if (context != null) {
             viewModelScope.launch(Dispatchers.IO) {

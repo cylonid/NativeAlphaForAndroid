@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        entryPointReached(this)
+        entryPointReached()
 
         setContent {
             val context = LocalContext.current

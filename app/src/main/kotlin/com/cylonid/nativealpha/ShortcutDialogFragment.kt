@@ -81,6 +81,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 import org.json.JSONException
 import org.json.JSONObject
 import org.jsoup.Jsoup
+import timber.log.Timber
 import java.net.URL
 import java.util.TreeMap
 import java.util.regex.Pattern
@@ -100,6 +101,7 @@ class ShortcutDialogFragment : DialogFragment() {
 
     companion object {
         private const val ARG_WEBAPP_ID = "arg_webapp_id"
+        private val META_REFRESH_URL_PATTERN = Pattern.compile(".*URL='?(.*)$", Pattern.CASE_INSENSITIVE)
 
         @JvmStatic
         fun newInstance(webapp: WebApp): ShortcutDialogFragment =
@@ -226,8 +228,7 @@ class ShortcutDialogFragment : DialogFragment() {
             if (!metaTags.isEmpty()) {
                 val metaTag = metaTags.first()
                 val content = metaTag?.attr("content").orEmpty()
-                val pattern = Pattern.compile(".*URL='?(.*)$", Pattern.CASE_INSENSITIVE)
-                val m = pattern.matcher(content)
+                val m = META_REFRESH_URL_PATTERN.matcher(content)
                 val redirectUrl = if (m.matches()) m.group(1) else null
                 if (!redirectUrl.isNullOrEmpty()) {
                     baseUrl = redirectUrl
@@ -261,7 +262,7 @@ class ShortcutDialogFragment : DialogFragment() {
                             result[IconFetchResult.NEW_BASEURL.index] = fullUrl.toString()
                         }
                     } catch (e: JSONException) {
-                        e.printStackTrace()
+                        Timber.w(e, "Failed to parse manifest metadata")
                     }
 
                     try {
@@ -276,7 +277,7 @@ class ShortcutDialogFragment : DialogFragment() {
                             foundIcons.getOrPut(width) { mutableListOf() }.add(fullUrl.toString())
                         }
                     } catch (e: JSONException) {
-                        e.printStackTrace()
+                        Timber.w(e, "Failed to parse manifest icons")
                     }
                 }
             }
@@ -309,7 +310,7 @@ class ShortcutDialogFragment : DialogFragment() {
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Timber.w(e, "Failed to fetch web app metadata for %s", baseUrl)
         }
 
         candidateIconUrls = foundIcons.values.flatten().distinct()

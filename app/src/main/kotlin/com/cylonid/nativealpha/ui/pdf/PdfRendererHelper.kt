@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import android.util.LruCache
+import androidx.core.graphics.createBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -66,8 +67,9 @@ open class PdfRendererHelper(
     private val dimensionCache = mutableMapOf<Int, Pair<Int, Int>>()
 
     private val maxCacheMemory =
-        ((Runtime.getRuntime().maxMemory() / 8).toInt())
-            .coerceIn(16 * 1024 * 1024, 48 * 1024 * 1024)
+        (Runtime.getRuntime().maxMemory() / 8L)
+            .coerceIn(16L * 1024 * 1024, 48L * 1024 * 1024)
+            .toInt()
 
     private val bitmapCache =
         object : LruCache<Int, Bitmap>(maxCacheMemory) {
@@ -175,7 +177,7 @@ open class PdfRendererHelper(
                         return@withLock null
                     }
 
-                    val bitmap = Bitmap.createBitmap(renderWidth, targetHeight, Bitmap.Config.ARGB_8888)
+                    val bitmap = createBitmap(renderWidth, targetHeight)
                     val canvas = Canvas(bitmap)
                     canvas.drawColor(Color.WHITE)
 

@@ -27,20 +27,8 @@ import com.cylonid.nativealpha.model.WebApp
 import com.cylonid.nativealpha.util.ShortcutIconUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlin.math.abs
 
-private val AVATAR_PALETTE =
-    listOf(
-        Color(0xFF1E88E5), // Blue
-        Color(0xFF43A047), // Green
-        Color(0xFFE53935), // Red
-        Color(0xFFFB8C00), // Orange
-        Color(0xFF8E24AA), // Purple
-        Color(0xFF00ACC1), // Cyan
-        Color(0xFF3949AB), // Indigo
-        Color(0xFFD81B60), // Pink
-        Color(0xFF00897B), // Teal
-    )
+private val AVATAR_PALETTE = ShortcutIconUtils.AVATAR_PALETTE_COLORS.map { Color(it) }
 
 @Composable
 fun WebAppFavicon(
@@ -84,8 +72,7 @@ fun WebAppFavicon(
     } else {
         val cleanTitle = webApp.title.trim().ifEmpty { webApp.baseUrl.removePrefix("https://").removePrefix("http://") }
         val initial = cleanTitle.firstOrNull()?.uppercaseChar()?.toString() ?: "W"
-        val colorIndex = abs(cleanTitle.hashCode()) % AVATAR_PALETTE.size
-        val avatarColor = AVATAR_PALETTE[colorIndex]
+        val avatarColor = AVATAR_PALETTE[ShortcutIconUtils.avatarColorIndex(cleanTitle)]
 
         Box(
             modifier =

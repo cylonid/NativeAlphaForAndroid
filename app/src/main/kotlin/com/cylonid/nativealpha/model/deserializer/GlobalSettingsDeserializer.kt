@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
+import timber.log.Timber
 import java.lang.reflect.Type
 
 class GlobalSettingsDeserializer : JsonDeserializer<GlobalSettings> {
@@ -22,7 +23,7 @@ class GlobalSettingsDeserializer : JsonDeserializer<GlobalSettings> {
                 } else {
                     GlobalSettings().globalWebApp
                 }
-            val settings = Gson().fromJson(obj, GlobalSettings::class.java)
+            val settings = plainGson.fromJson(obj, GlobalSettings::class.java)
             if (!obj.has("isUseBuiltinPdfViewer") || obj.get("isUseBuiltinPdfViewer").isJsonNull) {
                 settings.isUseBuiltinPdfViewer = true
             }
@@ -30,7 +31,12 @@ class GlobalSettingsDeserializer : JsonDeserializer<GlobalSettings> {
 
             return settings
         } catch (e: Exception) {
+            Timber.w(e, "Failed to deserialize GlobalSettings; falling back to defaults")
             return GlobalSettings()
         }
+    }
+
+    private companion object {
+        val plainGson = Gson()
     }
 }

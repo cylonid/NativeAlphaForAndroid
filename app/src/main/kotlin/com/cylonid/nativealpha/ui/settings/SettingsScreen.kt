@@ -107,7 +107,6 @@ fun SettingsScreen(
         updated.modify()
         settings = updated
         dataManager.settings = updated
-        dataManager.saveGlobalSettings()
     }
 
     val exportSuccessMsg = stringResource(R.string.export_success)
@@ -191,7 +190,7 @@ fun SettingsScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.cancel),
+                            contentDescription = stringResource(R.string.back),
                         )
                     }
                 },

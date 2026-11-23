@@ -65,6 +65,7 @@ import com.cylonid.nativealpha.ui.components.ReleaseNotesBottomSheet
 import com.cylonid.nativealpha.ui.components.RoundedCardContainer
 import com.cylonid.nativealpha.ui.components.SettingsActionItem
 import com.cylonid.nativealpha.ui.components.SettingsSectionHeader
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -107,7 +108,7 @@ fun AboutScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.cancel),
+                            contentDescription = stringResource(R.string.back),
                         )
                     }
                 },
@@ -318,7 +319,8 @@ fun AboutScreen(
                     onClick = {
                         try {
                             context.startActivity(Intent(context, DependenciesActivity::class.java))
-                        } catch (_: Exception) {
+                        } catch (e: Exception) {
+                            Timber.w(e, "Failed to open DependenciesActivity")
                         }
                     },
                 )
@@ -371,6 +373,7 @@ private fun openUrl(
     try {
         val intent = Intent(Intent.ACTION_VIEW, url.toUri())
         context.startActivity(intent)
-    } catch (_: Exception) {
+    } catch (e: Exception) {
+        Timber.w(e, "Failed to open URL: %s", url)
     }
 }

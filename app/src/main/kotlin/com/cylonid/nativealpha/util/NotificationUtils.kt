@@ -45,11 +45,10 @@ object NotificationUtils {
         ) { snackbar.dismiss() }
 
         val tv =
-            snackbar.view
-                .findViewById<TextView>(
-                    com.google.android.material.R.id.snackbar_text,
-                ).findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-        tv.maxLines = 10
+            snackbar.view.findViewById<TextView>(
+                com.google.android.material.R.id.snackbar_text,
+            )
+        tv?.maxLines = 10
         snackbar.show()
     }
 }

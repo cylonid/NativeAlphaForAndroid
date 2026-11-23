@@ -126,7 +126,7 @@ fun AdblockConfigScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.cancel),
+                            contentDescription = stringResource(R.string.back),
                         )
                     }
                 },
@@ -311,7 +311,7 @@ fun AdblockConfigScreen(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Rounded.DeleteOutline,
-                                        contentDescription = stringResource(R.string.question_delete_item),
+                                        contentDescription = stringResource(R.string.delete),
                                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }

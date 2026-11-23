@@ -43,6 +43,7 @@ import androidx.core.net.toUri
 import com.cylonid.nativealpha.BuildConfig
 import com.cylonid.nativealpha.R
 import com.cylonid.nativealpha.model.ReleaseNotes
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +63,8 @@ fun ReleaseNotesBottomSheet(
         try {
             val intent = Intent(Intent.ACTION_VIEW, url.toUri())
             context.startActivity(intent)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Timber.w(e, "Failed to open URL: %s", url)
         }
     }
 

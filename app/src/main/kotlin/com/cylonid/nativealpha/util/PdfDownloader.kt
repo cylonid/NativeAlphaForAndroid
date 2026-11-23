@@ -3,6 +3,7 @@ package com.cylonid.nativealpha.util
 import android.content.Context
 import android.net.Uri
 import android.webkit.CookieManager
+import androidx.core.net.toUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -11,6 +12,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.Locale
 
 object PdfDownloader {
     private const val MAX_REDIRECTS = 5
@@ -66,7 +68,7 @@ object PdfDownloader {
 
             // Handle local content / file URIs directly
             if (urlStr.startsWith("content://") || urlStr.startsWith("file://")) {
-                return@withContext copyLocalUriToCache(context, Uri.parse(urlStr), preferredFileName)
+                return@withContext copyLocalUriToCache(context, urlStr.toUri(), preferredFileName)
             }
 
             val cacheDir = getPdfCacheDir(context)
@@ -210,10 +212,10 @@ object PdfDownloader {
         try {
             val u1 = URL(urlStr1)
             val u2 = URL(urlStr2)
-            val scheme1 = u1.protocol.lowercase()
-            val scheme2 = u2.protocol.lowercase()
-            val host1 = u1.host.lowercase()
-            val host2 = u2.host.lowercase()
+            val scheme1 = u1.protocol.lowercase(Locale.ROOT)
+            val scheme2 = u2.protocol.lowercase(Locale.ROOT)
+            val host1 = u1.host.lowercase(Locale.ROOT)
+            val host2 = u2.host.lowercase(Locale.ROOT)
             val port1 = if (u1.port != -1) u1.port else u1.defaultPort
             val port2 = if (u2.port != -1) u2.port else u2.defaultPort
             scheme1 == scheme2 && host1 == host2 && port1 == port2
@@ -236,7 +238,7 @@ object PdfDownloader {
 
     fun sanitizeFileName(name: String): String {
         val sanitized = name.replace("[^a-zA-Z0-9._-]".toRegex(), "_")
-        return if (sanitized.lowercase().endsWith(".pdf")) {
+        return if (sanitized.lowercase(Locale.ROOT).endsWith(".pdf")) {
             sanitized
         } else {
             "$sanitized.pdf"

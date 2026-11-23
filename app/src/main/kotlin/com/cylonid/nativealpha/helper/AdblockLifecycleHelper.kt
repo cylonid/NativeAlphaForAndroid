@@ -1,9 +1,11 @@
 package com.cylonid.nativealpha.helper
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.edit
 import com.cylonid.nativealpha.R
 import com.cylonid.nativealpha.model.DataManager
 import io.github.edsuns.adfilter.AdFilter
@@ -88,6 +90,7 @@ class AdblockLifecycleHelper(
          * Sanitizing running states to 'NONE' (if rules already exist) or 'FAILED' prevents
          * the blocking .get() call during constructor initialization.
          */
+        @SuppressLint("ApplySharedPref")
         @JvmStatic
         fun sanitizeFilterDownloadStates(context: Context) {
             try {
@@ -101,9 +104,7 @@ class AdblockLifecycleHelper(
                         return
                     }
 
-                    // Recheck fresh state under coordination before modifying
-                    val latestJsonStr = prefs.getString(KEY_FILTER_MAP, null) ?: return
-                    val jsonObj = JSONObject(latestJsonStr)
+                    val jsonObj = JSONObject(filterMapJson)
                     var modified = false
                     val keys = jsonObj.keys()
                     while (keys.hasNext()) {
@@ -118,7 +119,10 @@ class AdblockLifecycleHelper(
                         }
                     }
                     if (modified) {
-                        prefs.edit().putString(KEY_FILTER_MAP, jsonObj.toString()).commit()
+                        // Synchronous commit is intentional: AdFilter.get() reads filter_map immediately afterward.
+                        prefs.edit(commit = true) {
+                            putString(KEY_FILTER_MAP, jsonObj.toString())
+                        }
                     }
                 }
             } catch (t: Throwable) {

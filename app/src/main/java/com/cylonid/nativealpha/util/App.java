@@ -6,7 +6,10 @@ import android.content.Context;
 import androidx.work.Configuration;
 import androidx.work.WorkManager;
 
+import com.cylonid.nativealpha.BuildConfig;
 import com.cylonid.nativealpha.helper.AdblockLifecycleHelper;
+
+import timber.log.Timber;
 
 public class App extends Application {
 
@@ -17,6 +20,9 @@ public class App extends Application {
 		super.onCreate();
 
 		instance = this;
+		if (BuildConfig.DEBUG) {
+			Timber.plant(new Timber.DebugTree());
+		}
 		AdblockLifecycleHelper.sanitizeFilterDownloadStates(this);
 		if (!WorkManager.isInitialized()) {
 			WorkManager.initialize(this, new Configuration.Builder().build());

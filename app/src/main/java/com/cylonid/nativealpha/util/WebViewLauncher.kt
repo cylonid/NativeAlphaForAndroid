@@ -9,6 +9,7 @@ import com.cylonid.nativealpha.R
 import com.cylonid.nativealpha.model.WebApp
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.processphoenix.ProcessPhoenix
+import timber.log.Timber
 import java.lang.NullPointerException
 
 object WebViewLauncher {
@@ -25,7 +26,7 @@ object WebViewLauncher {
                 c.getString(R.string.webview_activity_launch_failed),
                 Snackbar.LENGTH_LONG,
             )
-            e.printStackTrace()
+            Timber.e(e, "Failed to start WebView activity")
         }
     }
 
@@ -42,7 +43,7 @@ object WebViewLauncher {
                 a.getString(R.string.webview_activity_launch_failed),
                 Snackbar.LENGTH_LONG,
             )
-            e.printStackTrace()
+            Timber.e(e, "Failed to start WebView activity in new process")
         }
     }
 
@@ -61,7 +62,7 @@ object WebViewLauncher {
                     Class.forName("$packageName.WebViewActivity")
                 }
         } catch (e: ClassNotFoundException) {
-            e.printStackTrace()
+            Timber.e(e, "WebView activity class not found for container %d", webapp.containerId)
         }
         if (webViewClass == null) {
             return null

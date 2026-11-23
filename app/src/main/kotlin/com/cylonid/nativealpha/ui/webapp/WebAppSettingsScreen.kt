@@ -249,7 +249,7 @@ fun WebAppSettingsScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.cancel),
+                            contentDescription = stringResource(R.string.back),
                         )
                     }
                 },

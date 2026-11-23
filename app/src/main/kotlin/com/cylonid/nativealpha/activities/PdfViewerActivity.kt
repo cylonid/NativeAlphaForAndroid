@@ -27,6 +27,7 @@ import com.cylonid.nativealpha.util.PdfDownloader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -246,8 +247,8 @@ class PdfViewerActivity : AppCompatActivity() {
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
             startActivity(Intent.createChooser(intent, getString(R.string.pdf_viewer_share)))
-        } catch (_: Exception) {
-            // Sharing failed or no receiver
+        } catch (e: Exception) {
+            Timber.w(e, "Failed to share PDF")
         }
     }
 
@@ -265,8 +266,8 @@ class PdfViewerActivity : AppCompatActivity() {
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
             startActivity(Intent.createChooser(intent, getString(R.string.pdf_viewer_open_external)))
-        } catch (_: Exception) {
-            // No external PDF viewer available
+        } catch (e: Exception) {
+            Timber.w(e, "Failed to open PDF with external app")
         }
     }
 

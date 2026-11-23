@@ -67,6 +67,10 @@ public class DataManager {
 	// </>
 
 	private static final DataManager instance = new DataManager();
+	private static final Gson GSON = new Gson();
+	private static final Gson GSON_WITH_DESERIALIZERS = new GsonBuilder()
+			.registerTypeAdapter(WebApp.class, new WebAppDeserializer())
+			.registerTypeAdapter(GlobalSettings.class, new GlobalSettingsDeserializer()).create();
 	private ArrayList<WebApp> websites;
 	private int max_assigned_ID;
 	private SharedPreferences appdata;
@@ -97,8 +101,7 @@ public class DataManager {
 
 		appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE);
 		SharedPreferences.Editor editor = appdata.edit();
-		Gson gson = new Gson();
-		String json = gson.toJson(websites);
+		String json = GSON.toJson(websites);
 		editor.putString(shared_pref_webappdata, json);
 		editor.putInt(shared_pref_max_id, max_assigned_ID);
 		editor.putInt(shared_pref_next_container, SandboxManager.getInstance().getNextContainer());
@@ -153,13 +156,10 @@ public class DataManager {
 		appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE);
 		// Webapp data
 		if (appdata.contains(shared_pref_webappdata)) {
-			GsonBuilder gsonBuilder = new GsonBuilder();
-			gsonBuilder.registerTypeAdapter(WebApp.class, new WebAppDeserializer());
-			Gson gson = gsonBuilder.create();
 			String json = appdata.getString(shared_pref_webappdata, "");
 			int oldDataFormat = DataVersionConverter.getDataFormat(json);
 			String currentDataFormattedJson = this.checkDataFormat(oldDataFormat, json);
-			ArrayList<WebApp> new_websites = gson.fromJson(currentDataFormattedJson,
+			ArrayList<WebApp> new_websites = GSON_WITH_DESERIALIZERS.fromJson(currentDataFormattedJson,
 					new TypeToken<ArrayList<WebApp>>() {
 					}.getType());
 			checkIfWebAppIdsCollide(websites, new_websites);
@@ -186,14 +186,10 @@ public class DataManager {
 		}
 		// Global settings
 		if (appdata.contains(shared_pref_globalsettings)) {
-			GsonBuilder gsonBuilder = new GsonBuilder();
-			gsonBuilder.registerTypeAdapter(WebApp.class, new WebAppDeserializer());
-			gsonBuilder.registerTypeAdapter(GlobalSettings.class, new GlobalSettingsDeserializer());
-			Gson gson = gsonBuilder.create();
 			String json = appdata.getString(shared_pref_globalsettings, "");
 			int oldDataFormat = DataVersionConverter.getDataFormat(json);
 			String currentDataFormattedJson = this.checkDataFormat(oldDataFormat, json);
-			settings = gson.fromJson(currentDataFormattedJson, GlobalSettings.class);
+			settings = GSON_WITH_DESERIALIZERS.fromJson(currentDataFormattedJson, GlobalSettings.class);
 			assertGlobalWebappData();
 			if (oldDataFormat != DataVersionConverter.getDataFormat(currentDataFormattedJson))
 				this.saveGlobalSettings();
@@ -217,8 +213,7 @@ public class DataManager {
 		appdata = App.getAppContext().getSharedPreferences(SHARED_PREF_KEY, MODE_PRIVATE);
 		SharedPreferences.Editor editor = appdata.edit();
 
-		Gson gson = new Gson();
-		String json = gson.toJson(settings);
+		String json = GSON.toJson(settings);
 		editor.putString(shared_pref_globalsettings, json);
 		editor.putBoolean(shared_pref_global_settings_json, true);
 		editor.apply();

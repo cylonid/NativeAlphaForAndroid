@@ -48,6 +48,7 @@ import androidx.core.net.toUri
 import com.cylonid.nativealpha.R
 import com.mikepenz.aboutlibraries.entity.Library
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -87,7 +88,7 @@ fun DependenciesScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.cancel),
+                            contentDescription = stringResource(R.string.back),
                         )
                     }
                 },
@@ -136,7 +137,8 @@ fun DependenciesScreen(
                                 try {
                                     val intent = Intent(Intent.ACTION_VIEW, url.toUri())
                                     context.startActivity(intent)
-                                } catch (_: Exception) {
+                                } catch (e: Exception) {
+                                    Timber.w(e, "Failed to open library URL: %s", url)
                                 }
                             }
                         },

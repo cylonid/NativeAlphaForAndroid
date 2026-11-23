@@ -8,6 +8,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import timber.log.Timber
 import java.lang.reflect.Type
 
 class WebAppDeserializer : JsonDeserializer<WebApp> {
@@ -17,7 +18,7 @@ class WebAppDeserializer : JsonDeserializer<WebApp> {
         context: JsonDeserializationContext,
     ): WebApp {
         val obj = json.asJsonObject
-        val webapp = Gson().fromJson(obj, WebApp::class.java)
+        val webapp = plainGson.fromJson(obj, WebApp::class.java)
         if (!obj.has("isUseBuiltinPdfViewer") || obj.get("isUseBuiltinPdfViewer").isJsonNull) {
             webapp.isUseBuiltinPdfViewer = true
         }
@@ -46,7 +47,8 @@ class WebAppDeserializer : JsonDeserializer<WebApp> {
                         val value = configObj.get("value")?.asString ?: return@mapNotNull null
                         AdblockConfig(label, value)
                     } catch (e: Exception) {
-                        null // Skip malformed entries
+                        Timber.w(e, "Skipping malformed adblock config entry")
+                        null
                     }
                 }
             } else {
@@ -58,5 +60,9 @@ class WebAppDeserializer : JsonDeserializer<WebApp> {
             webapp.adBlockSettings = Const.getDefaultAdBlockConfig()
         }
         webapp.adBlockSettings = webapp.adBlockSettings.take(8).toMutableList()
+    }
+
+    private companion object {
+        val plainGson = Gson()
     }
 }

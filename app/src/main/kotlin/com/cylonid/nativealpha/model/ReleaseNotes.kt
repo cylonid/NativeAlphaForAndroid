@@ -24,6 +24,7 @@ data class ReleaseNotesSection(
 
 object ReleaseNotesRepository {
     private const val ASSET_FILE = "release_notes.json"
+    private val gson = Gson()
 
     @Volatile
     private var cachedNotes: ReleaseNotes? = null
@@ -37,7 +38,7 @@ object ReleaseNotesRepository {
                         .open(ASSET_FILE)
                         .bufferedReader()
                         .use { it.readText() }
-                Gson().fromJson(json, ReleaseNotes::class.java) ?: createFallback()
+                gson.fromJson(json, ReleaseNotes::class.java) ?: createFallback()
             } catch (e: Exception) {
                 Timber.w(e, "Could not load release notes from assets")
                 createFallback()

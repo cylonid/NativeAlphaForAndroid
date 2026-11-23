@@ -27,12 +27,29 @@ import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URL
-import kotlin.math.abs
 import kotlin.math.min
 
 object ShortcutIconUtils {
     private const val ICONS_DIR = "webapp_icons"
     const val MAX_ICON_DIMENSION = 256
+
+    val AVATAR_PALETTE_COLORS =
+        intArrayOf(
+            0xFF1E88E5.toInt(), // Blue
+            0xFF43A047.toInt(), // Green
+            0xFFE53935.toInt(), // Red
+            0xFFFB8C00.toInt(), // Orange
+            0xFF8E24AA.toInt(), // Purple
+            0xFF00ACC1.toInt(), // Cyan
+            0xFF3949AB.toInt(), // Indigo
+            0xFFD81B60.toInt(), // Pink
+            0xFF00897B.toInt(), // Teal
+        )
+
+    fun avatarColorIndex(label: String): Int {
+        val clean = label.trim().ifEmpty { "W" }
+        return (clean.hashCode() and Int.MAX_VALUE) % AVATAR_PALETTE_COLORS.size
+    }
 
     // In-memory LRU cache: cache up to 24 icons (~1-2MB RAM maximum)
     private val memoryCache = LruCache<Int, Bitmap>(24)
@@ -340,21 +357,8 @@ object ShortcutIconUtils {
         val bitmap = createBitmap(sizePx, sizePx, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
 
-        val colors =
-            intArrayOf(
-                0xFF1E88E5.toInt(), // Blue
-                0xFF43A047.toInt(), // Green
-                0xFFE53935.toInt(), // Red
-                0xFFFB8C00.toInt(), // Orange
-                0xFF8E24AA.toInt(), // Purple
-                0xFF00ACC1.toInt(), // Cyan
-                0xFF3949AB.toInt(), // Indigo
-                0xFFD81B60.toInt(), // Pink
-                0xFF00897B.toInt(), // Teal
-            )
         val cleanLabel = label.trim().ifEmpty { "W" }
-        val colorIndex = abs(cleanLabel.hashCode()) % colors.size
-        val bgColor = colors[colorIndex]
+        val bgColor = AVATAR_PALETTE_COLORS[avatarColorIndex(cleanLabel)]
 
         val bgPaint =
             Paint(Paint.ANTI_ALIAS_FLAG).apply {
