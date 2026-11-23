@@ -21,7 +21,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/native_alpha"
         android:supportsRtl="true"
-        android:screenOrientation="portrait"
         android:usesCleartextTraffic="true"
         android:resizeableActivity="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -42,7 +41,6 @@
             </intent-filter>
         </activity>
 
-<!--        Make sure to also copy changes to WebViewActivity in build.gradle-->
         <activity
             android:name=".WebViewActivity"
             android:parentActivityName=".MainActivity"

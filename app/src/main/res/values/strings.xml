@@ -2,13 +2,9 @@
     <string name="app_name" translatable="false">Native Alpha</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="spinner_prompt">UI Mode</string>
     <string name="global_settings">Global Settings</string>
     <string name="these_settings_are_applied_globally_and_override_app_specific_settings">These settings are used by all Web Apps, except those which explicitly override the global settings.</string>
-    <string name="clear_cookies_after_usage">Clear cookies after usage</string>
     <string name="use_three_finger_swipes_to_switch_between_web_apps_experimental">Use three-finger swipes ⇄ to switch between Web Apps (experimental)</string>
-    <string name="select_ui_mode">Select UI mode</string>
-    <string name="save">Save</string>
     <string name="loading_icon_and_website_title">Loading icon and website title…</string>
     <string name="open_external_links_in_browser_app">Open external links in browser app</string>
     <string name="allow_javascript">Allow Javascript</string>
@@ -16,25 +12,11 @@
     <string name="accept_third_party_cookies">Accept third-party cookies</string>
     <string name="clear_cache_after_usage">Clear cache after usage</string>
     <string name="enable_adblock_experimental">Enable adblock</string>
-    <string name="timeout_for_page_restore_in_minutes">Timeout in min</string>
     <string name="re_create_shortcut">Re-Create shortcut</string>
     <string name="create_shortcut_on_home_screen">Create shortcut on home screen</string>
     <string name="url" translatable="false">URL</string>
     <string name="use_two_finger_swipes_for_browser_forward_and_backward_navigation">Use two-finger swipes ⇄ for browser forward and backward navigation</string>
-    <string-array name="ui_modes">
-        <item>System default</item>
-        <item>Light Mode</item>
-        <item>Dark Mode</item>
-    </string-array>
-    <string name="icon_fetch_failed_line1">We could not retrieve an icon for %1$s.\nPossible reasons:\n</string>
-    <string name="icon_fetch_failed_line2">• No internet connection\n</string>
-    <string name="icon_fetch_failed_line3">• The website has no suitable icon stored.</string>
-    <string name="delete_question">Are you sure you want to remove this website?</string>
-    <string name="enter_valid_url">Please enter a valid web address.</string>
-    <string name="edit_webapp_settings">Edit Web App settings</string>
     <string name="add_webapp">Add Web App</string>
-    <string name="welcome_msg">Welcome!\nAdd your first Web App:</string>
-    <string name="restore_last_opened_page">Restore last opened page</string>
     <string name="request_website_in_desktop_version">Request website in desktop version</string>
     <string name="shortcut_icon">Shortcut Icon</string>
     <string name="shortcut_title">Shortcut Title</string>
@@ -45,7 +27,6 @@
     <string name="gnu_license">This software is released under GNU General Public License - Version 3.\nhttps://www.gnu.org/licenses/gpl-3.0.txt</string>
     <string name="app_info">About</string>
     <string name="license">License</string>
-    <string name="os_libraries_title">Open source libraries</string>
     <string name="web_app_settings">Web App Settings</string>
     <string name="do_not_load_images">Do not load images</string>
     <string name="request_data_saving_page">Send \"Save Data\" request</string>
@@ -66,13 +47,11 @@
     <string name="webapp_section_datasaving">Data saving</string>
     <string name="webapp_section_misc">Miscellaneous</string>
     <string name="paypal">" ☕ Buy me a coffee on PayPal"</string>
-    <string name="webapp_section_restorepage">Restore page</string>
     <string name="import_failed">The backup could not restored.</string>
     <string name="import_success">Backup with %1$d Web App(s) was restored successfully.</string>
     <string name="export_failed">The backup could not be exported.</string>
     <string name="export_success">The backup was created successfully.</string>
     <string name="webapp_not_found">The Web App you are trying to reach is no longer available.</string>
-    <string name="import_success_dialog_txt1">The backup contained</string>
     <string name="import_success_dialog_txt2">Do you want to re-create shortcuts for all Web Apps?</string>
     <string name="import_success_dialog_txt3">Please note you will have to manually confirm the addition of every shortcut.</string>
     <string name="no_filemanager">Please install a file manager.</string>
@@ -85,7 +64,6 @@
     <string name="dialog_permission_location_txt">Do you want to grant this Web App access to your location? You can revoke this decision any time in the Web App Settings menu.</string>
     <string name="dialog_permission_drm_title">DRM Content</string>
     <string name="dialog_permission_drm_txt">Do you want allow this Web App to load DRM-protected content?</string>
-    <string name="permission_location_rationale">If you want Web Apps to be able to retrieve your location, you can Native Alpha grant the permission to access the location. You can decide to grant the permission for every Web App individually.</string>
     <string name="permission_storage_rationale">If you want Native Alpha Web Apps to be able to download files, you have to accept the storage permission request.</string>
     <string name="file_download">File is being downloaded…</string>
     <string name="file_download_failed">Could not download file.</string>
@@ -93,15 +71,10 @@
     <string name="show_progress_bar_during_page_load">Show progress bar during page load</string>
     <string name="user_agent">User Agent</string>
     <string name="use_custom_user_agent">Use custom user agent</string>
-    <string name="insert_custom_user_agent">Insert custom user agent here…</string>
-    <string name="webapp_autoreload">Auto-reload page</string>
     <string name="webapp_interval_for_reload">Interval in seconds</string>
     <string name="webapp_autoreload_switch">Refresh page regularly</string>
-    <string name="hint_user_agent">Consult <![CDATA[<a href="https://www.whatismybrowser.com/guides/the-latest-user-agent/">WhatIsMyBrowser.com</a>]]> for a list of recent user agents.</string>
 
     <string name="label">Label</string>
-    <string name="backup_import_done">Backup import finished</string>
-    <string name="backup_imported_done_txt">The screen needs to be reloaded to apply the restored UI theme.</string>
     <string name="restore_shortcut">Do you want to restore the shortcut for <![CDATA[<b>%1$s</b>]]>?</string>
     <string name="force_dark_mode">Force Dark Mode</string>
     <string name="end">End</string>
@@ -110,7 +83,6 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="expert_settings">Expert Settings</string>
     <string name="show_expert_settings">Show expert settings</string>
-    <string name="ssl_errors">SSL Errors</string>
     <string name="ssl_permanent_warning">Only use this option for self-hosted non-production websites</string>
     <string name="ignore_ssl_errors">Ignore SSL errors</string>
     <string name="webapp_already_deleted">This Web App is no longer available. You can delete this shortcut.</string>
@@ -118,17 +90,11 @@
     <string name="global_web_app_settings">Global Web App Settings</string>
     <string name="general">General</string>
     <string name="backup">Backup</string>
-    <string name="use_google_safe_browsing">Use Google Safe Browsing</string>
     <string name="block_all_third_party_requests">Block third-party requests</string>
-    <string name="sandbox">Sandbox</string>
-    <string name="no_sandbox">Do not use sandbox.</string>
-    <string name="all_sandboxes_used">All sandboxes are currently in use.</string>
     <string name="enable_sandbox">Enable Sandbox</string>
     <string name="show_fullscreen">Full Screen (Immersive Mode)</string>
-    <string name="site_not_found">Page could not be loaded.</string>
     <string name="icon_not_found">Icon could not be loaded.</string>
     <string name="privacy_policy">Privacy Policy</string>
-    <string name="webapp_section_kiosk">Kiosk Mode</string>
     <string name="keep_screen_awake">Keep screen awake</string>
     <string name="dialog_permission_camera_title">Camera Access</string>
     <string name="dialog_permission_camera_txt">Do you want to grant this Web App access to your camera? You can revoke this decision any time in the Web App Settings menu.</string>
@@ -144,7 +110,6 @@
     <string name="share">Share</string>
     <string name="reload">Reload</string>
     <string name="activate_two_finger_zoom">Enable Pinch-To-Zoom</string>
-    <string name="webapp_section_access_restriction">Access Restriction</string>
     <string name="bioprompt_restricted_webapp">Access Restriction</string>
     <string name="bioprompt_disable_restricition">Disable access restriction?</string>
     <string name="enable_access_restriction">Enable access restriction</string>
@@ -153,17 +118,12 @@
     <string name="start_url">Start URL</string>
     <string name="more">More</string>
     <string name="close_web_app">Close Web App</string>
-    <string name="select_text">Select text</string>
     <string name="to_main_menu">To Main Menu</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
-    <string name="accept">Accept</string>
-    <string name="cancel_eula">You must accept the EULA to continue.</string>
     <string name="no_biometric_devices">Your device does not support biometric authentication.</string>
     <string name="no_biometric_keys_enrolled">Your device does support biometric  authentication, but you did not enroll any method yet.</string>
     <string name="webview_activity_launch_failed">Web App could not be started.</string>
-    <string name="no_url_entered">Please enter an URL.</string>
-    <string name="scroll_to_bottom">Please scroll to the bottom.</string>
     <string name="always_show_software_buttons">Always show software navigation buttons</string>
     <string name="use_standard_context_menu_temporarily">Temporarily use standard context menu</string>
     <string name="use_standard_context_menu_temporarily_sub">For the next long press</string>

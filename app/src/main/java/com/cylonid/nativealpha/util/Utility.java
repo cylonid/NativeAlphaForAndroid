@@ -1,30 +1,10 @@
 package com.cylonid.nativealpha.util;
 
-import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Utility {
-
-	public static void setViewAndChildrenEnabled(View view, boolean enabled) {
-
-		view.setClickable(enabled);
-		if (enabled) {
-			view.setAlpha(1.0f);
-		} else {
-			view.setAlpha(0.75f);
-		}
-
-		if (view instanceof ViewGroup) {
-			ViewGroup viewGroup = (ViewGroup) view;
-			for (int i = 0; i < viewGroup.getChildCount(); i++) {
-				View child = viewGroup.getChildAt(i);
-				setViewAndChildrenEnabled(child, enabled);
-			}
-		}
-	}
 
 	public static void Assert(boolean condition, String message) {
 		if (!condition) {

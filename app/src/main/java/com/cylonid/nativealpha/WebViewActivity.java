@@ -137,7 +137,6 @@ public class WebViewActivity extends AppCompatActivity
 	private final Runnable resetBackPressRunnable = () -> quitOnNextBackpress = false;
 	private Handler reload_handler = null;
 	private WebApp webapp = null;
-	private String urlOnFirstPageload = "";
 	private boolean fallbackToDefaultLongClickBehaviour = false;
 
 	private AdFilter adFilter;
@@ -227,13 +226,12 @@ public class WebViewActivity extends AppCompatActivity
 		String processName = Application.getProcessName();
 		String packageName = this.getPackageName();
 
-		boolean hasSandboxing = SandboxManager.getInstance() != null;
 		// Sandboxed Web App is openend in main process using an old shortcut
-		if (packageName.equals(processName) && webapp.isUseContainer() && hasSandboxing) {
+		if (packageName.equals(processName) && webapp.isUseContainer()) {
 			WebViewLauncher.startWebViewInNewProcess(webapp, this);
 		}
 
-		if (!packageName.equals(processName) && hasSandboxing) {
+		if (!packageName.equals(processName)) {
 			if (SandboxManager.getInstance().isSandboxUsedByAnotherApp(webapp)) {
 				SandboxManager.getInstance().unregisterWebAppFromSandbox(webapp.getContainerId());
 				WebViewLauncher.startWebViewInNewProcess(webapp, this);
@@ -1171,8 +1169,6 @@ public class WebViewActivity extends AppCompatActivity
 			if (request == null) {
 				return null;
 			}
-			if (urlOnFirstPageload.isEmpty() && request.getUrl() != null)
-				urlOnFirstPageload = request.getUrl().toString();
 
 			if (webapp != null && webapp.isUseAdblock() && adFilter != null) {
 				try {

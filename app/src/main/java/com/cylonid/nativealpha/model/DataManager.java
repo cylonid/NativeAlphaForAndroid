@@ -43,13 +43,10 @@ public class DataManager {
 
 	private static final String SHARED_PREF_KEY = "WEBSITEDATA";
 	private static final String GENERAL_INFO = "com.cylonid.nativealpha.GENERAL_INFO";
-	public static final String EULA_ACCEPTED = "eulaAccepted";
 
 	public static final String ADBLOCK_CRASH = "adblockCrash";
 	public static final String LAST_SHOWN_UPDATE = "lastShownUpdate";
-	public static final String DATA_FORMAT = "dataFormat";
 
-	private static final String SHARED_PREF_LEGACY_KEY = "GLOBALSETTINGS";
 	private static final String shared_pref_max_id = "MAX_ID";
 	private static final String shared_pref_next_container = "NEXT_CONTAINER";
 
@@ -104,13 +101,8 @@ public class DataManager {
 		String json = gson.toJson(websites);
 		editor.putString(shared_pref_webappdata, json);
 		editor.putInt(shared_pref_max_id, max_assigned_ID);
-		if (SandboxManager.getInstance() != null)
-			editor.putInt(shared_pref_next_container, SandboxManager.getInstance().getNextContainer());
+		editor.putInt(shared_pref_next_container, SandboxManager.getInstance().getNextContainer());
 		editor.apply();
-	}
-
-	public boolean getEulaData() {
-		return getGeneralInfo().getBoolean(EULA_ACCEPTED, false);
 	}
 
 	public boolean getHasAdblockCrashed() {
@@ -123,10 +115,6 @@ public class DataManager {
 
 	public void setHasAdblockCrashed(boolean newValue) {
 		getGeneralInfo().edit().putBoolean(ADBLOCK_CRASH, newValue).apply();
-	}
-
-	public void setEulaData(boolean newValue) {
-		getGeneralInfo().edit().putBoolean(EULA_ACCEPTED, newValue).apply();
 	}
 
 	public void setLastShownUpdate(int newValue) {
@@ -191,8 +179,7 @@ public class DataManager {
 		}
 
 		max_assigned_ID = appdata.getInt(shared_pref_max_id, max_assigned_ID);
-		if (SandboxManager.getInstance() != null)
-			SandboxManager.getInstance().setNextContainer(appdata.getInt(shared_pref_next_container, 0));
+		SandboxManager.getInstance().setNextContainer(appdata.getInt(shared_pref_next_container, 0));
 
 		if (appdata.getBoolean(shared_pref_global_settings_json, false)) {
 			loadGlobalSettingsLegacy();

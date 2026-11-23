@@ -2,38 +2,20 @@
 <resources>
     <string name="global_settings">Allgemeine Einstellungen</string>
     <string name="these_settings_are_applied_globally_and_override_app_specific_settings">Diese Einstellungen werden für alle Web-Apps angewendet, außer die Web-App überschreibt die globalen Einstellungen.</string>
-    <string name="spinner_prompt">Farbschema</string>
     <string name="clear_cache_after_usage">Cache nach Benutzung löschen</string>
-    <string name="clear_cookies_after_usage">Cookies nach Benutzung löschen</string>
     <string name="use_three_finger_swipes_to_switch_between_web_apps_experimental">Mit Drei-Finger-Wischen ⇄ zwischen Web-Apps wechseln (experimentell)</string>
-    <string name="select_ui_mode">Farbschema wählen</string>
-    <string name="save">Speichern</string>
     <string name="action_settings">Einstellungen</string>
 
-    <string-array name="ui_modes">
-        <item>Systemeinstellung übernehmen</item>
-        <item>Heller Modus</item>
-        <item>Dunkler Modus</item>
-    </string-array>
     <string name="loading_icon_and_website_title">Icon und Website-Titel laden…</string>
     <string name="open_external_links_in_browser_app">Externe Links in Browser-App öffnen</string>
     <string name="allow_javascript">Javascript zulassen</string>
     <string name="accept_cookies">Cookies akzeptieren</string>
     <string name="accept_third_party_cookies">Drittanbieter-Cookies akzeptieren</string>
     <string name="enable_adblock_experimental">Werbeblocker aktivieren</string>
-    <string name="timeout_for_page_restore_in_minutes">Timeout in min</string>
     <string name="re_create_shortcut">Startseitenverknüpfung erstellen</string>
     <string name="create_shortcut_on_home_screen">Startseitenverknüpfung erstellen</string>
     <string name="use_two_finger_swipes_for_browser_forward_and_backward_navigation">Mit Zwei-Finger-Wischen ⇄ im Browser vor und zurück wechseln</string>
-    <string name="icon_fetch_failed_line1">Es konnte kein Icon für %1$s geladen werden.\nMögliche Gründe:\n</string>
-    <string name="icon_fetch_failed_line2">• Keine Internetverbindung.\n</string>
-    <string name="icon_fetch_failed_line3">• Die Website hat kein passendes Icon gespeichert.</string>
-    <string name="delete_question">Sind Sie sicher, dass Sie diese Website entfernen wollen?</string>
-    <string name="enter_valid_url">Bitte geben Sie eine gültige URL an.</string>
-    <string name="edit_webapp_settings">Web-App-Einstellungen bearbeiten</string>
     <string name="add_webapp">Web-App hinzufügen</string>
-    <string name="welcome_msg">Willkommen!\nFügen Sie Ihre erste Web-App hinzu:</string>
-    <string name="restore_last_opened_page">Letzte geöffnete Seite wiederherstellen</string>
     <string name="request_website_in_desktop_version">Desktop-Version der Website anfordern</string>
     <string name="shortcut_icon">Symbol</string>
     <string name="shortcut_title">Beschriftung</string>
@@ -42,7 +24,6 @@
     <string name="app_info">Über die App</string>
     <string name="gnu_license">Diese Software unterliegt der GNU General Public License - Version 3.\nhttps://www.gnu.org/licenses/gpl-3.0.txt</string>
     <string name="license">Lizenz</string>
-    <string name="os_libraries_title">Open-Source-Bibliotheken</string>
     <string name="web_app_settings">Web-App-Einstellungen</string>
     <string name="do_not_load_images">Keine Bilder laden</string>
     <string name="request_data_saving_page">\"Save Data\"-Anfrage senden</string>
@@ -63,13 +44,11 @@
     <string name="webapp_section_datasaving">Daten sparen</string>
     <string name="webapp_section_misc">Sonstiges</string>
     <string name="paypal">" ☕ Spendier mir einen Kaffee auf PayPal"</string>
-    <string name="webapp_section_restorepage">Seitenwiederherstellung</string>
     <string name="import_failed">Die Sicherung konnte nicht wiederhergestellt werden.</string>
     <string name="import_success">Sicherung mit %1$d Web-App(s) wurde wiederhergestellt.</string>
     <string name="export_failed">Die Sicherung konnte nicht exportiert werden.</string>
     <string name="export_success">Die Sicherung wurde erfolgreich erstellt.</string>
     <string name="webapp_not_found">Diese Web-App ist nicht mehr verfügbar.</string>
-    <string name="import_success_dialog_txt1">Die Sicherung enthielt</string>
     <string name="import_success_dialog_txt2">Wollen Sie die Startseitenverknüpfungen wiederherstellen?</string>
     <string name="import_success_dialog_txt3">Bitte beachten Sie, dass jede Verknüpfung einzeln bestätigt werden muss.</string>
     <string name="no_filemanager">Bitte installieren Sie einen Datei-Manager.</string>
@@ -82,21 +61,15 @@
     <string name="dialog_permission_location_title">Standortzugriff-Anfrage</string>
     <string name="dialog_permission_drm_txt">Möchten Sie dieser Web-App erlauben, DRM-geschützte Inhalte zu laden?</string>
     <string name="dialog_permission_drm_title">DRM-Inhalte</string>
-    <string name="permission_location_rationale">Wenn Sie möchten, dass Web-Apps auf Ihren Standort zugreifen können, können Sie Native Alpha die Erlaubnis dazu erteilen. Sie können dies für jede Web-App einzeln entscheiden.</string>
     <string name="permission_storage_rationale">Wenn Sie über Native Alpha Dateien herunterladen möchten, müssen Sie dem Zugriff auf den Speicher zustimmen.</string>
     <string name="file_download">Datei wird heruntergeladen…</string>
     <string name="custom_icon">Eigenes Symbol verwenden</string>
     <string name="show_progress_bar_during_page_load">Ladebalken anzeigen</string>
     <string name="user_agent">User Agent</string>
     <string name="use_custom_user_agent">Eigenen User-Agent verwenden</string>
-    <string name="insert_custom_user_agent">User-Agent-String hier einfügen…</string>
-    <string name="webapp_autoreload">Seite regelmäßig neu laden</string>
     <string name="webapp_interval_for_reload">Intervall in Sekunden</string>
     <string name="webapp_autoreload_switch">Neu laden aktivieren</string>
-    <string name="hint_user_agent"><![CDATA[<a href="https://www.whatismybrowser.com/guides/the-latest-user-agent/">WhatIsMyBrowser.com</a>]]>  bietet eine Liste an aktuellen User Agents.</string>
     <string name="label">Label</string>
-    <string name="backup_import_done">Sicherung erfolgreich wiederhergestellt</string>
-    <string name="backup_imported_done_txt">Die Anwendung muss neu geladen werden, um das Farbschema aus der Sicherung wiederherzustellen.</string>
     <string name="restore_shortcut">Wollen Sie die Verknüpfung für <![CDATA[<b>%1$s</b>]]> wiederherstellen?</string>
     <string name="force_dark_mode">Dunklen Modus erzwingen</string>
     <string name="end">Ende</string>
@@ -105,7 +78,6 @@
     <string name="dark_mode">Dunkler Modus</string>
     <string name="expert_settings">Experten-Einstellungen</string>
     <string name="show_expert_settings">Experten-Einstellungen anzeigen</string>
-    <string name="ssl_errors">SSL-Fehler</string>
     <string name="ssl_permanent_warning">Verwenden Sie diese Option nur für selbst gehostete Test-Webseiten</string>
     <string name="ignore_ssl_errors">SSL-Fehler ignorieren</string>
     <string name="webapp_already_deleted">Diese Web-App wurde gelöscht. Sie können diese Verknüpfung löschen.</string>
@@ -113,17 +85,11 @@
     <string name="global_web_app_settings">Globale Web-App-Einstellungen</string>
     <string name="general">Allgemeines</string>
     <string name="backup">Backup</string>
-    <string name="use_google_safe_browsing">Google Safe Browsing aktivieren</string>
     <string name="block_all_third_party_requests">Drittanbieter-Anfragen blockieren</string>
-    <string name="sandbox">Sandbox</string>
-    <string name="no_sandbox">Sandbox nicht verwenden.</string>
-    <string name="all_sandboxes_used">Alle Sandboxen sind in Verwendung.</string>
     <string name="enable_sandbox">Sandbox aktivieren</string>
     <string name="show_fullscreen">Vollbildmodus</string>
-    <string name="site_not_found">Seite konnte nicht geladen werden.</string>
     <string name="icon_not_found">Icon konnte nicht geladen werden.</string>
     <string name="privacy_policy">Datenschutzerklärung</string>
-    <string name="webapp_section_kiosk">Kiosk-Modus</string>
     <string name="keep_screen_awake">Standby verhindern</string>
     <string name="dialog_permission_camera_title">Kamerazugriff</string>
     <string name="dialog_permission_camera_txt">Möchten Sie dieser Web-App Zugriff auf Ihre Kamera gewähren? Sie können die Entscheidung jederzeit in den Web-App-Einstellungen ändern.</string>
@@ -138,7 +104,6 @@
     <string name="share">Teilen</string>
     <string name="reload">Neu laden</string>
     <string name="activate_two_finger_zoom">Pinch-To-Zoom aktivieren</string>
-    <string name="webapp_section_access_restriction">Zugriffsbeschränkung</string>
     <string name="bioprompt_restricted_webapp">Zugriffsbeschränkung</string>
     <string name="bioprompt_disable_restricition">Zugriffsbeschränkung aufheben?</string>
     <string name="enable_access_restriction">Zugriffsbeschränkung aktivieren</string>
@@ -147,18 +112,13 @@
     <string name="start_url">Start-URL</string>
     <string name="more">Mehr</string>
     <string name="close_web_app">Web-App schließen</string>
-    <string name="select_text">Text auswählen</string>
     <string name="to_main_menu">Zum Hauptmenü</string>
     <string name="cancel">Abbrechen</string>
     <string name="ok">OK</string>
-    <string name="accept">Akzeptieren</string>
-    <string name="cancel_eula">Sie müssen die EULA akzeptieren, um fortzufahren.</string>
     <string name="eula_content">Die Software wird ohne Mängelgewähr und ohne jegliche ausdrückliche oder stillschweigende Gewährleistung, einschließlich, aber nicht beschränkt auf die Gewährleistung der Marktgängigkeit, der Eignung für einen bestimmten Zweck und der Nichtverletzung von Rechten Dritter, zur Verfügung gestellt. Die Autoren oder Urreberrechtsinhaber sind in keinem Fall haftbar für Ansprüche, Schäden oder andere Verpflichtungen, ob in einer Vertrags- oder Haftungsklage, einer unerlaubten Handlung oder anderweitig, die sich aus oder in Verbindung mit der Software oder der Nutzung oder anderen Geschäften mit der Software ergeben.</string>
     <string name="no_biometric_devices">Ihr Gerät unterstützt keine biometrische Authentifizierung.</string>
     <string name="no_biometric_keys_enrolled">Ihr Gerät unterstützt biometrische Authentifizierung, aber bisher wurde keine Aktivierungsmethode festgelegt.</string>
     <string name="webview_activity_launch_failed">Web-App konnte nicht gestartet werden.</string>
-    <string name="no_url_entered">Bitte geben Sie eine URL an.</string>
-    <string name="scroll_to_bottom">Bitte scrollen Sie bis zum Ende.</string>
     <string name="file_download_failed">Download fehlgeschlagen.</string>
     <string name="always_show_software_buttons">Software-Navigationsbuttons immer anzeigen</string>
     <string name="use_standard_context_menu_temporarily">Einmalig Standard-Kontextmenü nutzen</string>

@@ -1,33 +1,14 @@
 package com.cylonid.nativealpha.model;
 
-import android.service.autofill.DateValueSanitizer;
-
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DataVersionConverter {
 
-	public static String convertToDataFormat(String input, Map<String, String> map) {
-		for (Map.Entry<String, String> entry : map.entrySet()) {
-			input = input.replace(DataVersionConverter.formatAsJsonKey(entry.getKey()),
-					DataVersionConverter.formatAsJsonKey(entry.getValue()));
-		}
-		return input;
-	}
+	private static final Map<String, String> LEGACY_TO_1300_MAP;
 
-	public static int getDataFormat(String input) {
-		if (input.contains(DataVersionConverter.formatAsJsonKey("allow_js")))
-			return 1000;
-		if (input.contains(DataVersionConverter.formatAsJsonKey("isAllowJs")))
-			return 1300;
-
-		return 0;
-	}
-	private static String formatAsJsonKey(String key) {
-		return "\"" + key + "\":";
-	}
-
-	public static Map<String, String> getLegacyTo1300Map() {
+	static {
 		Map<String, String> map = new HashMap<>();
 		map.put("base_url", "baseUrl");
 		map.put("override_global_settings", "isOverrideGlobalSettings");
@@ -63,6 +44,30 @@ public class DataVersionConverter {
 		map.put("keep_awake", "isKeepAwake");
 		map.put("camera_permission", "isCameraPermission");
 		map.put("microphone_permission", "isMicrophonePermission");
-		return map;
+		LEGACY_TO_1300_MAP = Collections.unmodifiableMap(map);
+	}
+
+	public static String convertToDataFormat(String input, Map<String, String> map) {
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			input = input.replace(DataVersionConverter.formatAsJsonKey(entry.getKey()),
+					DataVersionConverter.formatAsJsonKey(entry.getValue()));
+		}
+		return input;
+	}
+
+	public static int getDataFormat(String input) {
+		if (input.contains(DataVersionConverter.formatAsJsonKey("allow_js")))
+			return 1000;
+		if (input.contains(DataVersionConverter.formatAsJsonKey("isAllowJs")))
+			return 1300;
+
+		return 0;
+	}
+	private static String formatAsJsonKey(String key) {
+		return "\"" + key + "\":";
+	}
+
+	public static Map<String, String> getLegacyTo1300Map() {
+		return LEGACY_TO_1300_MAP;
 	}
 }

@@ -14,7 +14,7 @@ public class SandboxManager {
 
 	private SandboxManager() {
 		next_container = 0;
-		IntStream.range(0, NUM_OF_SANDBOXES).forEach(x -> sandboxes[x] = new Sandbox(x));
+		IntStream.range(0, NUM_OF_SANDBOXES).forEach(x -> sandboxes[x] = new Sandbox());
 	}
 
 	public static synchronized SandboxManager getInstance() {

@@ -68,7 +68,6 @@ android {
     buildFeatures {
         compose true
         buildConfig true
-        dataBinding true
         viewBinding true
         resValues true
     }
@@ -134,14 +133,10 @@ android {
 apply from: "$rootDir/gradle/release-notes.gradle"
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation libs.androidx.core.ktx
     implementation libs.androidx.activity.ktx
     implementation libs.androidx.appcompat
     implementation libs.androidx.fragment.ktx
-    implementation libs.androidx.navigation.fragment
-    implementation libs.androidx.navigation.ui
     implementation libs.androidx.webkit
     implementation libs.androidx.biometric
     implementation libs.androidx.work.runtime
@@ -195,5 +190,4 @@ dependencies {
     androidTestUtil libs.androidx.test.orchestrator
     androidTestImplementation libs.androidx.test.ext.junit
     androidTestImplementation libs.androidx.test.espresso.core
-    androidTestImplementation libs.testng
 }
