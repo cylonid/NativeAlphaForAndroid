@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -81,6 +82,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 import org.json.JSONException
 import org.json.JSONObject
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import timber.log.Timber
 import java.net.URL
 import java.util.TreeMap
@@ -202,25 +204,59 @@ class ShortcutDialogFragment : DialogFragment() {
         private set
 
     fun fetchWebappData(): Array<String?> {
+        val outcome =
+            parseMetadata(
+                initialUrl = baseUrl,
+                preseededIcons = buildIconMap(),
+                fetchDocument = { url ->
+                    Jsoup
+                        .connect(url)
+                        .ignoreHttpErrors(true)
+                        .userAgent(Const.DESKTOP_USER_AGENT)
+                        .followRedirects(true)
+                        .get()
+                },
+                fetchManifestBody = { manifestUrl ->
+                    Jsoup
+                        .connect(manifestUrl)
+                        .ignoreContentType(true)
+                        .execute()
+                        .body()
+                },
+            )
+        baseUrl = outcome.resolvedBaseUrl
+        candidateIconUrls = outcome.candidateIconUrls
+        return outcome.result
+    }
+
+    @VisibleForTesting
+    data class MetadataFetchOutcome(
+        val result: Array<String?>,
+        val resolvedBaseUrl: String,
+        val candidateIconUrls: List<String>,
+    )
+
+    @VisibleForTesting
+    fun parseMetadata(
+        initialUrl: String,
+        preseededIcons: Map<Int, String> = emptyMap(),
+        fetchDocument: (String) -> Document,
+        fetchManifestBody: (String) -> String,
+    ): MetadataFetchOutcome {
         val result = arrayOfNulls<String>(3)
         val foundIcons = TreeMap<Int, MutableList<String>>(compareByDescending { it })
+        var currentUrl = initialUrl
 
-        for ((width, url) in buildIconMap()) {
+        for ((width, url) in preseededIcons) {
             foundIcons.getOrPut(width) { mutableListOf() }.add(url)
         }
 
         try {
-            var doc =
-                Jsoup
-                    .connect(baseUrl)
-                    .ignoreHttpErrors(true)
-                    .userAgent(Const.DESKTOP_USER_AGENT)
-                    .followRedirects(true)
-                    .get()
+            var doc = fetchDocument(currentUrl)
 
             val docLocation = doc.location()
             if (docLocation.isNotBlank()) {
-                baseUrl = docLocation
+                currentUrl = docLocation
             }
 
             // Step 1: Check for META Redirect
@@ -231,11 +267,11 @@ class ShortcutDialogFragment : DialogFragment() {
                 val m = META_REFRESH_URL_PATTERN.matcher(content)
                 val redirectUrl = if (m.matches()) m.group(1) else null
                 if (!redirectUrl.isNullOrEmpty()) {
-                    baseUrl = redirectUrl
-                    doc = Jsoup.connect(baseUrl).followRedirects(true).get()
+                    currentUrl = redirectUrl
+                    doc = fetchDocument(currentUrl)
                     val newLocation = doc.location()
                     if (newLocation.isNotBlank()) {
-                        baseUrl = newLocation
+                        currentUrl = newLocation
                     }
                 }
             }
@@ -245,19 +281,15 @@ class ShortcutDialogFragment : DialogFragment() {
             if (!manifest.isEmpty()) {
                 val mf = manifest.first()
                 if (mf != null) {
-                    val data =
-                        Jsoup
-                            .connect(mf.absUrl("href"))
-                            .ignoreContentType(true)
-                            .execute()
-                            .body()
+                    val manifestHref = mf.absUrl("href")
+                    val data = fetchManifestBody(manifestHref)
                     val json = JSONObject(data)
 
                     try {
                         result[IconFetchResult.TITLE.index] = json.getString("name")
                         val startUrl = json.getString("start_url")
                         if (startUrl.isNotEmpty()) {
-                            val manifestBaseUrl = URL(mf.absUrl("href"))
+                            val manifestBaseUrl = URL(manifestHref)
                             val fullUrl = URL(manifestBaseUrl, startUrl)
                             result[IconFetchResult.NEW_BASEURL.index] = fullUrl.toString()
                         }
@@ -272,7 +304,7 @@ class ShortcutDialogFragment : DialogFragment() {
                             val iconHref = iconObj.getString("src")
                             val sizes = iconObj.getString("sizes")
                             val width = ShortcutIconUtils.getWidthFromIcon(sizes)
-                            val manifestBaseUrl = URL(mf.absUrl("href"))
+                            val manifestBaseUrl = URL(manifestHref)
                             val fullUrl = URL(manifestBaseUrl, iconHref)
                             foundIcons.getOrPut(width) { mutableListOf() }.add(fullUrl.toString())
                         }
@@ -310,15 +342,19 @@ class ShortcutDialogFragment : DialogFragment() {
                 }
             }
         } catch (e: Exception) {
-            Timber.w(e, "Failed to fetch web app metadata for %s", baseUrl)
+            Timber.w(e, "Failed to fetch web app metadata for %s", currentUrl)
         }
 
-        candidateIconUrls = foundIcons.values.flatten().distinct()
-        if (candidateIconUrls.isNotEmpty()) {
-            result[IconFetchResult.FAVICON.index] = candidateIconUrls.first()
+        val resolvedCandidates = foundIcons.values.flatten().distinct()
+        if (resolvedCandidates.isNotEmpty()) {
+            result[IconFetchResult.FAVICON.index] = resolvedCandidates.first()
         }
 
-        return result
+        return MetadataFetchOutcome(
+            result = result,
+            resolvedBaseUrl = currentUrl,
+            candidateIconUrls = resolvedCandidates,
+        )
     }
 
     private fun addShortcutToHomeScreen(
