@@ -91,7 +91,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import com.cylonid.nativealpha.ui.webapp.WebAppMenuStyle;
 import com.cylonid.nativealpha.ui.webapp.WebViewMenuLauncher;
@@ -224,12 +223,14 @@ public class WebViewActivity extends AppCompatActivity
 		// Sandboxed Web App is openend in main process using an old shortcut
 		if (packageName.equals(processName) && webapp.isUseContainer()) {
 			WebViewLauncher.startWebViewInNewProcess(webapp, this);
+			return;
 		}
 
 		if (!packageName.equals(processName)) {
 			if (SandboxManager.getInstance().isSandboxUsedByAnotherApp(webapp)) {
 				SandboxManager.getInstance().unregisterWebAppFromSandbox(webapp.getContainerId());
 				WebViewLauncher.startWebViewInNewProcess(webapp, this);
+				return;
 			}
 			try {
 				SandboxManager.getInstance().registerWebAppToSandbox(webapp);
@@ -282,10 +283,10 @@ public class WebViewActivity extends AppCompatActivity
 			}
 		}
 
-		String fieldName = Stream.of(WebViewActivity.class.getDeclaredFields())
-				.filter(f -> f.getType() == WebView.class).findFirst().orElseThrow(null).getName();
-		String uaString = wv.getSettings().getUserAgentString().replace("; " + fieldName, "");
-		wv.getSettings().setUserAgentString(uaString);
+		String currentUa = wv.getSettings().getUserAgentString();
+		if (currentUa != null) {
+			wv.getSettings().setUserAgentString(currentUa.replace("; wv", ""));
+		}
 		if (webapp.isUseCustomUserAgent()) {
 			if (webapp.getUserAgent() != null && !webapp.getUserAgent().isEmpty()) {
 				wv.getSettings().setUserAgentString(
@@ -352,15 +353,7 @@ public class WebViewActivity extends AppCompatActivity
 					|| (file_name != null && file_name.toLowerCase(Locale.ROOT).endsWith(".pdf"))
 					|| (dl_url != null && dl_url.toLowerCase(Locale.ROOT).split("\\?")[0].endsWith(".pdf"));
 
-			String targetUrl = dl_url;
-			if (targetUrl != null && targetUrl.startsWith("blob:")) {
-				String stripped = targetUrl.replace("blob:", "");
-				try {
-					targetUrl = URLDecoder.decode(stripped, StandardCharsets.UTF_8.name());
-				} catch (Exception e) {
-					Timber.e(e, "Failed to decode blob download URL");
-				}
-			}
+			String targetUrl = decodeBlobUrlIfNeeded(dl_url);
 
 			if (isPdf && webapp != null && webapp.isUseBuiltinPdfViewer() && isSupportedPdfScheme(targetUrl)) {
 				if (isHttpUrl(targetUrl) && !webapp.isAllowHttp()) {
@@ -392,27 +385,19 @@ public class WebViewActivity extends AppCompatActivity
 					}
 				}
 			} else {
-				if (dl_url != null && !dl_url.isEmpty()) {
-					if (dl_url.startsWith("blob:")) {
-						dl_url = dl_url.replace("blob:", "");
-						try {
-							dl_url = URLDecoder.decode(dl_url, StandardCharsets.UTF_8.name());
-						} catch (Exception e) {
-							Timber.e(e, "Failed to decode blob download URL");
-						}
-					}
+				if (targetUrl != null && !targetUrl.isEmpty()) {
 					DownloadManager.Request request;
 					try {
-						request = new DownloadManager.Request(Uri.parse(dl_url));
+						request = new DownloadManager.Request(Uri.parse(targetUrl));
 					} catch (Exception e) {
-						NotificationUtils.showInfoSnackbar(this, getString(R.string.file_download),
+						NotificationUtils.showInfoSnackbar(this, getString(R.string.file_download_failed),
 								Snackbar.LENGTH_SHORT);
 						return;
 					}
-					file_name = Utility.getFileNameFromDownload(dl_url, contentDisposition, mimeType);
+					file_name = Utility.getFileNameFromDownload(targetUrl, contentDisposition, mimeType);
 
 					request.setMimeType(mimeType);
-					request.addRequestHeader("cookie", CookieManager.getInstance().getCookie(dl_url));
+					request.addRequestHeader("cookie", CookieManager.getInstance().getCookie(targetUrl));
 					request.addRequestHeader("User-Agent", userAgent);
 					request.setTitle(file_name);
 					request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
@@ -457,8 +442,7 @@ public class WebViewActivity extends AppCompatActivity
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				WebApp webapp = DataManager.getInstance().getWebApp(webappID);
-				if (webapp.isRequestDesktop())
+				if (WebViewActivity.this.webapp != null && WebViewActivity.this.webapp.isRequestDesktop())
 					return false;
 
 				switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -477,9 +461,11 @@ public class WebViewActivity extends AppCompatActivity
 							if (startX > stopX) {
 								if (event.getPointerCount() == 3
 										&& DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
-									WebViewLauncher.startWebView(DataManager.getInstance().getPredecessor(webappID),
-											WebViewActivity.this);
-									finish();
+									WebApp predecessor = DataManager.getInstance().getPredecessor(webappID);
+									if (predecessor != null) {
+										WebViewLauncher.startWebView(predecessor, WebViewActivity.this);
+										finish();
+									}
 								} else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch()) {
 									if (wv.canGoForward())
 										wv.goForward();
@@ -487,9 +473,11 @@ public class WebViewActivity extends AppCompatActivity
 							} else {
 								if (event.getPointerCount() == 3
 										&& DataManager.getInstance().getSettings().isThreeFingerMultitouch()) {
-									WebViewLauncher.startWebView(DataManager.getInstance().getSuccessor(webappID),
-											WebViewActivity.this);
-									finish();
+									WebApp successor = DataManager.getInstance().getSuccessor(webappID);
+									if (successor != null) {
+										WebViewLauncher.startWebView(successor, WebViewActivity.this);
+										finish();
+									}
 								} else if (DataManager.getInstance().getSettings().isTwoFingerMultitouch())
 									handleBackPressed();
 
@@ -764,7 +752,45 @@ public class WebViewActivity extends AppCompatActivity
 		if (backPressHandler != null && resetBackPressRunnable != null) {
 			backPressHandler.removeCallbacks(resetBackPressRunnable);
 		}
+		if (reload_handler != null) {
+			reload_handler.removeCallbacksAndMessages(null);
+		}
+		if (filePathCallback != null) {
+			filePathCallback.onReceiveValue(null);
+			filePathCallback = null;
+		}
+		if (wv != null) {
+			ViewGroup parent = (ViewGroup) wv.getParent();
+			if (parent != null) {
+				parent.removeView(wv);
+			}
+			wv.stopLoading();
+			wv.destroy();
+			wv = null;
+		}
 		super.onDestroy();
+	}
+
+	@Nullable
+	private static String decodeBlobUrlIfNeeded(@Nullable String url) {
+		if (url == null || !url.startsWith("blob:")) {
+			return url;
+		}
+		String stripped = url.substring("blob:".length());
+		try {
+			return URLDecoder.decode(stripped, StandardCharsets.UTF_8.name());
+		} catch (Exception e) {
+			Timber.e(e, "Failed to decode blob download URL");
+			return stripped;
+		}
+	}
+
+	private void startExternalActivitySafely(@NonNull Intent intent) {
+		try {
+			startActivity(intent);
+		} catch (ActivityNotFoundException e) {
+			Timber.w(e, "No activity found to handle intent: %s", intent.getAction());
+		}
 	}
 
 	private void reload() {
@@ -849,6 +875,7 @@ public class WebViewActivity extends AppCompatActivity
 				view.loadUrl(url, CUSTOM_HEADERS);
 			});
 			builder.setNegativeButton(getString(android.R.string.cancel), (dialog, id) -> finish());
+			builder.setOnCancelListener(dialog -> finish());
 			final AlertDialog dialog = builder.create();
 			dialog.show();
 		} else
@@ -1015,11 +1042,15 @@ public class WebViewActivity extends AppCompatActivity
 		}
 
 		public void onHideCustomView() {
-			((FrameLayout) getWindow().getDecorView()).removeView(this.mCustomView);
-			this.mCustomView = null;
+			if (this.mCustomView != null) {
+				((FrameLayout) getWindow().getDecorView()).removeView(this.mCustomView);
+				this.mCustomView = null;
+			}
 			setRequestedOrientation(this.mOriginalOrientation);
-			this.mCustomViewCallback.onCustomViewHidden();
-			this.mCustomViewCallback = null;
+			if (this.mCustomViewCallback != null) {
+				this.mCustomViewCallback.onCustomViewHidden();
+				this.mCustomViewCallback = null;
+			}
 			showSystemBars();
 		}
 
@@ -1110,7 +1141,8 @@ public class WebViewActivity extends AppCompatActivity
 
 					handler.proceed(username, password);
 
-				}).setNegativeButton(getString(R.string.cancel), (dialog, whichButton) -> handler.cancel()).show();
+				}).setNegativeButton(getString(R.string.cancel), (dialog, whichButton) -> handler.cancel())
+				.setOnCancelListener(dialog -> handler.cancel()).show();
 	}
 
 	private class CustomBrowser extends WebViewClient {
@@ -1137,13 +1169,36 @@ public class WebViewActivity extends AppCompatActivity
 
 		@Override
 		public void onPageFinished(WebView view, String url) {
-			if (url.equals("about:blank")) {
+			if ("about:blank".equals(url) && wv != null) {
 				String langExtension = LocaleUtils.getFileEnding();
 				wv.loadUrl("file:///android_asset/errorSite/error_" + langExtension + ".html");
 			}
-			wv.evaluateJavascript(
-					"document.addEventListener(\"visibilitychange\",function (event) {event.stopImmediatePropagation();},true);",
-					null);
+			if (view != null) {
+				if (webapp != null && webapp.isRequestDesktop()) {
+					view.evaluateJavascript(
+							"""
+									(function() {
+									  if (document.documentElement && document.documentElement.clientWidth < 1200) {
+									    var vp = document.querySelector('meta[name="viewport"]');
+									    if (vp) {
+									      vp.setAttribute('content', 'width=1200px, initial-scale=' + (document.documentElement.clientWidth / 1200));
+									    }
+									  }
+									})();
+									""",
+							null);
+				}
+				view.evaluateJavascript("""
+						(function() {
+						  if (!window.__nativeAlphaVisibilityGuard) {
+						    window.__nativeAlphaVisibilityGuard = true;
+						    document.addEventListener("visibilitychange", function (event) {
+						      event.stopImmediatePropagation();
+						    }, true);
+						  }
+						})();
+						""", null);
+			}
 			super.onPageFinished(view, url);
 		}
 
@@ -1222,6 +1277,7 @@ public class WebViewActivity extends AppCompatActivity
 			builder.setIcon(android.R.drawable.ic_dialog_alert);
 			builder.setPositiveButton(getString(android.R.string.cancel), (dialog, id) -> handler.cancel());
 			builder.setNegativeButton(getString(R.string.load_anyway), (dialog, id) -> handler.proceed());
+			builder.setOnCancelListener(dialog -> handler.cancel());
 			final AlertDialog dialog = builder.create();
 			dialog.show();
 			// dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setPadding(5, 5, 5, 5);
@@ -1231,24 +1287,6 @@ public class WebViewActivity extends AppCompatActivity
 					.setTextColor(ContextCompat.getColor(WebViewActivity.this, android.R.color.holo_red_dark));
 			dialog.getButton(AlertDialog.BUTTON_POSITIVE)
 					.setTextColor(ContextCompat.getColor(WebViewActivity.this, android.R.color.holo_green_dark));
-		}
-
-		@Override
-		public void onLoadResource(WebView view, String url) {
-			super.onLoadResource(view, url);
-
-			if (DataManager.getInstance().getWebApp(webappID).isRequestDesktop())
-				view.evaluateJavascript(
-						"""
-								 var needsForcedWidth = document.documentElement.clientWidth < 1200;
-								 if(needsForcedWidth) {
-								   document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1200px, initial-scale=' + (document.documentElement.clientWidth / 1200));
-								 }
-								""",
-						null);
-			view.evaluateJavascript(
-					"document.addEventListener(    \"visibilitychange\"    , (event) => {         event.stopImmediatePropagation();    }  );",
-					null);
 		}
 
 		@Override
@@ -1264,13 +1302,11 @@ public class WebViewActivity extends AppCompatActivity
 			WebApp webapp = DataManager.getInstance().getWebApp(webappID);
 
 			if (url.startsWith("tel:")) {
-				Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
-				startActivity(intent);
+				startExternalActivitySafely(new Intent(Intent.ACTION_DIAL, Uri.parse(url)));
 				return true;
 			}
 			if (url.startsWith("mailto:")) {
-				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-				startActivity(intent);
+				startExternalActivitySafely(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 				return true;
 			}
 
@@ -1307,7 +1343,7 @@ public class WebViewActivity extends AppCompatActivity
 					Uri uri = Uri.parse(base_url);
 					String host = uri.getHost();
 					if (host != null && !url.contains(host)) {
-						view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+						startExternalActivitySafely(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 						return true;
 					}
 				}
