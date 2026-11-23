@@ -117,7 +117,7 @@ data class WebApp(
         isAllowMediaPlaybackInBackground = other.isAllowMediaPlaybackInBackground
         alwaysUseFallbackContextMenu = other.alwaysUseFallbackContextMenu
         isUseBuiltinPdfViewer = other.isUseBuiltinPdfViewer
-        adBlockSettings = other.adBlockSettings
+        adBlockSettings = other.adBlockSettings.toMutableList()
     }
 
     private fun initDefaultSettings() {

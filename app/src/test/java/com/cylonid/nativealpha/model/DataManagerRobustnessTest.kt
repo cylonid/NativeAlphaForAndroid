@@ -1,16 +1,29 @@
 package com.cylonid.nativealpha.model
 
 import android.content.Context
+import android.util.Base64
+import android.util.Base64OutputStream
 import androidx.test.core.app.ApplicationProvider
+import com.cylonid.nativealpha.util.Const
+import com.himanshurawat.hasher.HashType
+import com.himanshurawat.hasher.Hasher
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNotSame
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.ObjectOutputStream
+import java.util.Date
+import java.util.TreeMap
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
@@ -82,5 +95,56 @@ class DataManagerRobustnessTest {
         assertNotSame(app0, effective)
         assertEquals(false, effective.isAllowJs)
         assertTrue(effective.isForceDarkMode)
+        val extraConfig = AdblockConfig("extra", "extra-list")
+        effective.adBlockSettings.add(extraConfig)
+        assertFalse(
+            dataManager.settings.globalWebApp.adBlockSettings
+                .contains(extraConfig),
+        )
+    }
+
+    @Test
+    fun testGetSuccessorAndPredecessorReturnNullWhenEmptyOrAllInactive() {
+        assertNull(dataManager.getSuccessor(0))
+        assertNull(dataManager.getPredecessor(0))
+
+        dataManager.websites.add(WebApp("https://inactive.example", 0, 0).apply { isActiveEntry = false })
+        assertNull(dataManager.getSuccessor(0))
+        assertNull(dataManager.getPredecessor(0))
+    }
+
+    @Test
+    fun testReplaceWebAppIgnoresOutOfBoundsId() {
+        val outOfBounds = WebApp("https://oob.example", 99, 99)
+        dataManager.replaceWebApp(outOfBounds)
+        assertTrue(dataManager.websites.isEmpty())
+    }
+
+    @Test
+    fun testLoadAppDataHandlesCorruptOrNullJsonGracefully() {
+        val prefs = context.getSharedPreferences("WEBSITEDATA", Context.MODE_PRIVATE)
+        prefs
+            .edit()
+            .putString("webappdata", "{not-valid-json")
+            .putString("globalsettings", "null")
+            .commit()
+
+        dataManager.loadAppData()
+        assertNotNull(dataManager.websites)
+        assertNotNull(dataManager.settings)
+        assertEquals(Const.NO_CONTAINER, dataManager.settings.globalWebApp.containerId)
+    }
+
+    @Test
+    fun testLoadSharedPreferencesRejectsUnauthorizedSerializedClass() {
+        val mapWithDisallowedClass = TreeMap<String, Any>().apply { put("evil", Date(0)) }
+        val baos = ByteArrayOutputStream()
+        Base64OutputStream(baos, Base64.DEFAULT).use { b64 ->
+            ObjectOutputStream(b64).use { oos ->
+                oos.writeObject(Hasher.hash(mapWithDisallowedClass.toString(), HashType.SHA_256))
+                oos.writeObject(mapWithDisallowedClass)
+            }
+        }
+        assertFalse(dataManager.loadSharedPreferences(ByteArrayInputStream(baos.toByteArray())))
     }
 }

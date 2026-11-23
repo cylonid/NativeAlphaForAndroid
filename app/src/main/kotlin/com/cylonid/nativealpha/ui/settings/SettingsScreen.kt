@@ -82,7 +82,9 @@ import com.cylonid.nativealpha.ui.components.SettingsSectionHeader
 import com.cylonid.nativealpha.ui.components.SettingsSwitchItem
 import com.cylonid.nativealpha.ui.webapp.WebAppMenuStyle
 import com.cylonid.nativealpha.util.Const
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -118,9 +120,12 @@ fun SettingsScreen(
             contract = ActivityResultContracts.CreateDocument("*/*"),
         ) { uri ->
             if (uri != null) {
-                dataManager.saveGlobalSettings()
-                val success = dataManager.saveSharedPreferencesToFile(uri)
                 coroutineScope.launch {
+                    val success =
+                        withContext(Dispatchers.IO) {
+                            dataManager.saveGlobalSettings()
+                            dataManager.saveSharedPreferencesToFile(uri)
+                        }
                     snackbarHostState.showSnackbar(
                         message = if (success) exportSuccessMsg else exportFailedMsg,
                     )
@@ -133,24 +138,30 @@ fun SettingsScreen(
             contract = ActivityResultContracts.OpenDocument(),
         ) { uri ->
             if (uri != null) {
-                val success = dataManager.loadSharedPreferencesFromFile(uri)
-                if (!success) {
-                    coroutineScope.launch {
+                coroutineScope.launch {
+                    val success =
+                        withContext(Dispatchers.IO) {
+                            val loaded = dataManager.loadSharedPreferencesFromFile(uri)
+                            if (loaded) {
+                                dataManager.loadAppData()
+                            }
+                            loaded
+                        }
+                    if (!success) {
                         snackbarHostState.showSnackbar(
                             message = importFailedMsg,
                         )
+                    } else {
+                        WebStorage.getInstance().deleteAllData()
+                        CookieManager.getInstance().removeAllCookies(null)
+                        val intent =
+                            Intent(context, MainActivity::class.java).apply {
+                                putExtra(Const.INTENT_BACKUP_RESTORED, true)
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            }
+                        context.startActivity(intent)
+                        (context as? Activity)?.finish()
                     }
-                } else {
-                    WebStorage.getInstance().deleteAllData()
-                    CookieManager.getInstance().removeAllCookies(null)
-                    dataManager.loadAppData()
-                    val intent =
-                        Intent(context, MainActivity::class.java).apply {
-                            putExtra(Const.INTENT_BACKUP_RESTORED, true)
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        }
-                    context.startActivity(intent)
-                    (context as? Activity)?.finish()
                 }
             }
         }

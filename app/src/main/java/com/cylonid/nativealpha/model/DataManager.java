@@ -2,6 +2,7 @@ package com.cylonid.nativealpha.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Looper;
 import timber.log.Timber;
 import android.net.Uri;
 import android.util.Base64;
@@ -20,23 +21,33 @@ import com.cylonid.nativealpha.util.ShortcutIconUtils;
 import com.cylonid.nativealpha.util.Utility;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.himanshurawat.hasher.HashType;
 import com.himanshurawat.hasher.Hasher;
 
 import java.io.InputStream;
+import java.io.InvalidClassException;
 import java.io.OutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class DataManager {
+
+	private static final Set<String> ALLOWED_BACKUP_CLASSES = new HashSet<>(
+			Arrays.asList("java.util.TreeMap", "java.util.HashMap", "java.lang.String", "java.lang.Boolean",
+					"java.lang.Integer", "java.lang.Long", "java.lang.Float", "java.lang.Double", "java.lang.Number"));
 
 	// Corresponds to app release version
 	private static final int LEGACY_DATA_FORMAT = 1000;
@@ -159,13 +170,28 @@ public class DataManager {
 			String json = appdata.getString(shared_pref_webappdata, "");
 			int oldDataFormat = DataVersionConverter.getDataFormat(json);
 			String currentDataFormattedJson = this.checkDataFormat(oldDataFormat, json);
-			ArrayList<WebApp> new_websites = GSON_WITH_DESERIALIZERS.fromJson(currentDataFormattedJson,
-					new TypeToken<ArrayList<WebApp>>() {
-					}.getType());
-			checkIfWebAppIdsCollide(websites, new_websites);
-			websites = new_websites;
-			if (oldDataFormat != DataVersionConverter.getDataFormat(currentDataFormattedJson))
-				this.saveWebAppData();
+			try {
+				ArrayList<WebApp> new_websites = GSON_WITH_DESERIALIZERS.fromJson(currentDataFormattedJson,
+						new TypeToken<ArrayList<WebApp>>() {
+						}.getType());
+				if (new_websites != null) {
+					checkIfWebAppIdsCollide(websites, new_websites);
+					websites = new_websites;
+					if (oldDataFormat != DataVersionConverter.getDataFormat(currentDataFormattedJson)) {
+						this.saveWebAppData();
+					}
+				} else {
+					Timber.w("Deserialized null websites list, keeping fallback list");
+					if (websites == null) {
+						websites = new ArrayList<>();
+					}
+				}
+			} catch (JsonSyntaxException e) {
+				Timber.e(e, "Failed to deserialize websites JSON");
+				if (websites == null) {
+					websites = new ArrayList<>();
+				}
+			}
 		}
 
 		if (websites != null && App.getAppContext() != null) {
@@ -189,7 +215,19 @@ public class DataManager {
 			String json = appdata.getString(shared_pref_globalsettings, "");
 			int oldDataFormat = DataVersionConverter.getDataFormat(json);
 			String currentDataFormattedJson = this.checkDataFormat(oldDataFormat, json);
-			settings = GSON_WITH_DESERIALIZERS.fromJson(currentDataFormattedJson, GlobalSettings.class);
+			try {
+				GlobalSettings loadedSettings = GSON_WITH_DESERIALIZERS.fromJson(currentDataFormattedJson,
+						GlobalSettings.class);
+				if (loadedSettings != null) {
+					settings = loadedSettings;
+				} else {
+					Timber.w("Deserialized null GlobalSettings, falling back to defaults");
+					settings = new GlobalSettings();
+				}
+			} catch (JsonSyntaxException e) {
+				Timber.e(e, "Failed to deserialize GlobalSettings JSON, falling back to defaults");
+				settings = new GlobalSettings();
+			}
 			assertGlobalWebappData();
 			if (oldDataFormat != DataVersionConverter.getDataFormat(currentDataFormattedJson))
 				this.saveGlobalSettings();
@@ -257,7 +295,13 @@ public class DataManager {
 			loadAppData();
 		}
 		try {
+			if (i < 0 || i >= websites.size()) {
+				throw new IndexOutOfBoundsException("Index " + i + " out of bounds for size " + websites.size());
+			}
 			WebApp stored = websites.get(i);
+			if (stored == null) {
+				return null;
+			}
 			if (!stored.isOverrideGlobalSettings() && !ignoreOverride) {
 				WebApp effective = stored.deepCopy();
 				effective.copySettings(settings.getGlobalWebApp());
@@ -266,17 +310,26 @@ public class DataManager {
 			return stored;
 		} catch (IndexOutOfBoundsException e) {
 			Context context = App.getAppContext();
-			if (context != null) {
+			if (context != null && Looper.getMainLooper() != null && Looper.myLooper() == Looper.getMainLooper()) {
 				Toast toast = Toast.makeText(context, context.getString(R.string.webapp_not_found), Toast.LENGTH_LONG);
 				toast.setGravity(Gravity.TOP, 0, 100);
 				toast.show();
+			} else {
+				Timber.w("WebApp %d not found (size=%d)", i, websites.size());
 			}
 		}
 		return null;
 	}
 
 	public void replaceWebApp(WebApp webapp) {
+		if (webapp == null) {
+			return;
+		}
 		int index = webapp.getID();
+		if (index < 0 || index >= websites.size()) {
+			Timber.w("Ignoring replaceWebApp for out-of-bounds id %d (size=%d)", index, websites.size());
+			return;
+		}
 		websites.set(index, webapp);
 		saveWebAppData();
 	}
@@ -327,9 +380,28 @@ public class DataManager {
 
 	public boolean loadSharedPreferences(InputStream is) {
 		try (Base64InputStream b64is = new Base64InputStream(is, Base64.DEFAULT);
-				ObjectInputStream ois = new ObjectInputStream(b64is)) {
+				ObjectInputStream ois = new ObjectInputStream(b64is) {
+					@Override
+					protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException {
+						String name = desc.getName();
+						if (!ALLOWED_BACKUP_CLASSES.contains(name)) {
+							throw new InvalidClassException("Unauthorized deserialization class", name);
+						}
+						return super.resolveClass(desc);
+					}
 
-			String checksum = (String) ois.readObject();
+					@Override
+					protected Class<?> resolveProxyClass(String[] interfaces)
+							throws IOException, ClassNotFoundException {
+						throw new InvalidClassException("Unauthorized proxy class in backup");
+					}
+				}) {
+
+			Object checksumObj = ois.readObject();
+			if (!(checksumObj instanceof String)) {
+				throw new IOException("Invalid backup format: expected checksum string.");
+			}
+			String checksum = (String) checksumObj;
 			Object readObj = ois.readObject();
 			if (!(readObj instanceof Map<?, ?>)) {
 				throw new IOException("Invalid backup format: expected map data.");
@@ -365,7 +437,7 @@ public class DataManager {
 			prefEdit.apply();
 			return true;
 
-		} catch (InvalidChecksumException | IOException | ClassNotFoundException e) {
+		} catch (InvalidChecksumException | IOException | ClassNotFoundException | ClassCastException e) {
 			Timber.e(e, "Failed to load shared preferences");
 			return false;
 		}
@@ -400,25 +472,35 @@ public class DataManager {
 	}
 
 	public WebApp getSuccessor(int i) {
-		int INVALID = websites.size();
-		int neighbor = i;
-		do {
-			neighbor = neighbor + 1;
-			if (neighbor == INVALID)
-				neighbor = 0;
-		} while (!websites.get(neighbor).isActiveEntry());
-		return websites.get(neighbor);
-
+		int size = websites.size();
+		if (size == 0) {
+			return null;
+		}
+		int neighbor = (i >= 0 && i < size) ? i : 0;
+		for (int step = 0; step < size; step++) {
+			neighbor = (neighbor + 1) % size;
+			WebApp candidate = websites.get(neighbor);
+			if (candidate != null && candidate.isActiveEntry()) {
+				return candidate;
+			}
+		}
+		return null;
 	}
+
 	public WebApp getPredecessor(int i) {
-		int INVALID = -1;
-		int neighbor = i;
-		do {
-			neighbor = neighbor - 1;
-			if (neighbor == INVALID)
-				neighbor = websites.size() - 1;
-		} while (!websites.get(neighbor).isActiveEntry());
-		return websites.get(neighbor);
+		int size = websites.size();
+		if (size == 0) {
+			return null;
+		}
+		int neighbor = (i >= 0 && i < size) ? i : 0;
+		for (int step = 0; step < size; step++) {
+			neighbor = (neighbor - 1 + size) % size;
+			WebApp candidate = websites.get(neighbor);
+			if (candidate != null && candidate.isActiveEntry()) {
+				return candidate;
+			}
+		}
+		return null;
 	}
 
 	private void assertGlobalWebappData() {

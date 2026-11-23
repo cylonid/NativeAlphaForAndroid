@@ -25,29 +25,45 @@ public class SandboxManager {
 	}
 
 	public int calculateNextFreeContainerId() {
-		if (next_container == NUM_OF_SANDBOXES) {
+		if (next_container < 0 || next_container >= NUM_OF_SANDBOXES) {
 			next_container = 0;
 		}
 		return next_container++;
 	}
 
+	private static boolean isValidSandboxId(int sandboxId) {
+		return sandboxId >= 0 && sandboxId < NUM_OF_SANDBOXES;
+	}
+
 	public void registerWebAppToSandbox(WebApp webapp) {
 		int sId = webapp.getContainerId();
+		if (!isValidSandboxId(sId)) {
+			Timber.w("Ignoring registerWebAppToSandbox with out-of-range containerId: %d", sId);
+			return;
+		}
 		sandboxes[sId].registerWebApp(webapp.getID(), webapp.getBaseUrl());
 		Timber.d("Sandbox %d is occupied by %s", webapp.getContainerId(), webapp.getTitle());
 	}
 
 	public void unregisterWebAppFromSandbox(int sandboxId) {
+		if (!isValidSandboxId(sandboxId)) {
+			Timber.w("Ignoring unregisterWebAppFromSandbox with out-of-range sandboxId: %d", sandboxId);
+			return;
+		}
 		if (!sandboxes[sandboxId].isUnoccupied()) {
 			WebApp currently_set_webapp = DataManager.getInstance()
 					.getWebApp(sandboxes[sandboxId].getCurrentlyRegisteredWebapp());
 			sandboxes[sandboxId].unregisterWebApp();
-			Timber.d("Sandbox %d is left by %s", sandboxId, currently_set_webapp.getTitle());
+			String title = currently_set_webapp != null ? currently_set_webapp.getTitle() : "<unknown>";
+			Timber.d("Sandbox %d is left by %s", sandboxId, title);
 		}
 	}
 
 	public boolean isSandboxUsedByAnotherApp(@NonNull WebApp webapp) {
 		int sId = webapp.getContainerId();
+		if (!isValidSandboxId(sId)) {
+			return false;
+		}
 		return sandboxes[sId].isUsedByAnotherApp(webapp);
 	}
 
@@ -56,7 +72,11 @@ public class SandboxManager {
 	}
 
 	public void setNextContainer(int nextContainer) {
-		this.next_container = nextContainer;
+		if (nextContainer < 0 || nextContainer >= NUM_OF_SANDBOXES) {
+			this.next_container = 0;
+		} else {
+			this.next_container = nextContainer;
+		}
 	}
 
 }

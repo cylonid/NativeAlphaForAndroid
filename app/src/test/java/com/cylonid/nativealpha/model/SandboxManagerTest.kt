@@ -5,7 +5,12 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34])
 class SandboxManagerTest {
     private lateinit var sandboxManager: SandboxManager
 
@@ -48,5 +53,32 @@ class SandboxManagerTest {
     fun testContainerIdAllocationCyclesAcrossAllEightSlots() {
         val allocated = (0 until 10).map { sandboxManager.calculateNextFreeContainerId() }
         assertEquals(listOf(0, 1, 2, 3, 4, 5, 6, 7, 0, 1), allocated)
+    }
+
+    @Test
+    fun testOutOfBoundsContainerIdsAreHandledSafely() {
+        sandboxManager.nextContainer = 99
+        assertEquals(0, sandboxManager.calculateNextFreeContainerId())
+
+        val invalidApp =
+            WebApp("https://invalid.example", 0, 0).apply {
+                containerId = -1
+            }
+        sandboxManager.registerWebAppToSandbox(invalidApp)
+        assertFalse(sandboxManager.isSandboxUsedByAnotherApp(invalidApp))
+        sandboxManager.unregisterWebAppFromSandbox(99)
+    }
+
+    @Test
+    fun testUnregisterHandlesMissingWebAppWithoutNpe() {
+        val orphan =
+            WebApp("https://orphan.example", 42, 42).apply {
+                isUseContainer = true
+                containerId = 3
+            }
+        sandboxManager.registerWebAppToSandbox(orphan)
+        DataManager.getInstance().websites.clear()
+        sandboxManager.unregisterWebAppFromSandbox(3)
+        assertFalse(sandboxManager.isSandboxUsedByAnotherApp(orphan))
     }
 }
