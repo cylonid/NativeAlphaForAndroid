@@ -131,7 +131,6 @@
     <string name="adblock_config">Adblock settings</string>
     <string name="adblock_description">The entries created here serve as sources for the ad blocker. The blocking rules are downloaded from the specified URL and kept up to date. Please note that adding too many sources may negatively impact performance. You can create up to 8 entries.</string>
     <string name="add_a_new_adblock_provider">Add a new adblock provider</string>
-    <string name="question_delete_item">Are you sure you want to delete this item?</string>
     <string name="undo">Undo</string>
     <string name="x_was_removed">%1$s was removed.</string>
     <string name="restore_standard_setting">Restore default</string>

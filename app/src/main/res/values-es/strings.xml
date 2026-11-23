@@ -128,7 +128,6 @@
     <string name="adblock_config">Configuración de Adblock</string>
     <string name="adblock_description">Las entradas creadas aquí sirven como fuentes para el bloqueador de anuncios. Las reglas de bloqueo se descargan desde la URL especificada y se mantienen actualizadas. Tenga en cuenta que agregar demasiadas fuentes puede afectar negativamente el rendimiento. Puede crear hasta 8 entradas.</string>
     <string name="add_a_new_adblock_provider">Añadir un nuevo proveedor de Adblock</string>
-    <string name="question_delete_item">¿Está seguro de que desea eliminar este elemento?</string>
     <string name="undo">Deshacer</string>
     <string name="x_was_removed">Se ha eliminado %1$s.</string>
     <string name="restore_standard_setting">Restaurar configuración predeterminada</string>
